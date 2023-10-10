@@ -4,10 +4,38 @@ option angle degrees
 
 #include "constants.inc"
 
-dim stage(MAP_SIZE) as integer
-dim gx%,gy%
+dim g_stage(MAP_SIZE) as integer
+dim g_x%,g_y%,g_i%
+
 init()
 load_stage(1)
+draw_screen_to_buffer()
+page write 0
+
+for g_i%=0 to 7
+    blit 0,0, SCREEN_OFFSET,0, SCREEN_WIDTH,SCREEN_HEIGHT, SCREEN_BUFFER
+    page scroll SCREEN_BUFFER,0,-1
+    do while timer<500: loop
+    timer=0
+next
+
+page write 0
+end
+
+sub draw_screen_to_buffer()
+    local tile%,tx%,ty%,row%=SCREEN_ROWS * TILE_SIZE
+
+    page write SCREEN_BUFFER
+    for g_y%=MAP_ROWS_0 to MAP_ROWS_0 - SCREEN_ROWS step -1
+        for g_x%=MAP_COLS_0 to 0 step -1
+            tile%=(g_stage(g_y%*MAP_COLS+g_x%) AND &HFF)-1
+            tx%=(tile% MOD TILES_COLS) * TILE_SIZE
+            ty%=(tile% \ TILES_COLS) * TILE_SIZE
+            blit tx%,ty%, g_x%*TILE_SIZE,row%, TILE_SIZE,TILE_SIZE, TILES_BUFFER
+        next
+        inc row%, -TILE_SIZE
+    next
+end sub
 
 'do
     'intro()
@@ -17,8 +45,9 @@ load_stage(1)
 sub init()
     cls
     mode 7,12 ' 320x240
-    page write TILES_BUFFER
-    load png "km_tileset.png", 32
+    page write SCREEN_BUFFER:cls
+    page write TILES_BUFFER:cls
+    load png "km_tileset.png"
     page write 0
 end sub
 
@@ -28,7 +57,7 @@ sub load_stage(num%)
     local file_name$ = "stage" + str$(num%) + ".map"
     open file_name$ for input as #1
     do while not eof(1)
-        stage(i%)=(asc(input$(1, #1)) << 8) OR asc(input$(1, #1))
+        g_stage(i%)=(asc(input$(1, #1)) << 8) OR asc(input$(1, #1))
         inc i%
     loop
     close #1
