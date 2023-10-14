@@ -1,6 +1,9 @@
 const KB_SPACE=32
 const KB_ESC=27
 
+const TILESET_IMG="tiles/km_tileset.png"
+const MAPS_DIR="maps/"
+
 const SCROLL_SPEED=135                    ' Scroll speed in ms
 
 const TILES_BUFFER=5                      ' Tileset buffer number

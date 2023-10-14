@@ -37,8 +37,23 @@ do
     'print@(0,200) "r: "+str$(g_row%)+" p: "+str$(g_tilepx%)+" T: "+str$(timer)+" ST: "+str$(g_scroll_timer!)
 loop
 
-end
-'page write 0: end
+page write 0: end
+
+'
+' Initialize the game
+sub init()
+    ' screen mode
+    mode 7,12 ' 320x240
+    ' init screen and tiles buffers
+    page write SCREEN_BUFFER:cls
+    page write TILES_BUFFER:cls
+    load png TILESET_IMG
+    ' clear screen
+    page write 0: cls
+    ' init game state variables
+    g_row%=MAP_ROWS-SCREEN_ROWS-1
+    g_tilepx%=0
+end sub
 
 '
 ' Draw map row to the top of the screen buffer
@@ -69,26 +84,10 @@ sub initialize_screen_buffer()
 end sub
 
 '
-' Initialize the game
-sub init()
-    ' screen mode
-    mode 7,12 ' 320x240
-    ' init screen and tiles buffers
-    page write SCREEN_BUFFER:cls
-    page write TILES_BUFFER:cls
-    load png "km_tileset.png"
-    ' clear screen
-    page write 0: cls
-    ' init game state variables
-    g_row%=MAP_ROWS-SCREEN_ROWS-1
-    g_tilepx%=0
-end sub
-
-'
 ' Load the map to the map global array g_map
 sub load_map(num%)
     local i%=0
-    local file_name$ = "stage" + str$(num%) + ".map"
+    local file_name$ = MAPS_DIR + "stage" + str$(num%) + ".map"
     open file_name$ for input as #1
     do while not eof(1)
         g_map(i%)=(asc(input$(1, #1)) << 8) OR asc(input$(1, #1))
