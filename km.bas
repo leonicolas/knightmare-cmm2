@@ -106,26 +106,26 @@ sub draw_next_map_row()
 end sub
 
 sub process_kb()
-    g_x=g_player(0)
-    g_y=g_player(1)
+    local x=g_player(0)
+    local y=g_player(1)
 
-    if g_kb1%=KB_LEFT or g_kb2%=KB_LEFT then
+    if g_kb1%=KB_LEFT or g_kb2%=KB_LEFT or g_kb3%=KB_LEFT then
         inc g_player(0), -g_player_speed
-        if map_colide(g_player()) then g_player(0)=g_x
+        if map_colide(g_player()) then g_player(0)=x
         if g_player(0) < 0 then g_player(0)=SCREEN_WIDTH - TILE_SIZE * 2
-    else if g_kb1%=KB_RIGHT or g_kb2%=KB_RIGHT then
+    else if g_kb1%=KB_RIGHT or g_kb2%=KB_RIGHT or g_kb3%=KB_RIGHT then
         inc g_player(0), g_player_speed
-        if map_colide(g_player()) then g_player(0)=g_x
+        if map_colide(g_player()) then g_player(0)=x
         if g_player(0) > SCREEN_WIDTH - TILE_SIZE * 2 then g_player(0)=0
     end if
 
-    if g_kb1%=KB_UP or g_kb2%=KB_UP then
+    if g_kb1%=KB_UP or g_kb2%=KB_UP or g_kb3%=KB_UP then
         inc g_player(1), -g_player_speed
-        if map_colide(g_player()) then g_player(1)=g_y
+        if map_colide(g_player()) then g_player(1)=y
         if g_player(1) < TILE_SIZE * 4 then g_player(1)=TILE_SIZE * 4
-    else if g_kb1%=KB_DOWN or g_kb2%=KB_DOWN then
+    else if g_kb1%=KB_DOWN or g_kb2%=KB_DOWN or g_kb3%=KB_DOWN then
         inc g_player(1), g_player_speed
-        if map_colide(g_player()) then g_player(1)=g_y
+        if map_colide(g_player()) then g_player(1)=y
         if g_player(1) > SCREEN_HEIGHT - TILE_SIZE then g_player(1)=SCREEN_HEIGHT - TILE_SIZE
     end if
 
