@@ -136,13 +136,13 @@ function map_colide(player()) as integer
     local col%=player(0)\TILE_SIZE
     local row%=(player(1)-g_tile_px%)\TILE_SIZE+g_row%
     ' Check top left
-    map_colide=g_map((row%+1)*TILES_COLS+col%)>>8 and 1
+    map_colide=g_map((row%+1)*MAP_COLS+col%)>>8 and 1
     ' Check top right
-    if not map_colide then map_colide=g_map((row%+1)*TILES_COLS+(col%+2))>>8 and 1
+    if not map_colide then map_colide=g_map((row%+1)*MAP_COLS+(col%+2))>>8 and 1
     ' Check bottom left
-    if not map_colide then map_colide=g_map((row%+2)*TILES_COLS+col%)>>8 and 1
+    if not map_colide then map_colide=g_map((row%+2)*MAP_COLS+col%)>>8 and 1
     ' Check bottom right
-    if not map_colide then map_colide=g_map((row%+2)*TILES_COLS+(col%+2))>>8 and 1
+    if not map_colide then map_colide=g_map((row%+2)*MAP_COLS+(col%+2))>>8 and 1
     ' TODO: Check horizontal wrapping collision
 end function
 '
