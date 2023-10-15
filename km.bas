@@ -12,10 +12,10 @@ dim g_row%                     ' Current top map row. Zero is the bottom row.
 dim g_scroll_timer             ' Scroll timer
 dim g_player_timer             ' Player timer
 dim g_game_tick                ' The game tick
-dim g_tilepx%                  ' The rendered tile row pixel
+dim g_tile_px%                 ' The rendered tile row pixel
 dim g_kb1%,g_kb2%,g_kb3%
-dim g_x%,g_y%,g_i%             ' Auxiliary global integer variables
-dim g_temp                     ' Auxiliary global float variables
+dim g_i%                       ' Auxiliary global integer variables
+dim g_temp1,g_temp2,g_x,g_y    ' Auxiliary global float variables
 
 ' 0-X, 1-Y, 2-Animation Flag
 dim g_player(2)=(SCREEN_WIDTH/2-TILE_SIZE, SCREEN_HEIGHT-TILE_SIZE*4,0)
@@ -42,18 +42,12 @@ sub run_stage()
         if g_scroll_timer >= 0 and timer >= g_scroll_timer then
             'sprite scroll 0,-1
             sprite scrollr 0,0,SCREEN_WIDTH,SCREEN_HEIGHT+TILE_SIZE,0,-1
-            inc g_tilepx%,1
+            check_scroll_collision()
+            inc g_tile_px%,1
             g_scroll_timer=timer+SCROLL_SPEED
             ' Draw the next map tile row
-            if g_tilepx% = TILE_SIZE then
-                inc g_row%,-1
-                if g_row% >= 0 then
-                    draw_map_row(g_row%)
-                    g_tilepx%=0
-                else
-                    ' Stops the screen scroll
-                    g_scroll_timer=-1
-                end if
+            if g_tile_px% = TILE_SIZE then
+                draw_next_map_row()
             end if
         end if
 
@@ -93,28 +87,64 @@ sub run_stage()
     loop
 end sub
 
-sub process_kb()
-    if g_kb1%=KB_UP or g_kb2%=KB_UP then
-        inc g_player(1), -g_player_speed
-        if g_player(1) < TILE_SIZE * 4 then g_player(1)=TILE_SIZE * 4
-    end if
-
-    if g_kb1%=KB_DOWN or g_kb2%=KB_DOWN then
-        inc g_player(1), g_player_speed
-        if g_player(1) > SCREEN_HEIGHT - TILE_SIZE then g_player(1)=SCREEN_HEIGHT - TILE_SIZE
-    end if
-
-    if g_kb1%=KB_LEFT or g_kb2%=KB_LEFT then
-        inc g_player(0), -g_player_speed
-        if g_player(0) < 0 then g_player(0)=SCREEN_WIDTH - TILE_SIZE * 2
-    end if
-
-    if g_kb1%=KB_RIGHT or g_kb2%=KB_RIGHT then
-        inc g_player(0), g_player_speed
-        if g_player(0) > SCREEN_WIDTH - TILE_SIZE * 2 then g_player(0)=0
+sub check_scroll_collision()
+    if map_colide(g_player()) then
+        inc g_player(1),2
+        'TODO: Implement player death by crush
     end if
 end sub
 
+sub draw_next_map_row()
+    inc g_row%,-1
+    if g_row% >= 0 then
+        draw_map_row(g_row%)
+        g_tile_px%=0
+    else
+        ' Stops the screen scroll
+        g_scroll_timer=-1
+    end if
+end sub
+
+sub process_kb()
+    g_x=g_player(0)
+    g_y=g_player(1)
+
+    if g_kb1%=KB_LEFT or g_kb2%=KB_LEFT then
+        inc g_player(0), -g_player_speed
+        if map_colide(g_player()) then g_player(0)=g_x
+        if g_player(0) < 0 then g_player(0)=SCREEN_WIDTH - TILE_SIZE * 2
+    else if g_kb1%=KB_RIGHT or g_kb2%=KB_RIGHT then
+        inc g_player(0), g_player_speed
+        if map_colide(g_player()) then g_player(0)=g_x
+        if g_player(0) > SCREEN_WIDTH - TILE_SIZE * 2 then g_player(0)=0
+    end if
+
+    if g_kb1%=KB_UP or g_kb2%=KB_UP then
+        inc g_player(1), -g_player_speed
+        if map_colide(g_player()) then g_player(1)=g_y
+        if g_player(1) < TILE_SIZE * 4 then g_player(1)=TILE_SIZE * 4
+    else if g_kb1%=KB_DOWN or g_kb2%=KB_DOWN then
+        inc g_player(1), g_player_speed
+        if map_colide(g_player()) then g_player(1)=g_y
+        if g_player(1) > SCREEN_HEIGHT - TILE_SIZE then g_player(1)=SCREEN_HEIGHT - TILE_SIZE
+    end if
+
+    check_scroll_collision()
+end sub
+
+function map_colide(player()) as integer
+    local col%=player(0)\TILE_SIZE
+    local row%=(player(1)-g_tile_px%)\TILE_SIZE+g_row%
+    ' Check top left
+    map_colide=g_map((row%+1)*TILES_COLS+col%)>>8 and 1
+    ' Check top right
+    if not map_colide then map_colide=g_map((row%+1)*TILES_COLS+(col%+2))>>8 and 1
+    ' Check bottom left
+    if not map_colide then map_colide=g_map((row%+2)*TILES_COLS+col%)>>8 and 1
+    ' Check bottom right
+    if not map_colide then map_colide=g_map((row%+2)*TILES_COLS+(col%+2))>>8 and 1
+    ' TODO: Check horizontal wrapping collision
+end function
 '
 ' Initialize the game
 sub init()
@@ -128,7 +158,7 @@ sub init()
     page write 0: cls
     ' init game state variables
     g_row%=MAP_ROWS-SCREEN_ROWS-1
-    g_tilepx%=0
+    g_tile_px%=0
 end sub
 
 '
