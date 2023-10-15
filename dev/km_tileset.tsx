@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.10.2" name="km_tileset" tilewidth="8" tileheight="8" tilecount="1200" columns="32" fillmode="preserve-aspect-fit">
- <image source="km_tileset.png" width="256" height="240"/>
+<tileset version="1.10" tiledversion="1.10.2" name="km_tileset" tilewidth="8" tileheight="8" tilecount="1200" columns="40" fillmode="preserve-aspect-fit">
+ <image source="../tiles/km_tileset.png" width="320" height="240"/>
  <tile id="0"/>
  <tile id="1"/>
  <tile id="2"/>
- <tile id="5"/>
- <tile id="6"/>
  <tile id="3"/>
  <tile id="4"/>
+ <tile id="5"/>
+ <tile id="6"/>
  <tile id="7"/>
  <tile id="8"/>
  <tile id="9"/>
