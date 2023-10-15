@@ -18,9 +18,9 @@ dim g_i%                       ' Auxiliary global integer variables
 dim g_temp1,g_temp2,g_x,g_y    ' Auxiliary global float variables
 
 ' 0-X, 1-Y, 2-Animation Flag
-dim g_player(2)=(SCREEN_WIDTH/2-TILE_SIZE, SCREEN_HEIGHT-TILE_SIZE*4,0)
-dim g_player_speed=.6
-dim g_player_animation_time=300
+dim g_player(2)
+dim g_player_speed=0.6
+dim g_player_animation_ms=300
 
 init()
 load_map(1)
@@ -33,9 +33,7 @@ page write 0: end
 sub run_stage()
     timer=0
 
-    sprite read #1, PLAYER_SKIN1_X_L, PLAYER_SKIN_Y, PLAYER_SIZE, PLAYER_SIZE, TILES_BUFFER
-    sprite read #2, PLAYER_SKIN1_X_R, PLAYER_SKIN_Y, PLAYER_SIZE, PLAYER_SIZE, TILES_BUFFER
-    sprite show g_player(2)+1,g_player(0),g_player(1),2
+    init_player()
 
     do
         ' Scrolls the map
@@ -53,12 +51,10 @@ sub run_stage()
 
         ' Process player animation
         if timer >= g_player_timer then
-            g_i%=g_player(2)+1
             g_player(2)=not g_player(2)
-            sprite swap g_i%,g_player(2)+1
-            g_player_timer=timer+g_player_animation_time
+            sprite read #1, CHOICE(g_player(2),PLAYER_SKIN1_X_R,PLAYER_SKIN1_X_L), PLAYER_SKIN_Y, PLAYER_SIZE, PLAYER_SIZE, TILES_BUFFER
+            g_player_timer=timer+g_player_animation_ms
         end if
-
 
         ' Process game logic and the sprites and map rendering
         if timer >= g_game_tick then
@@ -67,7 +63,7 @@ sub run_stage()
             if g_kb1% or g_kb2% or g_kb3% then process_kb()
 
             ' Process sprites
-            sprite next g_player(2)+1,g_player(0),g_player(1)
+            sprite next #1,g_player(0),g_player(1)
             sprite move
 
             ' Map rendering
@@ -85,6 +81,15 @@ sub run_stage()
             page write SCREEN_BUFFER
         end if
     loop
+end sub
+
+sub init_player()
+    g_player(0)=SCREEN_WIDTH/2-TILE_SIZE
+    g_player(1)=SCREEN_HEIGHT-TILE_SIZE*4
+    g_player(2)=0
+
+    sprite read #1, PLAYER_SKIN1_X_L,PLAYER_SKIN_Y, PLAYER_SIZE,PLAYER_SIZE, TILES_BUFFER
+    sprite show #1, g_player(0),g_player(1),2
 end sub
 
 sub check_scroll_collision()
