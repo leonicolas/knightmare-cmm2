@@ -14,7 +14,8 @@ dim g_player_timer             ' Player timer
 dim g_game_tick                ' The game tick
 dim g_tilepx%                  ' The rendered tile row pixel
 dim g_kb1%,g_kb2%,g_kb3%
-dim g_x%,g_y%,g_i%             ' Auxiliary global variables
+dim g_x%,g_y%,g_i%             ' Auxiliary global integer variables
+dim g_temp                     ' Auxiliary global float variables
 
 ' 0-X, 1-Y, 2-Animation Flag
 dim g_player(2)=(SCREEN_WIDTH/2-TILE_SIZE, SCREEN_HEIGHT-TILE_SIZE*4,0)
@@ -37,6 +38,34 @@ sub run_stage()
     sprite show g_player(2)+1,g_player(0),g_player(1),2
 
     do
+        ' Scrolls the map
+        if g_scroll_timer >= 0 and timer >= g_scroll_timer then
+            'sprite scroll 0,-1
+            sprite scrollr 0,0,SCREEN_WIDTH,SCREEN_HEIGHT+TILE_SIZE,0,-1
+            inc g_tilepx%,1
+            g_scroll_timer=timer+SCROLL_SPEED
+            ' Draw the next map tile row
+            if g_tilepx% = TILE_SIZE then
+                inc g_row%,-1
+                if g_row% >= 0 then
+                    draw_map_row(g_row%)
+                    g_tilepx%=0
+                else
+                    ' Stops the screen scroll
+                    g_scroll_timer=-1
+                end if
+            end if
+        end if
+
+        ' Process player animation
+        if timer >= g_player_timer then
+            g_i%=g_player(2)+1
+            g_player(2)=not g_player(2)
+            sprite swap g_i%,g_player(2)+1
+            g_player_timer=timer+g_player_animation_time
+        end if
+
+
         ' Process game logic and the sprites and map rendering
         if timer >= g_game_tick then
             ' Process keyboard
@@ -44,36 +73,16 @@ sub run_stage()
             if g_kb1% or g_kb2% or g_kb3% then process_kb()
 
             ' Process sprites
-            sprite show g_player(2)+1,g_player(0),g_player(1),2
+            sprite next g_player(2)+1,g_player(0),g_player(1)
+            sprite move
 
             ' Map rendering
             page write 0
-            blit 0,TILE_SIZE, SCREEN_OFFSET,0, SCREEN_WIDTH,SCREEN_HEIGHT, SCREEN_BUFFER
+            blit 0,TILE_SIZE, SCREEN_OFFSET,0, SCREEN_WIDTH,SCREEN_HEIGHT+TILE_SIZE, SCREEN_BUFFER
+            box 0,0,SCREEN_OFFSET,SCREEN_HEIGHT+TILE_SIZE,,0,0 'temp fix for outside map artifacts
             page write SCREEN_BUFFER
 
             g_game_tick=timer+GAME_TICK
-        end if
-
-        ' Scrolls the map
-        if timer >= g_scroll_timer then
-            sprite scroll 0,-1
-            inc g_tilepx%,1
-            g_scroll_timer=timer+SCROLL_SPEED
-        end if
-
-        ' Process player animation
-        if timer >= g_player_timer then
-            sprite hide g_player(2)+1
-            g_player(2)=not g_player(2)
-            g_player_timer=timer+g_player_animation_time
-        end if
-
-        ' Draw the next map tile row
-        if g_tilepx% = TILE_SIZE then
-            inc g_row%,-1
-            if g_row% < 0 then exit do
-            draw_map_row(g_row%)
-            g_tilepx%=0
         end if
 
         if g_debug% then
