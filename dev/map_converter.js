@@ -10,18 +10,18 @@ const mapBuffer = Buffer.alloc(groundBuffer.length / mapBufferBytesPerTile);
 /**
  * 2 Bytes per tile
  * 0000 0000 0000 0000
- *         | |--------> 1 byte: Tile Id 
+ *         | |--------> 1 byte: Tile Id
  *         |----------> 1 bit: Solid bit
  */
 
 for (let i = 0; i < groundBuffer.length; i += 4) {
     const groundValue = groundBuffer.readUInt32LE(i)
     const solidValue = solidBuffer.readUInt32LE(i)
-    
+
     const value = solidValue ? solidValue | 0x100 : groundValue;
     mapBuffer.writeUInt16BE(value & 0xFFFF, i / mapBufferBytesPerTile);
 };
 
 //fs.writeFileSync("ground.bin", groundBuffer);
 //fs.writeFileSync("solid.bin", solidBuffer);
-fs.writeFileSync("stage1.map", mapBuffer);
+fs.writeFileSync("../maps/stage1.map", mapBuffer);
