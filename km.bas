@@ -31,11 +31,14 @@ run_stage()
 page write 0: end
 
 sub run_stage()
+    local dbg_max_time=0,dbg_start_time;
     timer=0
 
     init_player()
 
     do
+        dbg_start_time=timer
+
         ' Scrolls the map
         if g_scroll_timer >= 0 and timer >= g_scroll_timer then
             'sprite scroll 0,-1
@@ -62,24 +65,25 @@ sub run_stage()
             g_kb1%=KeyDown(1): g_kb2%=KeyDown(2): g_kb3%=KeyDown(3)
             if g_kb1% or g_kb2% or g_kb3% then process_kb()
 
+            ' Map rendering
+            page write 0
+            blit 0,TILE_SIZE, SCREEN_OFFSET,0, SCREEN_WIDTH,SCREEN_HEIGHT+TILE_SIZE, SCREEN_BUFFER
+            page write SCREEN_BUFFER
+
             ' Process sprites
             sprite next #1,g_player(0),g_player(1)
             sprite move
 
-            ' Map rendering
-            page write 0
-            blit 0,TILE_SIZE, SCREEN_OFFSET,0, SCREEN_WIDTH,SCREEN_HEIGHT+TILE_SIZE, SCREEN_BUFFER
-            box 0,0,SCREEN_OFFSET,SCREEN_HEIGHT+TILE_SIZE,,0,0 'temp fix for outside map artifacts
-            page write SCREEN_BUFFER
+            ' Debug
+            if g_debug% then
+                page write 0
+                print@(0,200) "r: "+str$(dbg_max_time)+"  "
+                page write SCREEN_BUFFER
+            end if
 
             g_game_tick=timer+GAME_TICK
         end if
-
-        if g_debug% then
-            page write 0
-            print@(0,200) "r: "+str$(g_row%)+" kb1: "+str$(g_kb1%)+" kb2: "+str$(g_kb2%)+" kb3: "+str$(g_kb3%)+"  "
-            page write SCREEN_BUFFER
-        end if
+        dbg_max_time=max(dbg_max_time,timer-dbg_start_time)
     loop
 end sub
 
