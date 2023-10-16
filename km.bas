@@ -9,18 +9,36 @@ option default float
 dim g_debug%=0
 dim g_map(MAP_SIZE) as integer ' Map data
 dim g_row%                     ' Current top map row. Zero is the bottom row.
-dim g_scroll_timer             ' Scroll timer
-dim g_player_timer             ' Player timer
 dim g_game_tick                ' The game tick
 dim g_tile_px%                 ' The rendered tile row pixel
 dim g_kb1%,g_kb2%,g_kb3%
 dim g_i%                       ' Auxiliary global integer variables
 dim g_temp1,g_temp2,g_x,g_y    ' Auxiliary global float variables
 
-' 0-X, 1-Y, 2-Animation Flag
-dim g_player(2)
+' Timers
+dim g_scroll_timer             ' Scroll timer
+dim g_player_timer             ' Player timer
+dim g_shot_timer               ' Shot timer
+
+' 0-X, 1-Y, 2-Animation Flag, 3-Weapon
+dim g_player(3)
 dim g_player_speed=0.6
+dim g_player_shot_ms=100
 dim g_player_animation_ms=300
+
+' Supports 16 shots at the same time (id, x, y, speed x, speed y).
+' The three first slots are for the player shots, the other ones for enemies
+' 0 - No shot
+' 1 - Player Arrow
+' 2 - Player Double arrow
+' 3 - Player Fire
+' 4 - Player Boomerang
+' 5 - Player Sord
+' 6 - Player Double arrow (level 2)
+' 7 - Player Fire (level 2)
+' 8 - Player Boomerang (level 2)
+' 9 - Player Sord (level 2)
+dim g_shots(15,4)
 
 init()
 load_map(1)
@@ -31,13 +49,16 @@ run_stage()
 page write 0: end
 
 sub run_stage()
-    local dbg_max_time=0,dbg_start_time;
+    'local dbg_max_time=0,dbg_start_time;
     timer=0
 
     init_player()
 
     do
-        dbg_start_time=timer
+        'dbg_start_time=timer
+
+        ' Shot timer
+        if g_shot_timer > 0 and timer >= g_shot_timer then g_shot_timer=0
 
         ' Scrolls the map
         if g_scroll_timer >= 0 and timer >= g_scroll_timer then
@@ -55,11 +76,11 @@ sub run_stage()
         ' Process player animation
         if timer >= g_player_timer then
             g_player(2)=not g_player(2)
-            sprite read #1, CHOICE(g_player(2),PLAYER_SKIN1_X_R,PLAYER_SKIN1_X_L), PLAYER_SKIN_Y, PLAYER_SIZE, PLAYER_SIZE, TILES_BUFFER
+            sprite read #1, choice(g_player(2),PLAYER_SKIN1_X_R,PLAYER_SKIN1_X_L), PLAYER_SKIN_Y, TILE_SIZEx2, TILE_SIZEx2, TILES_BUFFER
             g_player_timer=timer+g_player_animation_ms
         end if
 
-        ' Process game logic and the sprites and map rendering
+        ' Process game logic, the sprites and map rendering
         if timer >= g_game_tick then
             ' Process keyboard
             g_kb1%=KeyDown(1): g_kb2%=KeyDown(2): g_kb3%=KeyDown(3)
@@ -71,29 +92,48 @@ sub run_stage()
             page write SCREEN_BUFFER
 
             ' Process sprites
+            process_shots()
             sprite next #1,g_player(0),g_player(1)
             sprite move
 
             ' Debug
             if g_debug% then
                 page write 0
-                print@(0,200) "r: "+str$(dbg_max_time)+"  "
+                'print@(0,200) "r: "+str$(dbg_max_time)+"  "
                 page write SCREEN_BUFFER
             end if
 
             g_game_tick=timer+GAME_TICK
         end if
-        dbg_max_time=max(dbg_max_time,timer-dbg_start_time)
+        'dbg_max_tim'e=max(dbg_max_time,timer-dbg_start_time)
     loop
+end sub
+
+sub process_shots()
+    local i
+    for i=0 to bound(g_shots())
+        ' Checks weapon id
+        if not g_shots(i,0) then continue for
+        ' Moves shot
+        inc g_shots(i,1),g_shots(i,3)
+        inc g_shots(i,2),g_shots(i,4)
+        if g_shots(i,2) < 0 then
+            g_shots(i,0)=0
+            sprite hide safe i+2
+        else
+            sprite next i+2,g_shots(i,1),g_shots(i,2)
+        end if
+    next
 end sub
 
 sub init_player()
     g_player(0)=SCREEN_WIDTH/2-TILE_SIZE
     g_player(1)=SCREEN_HEIGHT-TILE_SIZE*4
     g_player(2)=0
+    g_player(3)=1
 
-    sprite read #1, PLAYER_SKIN1_X_L,PLAYER_SKIN_Y, PLAYER_SIZE,PLAYER_SIZE, TILES_BUFFER
-    sprite show #1, g_player(0),g_player(1),2
+    sprite read #1, PLAYER_SKIN1_X_L,PLAYER_SKIN_Y, TILE_SIZEx2,TILE_SIZEx2, TILES_BUFFER
+    sprite show safe #1, g_player(0),g_player(1),1
 end sub
 
 sub check_scroll_collision()
@@ -138,7 +178,28 @@ sub process_kb()
         if g_player(1) > SCREEN_HEIGHT - TILE_SIZE then g_player(1)=SCREEN_HEIGHT - TILE_SIZE
     end if
 
+    if not g_shot_timer and (g_kb1%=KB_SPACE or g_kb2%=KB_SPACE or g_kb3%=KB_SPACE) then
+        player_shoot()
+    end if
+
     check_scroll_collision()
+end sub
+
+sub player_shoot()
+    local i
+    for i=0 to choice(g_player(3)>5,2,1)
+        if not g_shots(i,0) then
+            g_shots(i,0)=g_player(3)             ' weapon
+            g_shots(i,1)=g_player(0)+TILE_SIZE/2 ' X
+            g_shots(i,2)=g_player(1)-TILE_SIZEx2 ' Y
+            g_shots(i,3)=0                       ' Speed X
+            g_shots(i,4)=-2.2                    ' Speed Y
+            sprite read i+2, WEAPON_ARROW_X, WEAPON_Y, TILE_SIZE, TILE_SIZEx2, TILES_BUFFER
+            sprite show safe i+2, g_shots(i,1),g_shots(i,2), 1
+            g_shot_timer=timer+g_player_shot_ms
+            exit for
+        end if
+    next
 end sub
 
 function map_colide(player()) as integer

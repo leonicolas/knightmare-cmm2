@@ -20,6 +20,7 @@ const MAP_SIZE=MAP_COLS*MAP_ROWS          ' Total number of tiles in a map
 
 const TILES_BUFFER=5                      ' Tileset buffer number
 const TILE_SIZE=8                         ' Tile size in pixels
+const TILE_SIZEx2=TILE_SIZE*2             ' Tile size in pixels
 const TILES_COLS=40                       ' Tileset columns number
 const TILES_ROWS=30                       ' Tileset rows numbers
 
@@ -29,7 +30,9 @@ const SCREEN_ROWS=22                      ' Screen rows number
 const SCREEN_WIDTH=MAP_COLS*TILE_SIZE     ' Screen width in pixels
 const SCREEN_HEIGHT=SCREEN_ROWS*TILE_SIZE ' Screen height in pixels
 
+const PLAYER_SKIN_Y=TILE_SIZE*14
 const PLAYER_SKIN1_X_L=0
 const PLAYER_SKIN1_X_R=TILE_SIZE*2
-const PLAYER_SKIN_Y=TILE_SIZE*14
-const PLAYER_SIZE=TILE_SIZE*2
+
+const WEAPON_Y=TILE_SIZE*19
+const WEAPON_ARROW_X=0
