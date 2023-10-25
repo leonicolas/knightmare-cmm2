@@ -6,6 +6,7 @@ option default float
 #include "constants.inc"
 
 ' Global variables
+dim g_music_on%=1
 dim g_debug%=0
 dim g_map(MAP_SIZE) as integer ' Map data
 dim g_row%                     ' Current top map row. Zero is the bottom row.
@@ -45,11 +46,13 @@ load_map(1)
 initialize_screen_buffer()
 
 page write 2
-run_stage()
+run_stage(1)
 page write 0: end
 
-sub run_stage()
+sub run_stage(stage%)
     'local dbg_max_time=0,dbg_start_time;
+    if g_music_on% then play modfile MUSIC$(stage%), 16000
+
     timer=0
 
     init_player()
@@ -196,6 +199,7 @@ sub player_shoot()
             g_shots(i,4)=-2.2                    ' Speed Y
             sprite read i+2, WEAPON_ARROW_X, WEAPON_Y, TILE_SIZE, TILE_SIZEx2, TILES_BUFFER
             sprite show safe i+2, g_shots(i,1),g_shots(i,2), 1
+            play effect SHOT_EFFECT
             g_shot_timer=timer+g_player_shot_ms
             exit for
         end if
@@ -206,7 +210,7 @@ function map_colide(player()) as integer
     local col%=player(0)\TILE_SIZE
     local row%=(player(1)-g_tile_px%)\TILE_SIZE+g_row%
     ' Check top left
-    map_colide=g_map((row%+1)*MAP_COLS+col%)>>8 and 1
+    map_colide=g_map((row%+1)*MAP_COLS+col%) and &H100
     ' Check top right
     if not map_colide then map_colide=g_map((row%+1)*MAP_COLS+(col%+2))>>8 and 1
     ' Check bottom left
