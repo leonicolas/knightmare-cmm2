@@ -21,7 +21,7 @@ const MAP_SIZE=MAP_COLS*MAP_ROWS          ' Total number of tiles in a map
 const TILES_BUFFER=5                      ' Tileset buffer number
 const TILE_SIZE=8                         ' Tile size in pixels
 const TILE_SIZEx2=TILE_SIZE*2             ' Tile size in pixels
-const TILES_COLS=40                       ' Tileset columns number
+const TILES_COLS=32                       ' Tileset columns number
 const TILES_ROWS=30                       ' Tileset rows numbers
 
 const SCREEN_BUFFER=2                     ' Screen buffer number
