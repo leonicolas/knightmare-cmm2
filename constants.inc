@@ -37,6 +37,8 @@ const PLAYER_SKIN1_X_R=TILE_SIZE*2
 const WEAPON_Y=TILE_SIZE*19
 const WEAPON_ARROW_X=0
 
+const OBJECTS_ANIMATION_MS=140
+
 const SHOT_EFFECT="sfx/shot.wav"
 
 ' Mapping tables
