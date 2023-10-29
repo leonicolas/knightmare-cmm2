@@ -9,8 +9,8 @@ const TILESET_IMG="tiles/km_tileset.png"
 const MAPS_DIR="maps/"
 
 ' const PLAYER_ANIM_SPEED1
-const SCROLL_SPEED=135                    ' Scroll speed in ms
-const GAME_TICK=10                        ' Game tick in ms
+const SCROLL_SPEED_MS=135                 ' Scroll speed in ms
+const GAME_TICK_MS=10                     ' Game tick in ms
 
 const MAP_COLS=32                         ' Map columns number
 const MAP_ROWS=238                        ' Map rows number
@@ -43,3 +43,5 @@ const SHOT_EFFECT="sfx/shot.wav"
 
 ' Mapping tables
 dim MUSIC$(9)=("music/01_intro-psg.mod", "music/02_majou-densetsu-psg.mod", "", "", "", "", "", "", "", "")
+dim OBJ_TILE_Y%=128
+dim OBJ_TILE_X%(13)=(0, 0, 32, 32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)

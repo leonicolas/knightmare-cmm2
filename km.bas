@@ -6,7 +6,7 @@ option default float
 #include "constants.inc"
 
 ' Global variables
-dim g_music_on%=1
+dim g_sound_on%=0
 dim g_debug%=0
 dim g_map(MAP_SIZE) as integer ' Map data
 dim g_row%                     ' Current top map row. Zero is the bottom row.
@@ -49,11 +49,12 @@ init()
 load_map(1)
 initialize_screen_buffer()
 
-page write 2
 run_stage(1)
 page write 0: end
 
 sub run_stage(stage%)
+    page write 2
+
     'local dbg_max_time=0,dbg_start_time;
     if g_sound_on% then play modfile MUSIC$(stage%), 16000
 
@@ -62,95 +63,77 @@ sub run_stage(stage%)
     init_player()
 
     do
-        'dbg_start_time=timer
+        ' Game tick
+        if timer - g_game_tick < GAME_TICK_MS then continue do
 
-        ' Shot timer
-        if g_shot_timer > 0 and timer >= g_shot_timer then g_shot_timer=0
+        ' Process keyboard
+        g_kb1%=KeyDown(1): g_kb2%=KeyDown(2): g_kb3%=KeyDown(3)
+        if g_kb1% or g_kb2% or g_kb3% then process_kb()
 
         ' Scrolls the map
-        if g_scroll_timer >= 0 and timer >= g_scroll_timer then
-            'sprite scroll 0,-1
-            sprite scrollr 0,0,SCREEN_WIDTH,SCREEN_HEIGHT+TILE_SIZE,0,-1
-            check_scroll_collision()
-            inc g_tile_px%,1
-            g_scroll_timer=timer+SCROLL_SPEED
-            ' Draw the next map tile row
-            if g_tile_px% = TILE_SIZE then
-                draw_next_map_row()
-            end if
+        if g_row% >= 0 and timer - g_scroll_timer >= SCROLL_SPEED_MS then
+            scroll_map()
+            g_scroll_timer=timer
         end if
 
         ' Process player animation
-        if timer >= g_player_timer then
+        if timer - g_player_timer >= g_player_animation_ms then
             g_player(2)=not g_player(2)
             sprite read #1, choice(g_player(2),PLAYER_SKIN1_X_R,PLAYER_SKIN1_X_L), PLAYER_SKIN_Y, TILE_SIZEx2, TILE_SIZEx2, TILES_BUFFER
-            g_player_timer=timer+g_player_animation_ms
+            g_player_timer=timer
         end if
 
         ' Process objects animation
-        if timer >= g_objects_timer then
+        if timer - g_objects_timer >= OBJECTS_ANIMATION_MS then
             animate_objects()
-            g_objects_timer=timer+OBJECTS_ANIMATION_MS
+            g_objects_timer=timer
         end if
 
         ' Process game logic, the sprites and map rendering
-        if timer >= g_game_tick then
-            ' Process keyboard
-            g_kb1%=KeyDown(1): g_kb2%=KeyDown(2): g_kb3%=KeyDown(3)
-            if g_kb1% or g_kb2% or g_kb3% then process_kb()
+        ' Map rendering
+        page write 0
+        blit 0,TILE_SIZE, SCREEN_OFFSET,0, SCREEN_WIDTH,SCREEN_HEIGHT+TILE_SIZE, SCREEN_BUFFER
+        page write SCREEN_BUFFER
 
-            ' Map rendering
-            page write 0
-            blit 0,TILE_SIZE, SCREEN_OFFSET,0, SCREEN_WIDTH,SCREEN_HEIGHT+TILE_SIZE, SCREEN_BUFFER
-            page write SCREEN_BUFFER
+        ' Process sprites
+        move_shots()
+        move_objects()
+        ' Move player
+        sprite next #1,g_player(0),g_player(1)
+        sprite move
 
-            ' Process sprites
-            move_shots()
-            move_objects()
-            sprite next #1,g_player(0),g_player(1)
-            sprite move
-
-            ' Debug
-            if g_debug% then
-                page write 0
-                'print@(0,200) "r: "+str$(dbg_max_time)+"  "
-                page write SCREEN_BUFFER
-            end if
-
-            g_game_tick=timer+GAME_TICK
-        end if
-        'dbg_max_tim'e=max(dbg_max_time,timer-dbg_start_time)
+        g_game_tick=timer
     loop
 end sub
 
+'
+' Animate the game objects (enemies, power-ups)
 sub animate_objects()
-    local i
+    local i%, obj_id%, offset%=TILE_SIZEx2
     inc g_objects_tick%
-    for i=0 to bound(g_objects())
-        if not g_objects(i,0) then continue for
-        if g_objects_tick% mod 2 then
-            sprite read OBJ_INI_SPRITE_ID+i, 0, 128, 16, 16, TILES_BUFFER
-        else
-            sprite read OBJ_INI_SPRITE_ID+i, 16, 128, 16, 16, TILES_BUFFER
-        end if
+    for i%=0 to bound(g_objects())
+        obj_id%=g_objects(i%,0)
+        if not obj_id% then continue for
+        if g_objects_tick% mod 2 then offset%=0
+        sprite read OBJ_INI_SPRITE_ID + i%, OBJ_TILE_X%(obj_id%)+offset%, OBJ_TILE_Y%, TILE_SIZEx2, TILE_SIZEx2, TILES_BUFFER
     next
 end sub
 
 '
 ' Move screen shots
 sub move_shots()
-    local i
-    for i=0 to bound(g_shots())
+    local i%
+    for i%=0 to bound(g_shots())
         ' Checks weapon id
-        if not g_shots(i,0) then continue for
+        if not g_shots(i%,0) then continue for
         ' Moves shot
-        inc g_shots(i,1),g_shots(i,3)
-        inc g_shots(i,2),g_shots(i,4)
-        if g_shots(i,2) < 0 then
-            g_shots(i,0)=0
-            sprite hide safe i+2
+        inc g_shots(i%,1),g_shots(i%,3)
+        inc g_shots(i%,2),g_shots(i%,4)
+        if g_shots(i%,2) < 0 then
+            g_shots(i%,0)=0
+            sprite hide safe i%+2
         else
-            sprite next i+2,g_shots(i,1),g_shots(i,2)
+            sprite next i%+2,g_shots(i%,1),g_shots(i%,2)
         end if
     next
 end sub
@@ -158,30 +141,79 @@ end sub
 '
 ' Move screen objects
 sub move_objects()
-    local i
-    for i=0 to bound(g_objects())
+    local i%
+
+    for i%=0 to bound(g_objects())
         ' Checks object id
-        if not g_objects(i,0) then continue for
+        if not g_objects(i%,0) then continue for
         ' Moves object
-        inc g_objects(i,1),g_objects(i,3)
-        inc g_objects(i,2),g_objects(i,4)
-        if g_objects(i,2) < 0 or g_objects(i,2) > SCREEN_HEIGHT-TILE_SIZE then
-            g_objects(i,0)=0
-            sprite hide safe OBJ_INI_SPRITE_ID + i
+        inc g_objects(i%,1),g_objects(i%,3)
+        inc g_objects(i%,2),g_objects(i%,4)
+        if g_objects(i%,2) < 0 or g_objects(i%,2) > SCREEN_HEIGHT-TILE_SIZE then
+            sprite hide OBJ_INI_SPRITE_ID + i%
+            g_objects(i%,0)=0
         else
-            sprite next OBJ_INI_SPRITE_ID + i, g_objects(i,1), g_objects(i,2)
+            sprite next OBJ_INI_SPRITE_ID + i%, g_objects(i%,1), g_objects(i%,2)
         end if
+    next
+end sub
+
+'
+' Create the shot sprite
+sub fire()
+    ' Cooldown
+    debug_print("Shot!!! " + str$(timer) + ", " + str$(g_shot_timer));
+    if timer - g_shot_timer < g_player_shot_ms then exit sub
+
+    local i%
+    for i%=0 to choice(g_player(3)>5,2,1)
+        ' Ignore used slots
+        if g_shots(i%,0) then continue for
+
+        ' Create the shot state
+        g_shots(i%,0)=g_player(3)             ' weapon
+        g_shots(i%,1)=g_player(0)+TILE_SIZE/2 ' X
+        g_shots(i%,2)=g_player(1)-TILE_SIZEx2 ' Y
+        g_shots(i%,3)=0                       ' Speed X
+        g_shots(i%,4)=-2.2                    ' Speed Y
+        ' Create the shot sprite
+        sprite read i%+2, WEAPON_ARROW_X, WEAPON_Y, TILE_SIZE, TILE_SIZEx2, TILES_BUFFER
+        sprite show safe i%+2, g_shots(i%,1),g_shots(i%,2), 1
+        ' Play SFX
+        if g_sound_on% then play effect SHOT_EFFECT
+        ' Increment timer
+        g_shot_timer=timer
+        exit for
+    next
+end sub
+
+'
+' Create a new object initialize its state and sprite
+sub create_object(obj_id%, x%, y%)
+    local i%
+    for i%=0 to bound(g_objects())
+        ' Check for empty slots
+        if g_objects(i%,0) then continue for
+
+        g_objects(i%,0)=obj_id%  ' Object Id
+        g_objects(i%,1)=x%       ' X
+        g_objects(i%,2)=y%       ' Y
+        g_objects(i%,3)=0        ' Speed X
+        g_objects(i%,4)=0.15     ' Speed Y
+        sprite read OBJ_INI_SPRITE_ID + i%, OBJ_TILE_X%(obj_id%), OBJ_TILE_Y%, TILE_SIZEx2, TILE_SIZEx2, TILES_BUFFER
+        sprite show safe OBJ_INI_SPRITE_ID + i%, g_objects(i%,1),g_objects(i%,2), 0
+        exit for
     next
 end sub
 
 '
 ' Initialize player state and sprite
 sub init_player()
-    g_player(0)=SCREEN_WIDTH/2-TILE_SIZE
-    g_player(1)=SCREEN_HEIGHT-TILE_SIZE*4
-    g_player(2)=0
-    g_player(3)=1
-    g_player(4)=0.6
+    g_player(0)=SCREEN_WIDTH/2-TILE_SIZE  ' x
+    g_player(1)=SCREEN_HEIGHT-TILE_SIZE*4 ' y
+    g_player(2)=0                         ' animation counter
+    g_player(3)=1                         ' weapon
+    g_player(4)=0.6                       ' speed
 
     sprite read #1, PLAYER_SKIN1_X_L,PLAYER_SKIN_Y, TILE_SIZEx2,TILE_SIZEx2, TILES_BUFFER
     sprite show safe #1, g_player(0),g_player(1),1
@@ -198,15 +230,20 @@ sub check_scroll_collision()
 end sub
 
 '
-' Draw the next map row on the top of the screen buffer
-sub draw_next_map_row()
-    inc g_row%,-1
-    if g_row% >= 0 then
-        draw_map_row_and_create_objects(g_row%)
+' Scrolls the map
+sub scroll_map()
+    'sprite scroll 0,-1
+    sprite scrollr 0,0,SCREEN_WIDTH,SCREEN_HEIGHT+TILE_SIZE,0,-1
+    check_scroll_collision()
+    inc g_tile_px%,1
+    ' Draw the next map tile row
+    if g_tile_px% = TILE_SIZE then
         g_tile_px%=0
-    else
-        ' Stops the screen scroll
-        g_scroll_timer=-1
+        inc g_row%,-1
+        ' Draw the next map row on the top of the screen buffer
+        if g_row% >= 0 then
+            draw_map_row_and_create_objects(g_row%)
+        end if
     end if
 end sub
 
@@ -236,35 +273,11 @@ sub process_kb()
         if g_player(1) > SCREEN_HEIGHT - TILE_SIZE then g_player(1)=SCREEN_HEIGHT - TILE_SIZE
     end if
 
-    if not g_shot_timer and (g_kb1%=KB_SPACE or g_kb2%=KB_SPACE or g_kb3%=KB_SPACE) then
+    if g_kb1%=KB_SPACE or g_kb2%=KB_SPACE or g_kb3%=KB_SPACE then
         fire()
     end if
 
     check_scroll_collision()
-end sub
-
-'
-' Create the shot sprite
-sub fire()
-    local i
-    for i=0 to choice(g_player(3)>5,2,1)
-        ' Ignore used slots
-        if g_shots(i,0) then continue for
-
-        ' Create the shot state
-        g_shots(i,0)=g_player(3)             ' weapon
-        g_shots(i,1)=g_player(0)+TILE_SIZE/2 ' X
-        g_shots(i,2)=g_player(1)-TILE_SIZEx2 ' Y
-        g_shots(i,3)=0                       ' Speed X
-        g_shots(i,4)=-2.2                    ' Speed Y
-        ' Create the shot sprite
-        sprite read i+2, WEAPON_ARROW_X, WEAPON_Y, TILE_SIZE, TILE_SIZEx2, TILES_BUFFER
-        sprite show safe i+2, g_shots(i,1),g_shots(i,2), 1
-        ' Play SFX
-        if g_sound_on% then play effect SHOT_EFFECT
-        ' Increment timer
-        g_shot_timer=timer+g_player_shot_ms
-    next
 end sub
 
 '
@@ -321,28 +334,6 @@ sub draw_map_row_and_create_objects(row%)
 end sub
 
 '
-' Create a new object initialize its state and sprite
-sub create_object(obj_id%, x%, y%)
-    local i
-    page write 0
-    print@(0,200) "oid: " + str$(obj_id%) + " x: " + str$(x%) + " y: " + str$(y%) + "   "
-    page write SCREEN_BUFFER
-    for i=0 to bound(g_objects())
-        ' Check for empty slots
-        if not g_objects(i,0) then
-            g_objects(i,0)=obj_id%  ' Object Id
-            g_objects(i,1)=x%       ' X
-            g_objects(i,2)=y%       ' Y
-            g_objects(i,3)=0        ' Speed X
-            g_objects(i,4)=0.15     ' Speed Y
-            sprite read OBJ_INI_SPRITE_ID+i, 0, 128, 16, 16, TILES_BUFFER
-            sprite show safe OBJ_INI_SPRITE_ID+i, g_objects(i,1),g_objects(i,2), 0
-            exit for
-        end if
-    next
-end sub
-
-'
 ' Draw initial screen to the screen buffer
 sub initialize_screen_buffer()
     local row%
@@ -376,4 +367,12 @@ sub intro()
         kb%=KeyDown(1)
         if kb% = KB_ESC then mode 1:end
     loop
+end sub
+
+sub debug_print(msg$)
+    if g_debug% then
+        page write 0
+        print @(0,184) msg$
+        page write SCREEN_BUFFER
+    end if
 end sub
