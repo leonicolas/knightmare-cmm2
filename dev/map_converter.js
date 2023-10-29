@@ -12,8 +12,8 @@ const tileSize=8;
 
 const objectsIds = {
     blob: 1,
-    birdleft: 2,
-    birdright: 3,
+    bat: 2,
+    "bat-wave": 3,
 };
 
 /**
