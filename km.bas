@@ -7,7 +7,7 @@ option default float
 
 ' Global variables
 dim g_sound_on%=0
-dim g_debug%=0
+dim g_debug%=1
 dim g_map(MAP_SIZE) as integer ' Map data
 dim g_row%                     ' Current top map row. Zero is the bottom row.
 dim g_game_tick                ' The game tick
@@ -40,8 +40,8 @@ dim g_player_animation_ms=300
 ' 8 - Player Boomerang (level 2)
 ' 9 - Player Sword (level 2)
 dim g_shots(12,4)
-' Supports 10 objects at the same time (id, x, y, speed x, speed y).
-dim g_objects(10,4)
+' Supports 10 objects at the same time (id, x, y, speed x, speed y, aux).
+dim g_objects(10,5)
 dim g_objects_tick%=0
 const OBJ_INI_SPRITE_ID=bound(g_shots()) + 1 ' Initial sprite Id for object
 
@@ -53,13 +53,13 @@ run_stage(1)
 page write 0: end
 
 sub run_stage(stage%)
-    page write 2
+    page write 0: cls
+    page write SCREEN_BUFFER
 
     'local dbg_max_time=0,dbg_start_time;
     if g_sound_on% then play modfile MUSIC$(stage%), 16000
 
     timer=0
-
     init_player()
 
     do
@@ -147,8 +147,16 @@ sub move_objects()
         ' Checks object id
         if not g_objects(i%,0) then continue for
         ' Moves object
-        inc g_objects(i%,1),g_objects(i%,3)
-        inc g_objects(i%,2),g_objects(i%,4)
+        select case g_objects(i%,0)
+            case 2,3 ' Bat and Bat wave
+                g_objects(i%,1)=(SCREEN_CENTER-TILE_SIZE)+(SCREEN_CENTER-TILE_SIZEx4)*cos(g_objects(i%,5))
+                inc g_objects(i%,5),g_objects(i%,3)
+                inc g_objects(i%,2),g_objects(i%,4)
+            case else
+                inc g_objects(i%,1),g_objects(i%,3)
+                inc g_objects(i%,2),g_objects(i%,4)
+        end select
+
         if g_objects(i%,2) < 0 or g_objects(i%,2) > SCREEN_HEIGHT-TILE_SIZE then
             sprite hide OBJ_INI_SPRITE_ID + i%
             g_objects(i%,0)=0
@@ -195,11 +203,20 @@ sub create_object(obj_id%, x%, y%)
         ' Check for empty slots
         if g_objects(i%,0) then continue for
 
-        g_objects(i%,0)=obj_id%  ' Object Id
-        g_objects(i%,1)=x%       ' X
-        g_objects(i%,2)=y%       ' Y
-        g_objects(i%,3)=0        ' Speed X
-        g_objects(i%,4)=0.15     ' Speed Y
+        g_objects(i%,0)=obj_id%             ' Object Id
+        g_objects(i%,1)=x%                  ' X
+        g_objects(i%,2)=y%                  ' Y
+        g_objects(i%,3)=OBJ_DATA(obj_id%,0) ' Speed X
+        g_objects(i%,4)=OBJ_DATA(obj_id%,1) ' Speed Y
+        g_objects(i%,5)=OBJ_DATA(obj_id%,2) ' Auxiliary
+
+        select case obj_id%
+            case 3 ' Bat wave
+                if x% < SCREEN_CENTER then
+                    g_objects(i%,5)=180
+                end if
+        end select
+
         sprite read OBJ_INI_SPRITE_ID + i%, OBJ_TILE_X%(obj_id%), OBJ_TILE_Y%, TILE_SIZEx2, TILE_SIZEx2, TILES_BUFFER
         sprite show safe OBJ_INI_SPRITE_ID + i%, g_objects(i%,1),g_objects(i%,2), 0
         exit for
