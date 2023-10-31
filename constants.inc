@@ -1,3 +1,6 @@
+const false=0
+const true=1
+
 const KB_ESC=27
 const KB_SPACE=32
 const KB_UP=128
@@ -43,18 +46,23 @@ const OBJECTS_ANIMATION_MS=140
 
 const SHOT_EFFECT="sfx/shot.wav"
 
-' Mapping tables
+' Music table
 dim MUSIC$(9)=("music/01_intro-psg.mod", "music/02_majou-densetsu-psg.mod", "", "", "", "", "", "", "", "")
+
 ' Objects tiles position. First slot is not used
 dim OBJ_TILE_Y%=128
 dim OBJ_TILE_X%(13)=(0, 0, 32, 32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-' Object speed X and Y and auxiliary data. First slot is not used
+
+' Object data: speed X, speed Y and auxiliary data
 dim OBJ_DATA(13,2)
 ' Bubble
 OBJ_DATA(1,1)=0.15   ' Y speed
 ' Bat
-OBJ_DATA(2,0)=1.2    ' X speed (angle increment)
-OBJ_DATA(2,1)=0.2    ' Y speed
+OBJ_DATA(2,0)=0.7    ' X speed (angle increment)
+OBJ_DATA(2,1)=0.6    ' Y speed
+OBJ_DATA(2,2)=90     ' Angle
+const BAT_SPAWN_SPEED_MS=500
 ' Bat wave
 OBJ_DATA(3,0)=1.2    ' X speed (angle increment)
 OBJ_DATA(3,1)=0.33   ' Y speed
+const BAT_WAVE_SPAWN_SPEED_MS=200

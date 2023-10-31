@@ -40,8 +40,10 @@ dim g_player_animation_ms=300
 ' 8 - Player Boomerang (level 2)
 ' 9 - Player Sword (level 2)
 dim g_shots(12,4)
-' Supports 10 objects at the same time (id, x, y, speed x, speed y, aux).
-dim g_objects(10,5)
+' Supports 12 objects at the same time: obj id, x, y, speed x, speed y, aux.
+dim g_objects(11,5)
+' Object spawn data: quantity, x, y, next spawn time
+dim g_objects_spawn(bound(g_objects()),3)
 dim g_objects_tick%=0
 const OBJ_INI_SPRITE_ID=bound(g_shots()) + 1 ' Initial sprite Id for object
 
@@ -97,7 +99,7 @@ sub run_stage(stage%)
 
         ' Process sprites
         move_shots()
-        move_objects()
+        move_and_spawn_objects()
         ' Move player
         sprite next #1,g_player(0),g_player(1)
         sprite move
@@ -140,30 +142,60 @@ end sub
 
 '
 ' Move screen objects
-sub move_objects()
-    local i%
+sub move_and_spawn_objects()
+    local i%, sprite_id%, obj_id%
 
     for i%=0 to bound(g_objects())
+        obj_id%=g_objects(i%,0)
+
         ' Checks object id
-        if not g_objects(i%,0) then continue for
+        if not obj_id% then continue for
         ' Moves object
-        select case g_objects(i%,0)
-            case 2,3 ' Bat and Bat wave
+        select case obj_id%
+            case 2 ' Bat
+                if g_objects(i%,1) > SCREEN_CENTER then
+                    g_objects(i%,1)=SCREEN_WIDTH+SCREEN_CENTER*cos(g_objects(i%,5))
+                else
+                    g_objects(i%,1)=(SCREEN_CENTER-TILE_SIZE)*cos(g_objects(i%,5))
+                end if
+                inc g_objects(i%,5),g_objects(i%,3)
+                inc g_objects(i%,2),g_objects(i%,4)
+
+                ' Spawn new bat
+                if g_objects_spawn(i%, 0) > 0 and timer >= g_objects_spawn(i%, 3) then
+                    spawn_new_object_copy(obj_id%, i%, BAT_SPAWN_SPEED_MS)
+                end if
+
+            case 3 ' Bat wave
                 g_objects(i%,1)=(SCREEN_CENTER-TILE_SIZE)+(SCREEN_CENTER-TILE_SIZEx4)*cos(g_objects(i%,5))
                 inc g_objects(i%,5),g_objects(i%,3)
                 inc g_objects(i%,2),g_objects(i%,4)
+
+                ' Spawn new bat
+                if g_objects_spawn(i%, 0) > 0 and timer >= g_objects_spawn(i%, 3) then
+                    spawn_new_object_copy(obj_id%, i%, BAT_WAVE_SPAWN_SPEED_MS)
+                end if
+
             case else
                 inc g_objects(i%,1),g_objects(i%,3)
                 inc g_objects(i%,2),g_objects(i%,4)
         end select
 
-        if g_objects(i%,2) < 0 or g_objects(i%,2) > SCREEN_HEIGHT-TILE_SIZE then
-            sprite hide OBJ_INI_SPRITE_ID + i%
-            g_objects(i%,0)=0
+        ' Move or destroy the sprite if out of bounds
+        sprite_id%=OBJ_INI_SPRITE_ID + i%
+        if not sprite(e,sprite_id%) and g_objects(i%,2) <= SCREEN_HEIGHT-TILE_SIZE then
+            sprite next sprite_id%, g_objects(i%,1), g_objects(i%,2)
         else
-            sprite next OBJ_INI_SPRITE_ID + i%, g_objects(i%,1), g_objects(i%,2)
+            sprite hide sprite_id%
+            g_objects(i%,0)=0
         end if
     next
+end sub
+
+sub spawn_new_object_copy(obj_id%, i%, time_ms)
+    spawn_object(obj_id%, g_objects_spawn(i%, 1), g_objects_spawn(i%, 2), true)
+    g_objects_spawn(i%, 0)=g_objects_spawn(i%, 0) - 1
+    g_objects_spawn(i%, 3)=timer+time_ms
 end sub
 
 '
@@ -196,8 +228,8 @@ sub fire()
 end sub
 
 '
-' Create a new object initialize its state and sprite
-sub create_object(obj_id%, x%, y%)
+' Spawn a new object and initialize its state and sprite
+sub spawn_object(obj_id%, x%, y%, is_copy%)
     local i%
     for i%=0 to bound(g_objects())
         ' Check for empty slots
@@ -211,9 +243,13 @@ sub create_object(obj_id%, x%, y%)
         g_objects(i%,5)=OBJ_DATA(obj_id%,2) ' Auxiliary
 
         select case obj_id%
-            case 3 ' Bat wave
-                if x% < SCREEN_CENTER then
-                    g_objects(i%,5)=180
+            case 2,3 ' Bat
+                if x% < SCREEN_CENTER then g_objects(i%,5)=g_objects(i%,5)+180
+                if not is_copy% then
+                    g_objects_spawn(i%,0)=choice(obj_id%=2, 3, 4)
+                    g_objects_spawn(i%,1)=x% ' X
+                    g_objects_spawn(i%,2)=y% ' Y
+                    g_objects_spawn(i%,3)=timer+choice(obj_id%=2, BAT_SPAWN_SPEED_MS, BAT_WAVE_SPAWN_SPEED_MS)
                 end if
         end select
 
@@ -345,7 +381,7 @@ sub draw_map_row_and_create_objects(row%)
         blit tx%,ty%, col%*TILE_SIZE,0, TILE_SIZE,TILE_SIZE, TILES_BUFFER
         ' Create object
         obj_id%=(tile_data% AND &HE00) >> 9
-        if obj_id% then create_object(obj_id%, col%*TILE_SIZE, 0)
+        if obj_id% then spawn_object(obj_id%, col%*TILE_SIZE, 0, false)
     next
     page write 0
 end sub
