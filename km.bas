@@ -117,7 +117,7 @@ sub animate_objects()
         obj_id%=g_objects(i%,0)
         if not obj_id% then continue for
         if g_objects_tick% mod 2 then offset%=0
-        sprite read OBJ_INI_SPRITE_ID + i%, OBJ_TILE_X%(obj_id%)+offset%, OBJ_TILE_Y%, TILE_SIZEx2, TILE_SIZEx2, TILES_BUFFER
+        sprite read OBJ_INI_SPRITE_ID + i%, OBJ_TILE%(obj_id%,0)+offset%, OBJ_TILE%(obj_id%,1), TILE_SIZEx2, TILE_SIZEx2, TILES_BUFFER
     next
 end sub
 
@@ -150,6 +150,7 @@ sub move_and_spawn_objects()
 
         ' Checks object id
         if not obj_id% then continue for
+
         ' Moves object
         select case obj_id%
             case 2 ' Bat
@@ -192,17 +193,52 @@ sub move_and_spawn_objects()
     next
 end sub
 
+'
+' Spawn new object copy decrementing the number of remaining copies
 sub spawn_new_object_copy(obj_id%, i%, time_ms)
-    spawn_object(obj_id%, g_objects_spawn(i%, 1), g_objects_spawn(i%, 2), true)
+    spawn_object(obj_id%, g_objects_spawn(i%, 1), g_objects_spawn(i%, 2), 0)
     g_objects_spawn(i%, 0)=g_objects_spawn(i%, 0) - 1
     g_objects_spawn(i%, 3)=timer+time_ms
+end sub
+
+'
+' Spawn a new object and initialize its state and sprite
+sub spawn_object(obj_id%, x%, y%, extra%)
+    local i%
+    for i%=0 to bound(g_objects())
+        ' Check for empty slots
+        if g_objects(i%,0) then continue for
+
+        g_objects(i%,0)=obj_id%             ' Object Id
+        g_objects(i%,1)=x%                  ' X
+        g_objects(i%,2)=y%                  ' Y
+        if obj_id% <= bound(OBJ_DATA()) then
+            g_objects(i%,3)=OBJ_DATA(obj_id%,0) ' Speed X
+            g_objects(i%,4)=OBJ_DATA(obj_id%,1) ' Speed Y
+            g_objects(i%,5)=OBJ_DATA(obj_id%,2) ' Auxiliary
+        end if
+
+        select case obj_id%
+            case 2,3 ' Bat
+                if x% < SCREEN_CENTER then g_objects(i%,5)=g_objects(i%,5)+180
+                if extra% then
+                    g_objects_spawn(i%,0)=extra%
+                    g_objects_spawn(i%,1)=x% ' X
+                    g_objects_spawn(i%,2)=y% ' Y
+                    g_objects_spawn(i%,3)=timer+choice(obj_id%=2, BAT_SPAWN_SPEED_MS, BAT_WAVE_SPAWN_SPEED_MS)
+                end if
+        end select
+
+        sprite read OBJ_INI_SPRITE_ID + i%, OBJ_TILE%(obj_id%,0), OBJ_TILE%(obj_id%,1), TILE_SIZEx2, TILE_SIZEx2, TILES_BUFFER
+        sprite show safe OBJ_INI_SPRITE_ID + i%, g_objects(i%,1),g_objects(i%,2), 0
+        exit for
+    next
 end sub
 
 '
 ' Create the shot sprite
 sub fire()
     ' Cooldown
-    debug_print("Shot!!! " + str$(timer) + ", " + str$(g_shot_timer));
     if timer - g_shot_timer < g_player_shot_ms then exit sub
 
     local i%
@@ -223,38 +259,6 @@ sub fire()
         if g_sound_on% then play effect SHOT_EFFECT
         ' Increment timer
         g_shot_timer=timer
-        exit for
-    next
-end sub
-
-'
-' Spawn a new object and initialize its state and sprite
-sub spawn_object(obj_id%, x%, y%, is_copy%)
-    local i%
-    for i%=0 to bound(g_objects())
-        ' Check for empty slots
-        if g_objects(i%,0) then continue for
-
-        g_objects(i%,0)=obj_id%             ' Object Id
-        g_objects(i%,1)=x%                  ' X
-        g_objects(i%,2)=y%                  ' Y
-        g_objects(i%,3)=OBJ_DATA(obj_id%,0) ' Speed X
-        g_objects(i%,4)=OBJ_DATA(obj_id%,1) ' Speed Y
-        g_objects(i%,5)=OBJ_DATA(obj_id%,2) ' Auxiliary
-
-        select case obj_id%
-            case 2,3 ' Bat
-                if x% < SCREEN_CENTER then g_objects(i%,5)=g_objects(i%,5)+180
-                if not is_copy% then
-                    g_objects_spawn(i%,0)=choice(obj_id%=2, 3, 4)
-                    g_objects_spawn(i%,1)=x% ' X
-                    g_objects_spawn(i%,2)=y% ' Y
-                    g_objects_spawn(i%,3)=timer+choice(obj_id%=2, BAT_SPAWN_SPEED_MS, BAT_WAVE_SPAWN_SPEED_MS)
-                end if
-        end select
-
-        sprite read OBJ_INI_SPRITE_ID + i%, OBJ_TILE_X%(obj_id%), OBJ_TILE_Y%, TILE_SIZEx2, TILE_SIZEx2, TILES_BUFFER
-        sprite show safe OBJ_INI_SPRITE_ID + i%, g_objects(i%,1),g_objects(i%,2), 0
         exit for
     next
 end sub
@@ -295,7 +299,7 @@ sub scroll_map()
         inc g_row%,-1
         ' Draw the next map row on the top of the screen buffer
         if g_row% >= 0 then
-            draw_map_row_and_create_objects(g_row%)
+            draw_map_row_and_spawn_objects(g_row%)
         end if
     end if
 end sub
@@ -368,8 +372,8 @@ end sub
 '
 ' Draw map row to the top of the screen buffer
 ' and create objects sprites
-sub draw_map_row_and_create_objects(row%)
-    local tile%,col%,tx%,ty%,obj_id%,tile_data%
+sub draw_map_row_and_spawn_objects(row%)
+    local tile%,col%,tx%,ty%,obj_id%,tile_data%,extra%
 
     page write SCREEN_BUFFER
     for col%=MAP_COLS_0 to 0 step -1
@@ -379,9 +383,13 @@ sub draw_map_row_and_create_objects(row%)
         tx%=(tile% mod TILES_COLS) * TILE_SIZE
         ty%=(tile% \ TILES_COLS) * TILE_SIZE
         blit tx%,ty%, col%*TILE_SIZE,0, TILE_SIZE,TILE_SIZE, TILES_BUFFER
+
         ' Create object
         obj_id%=(tile_data% AND &HE00) >> 9
-        if obj_id% then spawn_object(obj_id%, col%*TILE_SIZE, 0, false)
+        if obj_id% then
+            extra%=(tile_data% AND &HE000) >> 13
+            spawn_object(obj_id%, col%*TILE_SIZE, 0, extra%)
+        end if
     next
     page write 0
 end sub
@@ -393,7 +401,7 @@ sub initialize_screen_buffer()
 
     page write SCREEN_BUFFER
     for row%=MAP_ROWS_0 to MAP_ROWS_0 - (SCREEN_ROWS + 0) step -1
-        draw_map_row_and_create_objects(row%)
+        draw_map_row_and_spawn_objects(row%)
         page scroll SCREEN_BUFFER,0,-TILE_SIZE
     next
     page scroll SCREEN_BUFFER,0,TILE_SIZE
