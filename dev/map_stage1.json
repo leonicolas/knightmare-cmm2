@@ -140,7 +140,7 @@
                  "name":"Bat Wave",
                  "properties":[
                         {
-                         "name":"Quantity",
+                         "name":"Count",
                          "type":"string",
                          "value":"5"
                         }],
@@ -168,7 +168,7 @@
                  "name":"Bat Wave",
                  "properties":[
                         {
-                         "name":"Quantity",
+                         "name":"Count",
                          "type":"string",
                          "value":"5"
                         }],
@@ -185,7 +185,7 @@
                  "name":"Bat Wave",
                  "properties":[
                         {
-                         "name":"Quantity",
+                         "name":"Count",
                          "type":"string",
                          "value":"5"
                         }],
@@ -246,7 +246,7 @@
                  "name":"Bat",
                  "properties":[
                         {
-                         "name":"Quantity",
+                         "name":"Count",
                          "type":"string",
                          "value":"3"
                         }],
@@ -263,7 +263,7 @@
                  "name":"Bat",
                  "properties":[
                         {
-                         "name":"Quantity",
+                         "name":"Count",
                          "type":"string",
                          "value":"1"
                         }],
@@ -277,15 +277,15 @@
                 {
                  "height":8,
                  "id":20,
-                 "name":"Bat Left",
+                 "name":"Bat",
                  "properties":[
                         {
-                         "name":"Quantity",
+                         "name":"Count",
                          "type":"string",
                          "value":"2"
                         }],
                  "rotation":0,
-                 "type":"bat-left",
+                 "type":"bat",
                  "visible":true,
                  "width":8,
                  "x":239.75,
@@ -297,7 +297,7 @@
                  "name":"Bat",
                  "properties":[
                         {
-                         "name":"Quantity",
+                         "name":"Count",
                          "type":"string",
                          "value":"2"
                         }],
@@ -336,7 +336,7 @@
                  "name":"Bat Wave",
                  "properties":[
                         {
-                         "name":"Quantity",
+                         "name":"Count",
                          "type":"string",
                          "value":"1"
                         }],
@@ -353,7 +353,7 @@
                  "name":"Bat Wave",
                  "properties":[
                         {
-                         "name":"Quantity",
+                         "name":"Count",
                          "type":"string",
                          "value":"1"
                         }],
@@ -370,7 +370,7 @@
                  "name":"Bat Wave",
                  "properties":[
                         {
-                         "name":"Quantity",
+                         "name":"Count",
                          "type":"string",
                          "value":"1"
                         }],
@@ -387,7 +387,7 @@
                  "name":"Bat Wave",
                  "properties":[
                         {
-                         "name":"Quantity",
+                         "name":"Count",
                          "type":"string",
                          "value":"1"
                         }],
@@ -404,7 +404,7 @@
                  "name":"Bat Wave",
                  "properties":[
                         {
-                         "name":"Quantity",
+                         "name":"Count",
                          "type":"string",
                          "value":"1"
                         }],
@@ -421,7 +421,7 @@
                  "name":"Bat Wave",
                  "properties":[
                         {
-                         "name":"Quantity",
+                         "name":"Count",
                          "type":"string",
                          "value":"1"
                         }],
@@ -438,7 +438,7 @@
                  "name":"Bat Wave",
                  "properties":[
                         {
-                         "name":"Quantity",
+                         "name":"Count",
                          "type":"string",
                          "value":"1"
                         }],
@@ -455,7 +455,7 @@
                  "name":"Bat Wave",
                  "properties":[
                         {
-                         "name":"Quantity",
+                         "name":"Count",
                          "type":"string",
                          "value":"1"
                         }],
@@ -473,7 +473,7 @@
          "y":0
         }],
  "nextlayerid":6,
- "nextobjectid":32,
+ "nextobjectid":35,
  "orientation":"orthogonal",
  "renderorder":"left-up",
  "tiledversion":"1.10.2",

@@ -27,7 +27,7 @@ const tileObjects = mapData.layers[2].objects.reduce(
         const normY = higherY - (higherY % tileSize);
         const index = (normY / tileSize) * mapCols + (normX / tileSize);
 
-        data[index] = objectsIds[object.type];
+        data[index] = Object.assign({}, object, { id: objectsIds[object.type] });
         return data;
     }, {}
 );
@@ -35,20 +35,22 @@ const tileObjects = mapData.layers[2].objects.reduce(
 /**
  * 2 Bytes per tile
  * 0000 0000 0000 0000
- *    |    | |--------> 1 byte: Tile Id
- *    |    |----------> 1 bit: Solid bit
- *    |---------------> 4 bits: Objects, enemies, power-ups
+ * |  |    | |--------> 1 byte: Tile Id
+ * |  |    |----------> 1 bit: Solid bit
+ * |  |---------------> 4 bits: Objects, enemies, power-ups
+ * |------------------> 4 bits: Object properties
  */
 for (let i = 0; i < groundBuffer.length; i += 4) {
     const groundValue = groundBuffer.readUInt32LE(i)
     const solidValue = solidBuffer.readUInt32LE(i)
-    const objectId = tileObjects[i / 4];
+    const objectData = tileObjects[i / 4];
 
     // Solid flag
     let value = solidValue ? solidValue | 0x100 : groundValue;
     // Object Id
-    if (objectId) {
-        value |= objectId << 9
+    if (objectData) {
+        value |= objectData.id << 9;
+        value |= getObjectPropertyValue(objectData) << 13;
     }
     mapBuffer.writeUInt16BE(value & 0xFFFF, i / mapBufferBytesPerTile);
 };
@@ -56,3 +58,12 @@ for (let i = 0; i < groundBuffer.length; i += 4) {
 //fs.writeFileSync("ground.bin", groundBuffer);
 //fs.writeFileSync("solid.bin", solidBuffer);
 fs.writeFileSync("../maps/stage1.map", mapBuffer);
+
+function getObjectPropertyValue(objectData) {
+    let propertyValue = 0;
+    (objectData.properties ?? []).every(propertyData => {
+        propertyValue = parseInt(propertyData.value, 10);
+        return false;
+    });
+    return propertyValue > 0 ? propertyValue - 1 : 0;
+}
