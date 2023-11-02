@@ -50,7 +50,7 @@ const SHOT_EFFECT="sfx/shot.wav"
 dim MUSIC$(9)=("music/01_intro-psg.mod", "music/02_majou-densetsu-psg.mod", "", "", "", "", "", "", "", "")
 
 ' Objects tiles position
-dim OBJ_TILE%(13,1)=(0,0,32,32,0,0,0,0,0,0,0,0,0,0, 144,128,128,128,128,128,128,128,128,128,128,128,128,128)
+dim OBJ_TILE%(14,1)=(0,0,32,32,0,0,0,0,0,0,0,0,0,0,0, 0,128,128,128,128,128,128,128,128,128,128,128,128,128,144)
 
 ' Object data: speed X, speed Y and auxiliary data
 dim OBJ_DATA(13,2)
