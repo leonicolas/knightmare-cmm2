@@ -35,11 +35,11 @@ const SCREEN_WIDTH=MAP_COLS*TILE_SIZE     ' Screen width in pixels
 const SCREEN_HEIGHT=SCREEN_ROWS*TILE_SIZE ' Screen height in pixels
 const SCREEN_CENTER=SCREEN_WIDTH/2        ' Screen center
 
-const PLAYER_SKIN_Y=TILE_SIZE*14
+const PLAYER_SKIN_Y=72
 const PLAYER_SKIN1_X_L=0
 const PLAYER_SKIN1_X_R=TILE_SIZE*2
 
-const WEAPON_Y=TILE_SIZE*20
+const WEAPON_Y=136
 const WEAPON_ARROW_X=0
 
 const OBJECTS_ANIMATION_MS=140
@@ -50,7 +50,7 @@ const SHOT_EFFECT="sfx/shot.wav"
 dim MUSIC$(9)=("music/01_intro-psg.mod", "music/02_majou-densetsu-psg.mod", "", "", "", "", "", "", "", "")
 
 ' Objects tiles position
-dim OBJ_TILE%(14,1)=(0,0,32,32,0,0,0,0,0,0,0,0,0,0,0, 0,128,128,128,128,128,128,128,128,128,128,128,128,128,144)
+dim OBJ_TILE%(14,1)=(0,0,32,32,0,0,0,0,0,0,0,0,0,0,0, 0,88,88,88,88,88,88,88,88,88,88,88,88,88,104)
 
 ' Object data: speed X, speed Y and auxiliary data
 dim OBJ_DATA(13,2)
