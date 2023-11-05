@@ -1,7 +1,7 @@
 const fs = require("fs");
 
 function generateMapBinary(stage) {
-    const mapData = require(`./map_stage${stage}.json`);
+    const mapData = require(`./maps/map_stage${stage}.json`);
 
     const groundBuffer = Buffer.from(mapData.layers[0].data, 'base64');
     const solidBuffer = Buffer.from(mapData.layers[1].data, 'base64');
@@ -37,21 +37,22 @@ function generateMapBinary(stage) {
     /**
      * 2 Bytes per tile
      * 0000 0000 0000 0000
-     * |  |    | |--------> 1 byte: Tile Id
-     * |  |    |----------> 1 bit: Solid bit
-     * |  |---------------> 4 bits: Objects, enemies, power-ups
-     * |------------------> 4 bits: Object properties
+     * |  |      ||-------> 7 bits: Tile Id
+     * |  |      |--------> 1 bit : Solid bit
+     * |  |---------------> 5 bits: Objects, enemies, power-ups
+     * |------------------> 3 bits: Object properties
      */
     for (let i = 0; i < groundBuffer.length; i += 4) {
-        const groundValue = groundBuffer.readUInt32LE(i)
-        const solidValue = solidBuffer.readUInt32LE(i)
+        // 96 tiles per stage
+        const groundValue = ((groundBuffer.readUInt32LE(i) - 1) % 96) + 1;
+        const solidValue = ((solidBuffer.readUInt32LE(i) - 1) % 96) + 1;
         const objectData = tileObjects[i / 4];
 
-        // Solid flag
-        let value = solidValue ? solidValue | 0x100 : groundValue;
+        // Tile value + solid flag
+        let value = solidValue ? solidValue | 0x80 : groundValue;
         // Object Id
         if (objectData) {
-            value |= objectData.id << 9;
+            value |= objectData.id << 8;
             value |= getObjectPropertyValue(objectData) << 13;
         }
         mapBuffer.writeUInt16BE(value & 0xFFFF, i / mapBufferBytesPerTile);
