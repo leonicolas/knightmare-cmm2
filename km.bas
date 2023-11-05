@@ -49,13 +49,14 @@ dim g_objects_tick%=0
 const OBJ_INI_SPRITE_ID=bound(g_shots()) + 1 ' Initial sprite Id for object
 
 init()
-load_map(1)
-initialize_screen_buffer()
-
 run_stage(1)
 page write 0: end
 
 sub run_stage(stage%)
+    load_map(stage%)
+    init_map_tiles(stage%)
+    initialize_screen_buffer()
+
     page write 0: cls
     page write SCREEN_BUFFER
 
@@ -244,6 +245,8 @@ sub spawn_object(obj_id%, x%, y%, data%)
     sprite show safe sprite_id%, g_objects(i%,1),g_objects(i%,2), 0
 end sub
 
+'
+' Create the object shadow
 sub create_shadow(obj_index%)
     local sprite_id%, i%=get_free_object_slot()
     if i% < 0 then exit sub
@@ -452,17 +455,27 @@ end sub
 
 '
 ' Load the map to the map global array g_map
-sub load_map(num%)
-    local i%=0
-    local file_name$ = MAPS_DIR + "stage" + str$(num%) + ".map"
+sub load_map(stage%)
+    local i%=0, value%, solid_bit%
+    local file_name$ = MAPS_DIR + "stage" + str$(stage%) + ".map"
     open file_name$ for input as #1
     do while not eof(1)
-        g_map(i%)=(asc(input$(1, #1)) << 8) OR asc(input$(1, #1))
+        value%=asc(input$(1, #1))
+        solid_bit%=value% and &H80
+        ' Recalculates the stage tiles position. 96 tiles per stage
+        value%=(value% and &H7F) + (96 * (stage% - 1))
+        g_map(i%)=((solid_bit% or value%) << 8) or asc(input$(1, #1))
         inc i%
     loop
     close #1
 end sub
 
+'
+' Update the map tiles position moving the current stage tiles
+' to the 0,0 buffer position. Each stage has 3 tiles rows.
+sub init_map_tiles(stage%)
+    page scroll MAP_TILES_BUFFER, 0, (stage% - 1) * 3 * TILE_SIZE
+end sub
 '
 ' Show the game intro
 sub intro()
