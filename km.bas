@@ -41,7 +41,7 @@ dim g_player_animation_ms=300
 ' 9 - Player Sword (level 2)
 dim g_shots(12,4)
 ' Objects data obj id, x, y, speed x, speed y, aux.
-dim g_objects(15,5)
+dim g_objects(25,5)
 ' Object spawn data: quantity, x, y, next spawn time
 dim g_objects_spawn(bound(g_objects()),3)
 dim g_objects_shadow(bound(g_objects_spawn()))
@@ -82,7 +82,7 @@ sub run_stage(stage%)
         ' Process player animation
         if timer - g_player_timer >= g_player_animation_ms then
             g_player(2)=not g_player(2)
-            sprite read #1, choice(g_player(2),PLAYER_SKIN1_X_R,PLAYER_SKIN1_X_L), PLAYER_SKIN_Y, TILE_SIZEx2, TILE_SIZEx2, TILES_BUFFER
+            sprite read #1, choice(g_player(2),PLAYER_SKIN1_X_R,PLAYER_SKIN1_X_L), PLAYER_SKIN_Y, TILE_SIZEx2, TILE_SIZEx2, OBJ_TILES_BUFFER
             g_player_timer=timer
         end if
 
@@ -120,7 +120,7 @@ sub animate_objects()
         if not obj_id% or obj_id%=14 then continue for
 
         if g_objects_tick% mod 2 then offset%=0
-        sprite read OBJ_INI_SPRITE_ID + i%, OBJ_TILE%(obj_id%,0)+offset%, OBJ_TILE%(obj_id%,1), TILE_SIZEx2, TILE_SIZEx2, TILES_BUFFER
+        sprite read OBJ_INI_SPRITE_ID + i%, OBJ_TILE%(obj_id%,0)+offset%, OBJ_TILE%(obj_id%,1), TILE_SIZEx2, TILE_SIZEx2, OBJ_TILES_BUFFER
     next
 end sub
 
@@ -218,6 +218,7 @@ sub spawn_object(obj_id%, x%, y%, data%)
     local sprite_id%, i%=get_free_object_slot()
     if i% < 0 then exit sub
 
+    debug_print("obj_id: "+str$(obj_id%)+", i:"+str$(i%)+"     ")
     g_objects(i%,0)=obj_id%             ' Object Id
     g_objects(i%,1)=x%                  ' X
     g_objects(i%,2)=y%                  ' Y
@@ -239,7 +240,7 @@ sub spawn_object(obj_id%, x%, y%, data%)
     end select
 
     sprite_id%=OBJ_INI_SPRITE_ID + i%
-    sprite read sprite_id%, OBJ_TILE%(obj_id%,0), OBJ_TILE%(obj_id%,1), TILE_SIZEx2, TILE_SIZEx2, TILES_BUFFER
+    sprite read sprite_id%, OBJ_TILE%(obj_id%,0), OBJ_TILE%(obj_id%,1), TILE_SIZEx2, TILE_SIZEx2, OBJ_TILES_BUFFER
     sprite show safe sprite_id%, g_objects(i%,1),g_objects(i%,2), 0
 end sub
 
@@ -253,7 +254,7 @@ sub create_shadow(obj_index%)
     g_objects_shadow(i%)=obj_index%
 
     sprite_id%=OBJ_INI_SPRITE_ID + i%
-    sprite read sprite_id%, OBJ_TILE%(14,0), OBJ_TILE%(14,1), TILE_SIZEx2, TILE_SIZEx2, TILES_BUFFER
+    sprite read sprite_id%, OBJ_TILE%(14,0), OBJ_TILE%(14,1), TILE_SIZEx2, TILE_SIZEx2, OBJ_TILES_BUFFER
     sprite show safe sprite_id%, g_objects(i%,1),g_objects(i%,2), 2
 end sub
 
@@ -289,7 +290,7 @@ sub fire()
         g_shots(i%,3)=0                       ' Speed X
         g_shots(i%,4)=-2.2                    ' Speed Y
         ' Create the shot sprite
-        sprite read i%+2, WEAPON_ARROW_X, WEAPON_Y, TILE_SIZE, TILE_SIZEx2, TILES_BUFFER
+        sprite read i%+2, WEAPON_ARROW_X, WEAPON_Y, TILE_SIZE, TILE_SIZEx2, OBJ_TILES_BUFFER
         sprite show safe i%+2, g_shots(i%,1),g_shots(i%,2), 1
         ' Play SFX
         if g_sound_on% then play effect SHOT_EFFECT
@@ -308,7 +309,7 @@ sub init_player()
     g_player(3)=1                         ' weapon
     g_player(4)=0.6                       ' speed
 
-    sprite read #1, PLAYER_SKIN1_X_L,PLAYER_SKIN_Y, TILE_SIZEx2,TILE_SIZEx2, TILES_BUFFER
+    sprite read #1, PLAYER_SKIN1_X_L,PLAYER_SKIN_Y, TILE_SIZEx2,TILE_SIZEx2, OBJ_TILES_BUFFER
     sprite show safe #1, g_player(0),g_player(1), 1,,1
 end sub
 
@@ -379,13 +380,13 @@ function map_colide(player()) as integer
     local col%=player(0)\TILE_SIZE
     local row%=(player(1)-g_tile_px%)\TILE_SIZE+g_row%
     ' Check top left
-    map_colide=g_map((row%+1)*MAP_COLS+col%) and &H100
+    map_colide=g_map((row%+1)*MAP_COLS+col%) and &H80
     ' Check top right
-    if not map_colide then map_colide=g_map((row%+1)*MAP_COLS+(col%+2))>>8 and 1
+    if not map_colide then map_colide=g_map((row%+1)*MAP_COLS+(col%+2)) >> 7 and 1
     ' Check bottom left
-    if not map_colide then map_colide=g_map((row%+2)*MAP_COLS+col%)>>8 and 1
+    if not map_colide then map_colide=g_map((row%+2)*MAP_COLS+col%) >> 7 and 1
     ' Check bottom right
-    if not map_colide then map_colide=g_map((row%+2)*MAP_COLS+(col%+2))>>8 and 1
+    if not map_colide then map_colide=g_map((row%+2)*MAP_COLS+(col%+2)) >> 7 and 1
     ' TODO: Check horizontal wrapping collision
 end function
 
@@ -394,10 +395,16 @@ end function
 sub init()
     ' screen mode
     mode 7,12 ' 320x240
+
     ' init screen and tiles buffers
     page write SCREEN_BUFFER:cls
-    page write TILES_BUFFER:cls
-    load png TILESET_IMG
+
+    page write MAP_TILES_BUFFER:cls
+    load png MAP_TILESET_IMG
+
+    page write OBJ_TILES_BUFFER:cls
+    load png OBJ_TILESET_IMG
+
     ' clear screen
     page write 0: cls
     ' init game state variables
@@ -415,13 +422,13 @@ sub draw_map_row_and_spawn_objects(row%)
     for col%=MAP_COLS_0 to 0 step -1
         ' Tile drawing
         tile_data%=g_map(row%*MAP_COLS+col%)
-        tile%=(tile_data% AND &HFF) - 1
+        tile%=(tile_data% AND &H7F) - 1
         tx%=(tile% mod TILES_COLS) * TILE_SIZE
         ty%=(tile% \ TILES_COLS) * TILE_SIZE
-        blit tx%,ty%, col%*TILE_SIZE,0, TILE_SIZE,TILE_SIZE, TILES_BUFFER
+        blit tx%,ty%, col%*TILE_SIZE,0, TILE_SIZE,TILE_SIZE, MAP_TILES_BUFFER
 
         ' Create object
-        obj_id%=(tile_data% AND &HE00) >> 9
+        obj_id%=(tile_data% AND &H1F00) >> 8
         if obj_id% then
             extra%=(tile_data% AND &HE000) >> 13
             spawn_object(obj_id%, col%*TILE_SIZE, 0, extra%)
