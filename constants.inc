@@ -19,9 +19,12 @@ const MAP_TILES_BUFFER=3                  ' Map tileset buffer number
 const OBJ_TILES_BUFFER=4                  ' Objects tileset buffer number
 const BOSSES_TILES_BUFFER=6               ' Bosses tileset buffer number
 
-' const PLAYER_ANIM_SPEED1
+' Speed control
 const SCROLL_SPEED_MS=135                 ' Scroll speed in ms
 const GAME_TICK_MS=10                     ' Game tick in ms
+const OBJECTS_ANIMATION_MS=140
+const SHOT_COOLDOWN_MS=200
+const PLAYER_ANIMATION_MS=300
 
 const MAP_COLS=32                         ' Map columns number
 const MAP_ROWS=238                        ' Map rows number
@@ -48,7 +51,6 @@ const PLAYER_SKIN1_X_R=TILE_SIZE*2
 const WEAPON_Y=64
 const WEAPON_ARROW_X=0
 
-const OBJECTS_ANIMATION_MS=140
 
 const SHOT_EFFECT="sfx/shot.wav"
 
