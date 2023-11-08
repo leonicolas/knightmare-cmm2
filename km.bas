@@ -53,21 +53,7 @@ run_stage(1)
 page write 0: end
 
 sub run_stage(stage%)
-    g_kb_released%=true
-    load_map(stage%)
-    init_map_tiles(stage%)
-    initialize_screen_buffer()
-
-    sprite interrupt check_collision
-
-    page write 0: cls
-    page write SCREEN_BUFFER
-
-    'local dbg_max_time=0,dbg_start_time;
-    if g_sound_on% then play modfile MUSIC$(stage%), 16000
-
-    timer=0
-    init_player()
+    init_stage(stage%)
 
     do
         ' Game tick
@@ -542,6 +528,25 @@ sub init()
     ' init game state variables
     g_row%=MAP_ROWS-SCREEN_ROWS-1
     g_tile_px%=0
+end sub
+
+'
+' Initialize the given stage
+sub init_stage(stage%)
+    g_kb_released%=true
+    load_map(stage%)
+    init_map_tiles(stage%)
+    initialize_screen_buffer()
+
+    sprite interrupt check_collision
+
+    page write 0: cls
+    page write SCREEN_BUFFER
+    init_player()
+
+    if g_sound_on% then play modfile MUSIC$(stage%), 16000
+
+    timer=0
 end sub
 
 '
