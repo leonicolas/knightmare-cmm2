@@ -41,8 +41,8 @@ dim g_player_animation_ms=PLAYER_ANIMATION_MS
 ' 9 - Player Sword (level 2)
 dim g_shots(12,4)
 const SHOTS_NUM%=bound(g_shots())
-' Objects data obj id, x, y, speed x, speed y, gpr1, gpr2, shadow
-dim g_obj(25,7)
+' Objects data obj id, x, y, gpr1, gpr2, shadow
+dim g_obj(25,5)
 ' Object spawn data: quantity, x, y, next spawn time
 dim g_obj_spawn(bound(g_obj()),3)
 dim g_obj_tick%=0
@@ -187,12 +187,12 @@ end sub
 '
 ' Delete an object shadow
 sub delete_shadow(src_obj_index%)
-    local shadow_index%=g_obj(src_obj_index%,7)
+    local shadow_index%=g_obj(src_obj_index%,5)
 
     if shadow_index% < 0 then exit sub
 
     g_obj(shadow_index%,0) = 0
-    g_obj(src_obj_index%, 7) = -1
+    g_obj(src_obj_index%,5) = -1
     sprite close OBJ_INI_SPRITE_ID + shadow_index%
 end sub
 
@@ -250,14 +250,15 @@ sub move_and_process_objects()
             case 2 ' Bat
                 ' Calculate new X
                 if g_obj(i%,1) > SCREEN_CENTER then
-                    g_obj(i%,1)=SCREEN_WIDTH+SCREEN_CENTER*cos(g_obj(i%,5))
+                    g_obj(i%,1)=SCREEN_WIDTH+SCREEN_CENTER*cos(g_obj(i%,3))
                 else
-                    g_obj(i%,1)=(SCREEN_CENTER-TILE_SIZE)*cos(g_obj(i%,5))
+                    g_obj(i%,1)=(SCREEN_CENTER-TILE_SIZE)*cos(g_obj(i%,3))
                 end if
+
                 ' Increment angle by the speed
-                inc g_obj(i%,5),g_obj(i%,3)
+                inc g_obj(i%,3),OBJ_DATA(obj_id%,0)
                 ' Increment Y
-                inc g_obj(i%,2),g_obj(i%,4)
+                inc g_obj(i%,2),OBJ_DATA(obj_id%,1)
                 ' Compensates sprite's tile misalignment
                 if g_obj_tick% mod 2 > 0 then offset_y%=OBJ_TILE%(obj_id%,3)/2
 
@@ -268,11 +269,12 @@ sub move_and_process_objects()
 
             case 3 ' Bat wave
                 ' Calculate new X
-                g_obj(i%,1)=(SCREEN_CENTER-TILE_SIZE)+(SCREEN_CENTER-TILE_SIZEx4)*cos(g_obj(i%,5))
+                g_obj(i%,1)=(SCREEN_CENTER-TILE_SIZE)+(SCREEN_CENTER-TILE_SIZEx4)*cos(g_obj(i%,3))
+
                 ' Increment angle by the speed
-                inc g_obj(i%,5),g_obj(i%,3)
+                inc g_obj(i%,3),OBJ_DATA(obj_id%,0)
                 ' Increment Y
-                inc g_obj(i%,2),g_obj(i%,4)
+                inc g_obj(i%,2),OBJ_DATA(obj_id%,1)
                 ' Compensates sprite's tile misalignment
                 if g_obj_tick% mod 2 > 0 then offset_y%=OBJ_TILE%(obj_id%,3)/2
 
@@ -282,13 +284,13 @@ sub move_and_process_objects()
                 end if
 
             case 14 ' Shadow
-                g_obj(i%,1)=g_obj(g_obj(i%,7),1)
-                g_obj(i%,2)=g_obj(g_obj(i%,7),2)+TILE_SIZEx2
+                g_obj(i%,1)=g_obj(g_obj(i%,5),1)
+                g_obj(i%,2)=g_obj(g_obj(i%,5),2)+TILE_SIZEx2
                 screen_offset%=-TILE_SIZE
 
             case else
-                inc g_obj(i%,1),g_obj(i%,3)
-                inc g_obj(i%,2),g_obj(i%,4)
+                inc g_obj(i%,1),OBJ_DATA(obj_id%,0)
+                inc g_obj(i%,2),OBJ_DATA(obj_id%,1)
         end select
 
         ' Move or destroy the sprite if out of bounds
@@ -296,7 +298,7 @@ sub move_and_process_objects()
         if not sprite(e,sprite_id%) and g_obj(i%,2) <= SCREEN_HEIGHT-screen_offset% then
             sprite next sprite_id%, g_obj(i%,1), g_obj(i%,2)+offset_y%
         else if obj_id% = 14 then
-            delete_shadow(g_obj(i%,7))
+            delete_shadow(g_obj(i%,5))
         else
             g_obj(i%,0)=0
             sprite close sprite_id%
@@ -321,15 +323,13 @@ sub spawn_object(obj_id%, x%, y%, data%)
     g_obj(i%,0)=obj_id%             ' Object Id
     g_obj(i%,1)=x%                  ' X
     g_obj(i%,2)=y%                  ' Y
-    g_obj(i%,3)=OBJ_DATA(obj_id%,0) ' Speed X
-    g_obj(i%,4)=OBJ_DATA(obj_id%,1) ' Speed Y
-    g_obj(i%,5)=OBJ_DATA(obj_id%,2) ' GPR 1
-    g_obj(i%,6)=0                   ' GPR 2
-    g_obj(i%,7)=-1                  ' Shadow index
+    g_obj(i%,3)=OBJ_DATA(obj_id%,2) ' GPR 1
+    g_obj(i%,4)=0                   ' GPR 2
+    g_obj(i%,5)=-1                  ' Shadow index
 
     select case obj_id%
         case 2,3 ' Bat
-            if x% < SCREEN_CENTER then g_obj(i%,5)=g_obj(i%,5)+180
+            if x% < SCREEN_CENTER then g_obj(i%,3)=g_obj(i%,3)+180
             if data% then
                 g_obj_spawn(i%,0)=data% ' Spawn count
                 g_obj_spawn(i%,1)=x%    ' X
@@ -355,8 +355,8 @@ sub create_shadow(obj_index%)
     g_obj(i%,0)=14                              ' Shadow id
     g_obj(i%,1)=g_obj(obj_index%,1)             ' X
     g_obj(i%,2)=g_obj(obj_index%,2)+TILE_SIZEx2 ' Y
-    g_obj(i%,7)=obj_index%                      ' Shadow -> source object index
-    g_obj(obj_index%,7)=i%                      ' Source object -> shadow index
+    g_obj(i%,5)=obj_index%                      ' Shadow -> source object index
+    g_obj(obj_index%,5)=i%                      ' Source object -> shadow index
     sprite_id%=OBJ_INI_SPRITE_ID + i%
     sprite read sprite_id%, OBJ_TILE%(14,0), OBJ_TILE%(14,1), OBJ_TILE%(14,2), OBJ_TILE%(14,3), OBJ_TILES_BUFFER
     sprite show safe sprite_id%, g_obj(i%,1),g_obj(i%,2), 3
@@ -421,7 +421,7 @@ end sub
 ' Check the player collision after map scroll
 ' Moves the player down in case of collision
 sub check_scroll_collision()
-    if map_colide(g_player()) then
+    if map_collide(g_player()) then
         inc g_player(1),2
         'TODO: Implement player kill by crush
     end if
@@ -453,21 +453,21 @@ sub process_kb()
 
     if g_kb1%=KB_LEFT or g_kb2%=KB_LEFT or g_kb3%=KB_LEFT then
         inc g_player(0), -g_player(4)
-        if map_colide(g_player()) then g_player(0)=x
+        if map_collide(g_player()) then g_player(0)=x
         if g_player(0) < 0 then g_player(0)=SCREEN_WIDTH - TILE_SIZE * 2
     else if g_kb1%=KB_RIGHT or g_kb2%=KB_RIGHT or g_kb3%=KB_RIGHT then
         inc g_player(0), g_player(4)
-        if map_colide(g_player()) then g_player(0)=x
+        if map_collide(g_player()) then g_player(0)=x
         if g_player(0) > SCREEN_WIDTH - TILE_SIZE * 2 then g_player(0)=0
     end if
 
     if g_kb1%=KB_UP or g_kb2%=KB_UP or g_kb3%=KB_UP then
         inc g_player(1), -g_player(4)
-        if map_colide(g_player()) then g_player(1)=y
+        if map_collide(g_player()) then g_player(1)=y
         if g_player(1) < TILE_SIZE * 4 then g_player(1)=TILE_SIZE * 4
     else if g_kb1%=KB_DOWN or g_kb2%=KB_DOWN or g_kb3%=KB_DOWN then
         inc g_player(1), g_player(4)
-        if map_colide(g_player()) then g_player(1)=y
+        if map_collide(g_player()) then g_player(1)=y
         if g_player(1) > SCREEN_HEIGHT - TILE_SIZE then g_player(1)=SCREEN_HEIGHT - TILE_SIZE
     end if
 
@@ -480,17 +480,17 @@ end sub
 
 '
 ' Checks the player collision against solid tiles
-function map_colide(player()) as integer
+function map_collide(player()) as integer
     local col%=player(0)\TILE_SIZE
     local row%=(player(1)-g_tile_px%)\TILE_SIZE+g_row%
     ' Check top left
-    map_colide=g_map((row%+1)*MAP_COLS+col%) and &H80
+    map_collide=g_map((row%+1)*MAP_COLS+col%) and &H80
     ' Check top right
-    if not map_colide then map_colide=g_map((row%+1)*MAP_COLS+(col%+2)) >> 7 and 1
+    if not map_collide then map_collide=g_map((row%+1)*MAP_COLS+(col%+2)) >> 7 and 1
     ' Check bottom left
-    if not map_colide then map_colide=g_map((row%+2)*MAP_COLS+col%) >> 7 and 1
+    if not map_collide then map_collide=g_map((row%+2)*MAP_COLS+col%) >> 7 and 1
     ' Check bottom right
-    if not map_colide then map_colide=g_map((row%+2)*MAP_COLS+(col%+2)) >> 7 and 1
+    if not map_collide then map_collide=g_map((row%+2)*MAP_COLS+(col%+2)) >> 7 and 1
     ' TODO: Check horizontal wrapping collision
 end function
 
