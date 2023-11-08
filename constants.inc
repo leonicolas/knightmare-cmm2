@@ -17,7 +17,7 @@ const MAPS_DIR="maps/"
 const SCREEN_BUFFER=2                     ' Screen buffer number
 const MAP_TILES_BUFFER=3                  ' Map tileset buffer number
 const OBJ_TILES_BUFFER=4                  ' Objects tileset buffer number
-const BOSSES_TILES_BUFFER=6               ' Bosses tileset buffer number
+const BOSSES_TILES_BUFFER=4               ' Bosses tileset buffer number
 
 ' Speed control
 const SCROLL_SPEED_MS=135                 ' Scroll speed in ms
@@ -48,21 +48,31 @@ const PLAYER_SKIN_Y=0
 const PLAYER_SKIN1_X_L=0
 const PLAYER_SKIN1_X_R=TILE_SIZE*2
 
-const WEAPON_Y=64
-const WEAPON_ARROW_X=0
-
-
+' Effects
 const SHOT_EFFECT="sfx/shot.wav"
 
 ' Music table
 dim MUSIC$(9)=("music/01_intro-psg.mod", "music/02_majou-densetsu-psg.mod", "", "", "", "", "", "", "", "")
 
-' Objects tiles position
-dim OBJ_TILE%(14,1)=(0,0,32,32,0,0,0,0,0,0,0,0,0,0,0, 0,16,16,16,16,16,16,16,16,16,16,16,16,16,32)
+' Objects tiles: tile x, y, width and height
+dim OBJ_TILE%(50,3)
+' Enemies
+' Blob
+OBJ_TILE%(1,0)=1: OBJ_TILE%(1,1)=17: OBJ_TILE%(1,2)=14: OBJ_TILE%(1,3)=14
+' Bat
+OBJ_TILE%(2,0)=32: OBJ_TILE%(2,1)=16: OBJ_TILE%(2,2)=16: OBJ_TILE%(2,3)=11
+' Bat Wave
+OBJ_TILE%(3,0)=32: OBJ_TILE%(3,1)=16: OBJ_TILE%(3,2)=16: OBJ_TILE%(3,3)=11
+
+' VFX
+' Shadow
+OBJ_TILE%(14,0)=0: OBJ_TILE%(14,1)=33: OBJ_TILE%(14,2)=16: OBJ_TILE%(14,3)=6
+' Shots
+OBJ_TILE%(30,0)=1: OBJ_TILE%(30,1)=66: OBJ_TILE%(30,2)=5: OBJ_TILE%(30,3)=13
 
 ' Object data: speed X, speed Y and auxiliary data
 dim OBJ_DATA(38,2)
-' Bubble
+' Blob
 OBJ_DATA(1,1)=0.15   ' Y speed
 ' Bat
 OBJ_DATA(2,0)=0.7    ' X speed (angle increment)

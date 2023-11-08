@@ -102,7 +102,7 @@ sub run_stage(stage%)
 
         ' Move sprites
         move_shots()
-        move_and_spawn_objects()
+        move_and_process_objects()
         ' Move player - ensure player always on top
         sprite show safe #1, g_player(0),g_player(1), 1,,1
         sprite move
@@ -169,7 +169,7 @@ sub kill_enemy(enemy_sprite_id%, shot_sprite_id%)
         if sprite_id% <> enemy_sprite_id% then continue for
         ' Delete enemy's object
         g_obj(i%,0) = 0
-        sprite hide safe sprite_id%
+        sprite close sprite_id%
 
         debug_print("sprite#: "+str$(sprite_id%)+" > "+str$(i%)+space$(10), o)
         inc o,16
@@ -180,7 +180,7 @@ sub kill_enemy(enemy_sprite_id%, shot_sprite_id%)
     next
 
     ' Delete the shot
-    sprite hide safe shot_sprite_id%
+    sprite close shot_sprite_id%
     g_shots(shot_sprite_id% - 2, 0) = 0
 end sub
 
@@ -193,7 +193,7 @@ sub delete_shadow(src_obj_index%)
 
     g_obj(shadow_index%,0) = 0
     g_obj(src_obj_index%, 7) = -1
-    sprite hide safe OBJ_INI_SPRITE_ID + shadow_index%
+    sprite close OBJ_INI_SPRITE_ID + shadow_index%
 end sub
 
 '
@@ -207,7 +207,8 @@ sub animate_objects()
         if not obj_id% or obj_id%=14 then continue for
 
         if g_obj_tick% mod 2 then offset%=0
-        sprite read OBJ_INI_SPRITE_ID + i%, OBJ_TILE%(obj_id%,0)+offset%, OBJ_TILE%(obj_id%,1), TILE_SIZEx2, TILE_SIZEx2, OBJ_TILES_BUFFER
+
+        sprite read OBJ_INI_SPRITE_ID + i%, OBJ_TILE%(obj_id%,0)+offset%, OBJ_TILE%(obj_id%,1), OBJ_TILE%(obj_id%,2), OBJ_TILE%(obj_id%,3), OBJ_TILES_BUFFER
     next
 end sub
 
@@ -223,7 +224,7 @@ sub move_shots()
         inc g_shots(i%,2),g_shots(i%,4)
         if g_shots(i%,2) < 0 then
             g_shots(i%,0)=0
-            sprite hide safe i%+2
+            sprite close i%+2
         else
             sprite next i%+2,g_shots(i%,1),g_shots(i%,2)
         end if
@@ -232,27 +233,33 @@ end sub
 
 '
 ' Move screen objects
-sub move_and_spawn_objects()
-    local i%, sprite_id%, obj_id%, offset%
+sub move_and_process_objects()
+    local i%, sprite_id%, obj_id%, screen_offset%, offset_y%
 
     for i%=0 to bound(g_obj())
+        offset_y%=0
         obj_id%=g_obj(i%,0)
 
         ' Checks object id
         if not obj_id% then continue for
 
-        offset%=TILE_SIZE
+        screen_offset%=TILE_SIZE
 
         ' Moves object
         select case obj_id%
             case 2 ' Bat
+                ' Calculate new X
                 if g_obj(i%,1) > SCREEN_CENTER then
                     g_obj(i%,1)=SCREEN_WIDTH+SCREEN_CENTER*cos(g_obj(i%,5))
                 else
                     g_obj(i%,1)=(SCREEN_CENTER-TILE_SIZE)*cos(g_obj(i%,5))
                 end if
+                ' Increment angle by the speed
                 inc g_obj(i%,5),g_obj(i%,3)
+                ' Increment Y
                 inc g_obj(i%,2),g_obj(i%,4)
+                ' Compensates sprite's tile misalignment
+                if g_obj_tick% mod 2 > 0 then offset_y%=OBJ_TILE%(obj_id%,3)/2
 
                 ' Spawn new bat
                 if g_obj_spawn(i%, 0) > 0 and timer >= g_obj_spawn(i%, 3) then
@@ -260,9 +267,14 @@ sub move_and_spawn_objects()
                 end if
 
             case 3 ' Bat wave
+                ' Calculate new X
                 g_obj(i%,1)=(SCREEN_CENTER-TILE_SIZE)+(SCREEN_CENTER-TILE_SIZEx4)*cos(g_obj(i%,5))
+                ' Increment angle by the speed
                 inc g_obj(i%,5),g_obj(i%,3)
+                ' Increment Y
                 inc g_obj(i%,2),g_obj(i%,4)
+                ' Compensates sprite's tile misalignment
+                if g_obj_tick% mod 2 > 0 then offset_y%=OBJ_TILE%(obj_id%,3)/2
 
                 ' Spawn new bat
                 if g_obj_spawn(i%, 0) > 0 and timer >= g_obj_spawn(i%, 3) then
@@ -272,7 +284,7 @@ sub move_and_spawn_objects()
             case 14 ' Shadow
                 g_obj(i%,1)=g_obj(g_obj(i%,7),1)
                 g_obj(i%,2)=g_obj(g_obj(i%,7),2)+TILE_SIZEx2
-                offset%=-TILE_SIZE
+                screen_offset%=-TILE_SIZE
 
             case else
                 inc g_obj(i%,1),g_obj(i%,3)
@@ -281,13 +293,13 @@ sub move_and_spawn_objects()
 
         ' Move or destroy the sprite if out of bounds
         sprite_id%=OBJ_INI_SPRITE_ID + i%
-        if not sprite(e,sprite_id%) and g_obj(i%,2) <= SCREEN_HEIGHT-offset% then
-            sprite next sprite_id%, g_obj(i%,1), g_obj(i%,2)
+        if not sprite(e,sprite_id%) and g_obj(i%,2) <= SCREEN_HEIGHT-screen_offset% then
+            sprite next sprite_id%, g_obj(i%,1), g_obj(i%,2)+offset_y%
         else if obj_id% = 14 then
             delete_shadow(g_obj(i%,7))
         else
-            sprite hide sprite_id%
             g_obj(i%,0)=0
+            sprite close sprite_id%
         end if
     next
 end sub
@@ -329,7 +341,8 @@ sub spawn_object(obj_id%, x%, y%, data%)
     end select
 
     sprite_id%=OBJ_INI_SPRITE_ID + i%
-    sprite read sprite_id%, OBJ_TILE%(obj_id%,0), OBJ_TILE%(obj_id%,1), TILE_SIZEx2, TILE_SIZEx2, OBJ_TILES_BUFFER
+    sprite read sprite_id%, OBJ_TILE%(obj_id%,0), OBJ_TILE%(obj_id%,1), OBJ_TILE%(obj_id%,2), OBJ_TILE%(obj_id%,3), OBJ_TILES_BUFFER
+    debug_print("> "+str$(obj_id%))
     sprite show safe sprite_id%, g_obj(i%,1),g_obj(i%,2), 0
 end sub
 
@@ -345,7 +358,7 @@ sub create_shadow(obj_index%)
     g_obj(i%,7)=obj_index%                      ' Shadow -> source object index
     g_obj(obj_index%,7)=i%                      ' Source object -> shadow index
     sprite_id%=OBJ_INI_SPRITE_ID + i%
-    sprite read sprite_id%, OBJ_TILE%(14,0), OBJ_TILE%(14,1), TILE_SIZEx2, TILE_SIZEx2, OBJ_TILES_BUFFER
+    sprite read sprite_id%, OBJ_TILE%(14,0), OBJ_TILE%(14,1), OBJ_TILE%(14,2), OBJ_TILE%(14,3), OBJ_TILES_BUFFER
     sprite show safe sprite_id%, g_obj(i%,1),g_obj(i%,2), 3
 end sub
 
@@ -375,13 +388,13 @@ sub fire()
         if g_shots(i%,0) then continue for
 
         ' Create the shot state
-        g_shots(i%,0)=g_player(3)               ' weapon
-        g_shots(i%,1)=g_player(0)+TILE_SIZE/2   ' X
-        g_shots(i%,2)=g_player(1)-TILE_SIZEx2-1 ' Y
-        g_shots(i%,3)=0                         ' Speed X
-        g_shots(i%,4)=-2.2                      ' Speed Y
+        g_shots(i%,0)=g_player(3)                   ' weapon
+        g_shots(i%,1)=g_player(0)+OBJ_TILE%(30,2)/2 ' X
+        g_shots(i%,2)=g_player(1)-OBJ_TILE%(30,3)-1 ' Y
+        g_shots(i%,3)=0                             ' Speed X
+        g_shots(i%,4)=-2.2                          ' Speed Y
         ' Create the shot sprite
-        sprite read i%+2, WEAPON_ARROW_X, WEAPON_Y, TILE_SIZE, TILE_SIZEx2, OBJ_TILES_BUFFER
+        sprite read i%+2, OBJ_TILE%(30,0), OBJ_TILE%(30,1), OBJ_TILE%(30,2), OBJ_TILE%(30,3), OBJ_TILES_BUFFER
         sprite show safe i%+2, g_shots(i%,1),g_shots(i%,2), 1
         ' Play SFX
         if g_sound_on% then play effect SHOT_EFFECT
@@ -486,7 +499,8 @@ end function
 sub init()
     ' screen mode
     font 1,1
-    mode 4,12 ' 320x240
+    mode 7,12 ' 320x240
+    'mode 4,12 ' debug mode
 
     ' init screen and tiles buffers
     page write SCREEN_BUFFER:cls
