@@ -12,7 +12,7 @@ dim g_map(MAP_SIZE) as integer ' Map data
 dim g_row%                     ' Current top map row. Zero is the bottom row.
 dim g_game_tick                ' The game tick
 dim g_tile_px%                 ' The rendered tile row pixel
-dim g_kb1%,g_kb2%,g_kb3%
+dim g_kb_released%             ' Tracks kb keys releasing
 dim g_i%                       ' Auxiliary global integer variables
 dim g_temp1,g_temp2,g_x,g_y    ' Auxiliary global float variables
 
@@ -53,6 +53,7 @@ run_stage(1)
 page write 0: end
 
 sub run_stage(stage%)
+    g_kb_released%=true
     load_map(stage%)
     init_map_tiles(stage%)
     initialize_screen_buffer()
@@ -73,8 +74,7 @@ sub run_stage(stage%)
         if timer - g_game_tick < GAME_TICK_MS then continue do
 
         ' Process keyboard
-        g_kb1%=KeyDown(1): g_kb2%=KeyDown(2): g_kb3%=KeyDown(3)
-        if g_kb1% or g_kb2% or g_kb3% then process_kb()
+        process_kb()
 
         ' Scrolls the map
         if g_row% >= 0 and timer - g_scroll_timer >= SCROLL_SPEED_MS then
@@ -405,6 +405,35 @@ sub fire()
 end sub
 
 '
+' Process the player movement
+sub move_player(direction%)
+    local x=g_player(0), y=g_player(1)
+
+    select case direction%
+        case KB_LEFT
+            inc g_player(0), -g_player(4)
+            if map_collide(g_player()) then g_player(0)=x
+            if g_player(0) < 0 then g_player(0)=SCREEN_WIDTH - TILE_SIZE * 2
+            check_scroll_collision()
+        case KB_RIGHT
+            inc g_player(0), g_player(4)
+            if map_collide(g_player()) then g_player(0)=x
+            if g_player(0) > SCREEN_WIDTH - TILE_SIZE * 2 then g_player(0)=0
+            check_scroll_collision()
+        case KB_UP
+            inc g_player(1), -g_player(4)
+            if map_collide(g_player()) then g_player(1)=y
+            if g_player(1) < TILE_SIZE * 4 then g_player(1)=TILE_SIZE * 4
+            check_scroll_collision()
+        case KB_DOWN
+            inc g_player(1), g_player(4)
+            if map_collide(g_player()) then g_player(1)=y
+            if g_player(1) > SCREEN_HEIGHT - TILE_SIZE then g_player(1)=SCREEN_HEIGHT - TILE_SIZE
+            check_scroll_collision()
+    end select
+end sub
+
+'
 ' Initialize player state and sprite
 sub init_player()
     g_player(0)=SCREEN_WIDTH/2-TILE_SIZE  ' x
@@ -448,34 +477,31 @@ end sub
 '
 ' Process keyboard keys
 sub process_kb()
-    local x=g_player(0)
-    local y=g_player(1)
+    local kb1%=KeyDown(1), kb2%=KeyDown(2), kb3%=KeyDown(3)
 
-    if g_kb1%=KB_LEFT or g_kb2%=KB_LEFT or g_kb3%=KB_LEFT then
-        inc g_player(0), -g_player(4)
-        if map_collide(g_player()) then g_player(0)=x
-        if g_player(0) < 0 then g_player(0)=SCREEN_WIDTH - TILE_SIZE * 2
-    else if g_kb1%=KB_RIGHT or g_kb2%=KB_RIGHT or g_kb3%=KB_RIGHT then
-        inc g_player(0), g_player(4)
-        if map_collide(g_player()) then g_player(0)=x
-        if g_player(0) > SCREEN_WIDTH - TILE_SIZE * 2 then g_player(0)=0
+    if not kb1% and not kb2% and not kb3% then
+        g_kb_released%=true
+        exit sub
     end if
 
-    if g_kb1%=KB_UP or g_kb2%=KB_UP or g_kb3%=KB_UP then
-        inc g_player(1), -g_player(4)
-        if map_collide(g_player()) then g_player(1)=y
-        if g_player(1) < TILE_SIZE * 4 then g_player(1)=TILE_SIZE * 4
-    else if g_kb1%=KB_DOWN or g_kb2%=KB_DOWN or g_kb3%=KB_DOWN then
-        inc g_player(1), g_player(4)
-        if map_collide(g_player()) then g_player(1)=y
-        if g_player(1) > SCREEN_HEIGHT - TILE_SIZE then g_player(1)=SCREEN_HEIGHT - TILE_SIZE
+    if kb1%=KB_LEFT or kb2%=KB_LEFT or kb3%=KB_LEFT then
+        move_player(KB_LEFT)
+    else if kb1%=KB_RIGHT or kb2%=KB_RIGHT or kb3%=KB_RIGHT then
+        move_player(KB_RIGHT)
     end if
 
-    if g_kb1%=KB_SPACE or g_kb2%=KB_SPACE or g_kb3%=KB_SPACE then
+    if kb1%=KB_UP or kb2%=KB_UP or kb3%=KB_UP then
+        move_player(KB_UP)
+    else if kb1%=KB_DOWN or kb2%=KB_DOWN or kb3%=KB_DOWN then
+        move_player(KB_DOWN)
+    end if
+
+    if g_kb_released% and (kb1%=KB_SPACE or kb2%=KB_SPACE or kb3%=KB_SPACE) then
         fire()
+        g_kb_released%=false
+    else if kb1%<>KB_SPACE and kb2%<>KB_SPACE and kb3%<>KB_SPACE then
+        g_kb_released%=true
     end if
-
-    check_scroll_collision()
 end sub
 
 '

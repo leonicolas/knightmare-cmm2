@@ -23,7 +23,7 @@ const BOSSES_TILES_BUFFER=4               ' Bosses tileset buffer number
 const SCROLL_SPEED_MS=135                 ' Scroll speed in ms
 const GAME_TICK_MS=10                     ' Game tick in ms
 const OBJECTS_ANIMATION_MS=140
-const SHOT_COOLDOWN_MS=200
+const SHOT_COOLDOWN_MS=150
 const PLAYER_ANIMATION_MS=300
 
 const MAP_COLS=32                         ' Map columns number
@@ -55,6 +55,7 @@ const SHOT_EFFECT="sfx/shot.wav"
 dim MUSIC$(9)=("music/01_intro-psg.mod", "music/02_majou-densetsu-psg.mod", "", "", "", "", "", "", "", "")
 
 ' Objects tiles: tile x, y, width and height
+' TODO: Move to data block
 dim OBJ_TILE%(50,3)
 ' Enemies
 ' Blob
@@ -71,6 +72,7 @@ OBJ_TILE%(14,0)=0: OBJ_TILE%(14,1)=33: OBJ_TILE%(14,2)=16: OBJ_TILE%(14,3)=6
 OBJ_TILE%(30,0)=1: OBJ_TILE%(30,1)=66: OBJ_TILE%(30,2)=5: OBJ_TILE%(30,3)=13
 
 ' Object data: speed X, speed Y and auxiliary data
+' TODO: Move to data block
 dim OBJ_DATA(38,2)
 ' Blob
 OBJ_DATA(1,1)=0.15   ' Y speed
