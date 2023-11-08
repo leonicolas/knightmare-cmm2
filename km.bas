@@ -41,10 +41,10 @@ dim g_player_animation_ms=PLAYER_ANIMATION_MS
 ' 9 - Player Sword (level 2)
 dim g_shots(12,4)
 const SHOTS_NUM%=bound(g_shots())
-' Objects data obj id, x, y, gpr1, gpr2, shadow
+' Object data: obj id, x, y, gpr1, gpr2, shadow
 dim g_obj(25,5)
-' Object spawn data: quantity, x, y, next spawn time
-dim g_obj_spawn(bound(g_obj()),3)
+' Object spawn data: quantity, obj id, x, y, next spawn time
+dim g_obj_spawn(bound(g_obj()),4)
 dim g_obj_tick%=0
 const OBJ_INI_SPRITE_ID=bound(g_shots()) + 1 ' Initial sprite Id for objects
 
@@ -233,12 +233,17 @@ sub move_and_process_objects()
 
         ' Moves object
         select case obj_id%
-            case 2 ' Bat
+            case 2,3 ' Bat
                 ' Calculate new X
-                if g_obj(i%,1) > SCREEN_CENTER then
-                    g_obj(i%,1)=SCREEN_WIDTH+SCREEN_CENTER*cos(g_obj(i%,3))
-                else
-                    g_obj(i%,1)=(SCREEN_CENTER-TILE_SIZE)*cos(g_obj(i%,3))
+                ' Simple bat
+                if obj_id%=2 then
+                    if g_obj(i%,1) > SCREEN_CENTER then
+                        g_obj(i%,1)=SCREEN_WIDTH+SCREEN_CENTER*cos(g_obj(i%,3))
+                    else
+                        g_obj(i%,1)=(SCREEN_CENTER-TILE_SIZE)*cos(g_obj(i%,3))
+                    end if
+                else ' Bat wave
+                    g_obj(i%,1)=(SCREEN_CENTER-TILE_SIZE)+(SCREEN_CENTER-TILE_SIZEx4)*cos(g_obj(i%,3))
                 end if
 
                 ' Increment angle by the speed
@@ -247,27 +252,6 @@ sub move_and_process_objects()
                 inc g_obj(i%,2),OBJ_DATA(obj_id%,1)
                 ' Compensates sprite's tile misalignment
                 if g_obj_tick% mod 2 > 0 then offset_y%=OBJ_TILE%(obj_id%,3)/2
-
-                ' Spawn new bat
-                if g_obj_spawn(i%, 0) > 0 and timer >= g_obj_spawn(i%, 3) then
-                    spawn_new_object_copy(obj_id%, i%, BAT_SPAWN_SPEED_MS)
-                end if
-
-            case 3 ' Bat wave
-                ' Calculate new X
-                g_obj(i%,1)=(SCREEN_CENTER-TILE_SIZE)+(SCREEN_CENTER-TILE_SIZEx4)*cos(g_obj(i%,3))
-
-                ' Increment angle by the speed
-                inc g_obj(i%,3),OBJ_DATA(obj_id%,0)
-                ' Increment Y
-                inc g_obj(i%,2),OBJ_DATA(obj_id%,1)
-                ' Compensates sprite's tile misalignment
-                if g_obj_tick% mod 2 > 0 then offset_y%=OBJ_TILE%(obj_id%,3)/2
-
-                ' Spawn new bat
-                if g_obj_spawn(i%, 0) > 0 and timer >= g_obj_spawn(i%, 3) then
-                    spawn_new_object_copy(obj_id%, i%, BAT_WAVE_SPAWN_SPEED_MS)
-                end if
 
             case 14 ' Shadow
                 g_obj(i%,1)=g_obj(g_obj(i%,5),1)
@@ -290,14 +274,32 @@ sub move_and_process_objects()
             sprite close sprite_id%
         end if
     next
+
+    ' Spawn extra objects
+    for i%=0 to bound(g_obj_spawn())
+        if not g_obj_spawn(i%, 0) then continue for
+
+        if timer >= g_obj_spawn(i%, 4) then
+            spawn_new_object_copy(i%)
+        end if
+    next
 end sub
 
 '
 ' Spawn new object copy decrementing the number of remaining copies
-sub spawn_new_object_copy(obj_id%, i%, time_ms)
-    spawn_object(obj_id%, g_obj_spawn(i%, 1), g_obj_spawn(i%, 2), 0)
+sub spawn_new_object_copy(i%)
+    local time_ms, obj_id%=g_obj_spawn(i%, 1)
+
+    select case obj_id%
+        case 2
+            time_ms=BAT_SPAWN_SPEED_MS
+        case 3
+            time_ms=BAT_WAVE_SPAWN_SPEED_MS
+    end select
+
+    spawn_object(obj_id%, g_obj_spawn(i%, 2), g_obj_spawn(i%, 3), 0)
     g_obj_spawn(i%, 0)=g_obj_spawn(i%, 0) - 1
-    g_obj_spawn(i%, 3)=timer+time_ms
+    g_obj_spawn(i%, 4)=timer+time_ms
 end sub
 
 '
@@ -317,10 +319,11 @@ sub spawn_object(obj_id%, x%, y%, data%)
         case 2,3 ' Bat
             if x% < SCREEN_CENTER then g_obj(i%,3)=g_obj(i%,3)+180
             if data% then
-                g_obj_spawn(i%,0)=data% ' Spawn count
-                g_obj_spawn(i%,1)=x%    ' X
-                g_obj_spawn(i%,2)=y%    ' Y
-                g_obj_spawn(i%,3)=timer+choice(obj_id%=2, BAT_SPAWN_SPEED_MS, BAT_WAVE_SPAWN_SPEED_MS)
+                g_obj_spawn(i%,0)=data%   ' Spawn count
+                g_obj_spawn(i%,1)=obj_id% ' Object Id
+                g_obj_spawn(i%,2)=x%      ' X
+                g_obj_spawn(i%,3)=y%      ' Y
+                g_obj_spawn(i%,4)=timer+choice(obj_id%=2, BAT_SPAWN_SPEED_MS, BAT_WAVE_SPAWN_SPEED_MS)
             end if
             ' Spawn the bat shadow
             create_shadow(i%)
