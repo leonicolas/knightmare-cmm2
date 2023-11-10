@@ -43,8 +43,8 @@ dim g_shots(12,4)
 const SHOTS_NUM%=bound(g_shots())
 ' Object data: obj id, x, y, gpr1, gpr2, shadow
 dim g_obj(25,5)
-' Object spawn data: quantity, obj id, x, y, next spawn time
-dim g_obj_spawn(bound(g_obj()),4)
+' Object spawn data queue: quantity, obj id, x, y, next spawn time
+dim g_spawn_queue(bound(g_obj()),4)
 dim g_obj_tick%=0
 const OBJ_INI_SPRITE_ID=bound(g_shots()) + 1 ' Initial sprite Id for objects
 
@@ -89,6 +89,8 @@ sub run_stage(stage%)
         ' Move sprites
         move_shots()
         move_and_process_objects()
+        ' Spawn enqueued objects
+        process_spawn_queue()
         ' Move player - ensure player always on top
         sprite show safe #1, g_player(0),g_player(1), 1,,1
         sprite move
@@ -108,6 +110,30 @@ sub check_collision()
             process_collision(sprite(C, 0, i%))
         next
     end if
+end sub
+
+
+'
+' Spawn new objects from the spawn queue
+sub process_spawn_queue()
+    local i%, time_ms
+
+    ' Spawn new objects from the queue
+    for i%=0 to bound(g_spawn_queue())
+        if g_spawn_queue(i%, 0) = 0 then continue for
+        if timer < g_spawn_queue(i%, 4) then continue for
+
+        select case g_spawn_queue(i%, 1)
+            case 2
+                time_ms=BAT_SPAWN_SPEED_MS
+            case 3
+                time_ms=BAT_WAVE_SPAWN_SPEED_MS
+        end select
+
+        spawn_object(g_spawn_queue(i%, 1), g_spawn_queue(i%, 2), g_spawn_queue(i%, 3))
+        inc g_spawn_queue(i%, 0), -1
+        g_spawn_queue(i%, 4)=timer+time_ms
+    next
 end sub
 
 '
@@ -153,6 +179,7 @@ sub kill_enemy(enemy_sprite_id%, shot_sprite_id%)
     for i%=0 to bound(g_obj())
         sprite_id%=OBJ_INI_SPRITE_ID + i%
         if sprite_id% <> enemy_sprite_id% then continue for
+
         ' Delete enemy's object
         g_obj(i%,0) = 0
         sprite close sprite_id%
@@ -169,6 +196,7 @@ sub kill_enemy(enemy_sprite_id%, shot_sprite_id%)
     sprite close shot_sprite_id%
     g_shots(shot_sprite_id% - 2, 0) = 0
 end sub
+
 
 '
 ' Delete an object shadow
@@ -274,38 +302,12 @@ sub move_and_process_objects()
             sprite close sprite_id%
         end if
     next
-
-    ' Spawn extra objects
-    for i%=0 to bound(g_obj_spawn())
-        if not g_obj_spawn(i%, 0) then continue for
-
-        if timer >= g_obj_spawn(i%, 4) then
-            spawn_new_object_copy(i%)
-        end if
-    next
-end sub
-
-'
-' Spawn new object copy decrementing the number of remaining copies
-sub spawn_new_object_copy(i%)
-    local time_ms, obj_id%=g_obj_spawn(i%, 1)
-
-    select case obj_id%
-        case 2
-            time_ms=BAT_SPAWN_SPEED_MS
-        case 3
-            time_ms=BAT_WAVE_SPAWN_SPEED_MS
-    end select
-
-    spawn_object(obj_id%, g_obj_spawn(i%, 2), g_obj_spawn(i%, 3), 0)
-    g_obj_spawn(i%, 0)=g_obj_spawn(i%, 0) - 1
-    g_obj_spawn(i%, 4)=timer+time_ms
 end sub
 
 '
 ' Spawn a new object and initialize its state and sprite
-sub spawn_object(obj_id%, x%, y%, data%)
-    local sprite_id%, i%=get_free_object_slot()
+sub spawn_object(obj_id%, x%, y%, map_data%)
+    local sprite_id%, offset%, layer%=1, i%=get_free_object_slot()
     if i% < 0 then exit sub
 
     g_obj(i%,0)=obj_id%             ' Object Id
@@ -317,24 +319,38 @@ sub spawn_object(obj_id%, x%, y%, data%)
 
     select case obj_id%
         case 2,3 ' Bat
+            ' Calculate the correct bat angle
             if x% < SCREEN_CENTER then g_obj(i%,3)=g_obj(i%,3)+180
-            if data% then
-                g_obj_spawn(i%,0)=data%   ' Spawn count
-                g_obj_spawn(i%,1)=obj_id% ' Object Id
-                g_obj_spawn(i%,2)=x%      ' X
-                g_obj_spawn(i%,3)=y%      ' Y
-                g_obj_spawn(i%,4)=timer+choice(obj_id%=2, BAT_SPAWN_SPEED_MS, BAT_WAVE_SPAWN_SPEED_MS)
+            ' Initialize bat spawning data
+            if map_data% then
+                enqueue_object_spawn(map_data%, obj_id%, x%, y%, choice(obj_id%=2, BAT_SPAWN_SPEED_MS, BAT_WAVE_SPAWN_SPEED_MS))
             end if
             ' Spawn the bat shadow
             create_shadow(i%)
+
+        case 20 ' Fire
+            offset%=FIRE_ANIM(0)*TILE_SIZEx2
+            layer%=4
     end select
 
     sprite_id%=OBJ_INI_SPRITE_ID + i%
-    sprite read sprite_id%, OBJ_TILE%(obj_id%,0), OBJ_TILE%(obj_id%,1), OBJ_TILE%(obj_id%,2), OBJ_TILE%(obj_id%,3), OBJ_TILES_BUFFER
-    debug_print("> "+str$(obj_id%))
-    sprite show safe sprite_id%, g_obj(i%,1),g_obj(i%,2), 0
+    sprite read sprite_id%, OBJ_TILE%(obj_id%,0), OBJ_TILE%(obj_id%,1)+offset%, OBJ_TILE%(obj_id%,2), OBJ_TILE%(obj_id%,3), OBJ_TILES_BUFFER
+    sprite show safe sprite_id%, g_obj(i%,1),g_obj(i%,2), layer%
 end sub
 
+sub enqueue_object_spawn(spawn_count%, obj_id%, x%, y%, spawn_speed_ms)
+    local i%
+    for i%=0 to bound(g_spawn_queue())
+        if g_spawn_queue(i%,0) then continue
+
+        g_spawn_queue(i%,0)=spawn_count% ' Spawn count
+        g_spawn_queue(i%,1)=obj_id%      ' Object Id
+        g_spawn_queue(i%,2)=x%           ' X
+        g_spawn_queue(i%,3)=y%           ' Y
+        g_spawn_queue(i%,4)=timer+spawn_speed_ms
+        exit for
+    next
+end sub
 '
 ' Create the object shadow
 sub create_shadow(obj_index%)
