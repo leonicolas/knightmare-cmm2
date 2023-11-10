@@ -283,7 +283,7 @@ sub move_and_process_objects()
 
             case 14 ' Shadow
                 g_obj(i%,1)=g_obj(g_obj(i%,5),1)
-                g_obj(i%,2)=g_obj(g_obj(i%,5),2)+TILE_SIZEx2
+                g_obj(i%,2)=g_obj(g_obj(i%,5),2)+g_obj(i%,3)
                 screen_offset%=-TILE_SIZE
 
             case else
@@ -326,7 +326,7 @@ sub spawn_object(obj_id%, x%, y%, map_data%)
                 enqueue_object_spawn(map_data%, obj_id%, x%, y%, choice(obj_id%=2, BAT_SPAWN_SPEED_MS, BAT_WAVE_SPAWN_SPEED_MS))
             end if
             ' Spawn the bat shadow
-            create_shadow(i%)
+            create_shadow(i%, TILE_SIZEx2+TILE_SIZE/2)
 
         case 20 ' Fire
             offset%=FIRE_ANIM(0)*TILE_SIZEx2
@@ -351,17 +351,19 @@ sub enqueue_object_spawn(spawn_count%, obj_id%, x%, y%, spawn_speed_ms)
         exit for
     next
 end sub
+
 '
 ' Create the object shadow
-sub create_shadow(obj_index%)
+sub create_shadow(obj_index%, height%)
     local sprite_id%, i%=get_free_object_slot()
     if i% < 0 then exit sub
 
-    g_obj(i%,0)=14                              ' Shadow id
-    g_obj(i%,1)=g_obj(obj_index%,1)             ' X
-    g_obj(i%,2)=g_obj(obj_index%,2)+TILE_SIZEx2 ' Y
-    g_obj(i%,5)=obj_index%                      ' Shadow -> source object index
-    g_obj(obj_index%,5)=i%                      ' Source object -> shadow index
+    g_obj(i%,0)=14                          ' Shadow id
+    g_obj(i%,1)=g_obj(obj_index%,1)         ' X
+    g_obj(i%,2)=g_obj(obj_index%,2)+height% ' Y
+    g_obj(i%,3)=height%                     ' Height
+    g_obj(i%,5)=obj_index%                  ' Shadow -> source object index
+    g_obj(obj_index%,5)=i%                  ' Source object -> shadow index
     sprite_id%=OBJ_INI_SPRITE_ID + i%
     sprite read sprite_id%, OBJ_TILE%(14,0), OBJ_TILE%(14,1), OBJ_TILE%(14,2), OBJ_TILE%(14,3), OBJ_TILES_BUFFER
     sprite show safe sprite_id%, g_obj(i%,1),g_obj(i%,2), 3
