@@ -123,13 +123,13 @@ sub process_collision(sprite_id%)
 
         ' Check player collision
         if sprite_id% = 1 or collided_id% = 1 then
-            kill_player(collided_id%)
+            hit_player(collided_id%)
 
         ' Check shot hit
         else if sprite_id% <= SHOTS_NUM% or collided_id% <= SHOTS_NUM% then
             ' Player shot hits enemy
             if sprite_id% <= 4 and collided_id% >= OBJ_INI_SPRITE_ID then
-                kill_enemy(collided_id%, sprite_id%)
+                hit_enemy(collided_id%, sprite_id%)
             end if
             debug_print("sprite#: "+str$(sprite_id%)+" > "+str$(collided_id%)+space$(10), o)
             inc o,16
@@ -161,15 +161,14 @@ sub process_spawn_queue()
 end sub
 
 '
-' Process the player kill
+' Process the player hit
 ' TODO: implement!!!
-sub kill_player(collided_id%)
+sub hit_player(collided_id%)
 end sub
 
 '
-' Process the enemy kill
-' TODO: Implement fast enemy search with lookup table
-sub kill_enemy(enemy_sprite_id%, shot_sprite_id%)
+' Process the enemy hit
+sub hit_enemy(enemy_sprite_id%, shot_sprite_id%)
     local i%,sprite_id%
     local o=16
 
