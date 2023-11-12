@@ -68,6 +68,8 @@ OBJ_TILE%(1,0)=1: OBJ_TILE%(1,1)=17: OBJ_TILE%(1,2)=14: OBJ_TILE%(1,3)=14
 OBJ_TILE%(2,0)=32: OBJ_TILE%(2,1)=16: OBJ_TILE%(2,2)=16: OBJ_TILE%(2,3)=11
 ' Bat Wave
 OBJ_TILE%(3,0)=32: OBJ_TILE%(3,1)=16: OBJ_TILE%(3,2)=16: OBJ_TILE%(3,3)=11
+' Knight
+OBJ_TILE%(4,0)=64: OBJ_TILE%(4,1)=16: OBJ_TILE%(4,2)=16: OBJ_TILE%(4,3)=16
 
 ' VFX
 ' Shadow
@@ -92,3 +94,8 @@ const BAT_SPAWN_SPEED_MS=500
 OBJ_DATA(3,0)=1.2    ' X speed (angle increment)
 OBJ_DATA(3,1)=0.33   ' Y speed
 const BAT_WAVE_SPAWN_SPEED_MS=200
+' Knight
+OBJ_DATA(4,0)=0.4    ' X speed - applied when it changes to horizontal movement
+OBJ_DATA(4,1)=0.5    ' Y speed
+const KNIGHT_CHANGE_DIRECT_DIST_PX=55
+const KNIGHT_MAX_HORIZONTAL_DIST_PX=48

@@ -16,6 +16,7 @@ function generateMapBinary(stage) {
         blob: 1,
         bat: 2,
         "bat-wave": 3,
+        knight: 4,
     };
 
     /**

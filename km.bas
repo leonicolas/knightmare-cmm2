@@ -219,7 +219,7 @@ end sub
 '
 ' Animate the game objects (enemies, power-ups)
 sub animate_objects()
-    local i%, obj_id%, offset%
+    local i%, obj_id%, sprite_index%, offset%, flip%
     inc g_anim_tick%
 
     for i%=0 to bound(g_obj())
@@ -228,12 +228,18 @@ sub animate_objects()
         if obj_id% = 0 or obj_id%=14 then continue for
 
         offset%=0
+        sprite_index%=OBJ_INI_SPRITE_ID + i%
+
+        ' Config animation
         select case obj_id%
+            case 4  ' Knight
+                if g_anim_tick% mod ANIM_TICK_DIVIDER < HALF_ANIM_TICK_DIVIDER then flip%=1
+
             case 20 ' Fire
                 if g_obj(i%, 3) > bound(FIRE_ANIM()) then
                     g_obj(i%, 0)=0
-                    sprite hide safe OBJ_INI_SPRITE_ID + i%
-                    sprite close OBJ_INI_SPRITE_ID + i%
+                    sprite hide safe sprite_index%
+                    sprite close sprite_index%
                     continue for
                 end if
                 offset%=FIRE_ANIM(g_obj(i%, 3))*TILE_SIZEx2
@@ -243,7 +249,13 @@ sub animate_objects()
                 if g_anim_tick% mod ANIM_TICK_DIVIDER < HALF_ANIM_TICK_DIVIDER then offset%=TILE_SIZEx2
         end select
 
-        sprite read OBJ_INI_SPRITE_ID + i%, OBJ_TILE%(obj_id%,0)+offset%, OBJ_TILE%(obj_id%,1), OBJ_TILE%(obj_id%,2), OBJ_TILE%(obj_id%,3), OBJ_TILES_BUFFER
+        ' Read or flip next frame's sprite
+        select case obj_id%
+            case 4
+                sprite show safe sprite_index%, sprite(X, sprite_index%), sprite(Y, sprite_index%), sprite(L, sprite_index%), flip%
+            case else
+                sprite read sprite_index%, OBJ_TILE%(obj_id%,0)+offset%, OBJ_TILE%(obj_id%,1), OBJ_TILE%(obj_id%,2), OBJ_TILE%(obj_id%,3), OBJ_TILES_BUFFER
+        end select
     next
 end sub
 
@@ -303,6 +315,20 @@ sub move_and_process_objects()
                 ' Compensates sprite's tile misalignment
                 if g_anim_tick% mod ANIM_TICK_DIVIDER >= HALF_ANIM_TICK_DIVIDER then offset_y%=OBJ_TILE%(obj_id%,3)/2
 
+            case 4 ' Knight
+                ' Check if it is time to change direction
+                if g_obj(i%,4)=0 and g_player(1)-g_obj(i%,2) < KNIGHT_CHANGE_DIRECT_DIST_PX then
+                    g_obj(i%,4)=g_obj(i%,1) ' Save the last X position
+                    g_obj(i%,5)=choice(g_obj(i%,1)>SCREEN_CENTER,-1,1) ' Horizontal movement direction
+                else if g_obj(i%,5) and abs(g_obj(i%,4)-g_obj(i%,1)) > KNIGHT_MAX_HORIZONTAL_DIST_PX then
+                    g_obj(i%,5)=0
+                end if
+
+                if g_obj(i%,5) then
+                    inc g_obj(i%,1),OBJ_DATA(obj_id%,0)*g_obj(i%,5)
+                else
+                    inc g_obj(i%,2),OBJ_DATA(obj_id%,1)
+                end if
             case 14 ' Shadow
                 g_obj(i%,1)=g_obj(g_obj(i%,5),1)
                 g_obj(i%,2)=g_obj(g_obj(i%,5),2)+g_obj(i%,3)
