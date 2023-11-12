@@ -7,7 +7,6 @@ option default float
 
 ' Global variables
 dim g_sound_on%=1
-dim g_debug%=1
 dim g_map(MAP_SIZE) as integer ' Map data
 dim g_row%                     ' Current top map row. Zero is the bottom row.
 dim g_game_tick                ' The game tick
@@ -669,9 +668,7 @@ sub intro()
 end sub
 
 sub debug_print(msg$, offset%)
-    if g_debug% then
-        page write 0
-        print @(0,184+offset%) msg$
-        page write SCREEN_BUFFER
-    end if
+    page write 0
+    print @(0,184+offset%) msg$
+    page write SCREEN_BUFFER
 end sub
