@@ -41,7 +41,7 @@ dim g_player_animation_ms=PLAYER_ANIMATION_MS
 dim g_shots(12,4)
 const SHOTS_NUM%=bound(g_shots())
 ' Object data: 0: obj id | 1: x | 2: y | 3: life | 4: gpr1 | 5: gpr2 | 6: shadow
-dim g_obj(2,6)
+dim g_obj(20,6)
 ' Object spawn data queue: 0: quantity | 1: obj id | 2: x | 3: y | 4: next spawn time
 dim g_spawn_queue(bound(g_obj()),4)
 dim g_anim_tick%=0
