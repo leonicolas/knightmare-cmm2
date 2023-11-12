@@ -82,20 +82,24 @@ dim FIRE_ANIM(15)=(1,0,1,0,1,0,2,1,2,1,2,1,3,2,3,2)
 
 ' Object data: speed X, speed Y, auxiliary data 1 and 2
 ' TODO: Move to data block
-dim OBJ_DATA(38,3)
+dim OBJ_DATA(38,4)
 ' Blob
 OBJ_DATA(1,1)=0.15   ' Y speed
+OBJ_DATA(1,2)=1      ' Life
 ' Bat
 OBJ_DATA(2,0)=0.7    ' X speed (angle increment)
 OBJ_DATA(2,1)=0.6    ' Y speed
-OBJ_DATA(2,2)=90     ' Angle
+OBJ_DATA(2,2)=1      ' Life
+OBJ_DATA(2,3)=90     ' Angle
 const BAT_SPAWN_SPEED_MS=500
 ' Bat wave
 OBJ_DATA(3,0)=1.2    ' X speed (angle increment)
 OBJ_DATA(3,1)=0.33   ' Y speed
+OBJ_DATA(3,2)=1      ' Life
 const BAT_WAVE_SPAWN_SPEED_MS=200
 ' Knight
 OBJ_DATA(4,0)=0.4    ' X speed - applied when it changes to horizontal movement
 OBJ_DATA(4,1)=0.5    ' Y speed
+OBJ_DATA(4,2)=3      ' Life
 const KNIGHT_CHANGE_DIRECT_DIST_PX=55
 const KNIGHT_MAX_HORIZONTAL_DIST_PX=48

@@ -40,9 +40,9 @@ dim g_player_animation_ms=PLAYER_ANIMATION_MS
 ' 9 - Player Sword (level 2)
 dim g_shots(12,4)
 const SHOTS_NUM%=bound(g_shots())
-' Object data: obj id, x, y, gpr1, gpr2, shadow
-dim g_obj(25,5)
-' Object spawn data queue: quantity, obj id, x, y, next spawn time
+' Object data: 0: obj id | 1: x | 2: y | 3: life | 4: gpr1 | 5: gpr2 | 6: shadow
+dim g_obj(2,6)
+' Object spawn data queue: 0: quantity | 1: obj id | 2: x | 3: y | 4: next spawn time
 dim g_spawn_queue(bound(g_obj()),4)
 dim g_anim_tick%=0
 const OBJ_INI_SPRITE_ID=bound(g_shots()) + 1 ' Initial sprite Id for objects
@@ -177,6 +177,10 @@ sub hit_enemy(enemy_sprite_id%, shot_sprite_id%)
         sprite_id%=OBJ_INI_SPRITE_ID + i%
         if sprite_id% <> enemy_sprite_id% then continue for
 
+        ' Decrement life
+        inc g_obj(i%,3), -1 ' TODO: Implement weapon force
+        if g_obj(i%,3) > 0 then continue for
+
         ' Delete enemy's object
         g_obj(i%,0) = 0
         sprite hide safe sprite_id%
@@ -206,12 +210,12 @@ end sub
 '
 ' Delete an object shadow
 sub delete_shadow(src_obj_index%)
-    local shadow_index%=g_obj(src_obj_index%,5)
+    local shadow_index%=g_obj(src_obj_index%,6)
 
     if shadow_index% < 0 then exit sub
 
     g_obj(shadow_index%,0) = 0
-    g_obj(src_obj_index%,5) = -1
+    g_obj(src_obj_index%,6) = -1
     sprite hide safe OBJ_INI_SPRITE_ID + shadow_index%
     sprite close OBJ_INI_SPRITE_ID + shadow_index%
 end sub
@@ -300,16 +304,16 @@ sub move_and_process_objects()
                 ' Simple bat
                 if obj_id%=2 then
                     if g_obj(i%,1) > SCREEN_CENTER then
-                        g_obj(i%,1)=SCREEN_WIDTH+SCREEN_CENTER*cos(g_obj(i%,3))
+                        g_obj(i%,1)=SCREEN_WIDTH+SCREEN_CENTER*cos(g_obj(i%,4))
                     else
-                        g_obj(i%,1)=(SCREEN_CENTER-TILE_SIZE)*cos(g_obj(i%,3))
+                        g_obj(i%,1)=(SCREEN_CENTER-TILE_SIZE)*cos(g_obj(i%,4))
                     end if
                 else ' Bat wave
-                    g_obj(i%,1)=(SCREEN_CENTER-TILE_SIZE)+(SCREEN_CENTER-TILE_SIZEx4)*cos(g_obj(i%,3))
+                    g_obj(i%,1)=(SCREEN_CENTER-TILE_SIZE)+(SCREEN_CENTER-TILE_SIZEx4)*cos(g_obj(i%,4))
                 end if
 
                 ' Increment angle by the speed
-                inc g_obj(i%,3),OBJ_DATA(obj_id%,0)
+                inc g_obj(i%,4),OBJ_DATA(obj_id%,0)
                 ' Increment Y
                 inc g_obj(i%,2),OBJ_DATA(obj_id%,1)
                 ' Compensates sprite's tile misalignment
@@ -330,8 +334,8 @@ sub move_and_process_objects()
                     inc g_obj(i%,2),OBJ_DATA(obj_id%,1)
                 end if
             case 14 ' Shadow
-                g_obj(i%,1)=g_obj(g_obj(i%,5),1)
-                g_obj(i%,2)=g_obj(g_obj(i%,5),2)+g_obj(i%,3)
+                g_obj(i%,1)=g_obj(g_obj(i%,6),1)
+                g_obj(i%,2)=g_obj(g_obj(i%,6),2)+g_obj(i%,4)
                 screen_offset%=-TILE_SIZE
 
             case else
@@ -344,7 +348,7 @@ sub move_and_process_objects()
         if not sprite(e,sprite_id%) and g_obj(i%,2) <= SCREEN_HEIGHT-screen_offset% then
             sprite next sprite_id%, g_obj(i%,1), g_obj(i%,2)+offset_y%
         else if obj_id% = 14 then
-            delete_shadow(g_obj(i%,5))
+            delete_shadow(g_obj(i%,6))
         else
             g_obj(i%,0)=0
             sprite hide safe sprite_id%
@@ -362,14 +366,15 @@ sub spawn_object(obj_id%, x%, y%, map_data%)
     g_obj(i%,0)=obj_id%             ' Object Id
     g_obj(i%,1)=x%                  ' X
     g_obj(i%,2)=y%                  ' Y
-    g_obj(i%,3)=OBJ_DATA(obj_id%,2) ' GPR 1
-    g_obj(i%,4)=OBJ_DATA(obj_id%,3) ' GPR 2
-    g_obj(i%,5)=-1                  ' Shadow index
+    g_obj(i%,3)=OBJ_DATA(obj_id%,2) ' Life
+    g_obj(i%,4)=OBJ_DATA(obj_id%,3) ' GPR 1
+    g_obj(i%,5)=OBJ_DATA(obj_id%,4) ' GPR 2
+    g_obj(i%,6)=-1                  ' Shadow index
 
     select case obj_id%
         case 2,3 ' Bat
             ' Calculate the correct bat angle
-            if x% < SCREEN_CENTER then g_obj(i%,3)=g_obj(i%,3)+180
+            if x% < SCREEN_CENTER then g_obj(i%,4)=g_obj(i%,4)+180
             ' Initialize bat spawning data
             if map_data% then
                 enqueue_object_spawn(map_data%, obj_id%, x%, y%, choice(obj_id%=2, BAT_SPAWN_SPEED_MS, BAT_WAVE_SPAWN_SPEED_MS))
@@ -412,9 +417,9 @@ sub create_shadow(obj_index%, height%)
     g_obj(i%,0)=14                          ' Shadow id
     g_obj(i%,1)=g_obj(obj_index%,1)         ' X
     g_obj(i%,2)=g_obj(obj_index%,2)+height% ' Y
-    g_obj(i%,3)=height%                     ' Height
-    g_obj(i%,5)=obj_index%                  ' Shadow -> source object index
-    g_obj(obj_index%,5)=i%                  ' Source object -> shadow index
+    g_obj(i%,4)=height%                     ' Height
+    g_obj(i%,6)=obj_index%                  ' Shadow -> source object index
+    g_obj(obj_index%,6)=i%                  ' Source object -> shadow index
     sprite_id%=OBJ_INI_SPRITE_ID + i%
     sprite read sprite_id%, OBJ_TILE%(14,0), OBJ_TILE%(14,1), OBJ_TILE%(14,2), OBJ_TILE%(14,3), OBJ_TILES_BUFFER
     sprite show safe sprite_id%, g_obj(i%,1),g_obj(i%,2), 3
