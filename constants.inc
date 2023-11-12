@@ -99,7 +99,7 @@ OBJ_DATA(3,2)=1      ' Life
 const BAT_WAVE_SPAWN_SPEED_MS=200
 ' Knight
 OBJ_DATA(4,0)=0.4    ' X speed - applied when it changes to horizontal movement
-OBJ_DATA(4,1)=0.5    ' Y speed
+OBJ_DATA(4,1)=0.4    ' Y speed
 OBJ_DATA(4,2)=3      ' Life
 const KNIGHT_CHANGE_DIRECT_DIST_PX=55
 const KNIGHT_MAX_HORIZONTAL_DIST_PX=48
