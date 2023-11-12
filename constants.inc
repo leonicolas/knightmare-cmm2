@@ -22,10 +22,13 @@ const BOSSES_TILES_BUFFER=4               ' Bosses tileset buffer number
 ' Speed control
 const SCROLL_SPEED_MS=135                 ' Scroll speed in ms
 const GAME_TICK_MS=10                     ' Game tick in ms
-const OBJECTS_ANIMATION_MS=140
 const SHOT_COOLDOWN_MS=150
-const PLAYER_ANIMATION_MS=300
+const PLAYER_ANIMATION_MS=300             ' Default player animation frame time in ms
+const OBJECTS_ANIMATION_MS=50             ' Objects animation frame time in ms
+const ANIM_TICK_DIVIDER=6                 ' Animation frame time tick divider. Used for slowing some animations
+const HALF_ANIM_TICK_DIVIDER=ANIM_TICK_DIVIDER/2
 
+' Map data
 const MAP_COLS=32                         ' Map columns number
 const MAP_ROWS=238                        ' Map rows number
 const MAP_COLS_0=MAP_COLS-1               ' Zero based map columns number
@@ -50,6 +53,7 @@ const PLAYER_SKIN1_X_R=TILE_SIZE*2
 
 ' Effects
 const SHOT_EFFECT="sfx/shot.wav"
+const ENEMY_DEATH_EFFECT="sfx/enemy_death.wav"
 
 ' Music table
 dim MUSIC$(9)=("music/01_intro-psg.mod", "music/02_majou-densetsu-psg.mod", "", "", "", "", "", "", "", "")
@@ -70,6 +74,9 @@ OBJ_TILE%(3,0)=32: OBJ_TILE%(3,1)=16: OBJ_TILE%(3,2)=16: OBJ_TILE%(3,3)=11
 OBJ_TILE%(14,0)=0: OBJ_TILE%(14,1)=33: OBJ_TILE%(14,2)=16: OBJ_TILE%(14,3)=6
 ' Shots
 OBJ_TILE%(30,0)=1: OBJ_TILE%(30,1)=66: OBJ_TILE%(30,2)=5: OBJ_TILE%(30,3)=13
+' Fire
+OBJ_TILE%(20,0)=96: OBJ_TILE%(20,1)=104: OBJ_TILE%(20,2)=TILE_SIZEx2: OBJ_TILE%(20,3)=TILE_SIZEx2
+dim FIRE_ANIM(15)=(1,0,1,0,1,0,2,1,2,1,2,1,3,2,3,2)
 
 ' Object data: speed X, speed Y and auxiliary data
 ' TODO: Move to data block

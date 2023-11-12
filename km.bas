@@ -6,7 +6,7 @@ option default float
 #include "constants.inc"
 
 ' Global variables
-dim g_sound_on%=0
+dim g_sound_on%=1
 dim g_debug%=1
 dim g_map(MAP_SIZE) as integer ' Map data
 dim g_row%                     ' Current top map row. Zero is the bottom row.
@@ -45,7 +45,7 @@ const SHOTS_NUM%=bound(g_shots())
 dim g_obj(25,5)
 ' Object spawn data queue: quantity, obj id, x, y, next spawn time
 dim g_spawn_queue(bound(g_obj()),4)
-dim g_obj_tick%=0
+dim g_anim_tick%=0
 const OBJ_INI_SPRITE_ID=bound(g_shots()) + 1 ' Initial sprite Id for objects
 
 init()
@@ -111,7 +111,6 @@ sub check_collision()
         next
     end if
 end sub
-
 
 '
 ' Spawn new objects from the spawn queue
@@ -182,21 +181,29 @@ sub kill_enemy(enemy_sprite_id%, shot_sprite_id%)
 
         ' Delete enemy's object
         g_obj(i%,0) = 0
+        sprite hide safe sprite_id%
         sprite close sprite_id%
 
         debug_print("sprite#: "+str$(sprite_id%)+" > "+str$(i%)+space$(10), o)
         inc o,16
 
-        ' Delete enemy's shadow
         delete_shadow(i%)
+        start_enemy_death_animation(i%)
+        if g_sound_on% then play effect ENEMY_DEATH_EFFECT
         exit for
     next
 
     ' Delete the shot
+    sprite hide safe shot_sprite_id%
     sprite close shot_sprite_id%
     g_shots(shot_sprite_id% - 2, 0) = 0
 end sub
 
+'
+' Initialize and start the enemy death animation
+sub start_enemy_death_animation(i%)
+    enqueue_object_spawn(1, 20, g_obj(i%,1), g_obj(i%,2))
+end sub
 
 '
 ' Delete an object shadow
@@ -207,20 +214,36 @@ sub delete_shadow(src_obj_index%)
 
     g_obj(shadow_index%,0) = 0
     g_obj(src_obj_index%,5) = -1
+    sprite hide safe OBJ_INI_SPRITE_ID + shadow_index%
     sprite close OBJ_INI_SPRITE_ID + shadow_index%
 end sub
 
 '
 ' Animate the game objects (enemies, power-ups)
 sub animate_objects()
-    local i%, obj_id%, offset%=TILE_SIZEx2
-    inc g_obj_tick%
+    local i%, obj_id%, offset%
+    inc g_anim_tick%
+
     for i%=0 to bound(g_obj())
         obj_id% = g_obj(i%, 0)
         ' Skip free slots and shadows
-        if not obj_id% or obj_id%=14 then continue for
+        if obj_id% = 0 or obj_id%=14 then continue for
 
-        if g_obj_tick% mod 2 then offset%=0
+        offset%=0
+        select case obj_id%
+            case 20 ' Fire
+                if g_obj(i%, 3) > bound(FIRE_ANIM()) then
+                    g_obj(i%, 0)=0
+                    sprite hide safe OBJ_INI_SPRITE_ID + i%
+                    sprite close OBJ_INI_SPRITE_ID + i%
+                    continue for
+                end if
+                offset%=FIRE_ANIM(g_obj(i%, 3))*TILE_SIZEx2
+                inc g_obj(i%, 3),1
+
+            case else ' Other objects
+                if g_anim_tick% mod ANIM_TICK_DIVIDER < HALF_ANIM_TICK_DIVIDER then offset%=TILE_SIZEx2
+        end select
 
         sprite read OBJ_INI_SPRITE_ID + i%, OBJ_TILE%(obj_id%,0)+offset%, OBJ_TILE%(obj_id%,1), OBJ_TILE%(obj_id%,2), OBJ_TILE%(obj_id%,3), OBJ_TILES_BUFFER
     next
@@ -238,6 +261,7 @@ sub move_shots()
         inc g_shots(i%,2),g_shots(i%,4)
         if g_shots(i%,2) < 0 then
             g_shots(i%,0)=0
+            sprite hide safe i%+2
             sprite close i%+2
         else
             sprite next i%+2,g_shots(i%,1),g_shots(i%,2)
@@ -279,7 +303,7 @@ sub move_and_process_objects()
                 ' Increment Y
                 inc g_obj(i%,2),OBJ_DATA(obj_id%,1)
                 ' Compensates sprite's tile misalignment
-                if g_obj_tick% mod 2 > 0 then offset_y%=OBJ_TILE%(obj_id%,3)/2
+                if g_anim_tick% mod ANIM_TICK_DIVIDER >= HALF_ANIM_TICK_DIVIDER then offset_y%=OBJ_TILE%(obj_id%,3)/2
 
             case 14 ' Shadow
                 g_obj(i%,1)=g_obj(g_obj(i%,5),1)
@@ -299,6 +323,7 @@ sub move_and_process_objects()
             delete_shadow(g_obj(i%,5))
         else
             g_obj(i%,0)=0
+            sprite hide safe sprite_id%
             sprite close sprite_id%
         end if
     next
@@ -307,7 +332,7 @@ end sub
 '
 ' Spawn a new object and initialize its state and sprite
 sub spawn_object(obj_id%, x%, y%, map_data%)
-    local sprite_id%, offset%, layer%=1, i%=get_free_object_slot()
+    local sprite_id%, offset_x%, offset_y%, layer%=1, i%=get_free_object_slot()
     if i% < 0 then exit sub
 
     g_obj(i%,0)=obj_id%             ' Object Id
@@ -329,19 +354,21 @@ sub spawn_object(obj_id%, x%, y%, map_data%)
             create_shadow(i%, TILE_SIZEx2+TILE_SIZE/2)
 
         case 20 ' Fire
-            offset%=FIRE_ANIM(0)*TILE_SIZEx2
+            offset_x%=FIRE_ANIM(0)*TILE_SIZEx2
             layer%=4
     end select
 
     sprite_id%=OBJ_INI_SPRITE_ID + i%
-    sprite read sprite_id%, OBJ_TILE%(obj_id%,0), OBJ_TILE%(obj_id%,1)+offset%, OBJ_TILE%(obj_id%,2), OBJ_TILE%(obj_id%,3), OBJ_TILES_BUFFER
+    sprite read sprite_id%, OBJ_TILE%(obj_id%,0)+offset_x%, OBJ_TILE%(obj_id%,1)+offset_y%, OBJ_TILE%(obj_id%,2), OBJ_TILE%(obj_id%,3), OBJ_TILES_BUFFER
     sprite show safe sprite_id%, g_obj(i%,1),g_obj(i%,2), layer%
 end sub
 
+'
+' Enqueues an object spawn
 sub enqueue_object_spawn(spawn_count%, obj_id%, x%, y%, spawn_speed_ms)
     local i%
     for i%=0 to bound(g_spawn_queue())
-        if g_spawn_queue(i%,0) then continue
+        if g_spawn_queue(i%,0) then continue for
 
         g_spawn_queue(i%,0)=spawn_count% ' Spawn count
         g_spawn_queue(i%,1)=obj_id%      ' Object Id
