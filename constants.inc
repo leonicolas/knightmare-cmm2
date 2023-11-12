@@ -78,9 +78,9 @@ OBJ_TILE%(30,0)=1: OBJ_TILE%(30,1)=66: OBJ_TILE%(30,2)=5: OBJ_TILE%(30,3)=13
 OBJ_TILE%(20,0)=96: OBJ_TILE%(20,1)=104: OBJ_TILE%(20,2)=TILE_SIZEx2: OBJ_TILE%(20,3)=TILE_SIZEx2
 dim FIRE_ANIM(15)=(1,0,1,0,1,0,2,1,2,1,2,1,3,2,3,2)
 
-' Object data: speed X, speed Y and auxiliary data
+' Object data: speed X, speed Y, auxiliary data 1 and 2
 ' TODO: Move to data block
-dim OBJ_DATA(38,2)
+dim OBJ_DATA(38,3)
 ' Blob
 OBJ_DATA(1,1)=0.15   ' Y speed
 ' Bat

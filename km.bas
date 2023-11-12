@@ -339,7 +339,7 @@ sub spawn_object(obj_id%, x%, y%, map_data%)
     g_obj(i%,1)=x%                  ' X
     g_obj(i%,2)=y%                  ' Y
     g_obj(i%,3)=OBJ_DATA(obj_id%,2) ' GPR 1
-    g_obj(i%,4)=0                   ' GPR 2
+    g_obj(i%,4)=OBJ_DATA(obj_id%,3) ' GPR 2
     g_obj(i%,5)=-1                  ' Shadow index
 
     select case obj_id%
