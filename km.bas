@@ -112,29 +112,6 @@ sub check_collision()
 end sub
 
 '
-' Spawn new objects from the spawn queue
-sub process_spawn_queue()
-    local i%, time_ms
-
-    ' Spawn new objects from the queue
-    for i%=0 to bound(g_spawn_queue())
-        if g_spawn_queue(i%, 0) = 0 then continue for
-        if timer < g_spawn_queue(i%, 4) then continue for
-
-        select case g_spawn_queue(i%, 1)
-            case 2
-                time_ms=BAT_SPAWN_SPEED_MS
-            case 3
-                time_ms=BAT_WAVE_SPAWN_SPEED_MS
-        end select
-
-        spawn_object(g_spawn_queue(i%, 1), g_spawn_queue(i%, 2), g_spawn_queue(i%, 3))
-        inc g_spawn_queue(i%, 0), -1
-        g_spawn_queue(i%, 4)=timer+time_ms
-    next
-end sub
-
-'
 ' Process the collision
 sub process_collision(sprite_id%)
     local i%, collided_id%
@@ -157,6 +134,29 @@ sub process_collision(sprite_id%)
             debug_print("sprite#: "+str$(sprite_id%)+" > "+str$(collided_id%)+space$(10), o)
             inc o,16
         end if
+    next
+end sub
+
+'
+' Spawn new objects from the spawn queue
+sub process_spawn_queue()
+    local i%, time_ms
+
+    ' Spawn new objects from the queue
+    for i%=0 to bound(g_spawn_queue())
+        if g_spawn_queue(i%, 0) = 0 then continue for
+        if timer < g_spawn_queue(i%, 4) then continue for
+
+        select case g_spawn_queue(i%, 1)
+            case 2
+                time_ms=BAT_SPAWN_SPEED_MS
+            case 3
+                time_ms=BAT_WAVE_SPAWN_SPEED_MS
+        end select
+
+        spawn_object(g_spawn_queue(i%, 1), g_spawn_queue(i%, 2), g_spawn_queue(i%, 3))
+        inc g_spawn_queue(i%, 0), -1
+        g_spawn_queue(i%, 4)=timer+time_ms
     next
 end sub
 
