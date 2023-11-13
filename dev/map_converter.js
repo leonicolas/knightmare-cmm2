@@ -1,4 +1,21 @@
 const fs = require("fs");
+const path = require("path");
+
+const objectsIds = {
+    blob: 1,
+    bat: 2,
+    "bat-wave": 3,
+    knight: 4,
+    block: 26,
+};
+
+const blockTypes = {
+    rook: 1,
+    knight: 2,
+    queen: 3,
+    king: 4,
+    barrier: 5,
+};
 
 function generateMapBinary(stage) {
     const mapData = require(`./maps/map_stage${stage}.json`);
@@ -11,13 +28,6 @@ function generateMapBinary(stage) {
 
     const mapCols=32;
     const tileSize=8;
-
-    const objectsIds = {
-        blob: 1,
-        bat: 2,
-        "bat-wave": 3,
-        knight: 4,
-    };
 
     /**
      * Indexes objects by tile index
@@ -61,13 +71,17 @@ function generateMapBinary(stage) {
 
     //fs.writeFileSync("ground.bin", groundBuffer);
     //fs.writeFileSync("solid.bin", solidBuffer);
-    fs.writeFileSync(`../maps/stage${stage}.map`, mapBuffer);
+    fs.writeFileSync(path.join(__dirname, `../maps/stage${stage}.map`), mapBuffer);
 }
 
 function getObjectPropertyValue(objectData) {
     let propertyValue = 0;
     (objectData.properties ?? []).every(propertyData => {
-        propertyValue = parseInt(propertyData.value, 10);
+        if (objectData.type === 'block') {
+            propertyValue = blockTypes[propertyData.value];
+        } else {
+            propertyValue = parseInt(propertyData.value, 10);
+        }
         return false;
     });
     return propertyValue > 0 ? propertyValue - 1 : 0;
