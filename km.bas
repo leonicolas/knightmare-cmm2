@@ -83,7 +83,7 @@ sub run_stage(stage%)
 
         ' Map rendering
         page write 0
-        blit 0,TILE_SIZE, SCREEN_OFFSET,0, SCREEN_WIDTH,SCREEN_HEIGHT+TILE_SIZE, SCREEN_BUFFER
+        blit 0,TILE_SIZE*2, SCREEN_OFFSET,0, SCREEN_WIDTH,SCREEN_HEIGHT, SCREEN_BUFFER
         page write SCREEN_BUFFER
 
         ' Move sprites
@@ -485,12 +485,12 @@ sub move_player(direction%)
         case KB_UP
             inc g_player(1), -g_player(4)
             if map_collide(g_player()) then g_player(1)=y
-            if g_player(1) < TILE_SIZE * 4 then g_player(1)=TILE_SIZE * 4
+            if g_player(1) < TILE_SIZE * 6 then g_player(1)=TILE_SIZE * 6
             check_scroll_collision()
         case KB_DOWN
             inc g_player(1), g_player(4)
             if map_collide(g_player()) then g_player(1)=y
-            if g_player(1) > SCREEN_HEIGHT - TILE_SIZE then g_player(1)=SCREEN_HEIGHT - TILE_SIZE
+            if g_player(1) > SCREEN_HEIGHT then g_player(1)=SCREEN_HEIGHT
             check_scroll_collision()
     end select
 end sub
@@ -499,7 +499,7 @@ end sub
 ' Initialize player state and sprite
 sub init_player()
     g_player(0)=SCREEN_WIDTH/2-TILE_SIZE  ' x
-    g_player(1)=SCREEN_HEIGHT-TILE_SIZE*4 ' y
+    g_player(1)=SCREEN_HEIGHT-TILE_SIZE*3 ' y
     g_player(2)=0                         ' animation counter
     g_player(3)=1                         ' weapon
     g_player(4)=0.6                       ' speed
@@ -521,8 +521,9 @@ end sub
 '
 ' Scrolls the map
 sub scroll_map()
-    'sprite scroll 0,-1
-    sprite scrollr 0,0,SCREEN_WIDTH,SCREEN_HEIGHT+TILE_SIZE,0,-1
+
+    ' Sprite scroll 0,-1
+    sprite scrollr 0,0,SCREEN_WIDTH,SCREEN_HEIGHT+TILE_SIZE*2,0,-1
     check_scroll_collision()
     inc g_tile_px%,1
     ' Draw the next map tile row
@@ -576,9 +577,9 @@ function map_collide(player()) as integer
     ' Check top right
     if not map_collide then map_collide=g_map((row%+1)*MAP_COLS+(col%+2)) >> 7 and 1
     ' Check bottom left
-    if not map_collide then map_collide=g_map((row%+2)*MAP_COLS+col%) >> 7 and 1
+    if not map_collide then map_collide=g_map((row%+1)*MAP_COLS+col%) >> 7 and 1
     ' Check bottom right
-    if not map_collide then map_collide=g_map((row%+2)*MAP_COLS+(col%+2)) >> 7 and 1
+    if not map_collide then map_collide=g_map((row%+1)*MAP_COLS+(col%+2)) >> 7 and 1
     ' TODO: Check horizontal wrapping collision
 end function
 
@@ -656,7 +657,7 @@ sub initialize_screen_buffer()
     local row%
 
     page write SCREEN_BUFFER
-    for row%=MAP_ROWS_0 to MAP_ROWS_0 - (SCREEN_ROWS + 0) step -1
+    for row%=MAP_ROWS_0 to MAP_ROWS_0 - (SCREEN_ROWS + 1) step -1
         draw_map_row_and_spawn_objects(row%)
         page scroll SCREEN_BUFFER,0,-TILE_SIZE
     next
