@@ -57,6 +57,7 @@ sub run_stage(stage%)
     do
         ' Game tick
         if timer - g_game_tick < GAME_TICK_MS then continue do
+        g_game_tick=timer
 
         ' Process keyboard
         process_kb()
@@ -93,8 +94,6 @@ sub run_stage(stage%)
         ' Move player - ensure player always on top
         sprite show safe #1, g_player(0),g_player(1), 1,,1
         sprite move
-
-        g_game_tick=timer
     loop
 end sub
 
