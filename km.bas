@@ -129,6 +129,8 @@ sub process_collision(sprite_id%)
             ' Player shot hits enemy
             if sprite_id% <= 4 and collided_id% >= OBJ_INI_SPRITE_ID then
                 hit_enemy(collided_id%, sprite_id%)
+                hit_enemy(collided_id%)
+                destroy_shot(sprite_id%)
             end if
             debug_print("sprite#: "+str$(sprite_id%)+" > "+str$(collided_id%)+space$(10), o)
             inc o,16
@@ -166,8 +168,15 @@ sub hit_player(collided_id%)
 end sub
 
 '
+' Destroy the shot sprite
+sub destroy_shot(sprite_id%)
+    sprite hide safe sprite_id%
+    sprite close sprite_id%
+    g_shots(sprite_id% - 2, 0) = 0
+end sub
+'
 ' Process the enemy hit
-sub hit_enemy(enemy_sprite_id%, shot_sprite_id%)
+sub hit_enemy(enemy_sprite_id%)
     local i%,sprite_id%
     local o=16
 
@@ -184,8 +193,6 @@ sub hit_enemy(enemy_sprite_id%, shot_sprite_id%)
         g_obj(i%,0) = 0
         sprite hide safe sprite_id%
         sprite close sprite_id%
-
-        debug_print("sprite#: "+str$(sprite_id%)+" > "+str$(i%)+space$(10), o)
         inc o,16
 
         delete_shadow(i%)
@@ -193,11 +200,6 @@ sub hit_enemy(enemy_sprite_id%, shot_sprite_id%)
         if g_sound_on% then play effect ENEMY_DEATH_EFFECT
         exit for
     next
-
-    ' Delete the shot
-    sprite hide safe shot_sprite_id%
-    sprite close shot_sprite_id%
-    g_shots(shot_sprite_id% - 2, 0) = 0
 end sub
 
 '
