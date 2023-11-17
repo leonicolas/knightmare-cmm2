@@ -6,7 +6,7 @@ const objectsIds = {
     bat: 2,
     "bat-wave": 3,
     knight: 4,
-    block: 26,
+    block: 31,
 };
 
 const blockTypes = {
@@ -81,10 +81,13 @@ function getObjectPropertyValue(objectData) {
             propertyValue = blockTypes[propertyData.value];
         } else {
             propertyValue = parseInt(propertyData.value, 10);
+            if (propertyData.name === 'Count') {
+                propertyValue = propertyValue > 0 ? propertyValue - 1 : 0
+            }
         }
         return false;
     });
-    return propertyValue > 0 ? propertyValue - 1 : 0;
+    return propertyValue;
 }
 
 for(let stage = 1; stage <= 2; ++stage) {
