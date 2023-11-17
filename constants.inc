@@ -60,6 +60,8 @@ const ENEMY_DEATH_EFFECT="sfx/enemy_death.wav"
 ' Music table
 dim MUSIC$(9)=("music/01_intro-psg.mod", "music/02_majou-densetsu-psg.mod", "", "", "", "", "", "", "", "")
 
+dim TRANSPARENT_BLOCK(1)=(80,64)
+
 ' Objects tiles: tile x, y, width and height
 ' TODO: Move to data block
 dim OBJ_TILE%(50,3)

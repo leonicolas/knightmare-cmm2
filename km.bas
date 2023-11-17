@@ -149,7 +149,7 @@ end sub
 '
 ' Spawn new objects from the spawn queue
 sub process_spawn_queue()
-    local i%, x%, y%, l%, time_ms, obj_id%,sprite_id%
+    local i%, time_ms, obj_id%
 
     ' Spawn new objects from the queue
     for i%=0 to bound(g_spawn_queue())
@@ -169,26 +169,32 @@ sub process_spawn_queue()
 
         ' Blocks
         else
-            ' Calculate the block index
-            obj_id%=31-obj_id%
-            ' Calculate the sprite index
-            sprite_id%=BLOCK_INI_SPRITE_ID+obj_id%
-            ' Calculate the object id. Block id + block type
-            obj_id%=31+g_blocks(obj_id%,0)
-            ' Save sprite position and layer
-            x%=sprite(X, sprite_id%)
-            y%=sprite(Y, sprite_id%)
-            l%=sprite(L, sprite_id%)
-            ' Replace buffer tiles
-            sprite hide safe sprite_id%
-            blit OBJ_TILE%(obj_id%,0),OBJ_TILE%(obj_id%,1), x%, y%, OBJ_TILE%(obj_id%,2), OBJ_TILE%(obj_id%,3), OBJ_TILES_BUFFER
-            sprite show safe sprite_id%, x%, y%, l%
+            replace_block(31-obj_id%)
         end if
 
         ' Decrement spawn count
         inc g_spawn_queue(i%, 0), -1
         g_spawn_queue(i%, 4)=timer+time_ms
     next
+end sub
+
+'
+' Replace block tiles
+sub replace_block(block_index%)
+    local x%, y%, l%, sprite_id%, obj_id%
+
+    ' Calculate the sprite index
+    sprite_id%=BLOCK_INI_SPRITE_ID+block_index%
+    ' Calculate the object id. Block id + block type
+    obj_id%=31 + choice(g_blocks(obj_id%,1) < BLOCK_HITS, 0, g_blocks(obj_id%,0))
+    ' Save sprite position and layer
+    x%=sprite(X, sprite_id%)
+    y%=sprite(Y, sprite_id%)
+    l%=sprite(L, sprite_id%)
+    ' Replace buffer tiles
+    sprite hide safe sprite_id%
+    blit OBJ_TILE%(obj_id%,0),OBJ_TILE%(obj_id%,1), x%, y%, OBJ_TILE%(obj_id%,2), OBJ_TILE%(obj_id%,3), OBJ_TILES_BUFFER
+    sprite show safe sprite_id%, x%, y%, l%
 end sub
 
 '
@@ -213,8 +219,7 @@ function hit_block(sprite_id%) as integer
     inc g_blocks(i%,1), 1
     hit_block = g_blocks(i%,1)
 
-    if g_blocks(i%,1)=BLOCK_HITS then
-        debug_print("Ix: " + str$(i%) + ", Tp: " + str$(g_blocks(i%,0)) + ", H: " + str$(g_blocks(i%,1)))
+    if g_blocks(i%,1)=1 or g_blocks(i%,1)=BLOCK_HITS then
         enqueue_object_spawn(1, 31+i%, sprite(X, sprite_id%), sprite(Y, sprite_id%))
     end if
 end function
@@ -450,7 +455,7 @@ sub spawn_block(x%, y%, type%)
     g_blocks(i%,0)=type% ' Block type
     g_blocks(i%,1)=0     ' Hits
 
-    sprite read BLOCK_INI_SPRITE_ID + i%, OBJ_TILE%(block_id%,0), OBJ_TILE%(block_id%,1), OBJ_TILE%(block_id%,2), OBJ_TILE%(block_id%,3), OBJ_TILES_BUFFER
+    sprite read BLOCK_INI_SPRITE_ID + i%, TRANSPARENT_BLOCK(0), TRANSPARENT_BLOCK(1), TILE_SIZEx2, TILE_SIZEx2, OBJ_TILES_BUFFER
     sprite show safe BLOCK_INI_SPRITE_ID + i%, x%,0, 1
 end sub
 
