@@ -605,7 +605,6 @@ sub init()
     ' clear screen
     page write 0: cls
     ' init game state variables
-    g_row%=MAP_ROWS-SCREEN_ROWS-1
     g_tile_px%=0
 end sub
 
