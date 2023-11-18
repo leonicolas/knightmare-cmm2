@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.8" tiledversion="1.8.0" orientation="orthogonal" renderorder="left-up" width="32" height="238" tilewidth="8" tileheight="8" infinite="0" nextlayerid="8" nextobjectid="117">
+<map version="1.8" tiledversion="1.8.0" orientation="orthogonal" renderorder="left-up" width="32" height="238" tilewidth="8" tileheight="8" infinite="0" nextlayerid="8" nextobjectid="143">
  <editorsettings>
   <export target="map_stage1.json" format="json"/>
  </editorsettings>
@@ -40,7 +40,7 @@
     <property name="Count" value="5"/>
    </properties>
   </object>
-  <object id="14" name="Blob" type="blob" x="176.75" y="1432.25" width="8" height="8"/>
+  <object id="14" name="Blob" type="blob" x="175.967" y="1432.16" width="8" height="8"/>
   <object id="15" name="Blob" type="blob" x="32.25" y="1408" width="8" height="8"/>
   <object id="16" name="Blob" type="blob" x="176.5" y="1383.5" width="8" height="8"/>
   <object id="17" name="Blob" type="blob" x="120" y="1367.5" width="8" height="8"/>
@@ -122,8 +122,8 @@
   <object id="44" name="Knight" type="knight" x="120" y="1048.25" width="8" height="8"/>
   <object id="45" name="Knight" type="knight" x="72" y="1032.5" width="8" height="8"/>
   <object id="46" name="Knight" type="knight" x="32.25" y="1024.5" width="8" height="8"/>
-  <object id="47" name="Knight" type="knight" x="168.25" y="1016.5" width="8" height="8"/>
-  <object id="48" name="Knight" type="knight" x="120.5" y="1008.75" width="8" height="8"/>
+  <object id="47" name="Knight" type="knight" x="167.977" y="1016.14" width="8" height="8"/>
+  <object id="48" name="Knight" type="knight" x="120.136" y="1008.39" width="8" height="8"/>
   <object id="49" name="Blob" type="blob" x="168.5" y="952" width="8" height="8"/>
   <object id="50" name="Blob" type="blob" x="32.25" y="975.5" width="8" height="8"/>
   <object id="51" name="Blob" type="blob" x="168" y="984" width="8" height="8"/>
@@ -160,12 +160,12 @@
   </object>
   <object id="59" name="Blob" type="blob" x="208" y="919.875" width="8" height="8"/>
   <object id="60" name="Blob" type="blob" x="32.375" y="624.375" width="8" height="8"/>
-  <object id="61" name="Bat Wave" type="bat-wave" x="200.5" y="865" width="8" height="8">
+  <object id="61" name="Bat Wave" type="bat-wave" x="200.136" y="864.273" width="8" height="8">
    <properties>
     <property name="Count" value="5"/>
    </properties>
   </object>
-  <object id="62" name="Bat Wave" type="bat-wave" x="200.75" y="840.25" width="8" height="8">
+  <object id="62" name="Bat Wave" type="bat-wave" x="200.295" y="840.432" width="8" height="8">
    <properties>
     <property name="Count" value="5"/>
    </properties>
@@ -335,6 +335,131 @@
   <object id="116" name="Block" type="block" x="64" y="1696" width="16" height="16">
    <properties>
     <property name="Type" value="rook"/>
+   </properties>
+  </object>
+  <object id="118" name="Block" type="block" x="144" y="1600" width="16" height="16">
+   <properties>
+    <property name="Type" value="rook"/>
+   </properties>
+  </object>
+  <object id="117" name="Block" type="block" x="224" y="1536" width="16" height="16">
+   <properties>
+    <property name="Type" value="knight"/>
+   </properties>
+  </object>
+  <object id="119" name="Block" type="block" x="144" y="1616" width="16" height="16">
+   <properties>
+    <property name="Type" value="rook"/>
+   </properties>
+  </object>
+  <object id="120" name="Block" type="block" x="112.125" y="1472.04" width="16" height="16">
+   <properties>
+    <property name="Type" value="knight"/>
+   </properties>
+  </object>
+  <object id="121" name="Block" type="block" x="48" y="1408" width="16" height="16">
+   <properties>
+    <property name="Type" value="rook"/>
+   </properties>
+  </object>
+  <object id="122" name="Block" type="block" x="192" y="1472" width="16" height="16">
+   <properties>
+    <property name="Type" value="rook"/>
+   </properties>
+  </object>
+  <object id="123" name="Block" type="block" x="192" y="1440" width="16" height="16">
+   <properties>
+    <property name="Type" value="rook"/>
+   </properties>
+  </object>
+  <object id="124" name="Block" type="block" x="192" y="1408" width="16" height="16">
+   <properties>
+    <property name="Type" value="rook"/>
+   </properties>
+  </object>
+  <object id="125" name="Block" type="block" x="80" y="1280" width="16" height="16">
+   <properties>
+    <property name="Type" value="rook"/>
+   </properties>
+  </object>
+  <object id="126" name="Block" type="block" x="80" y="1248" width="16" height="16">
+   <properties>
+    <property name="Type" value="rook"/>
+   </properties>
+  </object>
+  <object id="127" name="Block" type="block" x="80" y="1216" width="16" height="16">
+   <properties>
+    <property name="Type" value="rook"/>
+   </properties>
+  </object>
+  <object id="128" name="Block" type="block" x="80" y="1184" width="16" height="16">
+   <properties>
+    <property name="Type" value="rook"/>
+   </properties>
+  </object>
+  <object id="129" name="Block" type="block" x="176" y="1200" width="16" height="16">
+   <properties>
+    <property name="Type" value="king"/>
+   </properties>
+  </object>
+  <object id="132" name="Block" type="block" x="96" y="976" width="16" height="16">
+   <properties>
+    <property name="Type" value="king"/>
+   </properties>
+  </object>
+  <object id="131" name="Block" type="block" x="208" y="1040" width="16" height="16">
+   <properties>
+    <property name="Type" value="rook"/>
+   </properties>
+  </object>
+  <object id="133" name="Block" type="block" x="80" y="816" width="16" height="16">
+   <properties>
+    <property name="Type" value="rook"/>
+   </properties>
+  </object>
+  <object id="136" name="Block" type="block" x="48" y="656" width="16" height="16">
+   <properties>
+    <property name="Type" value="rook"/>
+   </properties>
+  </object>
+  <object id="138" name="Block" type="block" x="128" y="416" width="16" height="16">
+   <properties>
+    <property name="Type" value="rook"/>
+   </properties>
+  </object>
+  <object id="142" name="Block" type="block" x="48" y="352" width="16" height="16">
+   <properties>
+    <property name="Type" value="knight"/>
+   </properties>
+  </object>
+  <object id="139" name="Block" type="block" x="128" y="464" width="16" height="16">
+   <properties>
+    <property name="Type" value="rook"/>
+   </properties>
+  </object>
+  <object id="141" name="Block" type="block" x="208" y="464" width="16" height="16">
+   <properties>
+    <property name="Type" value="king"/>
+   </properties>
+  </object>
+  <object id="140" name="Block" type="block" x="128" y="512" width="16" height="16">
+   <properties>
+    <property name="Type" value="rook"/>
+   </properties>
+  </object>
+  <object id="137" name="Block" type="block" x="96" y="624" width="16" height="16">
+   <properties>
+    <property name="Type" value="knight"/>
+   </properties>
+  </object>
+  <object id="134" name="Block" type="block" x="176" y="816" width="16" height="16">
+   <properties>
+    <property name="Type" value="rook"/>
+   </properties>
+  </object>
+  <object id="135" name="Block" type="block" x="224" y="864" width="16" height="16">
+   <properties>
+    <property name="Type" value="queen"/>
    </properties>
   </object>
  </objectgroup>

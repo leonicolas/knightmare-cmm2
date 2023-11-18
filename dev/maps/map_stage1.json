@@ -204,8 +204,8 @@
                  "type":"blob",
                  "visible":true,
                  "width":8,
-                 "x":176.75,
-                 "y":1432.25
+                 "x":175.967391304348,
+                 "y":1432.16304347826
                 }, 
                 {
                  "height":8,
@@ -574,8 +574,8 @@
                  "type":"knight",
                  "visible":true,
                  "width":8,
-                 "x":168.25,
-                 "y":1016.5
+                 "x":167.977272727273,
+                 "y":1016.13636363636
                 }, 
                 {
                  "height":8,
@@ -585,8 +585,8 @@
                  "type":"knight",
                  "visible":true,
                  "width":8,
-                 "x":120.5,
-                 "y":1008.75
+                 "x":120.136363636364,
+                 "y":1008.38636363636
                 }, 
                 {
                  "height":8,
@@ -770,8 +770,8 @@
                  "type":"bat-wave",
                  "visible":true,
                  "width":8,
-                 "x":200.5,
-                 "y":865
+                 "x":200.136363636364,
+                 "y":864.272727272727
                 }, 
                 {
                  "height":8,
@@ -787,8 +787,8 @@
                  "type":"bat-wave",
                  "visible":true,
                  "width":8,
-                 "x":200.75,
-                 "y":840.25
+                 "x":200.295454545455,
+                 "y":840.431818181818
                 }, 
                 {
                  "height":8,
@@ -1524,6 +1524,431 @@
                  "width":16,
                  "x":64,
                  "y":1696
+                }, 
+                {
+                 "height":16,
+                 "id":118,
+                 "name":"Block",
+                 "properties":[
+                        {
+                         "name":"Type",
+                         "type":"string",
+                         "value":"rook"
+                        }],
+                 "rotation":0,
+                 "type":"block",
+                 "visible":true,
+                 "width":16,
+                 "x":144,
+                 "y":1600
+                }, 
+                {
+                 "height":16,
+                 "id":117,
+                 "name":"Block",
+                 "properties":[
+                        {
+                         "name":"Type",
+                         "type":"string",
+                         "value":"knight"
+                        }],
+                 "rotation":0,
+                 "type":"block",
+                 "visible":true,
+                 "width":16,
+                 "x":224,
+                 "y":1536
+                }, 
+                {
+                 "height":16,
+                 "id":119,
+                 "name":"Block",
+                 "properties":[
+                        {
+                         "name":"Type",
+                         "type":"string",
+                         "value":"rook"
+                        }],
+                 "rotation":0,
+                 "type":"block",
+                 "visible":true,
+                 "width":16,
+                 "x":144,
+                 "y":1616
+                }, 
+                {
+                 "height":16,
+                 "id":120,
+                 "name":"Block",
+                 "properties":[
+                        {
+                         "name":"Type",
+                         "type":"string",
+                         "value":"knight"
+                        }],
+                 "rotation":0,
+                 "type":"block",
+                 "visible":true,
+                 "width":16,
+                 "x":112.125,
+                 "y":1472.04166666667
+                }, 
+                {
+                 "height":16,
+                 "id":121,
+                 "name":"Block",
+                 "properties":[
+                        {
+                         "name":"Type",
+                         "type":"string",
+                         "value":"rook"
+                        }],
+                 "rotation":0,
+                 "type":"block",
+                 "visible":true,
+                 "width":16,
+                 "x":48,
+                 "y":1408
+                }, 
+                {
+                 "height":16,
+                 "id":122,
+                 "name":"Block",
+                 "properties":[
+                        {
+                         "name":"Type",
+                         "type":"string",
+                         "value":"rook"
+                        }],
+                 "rotation":0,
+                 "type":"block",
+                 "visible":true,
+                 "width":16,
+                 "x":192,
+                 "y":1472
+                }, 
+                {
+                 "height":16,
+                 "id":123,
+                 "name":"Block",
+                 "properties":[
+                        {
+                         "name":"Type",
+                         "type":"string",
+                         "value":"rook"
+                        }],
+                 "rotation":0,
+                 "type":"block",
+                 "visible":true,
+                 "width":16,
+                 "x":192,
+                 "y":1440
+                }, 
+                {
+                 "height":16,
+                 "id":124,
+                 "name":"Block",
+                 "properties":[
+                        {
+                         "name":"Type",
+                         "type":"string",
+                         "value":"rook"
+                        }],
+                 "rotation":0,
+                 "type":"block",
+                 "visible":true,
+                 "width":16,
+                 "x":192,
+                 "y":1408
+                }, 
+                {
+                 "height":16,
+                 "id":125,
+                 "name":"Block",
+                 "properties":[
+                        {
+                         "name":"Type",
+                         "type":"string",
+                         "value":"rook"
+                        }],
+                 "rotation":0,
+                 "type":"block",
+                 "visible":true,
+                 "width":16,
+                 "x":80,
+                 "y":1280
+                }, 
+                {
+                 "height":16,
+                 "id":126,
+                 "name":"Block",
+                 "properties":[
+                        {
+                         "name":"Type",
+                         "type":"string",
+                         "value":"rook"
+                        }],
+                 "rotation":0,
+                 "type":"block",
+                 "visible":true,
+                 "width":16,
+                 "x":80,
+                 "y":1248
+                }, 
+                {
+                 "height":16,
+                 "id":127,
+                 "name":"Block",
+                 "properties":[
+                        {
+                         "name":"Type",
+                         "type":"string",
+                         "value":"rook"
+                        }],
+                 "rotation":0,
+                 "type":"block",
+                 "visible":true,
+                 "width":16,
+                 "x":80,
+                 "y":1216
+                }, 
+                {
+                 "height":16,
+                 "id":128,
+                 "name":"Block",
+                 "properties":[
+                        {
+                         "name":"Type",
+                         "type":"string",
+                         "value":"rook"
+                        }],
+                 "rotation":0,
+                 "type":"block",
+                 "visible":true,
+                 "width":16,
+                 "x":80,
+                 "y":1184
+                }, 
+                {
+                 "height":16,
+                 "id":129,
+                 "name":"Block",
+                 "properties":[
+                        {
+                         "name":"Type",
+                         "type":"string",
+                         "value":"king"
+                        }],
+                 "rotation":0,
+                 "type":"block",
+                 "visible":true,
+                 "width":16,
+                 "x":176,
+                 "y":1200
+                }, 
+                {
+                 "height":16,
+                 "id":132,
+                 "name":"Block",
+                 "properties":[
+                        {
+                         "name":"Type",
+                         "type":"string",
+                         "value":"king"
+                        }],
+                 "rotation":0,
+                 "type":"block",
+                 "visible":true,
+                 "width":16,
+                 "x":96,
+                 "y":976
+                }, 
+                {
+                 "height":16,
+                 "id":131,
+                 "name":"Block",
+                 "properties":[
+                        {
+                         "name":"Type",
+                         "type":"string",
+                         "value":"rook"
+                        }],
+                 "rotation":0,
+                 "type":"block",
+                 "visible":true,
+                 "width":16,
+                 "x":208,
+                 "y":1040
+                }, 
+                {
+                 "height":16,
+                 "id":133,
+                 "name":"Block",
+                 "properties":[
+                        {
+                         "name":"Type",
+                         "type":"string",
+                         "value":"rook"
+                        }],
+                 "rotation":0,
+                 "type":"block",
+                 "visible":true,
+                 "width":16,
+                 "x":80,
+                 "y":816
+                }, 
+                {
+                 "height":16,
+                 "id":136,
+                 "name":"Block",
+                 "properties":[
+                        {
+                         "name":"Type",
+                         "type":"string",
+                         "value":"rook"
+                        }],
+                 "rotation":0,
+                 "type":"block",
+                 "visible":true,
+                 "width":16,
+                 "x":48,
+                 "y":656
+                }, 
+                {
+                 "height":16,
+                 "id":138,
+                 "name":"Block",
+                 "properties":[
+                        {
+                         "name":"Type",
+                         "type":"string",
+                         "value":"rook"
+                        }],
+                 "rotation":0,
+                 "type":"block",
+                 "visible":true,
+                 "width":16,
+                 "x":128,
+                 "y":416
+                }, 
+                {
+                 "height":16,
+                 "id":142,
+                 "name":"Block",
+                 "properties":[
+                        {
+                         "name":"Type",
+                         "type":"string",
+                         "value":"knight"
+                        }],
+                 "rotation":0,
+                 "type":"block",
+                 "visible":true,
+                 "width":16,
+                 "x":48,
+                 "y":352
+                }, 
+                {
+                 "height":16,
+                 "id":139,
+                 "name":"Block",
+                 "properties":[
+                        {
+                         "name":"Type",
+                         "type":"string",
+                         "value":"rook"
+                        }],
+                 "rotation":0,
+                 "type":"block",
+                 "visible":true,
+                 "width":16,
+                 "x":128,
+                 "y":464
+                }, 
+                {
+                 "height":16,
+                 "id":141,
+                 "name":"Block",
+                 "properties":[
+                        {
+                         "name":"Type",
+                         "type":"string",
+                         "value":"king"
+                        }],
+                 "rotation":0,
+                 "type":"block",
+                 "visible":true,
+                 "width":16,
+                 "x":208,
+                 "y":464
+                }, 
+                {
+                 "height":16,
+                 "id":140,
+                 "name":"Block",
+                 "properties":[
+                        {
+                         "name":"Type",
+                         "type":"string",
+                         "value":"rook"
+                        }],
+                 "rotation":0,
+                 "type":"block",
+                 "visible":true,
+                 "width":16,
+                 "x":128,
+                 "y":512
+                }, 
+                {
+                 "height":16,
+                 "id":137,
+                 "name":"Block",
+                 "properties":[
+                        {
+                         "name":"Type",
+                         "type":"string",
+                         "value":"knight"
+                        }],
+                 "rotation":0,
+                 "type":"block",
+                 "visible":true,
+                 "width":16,
+                 "x":96,
+                 "y":624
+                }, 
+                {
+                 "height":16,
+                 "id":134,
+                 "name":"Block",
+                 "properties":[
+                        {
+                         "name":"Type",
+                         "type":"string",
+                         "value":"rook"
+                        }],
+                 "rotation":0,
+                 "type":"block",
+                 "visible":true,
+                 "width":16,
+                 "x":176,
+                 "y":816
+                }, 
+                {
+                 "height":16,
+                 "id":135,
+                 "name":"Block",
+                 "properties":[
+                        {
+                         "name":"Type",
+                         "type":"string",
+                         "value":"queen"
+                        }],
+                 "rotation":0,
+                 "type":"block",
+                 "visible":true,
+                 "width":16,
+                 "x":224,
+                 "y":864
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1532,7 +1957,7 @@
          "y":0
         }],
  "nextlayerid":8,
- "nextobjectid":117,
+ "nextobjectid":143,
  "orientation":"orthogonal",
  "renderorder":"left-up",
  "tiledversion":"1.8.0",
