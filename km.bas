@@ -654,9 +654,9 @@ function map_collide(player()) as integer
     ' Check top right
     if not map_collide then map_collide=g_map((row%+1)*MAP_COLS+(col%+2)) >> 7 and 1
     ' Check bottom left
-    if not map_collide then map_collide=g_map((row%+1)*MAP_COLS+col%) >> 7 and 1
+    if not map_collide then map_collide=g_map((row%+2)*MAP_COLS+col%) >> 7 and 1
     ' Check bottom right
-    if not map_collide then map_collide=g_map((row%+1)*MAP_COLS+(col%+2)) >> 7 and 1
+    if not map_collide then map_collide=g_map((row%+2)*MAP_COLS+(col%+2)) >> 7 and 1
     ' TODO: Check horizontal wrapping collision
 end function
 
