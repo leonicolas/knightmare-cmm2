@@ -6,7 +6,7 @@ option default float
 #include "constants.inc"
 
 ' Global variables
-dim g_sound_on%=0
+dim g_sound_on%=1
 dim g_map(MAP_SIZE) as integer ' Map data
 dim g_row%                     ' Current top map row. Zero is the bottom row.
 dim g_game_tick                ' The game tick
@@ -45,7 +45,7 @@ dim g_obj(20,6)
 ' Object spawn data queue: 0: quantity | 1: obj id | 2: x | 3: y | 4: next spawn time
 dim g_spawn_queue(bound(g_obj()),4)
 ' Blocks: 0: type | 1: hits
-dim g_blocks(5,1)
+dim g_blocks(8,1)
 dim g_anim_tick%=0
 
 const OBJ_INI_SPRITE_ID=bound(g_shots()) + 1 ' Initial sprite Id for objects
@@ -132,7 +132,7 @@ sub process_collision(sprite_id%)
         else if sprite_id% <= SHOTS_NUM% or collided_id% <= SHOTS_NUM% then
             ' Player shot hits a block
             if sprite_id% <= 4 and collided_id% >= BLOCK_INI_SPRITE_ID then
-                if hit_block(collided_id%) <= BLOCK_HITS then
+                if hit_block(collided_id%) then
                     destroy_shot(sprite_id%)
                 end if
 
@@ -169,7 +169,7 @@ sub process_spawn_queue()
 
         ' Blocks
         else
-            replace_block(31-obj_id%)
+            replace_block(obj_id%-31)
         end if
 
         ' Decrement spawn count
@@ -186,7 +186,7 @@ sub replace_block(block_index%)
     ' Calculate the sprite index
     sprite_id%=BLOCK_INI_SPRITE_ID+block_index%
     ' Calculate the object id. Block id + block type
-    obj_id%=31 + choice(g_blocks(obj_id%,1) < BLOCK_HITS, 0, g_blocks(obj_id%,0))
+    obj_id%=31 + choice(g_blocks(block_index%,1) < block_max_hits(block_index%), 0, g_blocks(block_index%,0))
     ' Save sprite position and layer
     x%=sprite(X, sprite_id%)
     y%=sprite(Y, sprite_id%)
@@ -212,16 +212,38 @@ sub destroy_shot(sprite_id%)
 end sub
 
 '
-' Process block hit
+' Process block hit. Returns true if the block was hit
 function hit_block(sprite_id%) as integer
-    local i%=sprite_id%-BLOCK_INI_SPRITE_ID
+    local i%=sprite_id% - BLOCK_INI_SPRITE_ID
+    local max_hits%=block_max_hits(i%)
+
+    if g_blocks(i%,1) = max_hits% then exit function
+
     ' Increment hits
     inc g_blocks(i%,1), 1
-    hit_block = g_blocks(i%,1)
+    hit_block = true
 
-    if g_blocks(i%,1)=1 or g_blocks(i%,1)=BLOCK_HITS then
+    debug_print("i: "+str$(i%)+", MH: "+str$(max_hits%)+", H: "+str$(g_blocks(i%,1)))
+
+    if g_sound_on% then
+        if g_blocks(i%,1) < max_hits% then
+            play effect BLOCK_HIT_SFX
+        else if g_blocks(i%,1) = max_hits% then
+            play effect BLOCK_OPEN_SFX
+        end if
+    end if
+
+    if g_blocks(i%,1)=1 or g_blocks(i%,1)=max_hits% then
+        ' Spawn new block tile
         enqueue_object_spawn(1, 31+i%, sprite(X, sprite_id%), sprite(Y, sprite_id%))
     end if
+end function
+
+'
+' Calculate max hits for the block
+function block_max_hits(block_index%) as integer
+    ' Special blocks need twice of hits
+    block_max_hits = choice(g_blocks(block_index%,0) > 1, BLOCK_HITS * 2, BLOCK_HITS)
 end function
 
 '
@@ -247,7 +269,7 @@ sub hit_enemy(enemy_sprite_id%)
 
         delete_shadow(i%)
         start_enemy_death_animation(i%)
-        if g_sound_on% then play effect ENEMY_DEATH_EFFECT
+        if g_sound_on% then play effect ENEMY_DEATH_SFX
         exit for
     next
 end sub
@@ -527,7 +549,7 @@ sub fire()
         sprite read i%+2, OBJ_TILE%(40,0), OBJ_TILE%(40,1), OBJ_TILE%(40,2), OBJ_TILE%(40,3), OBJ_TILES_BUFFER
         sprite show safe i%+2, g_shots(i%,1),g_shots(i%,2), 1
         ' Play SFX
-        if g_sound_on% then play effect SHOT_EFFECT
+        if g_sound_on% then play effect SHOT_SFX
         ' Increment timer
         g_shot_timer=timer
         exit for
@@ -587,6 +609,13 @@ sub check_scroll_collision()
 end sub
 
 '
+' Destroy block sprite
+sub destroy_block(block_index%)
+    g_blocks(block_index%,0)=0
+    sprite close BLOCK_INI_SPRITE_ID + block_index%
+end sub
+
+'
 ' Scrolls the map
 sub scroll_map()
     local i%, sprite_id%
@@ -596,6 +625,7 @@ sub scroll_map()
         if g_blocks(i%,0)=0 then continue for
         sprite_id%=BLOCK_INI_SPRITE_ID + i%
         sprite next sprite_id%, sprite(X, sprite_id%), sprite(Y, sprite_id%) + 1
+        if sprite(Y, sprite_id%) > SCREEN_HEIGHT+TILE_SIZEx2 then destroy_block(i%)
     next
 
     ' Sprite scroll 0,-1

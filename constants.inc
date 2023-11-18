@@ -54,8 +54,10 @@ const PLAYER_SKIN1_X_R=TILE_SIZE*2
 const BLOCK_HITS=5
 
 ' Effects
-const SHOT_EFFECT="sfx/shot.wav"
-const ENEMY_DEATH_EFFECT="sfx/enemy_death.wav"
+const SHOT_SFX="sfx/shot.wav"
+const ENEMY_DEATH_SFX="sfx/enemy_death.wav"
+const BLOCK_HIT_SFX="sfx/block_hit.wav"
+const BLOCK_OPEN_SFX="sfx/block_open.wav"
 
 ' Music table
 dim MUSIC$(9)=("music/01_intro-psg.mod", "music/02_majou-densetsu-psg.mod", "", "", "", "", "", "", "", "")
