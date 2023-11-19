@@ -1,6 +1,6 @@
 # Knightmare MMBasic Version
 
-The MSX Knightmare video game is entirely written in MMBasic.
+The MSX Knightmare video game entirely written in MMBasic.
 
 **This version is still in development!**
 
@@ -22,7 +22,7 @@ See more at the [MMBasic home page](https://mmbasic.com/)
 
 The Windows/DOS version of MMBasic was created to make it easy to evaluate MMBasic. It is a single executable that does not need installation, just double-click on the executable and MMBasic will run in a DOS window on Windows (including Windows 10). It also runs in Linux using [Wine](https://www.winehq.org/).
 
-The executable and documentation can be downloaded from [http://geoffg.net/WindowsMMBasic.html](http://geoffg.net/WindowsMMBasic.html).
+The executable and documentation can be downloaded from [https://www.thebackshed.com/forum/uploads/matherp/2023-11-03_035948_MMBasic.zip](https://www.thebackshed.com/forum/uploads/matherp/2023-11-03_035948_MMBasic.zip).
 
 ## Running MMBasic Knightmare
 
@@ -30,10 +30,7 @@ After downloading the source code from this repository and executing the MMBasic
 
 To run the video game use the command ```run "km.bas"```
 
-<div style="display: flex; gap: 20px;">
-    <image alt="MMBasic for Windows" src="images/mmbasic_windows01.png" width="250px"/>
-    <image alt="MMBasic for Windows" src="images/mmbasic_windows02.png" width="250px"/>
-</div>
+[<img src="images/thumbnail-small.png" width="400px" />](https://www.youtube.com/embed/QT1vP_sk1wE?si=Kki08KXhlgTeJaEZ "MMBasic Knightmare") 
 
 ## Maps
 
