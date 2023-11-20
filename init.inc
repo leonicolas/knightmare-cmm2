@@ -5,7 +5,8 @@
 sub init()
     ' screen mode
     font 1,1
-    mode 7,12 ' 320x240
+    mode 3,12 ' 320x200
+    'mode 7,12 ' 320x240
     'mode 4,12 ' debug mode
 
     ' init screen and tiles buffers
