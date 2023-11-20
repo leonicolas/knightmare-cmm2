@@ -5,6 +5,7 @@ option default float
 
 #include "constants.inc"
 #include "global.inc"
+#include "print.inc"
 #include "init.inc"
 
 init()
