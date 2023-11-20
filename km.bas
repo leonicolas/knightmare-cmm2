@@ -44,7 +44,7 @@ sub run_stage(stage%)
 
         ' Map rendering
         page write 0
-        blit 0,TILE_SIZE*2, SCREEN_OFFSET,0, SCREEN_WIDTH,SCREEN_HEIGHT, SCREEN_BUFFER
+        blit 0,TILE_SIZEx2, SCREEN_OFFSET,0, SCREEN_WIDTH,SCREEN_HEIGHT, SCREEN_BUFFER
         page write SCREEN_BUFFER
 
         ' Move sprites
