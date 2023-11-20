@@ -20,6 +20,7 @@ dim g_player(4)
 dim g_player_shot_ms=SHOT_COOLDOWN_MS
 dim g_player_animation_ms=PLAYER_ANIMATION_MS
 dim g_score%=0
+dim g_hiscore%=0
 dim g_lives%=2
 
 ' Supports 12 shots at the same time (id, x, y, speed x, speed y).

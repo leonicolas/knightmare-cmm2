@@ -38,6 +38,15 @@ sub init_stage(stage%)
     page write SCREEN_BUFFER
     init_player()
 
+    ' Print the HUD
+    print_text(SCREEN_ROWS  , 3, "SCORE  HISCORE  REST  STAGE")
+    print_text(SCREEN_ROWS+1, 3, "   00       00    00     00")
+    print_stage(stage%)
+    print_lives(g_lives%)
+    print_hiscore(g_hiscore%)
+    print_score(g_score%)
+
+    ' Play stage music
     if g_sound_on% then play modfile MUSIC$(stage%), 16000
 
     timer=0

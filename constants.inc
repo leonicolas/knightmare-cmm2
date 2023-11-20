@@ -47,6 +47,13 @@ const SCREEN_WIDTH=MAP_COLS*TILE_SIZE     ' Screen width in pixels
 const SCREEN_HEIGHT=SCREEN_ROWS*TILE_SIZE ' Screen height in pixels
 const SCREEN_CENTER=SCREEN_WIDTH/2        ' Screen center
 
+const SYMBOLS_X=0
+const SYMBOLS_Y=48
+const NUMBERS_X=24
+const NUMBERS_Y=48
+const LETTERS_X=0
+const LETTERS_Y=56
+
 const PLAYER_SKIN_Y=0
 const PLAYER_SKIN1_X_L=0
 const PLAYER_SKIN1_X_R=TILE_SIZE*2
@@ -63,6 +70,9 @@ const BLOCK_OPEN_SFX="sfx/block_open.wav"
 dim MUSIC$(9)=("music/01_intro-psg.mod", "music/02_majou-densetsu-psg.mod", "", "", "", "", "", "", "", "")
 
 dim TRANSPARENT_BLOCK(1)=(80,64)
+
+' Points
+dim POINTS(38)=(0,10,50,50,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
 
 ' Objects tiles: tile x, y, width and height
 ' TODO: Move to data block

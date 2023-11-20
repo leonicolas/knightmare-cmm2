@@ -180,8 +180,6 @@ function hit_block(sprite_id%) as integer
     inc g_blocks(i%,1), 1
     hit_block = true
 
-    debug_print("i: "+str$(i%)+", MH: "+str$(max_hits%)+", H: "+str$(g_blocks(i%,1)))
-
     if g_sound_on% then
         if g_blocks(i%,1) < max_hits% then
             play effect BLOCK_HIT_SFX
@@ -218,6 +216,9 @@ sub hit_enemy(enemy_sprite_id%)
         inc g_obj(i%,3), -1 ' TODO: Implement weapon force
         if g_obj(i%,3) > 0 then continue for
 
+        ' Increment score
+        increment_score(g_obj(i%,0))
+
         ' Delete enemy's object
         g_obj(i%,0) = 0
         sprite hide safe sprite_id%
@@ -227,8 +228,21 @@ sub hit_enemy(enemy_sprite_id%)
         delete_shadow(i%)
         start_enemy_death_animation(i%)
         if g_sound_on% then play effect ENEMY_DEATH_SFX
+
         exit for
     next
+end sub
+
+'
+' Increments the score and the hiscore
+sub increment_score(obj_id%)
+    inc g_score%, POINTS(obj_id%)
+    print_score(g_score%)
+
+    if g_score% > g_hiscore% then
+        g_hiscore% = g_score%
+        print_hiscore(g_hiscore%)
+    end if
 end sub
 
 '
