@@ -30,7 +30,7 @@ After downloading the source code from this repository and executing the MMBasic
 
 To run the video game use the command ```run "km.bas"```
 
-[<img src="images/thumbnail-small.png" width="400px" />](https://www.youtube.com/embed/QT1vP_sk1wE?si=Kki08KXhlgTeJaEZ "MMBasic Knightmare") 
+[<img src="images/thumbnail-small.png" width="400px" />](https://youtube.com/playlist?list=PLpx1nOk-DRHy_u9RyLZ5AYdjwFX-UcOje&si=Dn6mccseqbJvQ2Kn "MMBasic Knightmare")
 
 ## Maps
 
