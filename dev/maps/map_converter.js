@@ -18,10 +18,10 @@ const blockTypes = {
 };
 
 function generateMapBinary(stage) {
-    const mapData = require(`./maps/map_stage${stage}.json`);
+    const mapData = require(`./map_stage${stage}.json`);
 
-    const groundBuffer = Buffer.from(mapData.layers[0].data, 'base64');
-    const solidBuffer = Buffer.from(mapData.layers[1].data, 'base64');
+    const groundBuffer = Buffer.from(mapData.layers[0].data, "base64");
+    const solidBuffer = Buffer.from(mapData.layers[1].data, "base64");
 
     const mapBufferBytesPerTile = 2;
     const mapBuffer = Buffer.alloc(groundBuffer.length / mapBufferBytesPerTile);
@@ -71,17 +71,17 @@ function generateMapBinary(stage) {
 
     //fs.writeFileSync("ground.bin", groundBuffer);
     //fs.writeFileSync("solid.bin", solidBuffer);
-    fs.writeFileSync(path.join(__dirname, `../maps/stage${stage}.map`), mapBuffer);
+    fs.writeFileSync(path.join(__dirname, `../../maps/stage${stage}.map`), mapBuffer);
 }
 
 function getObjectPropertyValue(objectData) {
     let propertyValue = 0;
     (objectData.properties ?? []).every(propertyData => {
-        if (objectData.type === 'block') {
+        if (objectData.type === "block") {
             propertyValue = blockTypes[propertyData.value];
         } else {
             propertyValue = parseInt(propertyData.value, 10);
-            if (propertyData.name === 'Count') {
+            if (propertyData.name === "Count") {
                 propertyValue = propertyValue > 0 ? propertyValue - 1 : 0
             }
         }
