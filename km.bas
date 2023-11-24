@@ -86,7 +86,7 @@ sub process_collision(sprite_id%)
             hit_player(collided_id%)
 
         ' Check shot hit
-        else if sprite_id% <= SHOTS_NUM% or collided_id% <= SHOTS_NUM% then
+        else if sprite_id% <= SHOTS_NUM% then
             ' Player shot hits a block
             if sprite_id% <= 4 and collided_id% >= BLOCK_INI_SPRITE_ID then
                 if hit_block(collided_id%) then
