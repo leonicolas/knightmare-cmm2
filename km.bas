@@ -82,8 +82,13 @@ sub process_collision(sprite_id%)
         if collided_id% > 63 then continue for
 
         ' Check player collision
-        if sprite_id% = 1 or collided_id% = 1 then
-            hit_player(collided_id%)
+        if sprite_id% = 1 then
+            ' Player hits a block
+            if collided_id% >= BLOCK_INI_SPRITE_ID then
+                collect_block_bonus(collided_id%)
+            else
+                hit_player(collided_id%)
+            end if
 
         ' Check shot hit
         else if sprite_id% <= SHOTS_NUM% then
@@ -137,13 +142,17 @@ end sub
 
 '
 ' Replace block tiles
-sub replace_block(block_index%)
-    local x%, y%, l%, sprite_id%, obj_id%
+sub replace_block(i%)
+    local x%, y%, l%, sprite_id%, obj_id%, max_hits%=block_max_hits(i%)
 
-    ' Calculate the sprite index
-    sprite_id%=BLOCK_INI_SPRITE_ID+block_index%
-    ' Calculate the object id. Block id + block type
-    obj_id%=31 + choice(g_blocks(block_index%,1) < block_max_hits(block_index%), 0, g_blocks(block_index%,0))
+    if g_blocks(i%,0) < 6 and g_blocks(i%,1) > 1 and g_blocks(i%,1) < max_hits% then
+        end sub
+    end if
+
+    ' Calculate the block sprite index
+    sprite_id%=BLOCK_INI_SPRITE_ID+i%
+    ' Calculate the object id. Block id + block type. Question mark or block type
+    obj_id%=31 + choice(g_blocks(i%,1) < max_hits%, 0, g_blocks(i%,0))
     ' Save sprite position and layer
     x%=sprite(X, sprite_id%)
     y%=sprite(Y, sprite_id%)
@@ -151,7 +160,12 @@ sub replace_block(block_index%)
     ' Replace buffer tiles
     sprite hide safe sprite_id%
     blit OBJ_TILE%(obj_id%,0),OBJ_TILE%(obj_id%,1), x%, y%, OBJ_TILE%(obj_id%,2), OBJ_TILE%(obj_id%,3), OBJ_TILES_BUFFER
-    sprite show safe sprite_id%, x%, y%, l%
+    if g_blocks(i%, 0) = 6 then
+        sprite close sprite_id%
+        g_blocks(i%, 0) = 0
+    else
+        sprite show safe sprite_id%, x%, y%, l%
+    end if
 end sub
 
 '
@@ -195,17 +209,61 @@ function hit_block(sprite_id%) as integer
 end function
 
 '
+' Collects the block bonus if it is available
+sub collect_block_bonus(sprite_id%)
+    local i%=sprite_id% - BLOCK_INI_SPRITE_ID
+    local max_hits%=block_max_hits(i%)
+
+    if g_blocks(i%,1) < max_hits% or g_blocks(i%,0) = 6 then exit sub
+
+    select case g_blocks(i%,0)
+        case 1 ' Hook - points
+            increment_score(BLOCK_POINTS)
+            play effect POINTS_SFX
+        case 2 ' Knight - kill all enemies in the screen
+            kill_all_enemies()
+        case 3 ' Queen - Extra life
+            update_life(1)
+        case 4 ' King - Freeze enemies
+            increment_score(BLOCK_POINTS)
+            play effect POINTS_SFX
+        case 5 ' Barrier
+            increment_score(BLOCK_POINTS)
+            play effect POINTS_SFX
+    end select
+
+    g_blocks(i%,0)=6
+    enqueue_action(1, 31+i%, sprite(X, sprite_id%), sprite(Y, sprite_id%))
+end sub
+
+'
+' Kill all enemies in the screen
+sub kill_all_enemies()
+    local i%
+    play effect KILL_ALL_ENEMIES_SFX
+    for i%=0 to bound(g_obj())
+        ' Check for free slots
+        if g_obj(i%,0)=0 then continue for
+        hit_enemy(OBJ_INI_SPRITE_ID + i%, true)
+    next
+end sub
+
+'
 ' Calculate max hits for the block
-function block_max_hits(block_index%) as integer
-    ' Special blocks need twice of hits
-    block_max_hits = choice(g_blocks(block_index%,0) > 1, BLOCK_HITS * 2, BLOCK_HITS)
+function block_max_hits(i%) as integer
+    if g_blocks(i%,0) = 6 then
+        ' collected block doesn't have max hits
+        block_max_hits = 0
+    else
+        ' Special blocks need twice of hits
+        block_max_hits = choice(g_blocks(i%,0) > 1, BLOCK_HITS * 2, BLOCK_HITS)
+    end if
 end function
 
 '
 ' Process the enemy hit
-sub hit_enemy(enemy_sprite_id%)
+sub hit_enemy(enemy_sprite_id%, instakill%)
     local i%,sprite_id%
-    local o=16
 
     ' Delete the enemy
     for i%=0 to bound(g_obj())
@@ -214,7 +272,7 @@ sub hit_enemy(enemy_sprite_id%)
 
         ' Decrement life
         inc g_obj(i%,3), -1 ' TODO: Implement weapon force
-        if g_obj(i%,3) > 0 then continue for
+        if not instakill% and g_obj(i%,3) > 0 then continue for
 
         ' Increment score
         increment_score(OBJ_POINTS(g_obj(i%,0)))
@@ -223,26 +281,42 @@ sub hit_enemy(enemy_sprite_id%)
         g_obj(i%,0) = 0
         sprite hide safe sprite_id%
         sprite close sprite_id%
-        inc o,16
 
         delete_shadow(i%)
         start_enemy_death_animation(i%)
-        if g_sound_on% then play effect ENEMY_DEATH_SFX
+        if g_sound_on% and not instakill% then play effect ENEMY_DEATH_SFX
 
         exit for
     next
 end sub
 
 '
-' Increments the score and the hiscore
-sub increment_score(obj_id%)
-    inc g_score%, POINTS(obj_id%)
+' Increment the score and the hiscore and update the HUD
+sub increment_score(points%)
+    local i%=g_score%\NEW_LIFE_POINTS
+    inc g_score%, points%
     print_score(g_score%)
+
+    if g_score%\NEW_LIFE_POINTS > i% then
+        update_life(1)
+    end if
 
     if g_score% > g_hiscore% then
         g_hiscore% = g_score%
         print_hiscore(g_hiscore%)
     end if
+end sub
+
+'
+' Update the player lives and the HUD
+sub update_life(value%)
+    if value% >= 0 then
+        play effect NEW_LIFE_SFX
+    else
+        play effect PLAYER_DEATH_SFX
+    end if
+    inc g_lives%, choice(value%, value%, 1)
+    print_lives(g_lives%)
 end sub
 
 '

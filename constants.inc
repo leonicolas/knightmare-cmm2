@@ -57,6 +57,7 @@ const LETTERS_Y=56
 const PLAYER_SKIN_Y=0
 const PLAYER_SKIN1_X_L=0
 const PLAYER_SKIN1_X_R=TILE_SIZE*2
+const NEW_LIFE_POINTS=1000
 
 const BLOCK_HITS=5
 const BLOCK_POINTS=500
@@ -64,6 +65,10 @@ const BLOCK_POINTS=500
 ' Effects
 const SHOT_SFX="sfx/shot.wav"
 const ENEMY_DEATH_SFX="sfx/enemy_death.wav"
+const PLAYER_DEATH_SFX="sfx/player_death.wav"
+const NEW_LIFE_SFX="sfx/new_life.wav"
+const POINTS_SFX="sfx/points.wav"
+const KILL_ALL_ENEMIES_SFX="sfx/kill_all_enemies.wav"
 const BLOCK_HIT_SFX="sfx/block_hit.wav"
 const BLOCK_OPEN_SFX="sfx/block_open.wav"
 
@@ -73,7 +78,7 @@ dim MUSIC$(9)=("music/01_intro-psg.mod", "music/02_majou-densetsu-psg.mod", "", 
 dim TRANSPARENT_BLOCK(1)=(80,64)
 
 ' Points
-dim POINTS(38)=(0,10,50,50,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
+dim OBJ_POINTS(38)=(0,10,50,50,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
 
 ' Objects tiles: tile x, y, width and height
 ' TODO: Move to data block
@@ -109,6 +114,8 @@ OBJ_TILE%(34,0)=48: OBJ_TILE%(34,1)=104: OBJ_TILE%(34,2)=TILE_SIZEx2: OBJ_TILE%(
 OBJ_TILE%(35,0)=64: OBJ_TILE%(35,1)=104: OBJ_TILE%(35,2)=TILE_SIZEx2: OBJ_TILE%(35,3)=TILE_SIZEx2
 ' Barrier
 OBJ_TILE%(36,0)=80: OBJ_TILE%(36,1)=104: OBJ_TILE%(36,2)=TILE_SIZEx2: OBJ_TILE%(36,3)=TILE_SIZEx2
+' Empty
+OBJ_TILE%(37,0)=96: OBJ_TILE%(37,1)=104: OBJ_TILE%(37,2)=TILE_SIZEx2: OBJ_TILE%(37,3)=TILE_SIZEx2
 
 ' Object data: speed X, speed Y, auxiliary data 1 and 2
 ' TODO: Move to data block
