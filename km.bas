@@ -690,6 +690,6 @@ end sub
 
 sub debug_print(msg$, offset%)
     page write 0
-    print @(0,184+offset%) msg$
+    print @(0,192+offset%) msg$
     page write SCREEN_BUFFER
 end sub
