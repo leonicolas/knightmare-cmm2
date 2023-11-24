@@ -37,10 +37,10 @@ dim g_lives%=2
 ' 9 - Player Sword (level 2)
 dim g_shots(12,4)
 const SHOTS_NUM%=bound(g_shots())
-' Object data: 0: obj id | 1: x | 2: y | 3: life | 4: gpr1 | 5: gpr2 | 6: shadow
+' Object data: 0: obj id | 1: x | 2: y | 3: life | 4: GPR 1 | 5: GPR 2 | 6: shadow
 dim g_obj(20,6)
-' Object spawn data queue: 0: quantity | 1: obj id | 2: x | 3: y | 4: next spawn time
-dim g_spawn_queue(bound(g_obj()),4)
+' Actions data queue: 0: num of executions | 1: action id | 2: GPR 1 | 3: GPR 2 | 4: next execution time
+dim g_actions_queue(bound(g_obj()),4)
 ' Blocks: 0: type | 1: hits
 dim g_blocks(8,1)
 dim g_anim_tick%=0

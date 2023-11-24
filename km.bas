@@ -51,7 +51,7 @@ sub run_stage(stage%)
         move_shots()
         move_and_process_objects()
         ' Spawn enqueued objects
-        process_spawn_queue()
+        process_actions_queue()
         ' Move player - ensure player always on top
         sprite show safe #1, g_player(0),g_player(1), 1,,1
         sprite move
@@ -104,16 +104,16 @@ sub process_collision(sprite_id%)
 end sub
 
 '
-' Spawn new objects from the spawn queue
-sub process_spawn_queue()
+' Process the actions queue executing the enqueue actions
+sub process_actions_queue()
     local i%, time_ms, obj_id%
 
-    ' Spawn new objects from the queue
-    for i%=0 to bound(g_spawn_queue())
-        if g_spawn_queue(i%, 0) = 0 then continue for
-        if timer < g_spawn_queue(i%, 4) then continue for
+    ' Process enqueued actions
+    for i%=0 to bound(g_actions_queue())
+        if g_actions_queue(i%, 0) = 0 then continue for
+        if timer < g_actions_queue(i%, 4) then continue for
 
-        obj_id%=g_spawn_queue(i%, 1)
+        obj_id%=g_actions_queue(i%, 1)
         ' Objects and enemies
         if obj_id% < 31 then
             select case obj_id%
@@ -122,16 +122,16 @@ sub process_spawn_queue()
                 case 3
                     time_ms=BAT_WAVE_SPAWN_SPEED_MS
             end select
-            spawn_object(obj_id%, g_spawn_queue(i%, 2), g_spawn_queue(i%, 3))
+            spawn_object(obj_id%, g_actions_queue(i%, 2), g_actions_queue(i%, 3))
 
         ' Blocks
         else
             replace_block(obj_id%-31)
         end if
 
-        ' Decrement spawn count
-        inc g_spawn_queue(i%, 0), -1
-        g_spawn_queue(i%, 4)=timer+time_ms
+        ' Decrement execution count
+        inc g_actions_queue(i%, 0), -1
+        g_actions_queue(i%, 4)=timer+time_ms
     next
 end sub
 
@@ -190,7 +190,7 @@ function hit_block(sprite_id%) as integer
 
     if g_blocks(i%,1)=1 or g_blocks(i%,1)=max_hits% then
         ' Spawn new block tile
-        enqueue_object_spawn(1, 31+i%, sprite(X, sprite_id%), sprite(Y, sprite_id%))
+        enqueue_action(1, 31+i%, sprite(X, sprite_id%), sprite(Y, sprite_id%))
     end if
 end function
 
@@ -248,7 +248,7 @@ end sub
 '
 ' Initialize and start the enemy death animation
 sub start_enemy_death_animation(i%)
-    enqueue_object_spawn(1, 20, g_obj(i%,1), g_obj(i%,2))
+    enqueue_action(1, 20, g_obj(i%,1), g_obj(i%,2))
 end sub
 
 '
@@ -421,7 +421,7 @@ sub spawn_object(obj_id%, x%, y%, map_data%)
             if x% < SCREEN_CENTER then g_obj(i%,4)=g_obj(i%,4)+180
             ' Initialize bat spawning data
             if map_data% then
-                enqueue_object_spawn(map_data%, obj_id%, x%, y%, choice(obj_id%=2, BAT_SPAWN_SPEED_MS, BAT_WAVE_SPAWN_SPEED_MS))
+                enqueue_action(map_data%, obj_id%, x%, y%, choice(obj_id%=2, BAT_SPAWN_SPEED_MS, BAT_WAVE_SPAWN_SPEED_MS))
             end if
             ' Spawn the bat shadow
             create_shadow(i%, TILE_SIZEx2+TILE_SIZE/2)
@@ -454,16 +454,16 @@ end sub
 
 '
 ' Enqueues an object spawn
-sub enqueue_object_spawn(spawn_count%, obj_id%, x%, y%, spawn_speed_ms)
+sub enqueue_action(spawn_count%, obj_id%, x%, y%, spawn_speed_ms)
     local i%
-    for i%=0 to bound(g_spawn_queue())
-        if g_spawn_queue(i%,0) then continue for
+    for i%=0 to bound(g_actions_queue())
+        if g_actions_queue(i%,0) then continue for
 
-        g_spawn_queue(i%,0)=spawn_count% ' Spawn count
-        g_spawn_queue(i%,1)=obj_id%      ' Object Id
-        g_spawn_queue(i%,2)=x%           ' X
-        g_spawn_queue(i%,3)=y%           ' Y
-        g_spawn_queue(i%,4)=timer+spawn_speed_ms
+        g_actions_queue(i%,0)=spawn_count% ' Spawn count
+        g_actions_queue(i%,1)=obj_id%      ' Object Id
+        g_actions_queue(i%,2)=x%           ' X
+        g_actions_queue(i%,3)=y%           ' Y
+        g_actions_queue(i%,4)=timer+spawn_speed_ms
         exit for
     next
 end sub
