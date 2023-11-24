@@ -59,6 +59,7 @@ const PLAYER_SKIN1_X_L=0
 const PLAYER_SKIN1_X_R=TILE_SIZE*2
 
 const BLOCK_HITS=5
+const BLOCK_POINTS=500
 
 ' Effects
 const SHOT_SFX="sfx/shot.wav"

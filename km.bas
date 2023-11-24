@@ -217,7 +217,7 @@ sub hit_enemy(enemy_sprite_id%)
         if g_obj(i%,3) > 0 then continue for
 
         ' Increment score
-        increment_score(g_obj(i%,0))
+        increment_score(OBJ_POINTS(g_obj(i%,0)))
 
         ' Delete enemy's object
         g_obj(i%,0) = 0
