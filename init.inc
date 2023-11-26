@@ -38,7 +38,7 @@ sub init_stage(stage%)
 
     sprite interrupt check_collision
 
-    page write 0: cls
+    cls 0: cls 1
     page write SCREEN_BUFFER
     init_player()
 
