@@ -17,7 +17,8 @@ const MAPS_DIR="maps/"
 const SCREEN_BUFFER=2                     ' Screen buffer number
 const MAP_TILES_BUFFER=3                  ' Map tileset buffer number
 const OBJ_TILES_BUFFER=4                  ' Objects tileset buffer number
-const BOSSES_TILES_BUFFER=4               ' Bosses tileset buffer number
+const BOSSES_TILES_BUFFER=5               ' Bosses tileset buffer number
+const GENERAL_USE_BUFFER=6                ' General use byffer number
 
 ' Speed control
 const SCROLL_SPEED_MS=135                 ' Scroll speed in ms
@@ -57,7 +58,7 @@ const LETTERS_Y=56
 const PLAYER_SKIN_Y=0
 const PLAYER_SKIN1_X_L=0
 const PLAYER_SKIN1_X_R=TILE_SIZE*2
-const NEW_LIFE_POINTS=1000
+const NEW_LIFE_POINTS=100000
 
 const BLOCK_HITS=5
 const BLOCK_POINTS=500
