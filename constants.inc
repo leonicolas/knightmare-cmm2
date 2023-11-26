@@ -54,6 +54,8 @@ const NUMBERS_X=24
 const NUMBERS_Y=48
 const LETTERS_X=0
 const LETTERS_Y=56
+const TRANSPARENT_BLOCK_X=80
+const TRANSPARENT_BLOCK_Y=64
 
 const PLAYER_SKIN_Y=0
 const PLAYER_SKIN1_X_L=0
@@ -75,8 +77,6 @@ const BLOCK_OPEN_SFX="sfx/block_open.wav"
 
 ' Music table
 dim MUSIC$(9)=("music/01_intro-psg.mod", "music/02_majou-densetsu-psg.mod", "", "", "", "", "", "", "", "")
-
-dim TRANSPARENT_BLOCK(1)=(80,64)
 
 ' Points
 dim OBJ_POINTS(38)=(0,10,50,50,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)

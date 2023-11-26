@@ -55,7 +55,32 @@ sub run_stage(stage%)
         ' Move player - ensure player always on top
         sprite show safe #1, g_player(0),g_player(1), 1,,1
         sprite move
+
+        if g_freeze_timer >= 0 then process_freeze_timer()
+        if g_power_up_timer >= 0 then process_power_up_timer()
     loop
+    ' Close all sprites
+    sprite close all
+end sub
+
+'
+' Show and countdown freeze timer
+sub process_freeze_timer()
+    print_freeze_timer(g_freeze_timer)
+    inc g_freeze_timer, -0.01
+    if g_freeze_timer < 0 then
+        clear_freeze_timer()
+    end if
+end sub
+
+'
+' Show and countdown the power-up timer
+sub process_power_up_timer()
+    print_power_up_timer(g_power_up_timer)
+    inc g_power_up_timer, -0.03
+    if g_power_up_timer < 0 then
+        clear_power_up_timer()
+    end if
 end sub
 
 '
@@ -237,7 +262,7 @@ sub collect_block_bonus(sprite_id%)
 end sub
 
 '
-' Kill all enemies in the screen
+' Kill all visible enemies
 sub kill_all_enemies()
     local i%
     play effect KILL_ALL_ENEMIES_SFX
@@ -522,7 +547,7 @@ sub spawn_block(x%, y%, type%)
     g_blocks(i%,0)=type% ' Block type
     g_blocks(i%,1)=0     ' Hits
 
-    sprite read BLOCK_INI_SPRITE_ID + i%, TRANSPARENT_BLOCK(0), TRANSPARENT_BLOCK(1), TILE_SIZEx2, TILE_SIZEx2, OBJ_TILES_BUFFER
+    sprite read BLOCK_INI_SPRITE_ID + i%, TRANSPARENT_BLOCK_X, TRANSPARENT_BLOCK_Y, TILE_SIZEx2, TILE_SIZEx2, OBJ_TILES_BUFFER
     sprite show safe BLOCK_INI_SPRITE_ID + i%, x%,0, 1
 end sub
 

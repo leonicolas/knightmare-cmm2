@@ -14,6 +14,8 @@ dim g_scroll_timer             ' Scroll timer
 dim g_player_timer             ' Player timer
 dim g_obj_timer                ' Objects timer
 dim g_shot_timer               ' Shot timer
+dim g_freeze_timer=-1          ' Enemies freeze timer
+dim g_power_up_timer=-1        ' Power-up timer
 
 ' Player state: x, y, animation counter, weapon, speed
 dim g_player(4)
