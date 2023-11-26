@@ -11,12 +11,12 @@ sub init()
     color rgb(white), rgb(black)
 
     ' init screen and buffers
-    cls 0
-    cls 1
-    cls SCREEN_BUFFER
-    cls MAP_TILES_BUFFER
-    cls OBJ_TILES_BUFFER
-    cls GENERAL_USE_BUFFER
+    page write 0: cls 0
+    page write 1: cls 0
+    page write SCREEN_BUFFER: cls 0
+    page write MAP_TILES_BUFFER: cls 0
+    page write OBJ_TILES_BUFFER: cls 0
+    page write GENERAL_USE_BUFFER: cls 0
 
     page write MAP_TILES_BUFFER
     load png MAP_TILESET_IMG
@@ -38,7 +38,8 @@ sub init_stage(stage%)
 
     sprite interrupt check_collision
 
-    cls 0: cls 1
+    page write 0: cls 0
+    page write 1: cls 0
     page write SCREEN_BUFFER
     init_player()
 
