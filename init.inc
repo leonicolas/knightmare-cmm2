@@ -8,19 +8,23 @@ sub init()
     mode 3,12 ' 320x200
     'mode 7,12 ' 320x240
     'mode 4,12 ' debug mode
+    color rgb(white), rgb(black)
 
-    ' init screen and tiles buffers
-    page write SCREEN_BUFFER:cls
+    ' init screen and buffers
+    cls 0
+    cls 1
+    cls SCREEN_BUFFER
+    cls MAP_TILES_BUFFER
+    cls OBJ_TILES_BUFFER
+    cls GENERAL_USE_BUFFER
 
-    page write MAP_TILES_BUFFER:cls
+    page write MAP_TILES_BUFFER
     load png MAP_TILESET_IMG
 
-    page write OBJ_TILES_BUFFER:cls
+    page write OBJ_TILES_BUFFER
     load png OBJ_TILESET_IMG
 
-    ' clear screen
-    page write 0: cls
-    ' init game state variables
+    ' init stage state variables
     g_tile_px%=0
 end sub
 
