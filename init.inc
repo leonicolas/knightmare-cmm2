@@ -43,8 +43,8 @@ sub init_stage(stage%)
     init_player()
 
     ' Print the HUD
-    print_text(SCREEN_ROWS  , 3, "SCORE  HISCORE  REST  STAGE")
-    print_text(SCREEN_ROWS+1, 3, "   00       00    00     00")
+    print_text(SCREEN_ROWS  , 3, "SCORE  HISCORE  REST  STAGE", SCREEN_OFFSET)
+    print_text(SCREEN_ROWS+1, 3, "   00       00    00     00", SCREEN_OFFSET)
     print_stage(stage%)
     print_lives(g_lives%)
     print_hiscore(g_hiscore%)
