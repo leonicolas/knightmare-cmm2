@@ -68,7 +68,7 @@ end sub
 sub process_freeze_timer()
     local fraction%=fix((g_freeze_timer - fix(g_freeze_timer)) * 100)
     print_freeze_timer(g_freeze_timer)
-    if fraction% = 0 or (g_freeze_timer < 4 and fraction% = 50) then play effect FREEZE_TICK
+    if fraction% = 0 or (g_freeze_timer < 4 and fraction% = 50) then play effect FREEZE_TICK_SFX
 
     inc g_freeze_timer, -0.01
     if g_freeze_timer < 0 then

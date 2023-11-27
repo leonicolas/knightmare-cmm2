@@ -76,7 +76,7 @@ const POINTS_SFX="sfx/points.wav"
 const KILL_ALL_ENEMIES_SFX="sfx/kill_all_enemies.wav"
 const BLOCK_HIT_SFX="sfx/block_hit.wav"
 const BLOCK_OPEN_SFX="sfx/block_open.wav"
-const FREEZE_TICK="sfx/freeze_tick.wav"
+const FREEZE_TICK_SFX="sfx/freeze_tick.wav"
 
 ' Music table
 dim MUSIC$(9)=("music/01_intro-psg.mod", "music/02_majou-densetsu-psg.mod", "", "", "", "", "", "", "", "")
