@@ -5,6 +5,7 @@ option default float
 
 #include "constants.inc"
 #include "global.inc"
+#include "intro.inc"
 #include "print.inc"
 #include "init.inc"
 
@@ -779,14 +780,4 @@ sub process_map_row(row%)
         end if
     next
     page write 0
-end sub
-
-'
-' Show the game intro
-sub intro()
-    local kb%
-    do while kb% <> KB_SPACE
-        kb%=KeyDown(1)
-        if kb% = KB_ESC then mode 1:end
-    loop
 end sub
