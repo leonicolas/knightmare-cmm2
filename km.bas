@@ -24,7 +24,7 @@ sub run_stage(stage%)
         process_kb()
 
         ' Scrolls the map
-        if g_row% >= 0 and timer - g_scroll_timer >= SCROLL_SPEED_MS then
+        if g_freeze_timer < 0 and g_row% >= 0 and timer - g_scroll_timer >= SCROLL_SPEED_MS then
             scroll_map()
             g_scroll_timer=timer
         end if
@@ -49,7 +49,7 @@ sub run_stage(stage%)
 
         ' Move sprites
         move_shots()
-        move_and_process_objects()
+        if g_freeze_timer < 0 then move_and_process_objects()
         ' Spawn enqueued objects
         process_actions_queue()
         ' Move player - ensure player always on top
@@ -66,7 +66,10 @@ end sub
 '
 ' Show and countdown freeze timer
 sub process_freeze_timer()
+    local fraction%=fix((g_freeze_timer - fix(g_freeze_timer)) * 100)
     print_freeze_timer(g_freeze_timer)
+    if fraction% = 0 or (g_freeze_timer < 4 and fraction% = 50) then play effect FREEZE_TICK
+
     inc g_freeze_timer, -0.01
     if g_freeze_timer < 0 then
         clear_freeze_timer()
@@ -250,8 +253,7 @@ sub collect_block_bonus(sprite_id%)
         case 3 ' Queen - Extra life
             update_life(1)
         case 4 ' King - Freeze enemies
-            increment_score(BLOCK_POINTS)
-            play effect POINTS_SFX
+            g_freeze_timer=FREEZE_TIME
         case 5 ' Barrier
             increment_score(BLOCK_POINTS)
             play effect POINTS_SFX
@@ -373,6 +375,8 @@ sub animate_objects()
         obj_id% = g_obj(i%, 0)
         ' Skip free slots and shadows
         if obj_id% = 0 or obj_id%=39 then continue for
+        ' Skip enemies if freeze is enabled, except fire animation
+        if obj_id% <> 20 and g_freeze_timer >= 0 then continue for
 
         offset%=0
         sprite_index%=OBJ_INI_SPRITE_ID + i%

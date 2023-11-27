@@ -15,8 +15,8 @@ sub print_lives(lives%)
 end sub
 
 sub print_freeze_timer(t)
-    local lsh%=int(t)
-    local rsh%=int((t - lsh%) * 60)
+    local lsh%=fix(t)
+    local rsh%=fix((t - lsh%) * 60)
     local l$=right$("0"+str$(lsh%),2)
     local r$=right$("0"+str$(rsh%),2)
     print_text(1, 24, l$+":"+r$, SCREEN_OFFSET, 1)
@@ -27,7 +27,7 @@ sub clear_freeze_timer()
 end sub
 
 sub print_power_up_timer(t)
-    local txt$=right$("0"+str$(int(t)),2)
+    local txt$=right$("0"+str$(fix(t)),2)
     print_text(1, 4, txt$, SCREEN_OFFSET, 1)
 end sub
 
