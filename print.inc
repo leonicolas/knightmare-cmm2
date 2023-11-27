@@ -1,17 +1,17 @@
 sub print_score(score%)
-    print_text(SCREEN_ROWS+1, 8-(len(str$(score%))), str$(score%), SCREEN_OFFSET)
+    print_text(SCREEN_ROWS+1, 8-(len(str$(score%))), str$(score%), SCREEN_OFFSET, 1)
 end sub
 
 sub print_hiscore(hiscore%)
-    print_text(SCREEN_ROWS+1, 17-(len(str$(hiscore%))), str$(hiscore%), SCREEN_OFFSET)
+    print_text(SCREEN_ROWS+1, 17-(len(str$(hiscore%))), str$(hiscore%), SCREEN_OFFSET, 1)
 end sub
 
 sub print_stage(stage%)
-    print_text(SCREEN_ROWS+1, 30-(len(str$(stage%))), str$(stage%), SCREEN_OFFSET)
+    print_text(SCREEN_ROWS+1, 30-(len(str$(stage%))), str$(stage%), SCREEN_OFFSET, 1)
 end sub
 
 sub print_lives(lives%)
-    print_text(SCREEN_ROWS+1, 23-(len(str$(lives%))), str$(lives%), SCREEN_OFFSET)
+    print_text(SCREEN_ROWS+1, 23-(len(str$(lives%))), str$(lives%), SCREEN_OFFSET, 1)
 end sub
 
 sub print_freeze_timer(t)
