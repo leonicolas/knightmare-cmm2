@@ -790,9 +790,3 @@ sub intro()
         if kb% = KB_ESC then mode 1:end
     loop
 end sub
-
-sub debug_print(msg$, offset%)
-    page write 0
-    print @(0,192+offset%) msg$
-    page write SCREEN_BUFFER
-end sub

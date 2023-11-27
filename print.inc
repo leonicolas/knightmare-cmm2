@@ -1,3 +1,9 @@
+sub debug_print(msg$, offset%)
+    page write 0
+    print @(0,192+offset%) msg$
+    page write SCREEN_BUFFER
+end sub
+
 sub print_score(score%)
     print_text(SCREEN_ROWS+1, 8-(len(str$(score%))), str$(score%), SCREEN_OFFSET, 1)
 end sub
