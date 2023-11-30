@@ -21,7 +21,7 @@ const BOSSES_TILES_BUFFER=5               ' Bosses tileset buffer number
 const GENERAL_USE_BUFFER=6                ' General use byffer number
 
 ' Speed control
-const SCROLL_SPEED_MS=135                 ' Scroll speed in ms
+const SCROLL_SPEED_MS=128                 ' Scroll speed in ms
 const GAME_TICK_MS=10                     ' Game tick in ms
 const SHOT_COOLDOWN_MS=150
 const PLAYER_ANIMATION_MS=300             ' Default player animation frame time in ms
