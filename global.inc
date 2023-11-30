@@ -6,8 +6,6 @@ dim g_row%                     ' Current top map row. Zero is the bottom row.
 dim g_game_tick                ' The game tick
 dim g_tile_px%                 ' The rendered tile row pixel
 dim g_kb_released%             ' Tracks kb keys releasing
-dim g_i%                       ' Auxiliary global integer variables
-dim g_temp1,g_temp2,g_x,g_y    ' Auxiliary global float variables
 
 ' Timers
 dim g_scroll_timer             ' Scroll timer
