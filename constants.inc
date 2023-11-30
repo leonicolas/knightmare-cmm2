@@ -23,7 +23,8 @@ const GENERAL_USE_BUFFER=6                ' General use byffer number
 ' Speed control
 const SCROLL_SPEED_MS=128                 ' Scroll speed in ms
 const GAME_TICK_MS=10                     ' Game tick in ms
-const SHOT_COOLDOWN_MS=150
+const SHOT_COOLDOWN_MS=150                ' Player shot cooldown in ms
+const ENEMIES_SHOTS_MS=2000               ' Enemies shots in ms
 const PLAYER_ANIMATION_MS=300             ' Default player animation frame time in ms
 const OBJECTS_ANIMATION_MS=50             ' Objects animation frame time in ms
 const ANIM_TICK_DIVIDER=6                 ' Animation frame time tick divider. Used for slowing some animations
@@ -61,6 +62,9 @@ const PLAYER_SKIN_Y=0
 const PLAYER_SKIN1_X_L=0
 const PLAYER_SKIN1_X_R=TILE_SIZE*2
 const NEW_LIFE_POINTS=100000
+
+const MAX_ENEMIES_SHOOT_Y=SCREEN_HEIGHT*0.6
+const ENEMIES_SHOOT_CHANCE=0.7
 
 const BLOCK_HITS=5
 const BLOCK_POINTS=500
@@ -105,6 +109,14 @@ OBJ_TILE%(40,0)=1: OBJ_TILE%(40,1)=66: OBJ_TILE%(40,2)=5: OBJ_TILE%(40,3)=13
 ' Fire
 OBJ_TILE%(20,0)=112: OBJ_TILE%(20,1)=104: OBJ_TILE%(20,2)=16: OBJ_TILE%(20,3)=16
 dim FIRE_ANIM(15)=(1,0,1,0,1,0,2,1,2,1,2,1,3,2,3,2)
+' Pink Fire
+OBJ_TILE%(21,0)=176: OBJ_TILE%(21,1)=104: OBJ_TILE%(21,2)=16: OBJ_TILE%(21,3)=16
+' Dot bullet
+OBJ_TILE%(22,0)=22: OBJ_TILE%(22,1)=38: OBJ_TILE%(22,2)=4: OBJ_TILE%(22,3)=4
+' Arrow
+OBJ_TILE%(23,0)=133: OBJ_TILE%(23,1)=34: OBJ_TILE%(23,2)=5: OBJ_TILE%(23,3)=14
+OBJ_TILE%(24,0)=145: OBJ_TILE%(24,1)=38: OBJ_TILE%(24,2)=13: OBJ_TILE%(24,3)=5
+OBJ_TILE%(25,0)=163: OBJ_TILE%(25,1)=35: OBJ_TILE%(25,2)=11: OBJ_TILE%(25,3)=11
 ' Blocks
 ' Question mark
 OBJ_TILE%(31,0)=0: OBJ_TILE%(31,1)=104: OBJ_TILE%(31,2)=16: OBJ_TILE%(31,3)=16

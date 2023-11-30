@@ -43,6 +43,12 @@ sub run_stage(stage%)
             g_obj_timer=timer
         end if
 
+        ' Process enemies shots
+        if timer - g_eshot_timer >= ENEMIES_SHOTS_MS then
+            if stage% > 1 or g_row% < 110 then enemies_fire()
+            g_eshot_timer=timer
+        end if
+
         ' Map rendering
         page write 0
         blit 0,TILE_SIZEx2, SCREEN_OFFSET,0, SCREEN_WIDTH,SCREEN_HEIGHT, SCREEN_BUFFER
@@ -355,21 +361,21 @@ end sub
 
 '
 ' Delete an object shadow
-sub delete_shadow(src_obj_index%)
-    local shadow_index%=g_obj(src_obj_index%,6)
+sub delete_shadow(src_obj_ix%)
+    local shadow_ix%=g_obj(src_obj_ix%,6)
 
-    if shadow_index% < 0 then exit sub
+    if shadow_ix% < 0 then exit sub
 
-    g_obj(shadow_index%,0) = 0
-    g_obj(src_obj_index%,6) = -1
-    sprite hide safe OBJ_INI_SPRITE_ID + shadow_index%
-    sprite close OBJ_INI_SPRITE_ID + shadow_index%
+    g_obj(shadow_ix%,0) = 0
+    g_obj(src_obj_ix%,6) = -1
+    sprite hide safe OBJ_INI_SPRITE_ID + shadow_ix%
+    sprite close OBJ_INI_SPRITE_ID + shadow_ix%
 end sub
 
 '
 ' Animate the game objects (enemies, power-ups)
 sub animate_objects()
-    local i%, obj_id%, sprite_index%, offset%, flip%
+    local i%, obj_id%, sprite_ix%, offset%, flip%
     inc g_anim_tick%
 
     for i%=0 to bound(g_obj())
@@ -380,7 +386,7 @@ sub animate_objects()
         if obj_id% <> 20 and g_freeze_timer >= 0 then continue for
 
         offset%=0
-        sprite_index%=OBJ_INI_SPRITE_ID + i%
+        sprite_ix%=OBJ_INI_SPRITE_ID + i%
 
         ' Config animation
         select case obj_id%
@@ -390,8 +396,8 @@ sub animate_objects()
             case 20 ' Fire
                 if g_obj(i%, 3) > bound(FIRE_ANIM()) then
                     g_obj(i%, 0)=0
-                    sprite hide safe sprite_index%
-                    sprite close sprite_index%
+                    sprite hide safe sprite_ix%
+                    sprite close sprite_ix%
                     continue for
                 end if
                 offset%=FIRE_ANIM(g_obj(i%, 3))*TILE_SIZEx2
@@ -404,9 +410,9 @@ sub animate_objects()
         ' Read or flip next frame's sprite
         select case obj_id%
             case 4
-                sprite show safe sprite_index%, sprite(X, sprite_index%), sprite(Y, sprite_index%), sprite(L, sprite_index%), flip%
+                sprite show safe sprite_ix%, sprite(X, sprite_ix%), sprite(Y, sprite_ix%), sprite(L, sprite_ix%), flip%
             case else
-                sprite read sprite_index%, OBJ_TILE%(obj_id%,0)+offset%, OBJ_TILE%(obj_id%,1), OBJ_TILE%(obj_id%,2), OBJ_TILE%(obj_id%,3), OBJ_TILES_BUFFER
+                sprite read sprite_ix%, OBJ_TILE%(obj_id%,0)+offset%, OBJ_TILE%(obj_id%,1), OBJ_TILE%(obj_id%,2), OBJ_TILE%(obj_id%,3), OBJ_TILES_BUFFER
         end select
     next
 end sub
@@ -414,19 +420,19 @@ end sub
 '
 ' Move screen shots
 sub move_shots()
-    local i%
+    local i%,x,y
     for i%=0 to bound(g_shots())
         ' Checks weapon id
-        if not g_shots(i%,0) then continue for
+        if g_shots(i%,0)=0 then continue for
         ' Moves shot
         inc g_shots(i%,1),g_shots(i%,3)
         inc g_shots(i%,2),g_shots(i%,4)
-        if g_shots(i%,2) < 0 then
-            g_shots(i%,0)=0
-            sprite hide safe i%+2
-            sprite close i%+2
+        x = g_shots(i%,1)
+        y = g_shots(i%,2)
+        if y < 0 or y > SCREEN_HEIGHT+TILE_SIZEx2 or x < 0 or x > SCREEN_WIDTH then
+            destroy_shot(i%+2)
         else
-            sprite next i%+2,g_shots(i%,1),g_shots(i%,2)
+            sprite next i%+2, x, y
         end if
     next
 end sub
@@ -574,16 +580,16 @@ end sub
 
 '
 ' Create the object shadow
-sub create_shadow(obj_index%, height%)
+sub create_shadow(obj_ix%, height%)
     local sprite_id%, i%=get_free_object_slot()
     if i% < 0 then exit sub
 
     g_obj(i%,0)=39                          ' Shadow id
-    g_obj(i%,1)=g_obj(obj_index%,1)         ' X
-    g_obj(i%,2)=g_obj(obj_index%,2)+height% ' Y
+    g_obj(i%,1)=g_obj(obj_ix%,1)         ' X
+    g_obj(i%,2)=g_obj(obj_ix%,2)+height% ' Y
     g_obj(i%,4)=height%                     ' Height
-    g_obj(i%,6)=obj_index%                  ' Shadow -> source object index
-    g_obj(obj_index%,6)=i%                  ' Source object -> shadow index
+    g_obj(i%,6)=obj_ix%                  ' Shadow -> source object index
+    g_obj(obj_ix%,6)=i%                  ' Source object -> shadow index
     sprite_id%=OBJ_INI_SPRITE_ID + i%
     sprite read sprite_id%, OBJ_TILE%(39,0), OBJ_TILE%(39,1), OBJ_TILE%(39,2), OBJ_TILE%(39,3), OBJ_TILES_BUFFER
     sprite show safe sprite_id%, g_obj(i%,1),g_obj(i%,2), 3
@@ -604,10 +610,23 @@ function get_free_object_slot() as integer
 end function
 
 '
+' Find free slots in the shots data array.
+sub get_free_shot_slots(free_slots%())
+    local i%,c%=0
+    ' Starts from 3 because 0 to 2 slots are reserved for the player
+    for i%=3 to bound(g_shots())
+        ' Check for free slots
+        if g_shots(i%,0) then continue for
+        free_slots%(c%)=i%
+        inc c%
+    next
+end sub
+
+'
 ' Create the shot sprite
 sub fire()
     ' Cooldown
-    if timer - g_shot_timer < g_player_shot_ms then exit sub
+    if timer - g_pshot_timer < g_player_shot_ms then exit sub
 
     local i%
     for i%=0 to choice(g_player(3)>5,2,1)
@@ -626,9 +645,65 @@ sub fire()
         ' Play SFX
         if g_sound_on% then play effect SHOT_SFX
         ' Increment timer
-        g_shot_timer=timer
+        g_pshot_timer=timer
         exit for
     next
+end sub
+
+'
+' Visible enemies shoot
+sub enemies_fire()
+    local i%,c%,slot_ix%
+    local free_slots%(bound(g_shots())-3)
+
+    get_free_shot_slots(free_slots%())
+
+    for i%=0 to bound(g_obj())
+        ' Has object or is in the min Y position?
+        if g_obj(i%,0) = 0 or g_obj(i%,0) > 16 or g_obj(i%,2) < TILE_SIZEx2 then
+            continue for
+        end if
+
+        slot_ix%=free_slots%(c%)
+        ' Has free slot?
+        if slot_ix% = 0 then exit for
+
+        enemy_fire(i%, slot_ix%)
+        inc c%
+    next
+end sub
+
+'
+' Single enemy shoot
+sub enemy_fire(enemy_ix%, shot_ix%)
+    if g_obj(enemy_ix%,2) > MAX_ENEMIES_SHOOT_Y or rnd > ENEMIES_SHOOT_CHANCE then exit sub
+    local enemy_spr_id%=OBJ_INI_SPRITE_ID + enemy_ix%
+    local cx=sprite(W, enemy_spr_id%)/2, cy=sprite(H, enemy_spr_id%)/2
+    local angle=deg(sprite(V, enemy_spr_id%, 1))
+    local idx%=22,rot%
+
+    select case g_obj(enemy_ix%,0)
+        case 4 ' Knight
+            rot%=fix((angle+22.5)/45)
+            if rot%=0 or rot%=4 then
+                idx%=23: rot%=choice(rot%=0,2,0)
+            else if rot%=2 or rot%=6 then
+                idx%=24: rot%=choice(rot%=2,1,0)
+            else if rot%=3 or rot%=5 then
+                idx%=25: rot%=choice(rot%=3,1,0)
+            else
+                idx%=25: rot%=choice(rot%=1,3,2)
+            end if
+    end select
+    ' Create the shot state
+    g_shots(shot_ix%,0)=1                     ' weapon
+    g_shots(shot_ix%,1)=g_obj(enemy_ix%,1)+cx ' X
+    g_shots(shot_ix%,2)=g_obj(enemy_ix%,2)+cy ' Y
+    g_shots(shot_ix%,3)=0.5*sin(angle)        ' Speed X
+    g_shots(shot_ix%,4)=0.5*-cos(angle)       ' Speed Y
+    ' Create the shot sprite
+    sprite read shot_ix%+2, OBJ_TILE%(idx%,0), OBJ_TILE%(idx%,1), OBJ_TILE%(idx%,2), OBJ_TILE%(idx%,3), OBJ_TILES_BUFFER
+    sprite show safe shot_ix%+2, g_shots(shot_ix%,1),g_shots(shot_ix%,2), 1, rot%
 end sub
 
 '
@@ -672,9 +747,9 @@ end sub
 
 '
 ' Destroy block sprite
-sub destroy_block(block_index%)
-    g_blocks(block_index%,0)=0
-    sprite close BLOCK_INI_SPRITE_ID + block_index%
+sub destroy_block(block_ix%)
+    g_blocks(block_ix%,0)=0
+    sprite close BLOCK_INI_SPRITE_ID + block_ix%
 end sub
 
 '

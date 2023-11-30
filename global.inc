@@ -1,6 +1,6 @@
 ' Global variables
 
-dim g_sound_on%=1
+dim g_sound_on%=0
 dim g_map(MAP_SIZE) as integer ' Map data
 dim g_row%                     ' Current top map row. Zero is the bottom row.
 dim g_game_tick                ' The game tick
@@ -11,7 +11,8 @@ dim g_kb_released%             ' Tracks kb keys releasing
 dim g_scroll_timer             ' Scroll timer
 dim g_player_timer             ' Player timer
 dim g_obj_timer                ' Objects timer
-dim g_shot_timer               ' Shot timer
+dim g_pshot_timer              ' Player shot timer
+dim g_eshot_timer              ' Enemies shots timer
 dim g_freeze_timer=-1          ' Enemies freeze timer
 dim g_power_up_timer=-1        ' Power-up timer
 
@@ -23,7 +24,7 @@ dim g_score%=0
 dim g_hiscore%=0
 dim g_lives%=2
 
-' Supports 12 shots at the same time (id, x, y, speed x, speed y).
+' Supports 12 shots at the same time: 0: id | 1: x | 2: y | 3: speed x | 4: speed y
 ' The three first slots are for the player shots, the other ones for enemies
 ' 0 - No shot
 ' 1 - Player Arrow
