@@ -45,5 +45,5 @@ dim g_actions_queue(bound(g_obj()),4)
 dim g_blocks(8,1)
 dim g_anim_tick%=0
 
-const OBJ_INI_SPRITE_ID=bound(g_shots()) + 1 ' Initial sprite Id for objects
+const OBJ_INI_SPRITE_ID=bound(g_shots()) + 3 ' Initial sprite Id for objects
 const BLOCK_INI_SPRITE_ID=OBJ_INI_SPRITE_ID+bound(g_obj()) + 1 ' Initial sprite Id for blocks
