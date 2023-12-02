@@ -43,8 +43,8 @@
                  "type":"blob",
                  "visible":true,
                  "width":8,
-                 "x":168.417,
-                 "y":1703.5
+                 "x":168.235181818182,
+                 "y":1687.86363636364
                 }, 
                 {
                  "height":8,
@@ -54,8 +54,8 @@
                  "type":"blob",
                  "visible":true,
                  "width":8,
-                 "x":32.25,
-                 "y":1672
+                 "x":32.0681818181818,
+                 "y":1671.81818181818
                 }, 
                 {
                  "height":8,
@@ -65,8 +65,8 @@
                  "type":"blob",
                  "visible":true,
                  "width":8,
-                 "x":168.5,
-                 "y":1664.5
+                 "x":167.772727272727,
+                 "y":1656.31818181818
                 }, 
                 {
                  "height":8,
@@ -76,8 +76,8 @@
                  "type":"blob",
                  "visible":true,
                  "width":8,
-                 "x":128.5,
-                 "y":1647.5
+                 "x":127.772727272727,
+                 "y":1640.22727272727
                 }, 
                 {
                  "height":8,
@@ -87,8 +87,8 @@
                  "type":"blob",
                  "visible":true,
                  "width":8,
-                 "x":207.25,
-                 "y":1624.75
+                 "x":208.159090909091,
+                 "y":1624.38636363636
                 }, 
                 {
                  "height":8,
@@ -120,8 +120,8 @@
                  "type":"blob",
                  "visible":true,
                  "width":8,
-                 "x":32.25,
-                 "y":1568
+                 "x":31.8863636363636,
+                 "y":1560
                 }, 
                 {
                  "height":8,
@@ -148,8 +148,8 @@
                  "type":"bat-wave",
                  "visible":true,
                  "width":8,
-                 "x":184.25,
-                 "y":1552
+                 "x":207.704545454545,
+                 "y":1551.81818181818
                 }, 
                 {
                  "height":8,
@@ -159,8 +159,8 @@
                  "type":"blob",
                  "visible":true,
                  "width":8,
-                 "x":128.5,
-                 "y":1529
+                 "x":128.318181818182,
+                 "y":1528.27272727273
                 }, 
                 {
                  "height":8,
@@ -176,7 +176,7 @@
                  "type":"bat-wave",
                  "visible":true,
                  "width":8,
-                 "x":184,
+                 "x":208,
                  "y":1504.25
                 }, 
                 {
@@ -193,30 +193,8 @@
                  "type":"bat-wave",
                  "visible":true,
                  "width":8,
-                 "x":183.75,
-                 "y":1464
-                }, 
-                {
-                 "height":8,
-                 "id":14,
-                 "name":"Blob",
-                 "rotation":0,
-                 "type":"blob",
-                 "visible":true,
-                 "width":8,
-                 "x":175.967391304348,
-                 "y":1432.16304347826
-                }, 
-                {
-                 "height":8,
-                 "id":15,
-                 "name":"Blob",
-                 "rotation":0,
-                 "type":"blob",
-                 "visible":true,
-                 "width":8,
-                 "x":32.25,
-                 "y":1408
+                 "x":32.2954545454546,
+                 "y":1447.81818181818
                 }, 
                 {
                  "height":8,
@@ -226,8 +204,8 @@
                  "type":"blob",
                  "visible":true,
                  "width":8,
-                 "x":176.5,
-                 "y":1383.5
+                 "x":168.681818181818,
+                 "y":1368.22727272727
                 }, 
                 {
                  "height":8,
@@ -237,42 +215,8 @@
                  "type":"blob",
                  "visible":true,
                  "width":8,
-                 "x":120,
-                 "y":1367.5
-                }, 
-                {
-                 "height":8,
-                 "id":18,
-                 "name":"Bat",
-                 "properties":[
-                        {
-                         "name":"Count",
-                         "type":"string",
-                         "value":"3"
-                        }],
-                 "rotation":0,
-                 "type":"bat",
-                 "visible":true,
-                 "width":8,
-                 "x":240.5,
+                 "x":32.1818181818182,
                  "y":1351.5
-                }, 
-                {
-                 "height":8,
-                 "id":19,
-                 "name":"Bat",
-                 "properties":[
-                        {
-                         "name":"Count",
-                         "type":"string",
-                         "value":"1"
-                        }],
-                 "rotation":0,
-                 "type":"bat",
-                 "visible":true,
-                 "width":8,
-                 "x":0.5,
-                 "y":1336.25
                 }, 
                 {
                  "height":8,
@@ -288,8 +232,8 @@
                  "type":"bat",
                  "visible":true,
                  "width":8,
-                 "x":239.75,
-                 "y":1304.75
+                 "x":248.477272727273,
+                 "y":1295.65909090909
                 }, 
                 {
                  "height":8,
@@ -305,200 +249,8 @@
                  "type":"bat",
                  "visible":true,
                  "width":8,
-                 "x":0.5,
-                 "y":1288.25
-                }, 
-                {
-                 "height":8,
-                 "id":22,
-                 "name":"Blob",
-                 "rotation":0,
-                 "type":"blob",
-                 "visible":true,
-                 "width":8,
-                 "x":176,
-                 "y":1271.75
-                }, 
-                {
-                 "height":8,
-                 "id":23,
-                 "name":"Blob",
-                 "rotation":0,
-                 "type":"blob",
-                 "visible":true,
-                 "width":8,
-                 "x":32.5,
-                 "y":1248.25
-                }, 
-                {
-                 "height":8,
-                 "id":24,
-                 "name":"Bat Wave",
-                 "properties":[
-                        {
-                         "name":"Count",
-                         "type":"string",
-                         "value":"1"
-                        }],
-                 "rotation":0,
-                 "type":"bat-wave",
-                 "visible":true,
-                 "width":8,
-                 "x":200.667,
-                 "y":1240.42
-                }, 
-                {
-                 "height":8,
-                 "id":25,
-                 "name":"Bat Wave",
-                 "properties":[
-                        {
-                         "name":"Count",
-                         "type":"string",
-                         "value":"1"
-                        }],
-                 "rotation":0,
-                 "type":"bat-wave",
-                 "visible":true,
-                 "width":8,
-                 "x":32.25,
-                 "y":1232
-                }, 
-                {
-                 "height":8,
-                 "id":26,
-                 "name":"Bat Wave",
-                 "properties":[
-                        {
-                         "name":"Count",
-                         "type":"string",
-                         "value":"1"
-                        }],
-                 "rotation":0,
-                 "type":"bat-wave",
-                 "visible":true,
-                 "width":8,
-                 "x":200.5,
-                 "y":1191.75
-                }, 
-                {
-                 "height":8,
-                 "id":27,
-                 "name":"Bat Wave",
-                 "properties":[
-                        {
-                         "name":"Count",
-                         "type":"string",
-                         "value":"1"
-                        }],
-                 "rotation":0,
-                 "type":"bat-wave",
-                 "visible":true,
-                 "width":8,
-                 "x":32.75,
-                 "y":1184
-                }, 
-                {
-                 "height":8,
-                 "id":28,
-                 "name":"Bat Wave",
-                 "properties":[
-                        {
-                         "name":"Count",
-                         "type":"string",
-                         "value":"1"
-                        }],
-                 "rotation":0,
-                 "type":"bat-wave",
-                 "visible":true,
-                 "width":8,
-                 "x":200.523,
-                 "y":1144.52
-                }, 
-                {
-                 "height":8,
-                 "id":29,
-                 "name":"Bat Wave",
-                 "properties":[
-                        {
-                         "name":"Count",
-                         "type":"string",
-                         "value":"1"
-                        }],
-                 "rotation":0,
-                 "type":"bat-wave",
-                 "visible":true,
-                 "width":8,
-                 "x":31.8182,
-                 "y":1144.61
-                }, 
-                {
-                 "height":8,
-                 "id":30,
-                 "name":"Bat Wave",
-                 "properties":[
-                        {
-                         "name":"Count",
-                         "type":"string",
-                         "value":"1"
-                        }],
-                 "rotation":0,
-                 "type":"bat-wave",
-                 "visible":true,
-                 "width":8,
-                 "x":200.75,
-                 "y":1208
-                }, 
-                {
-                 "height":8,
-                 "id":31,
-                 "name":"Bat Wave",
-                 "properties":[
-                        {
-                         "name":"Count",
-                         "type":"string",
-                         "value":"1"
-                        }],
-                 "rotation":0,
-                 "type":"bat-wave",
-                 "visible":true,
-                 "width":8,
-                 "x":32.25,
-                 "y":1200.42
-                }, 
-                {
-                 "height":8,
-                 "id":39,
-                 "name":"Bat Wave",
-                 "properties":[
-                        {
-                         "name":"Count",
-                         "type":"string",
-                         "value":"1"
-                        }],
-                 "rotation":0,
-                 "type":"bat-wave",
-                 "visible":true,
-                 "width":8,
-                 "x":32.3864,
-                 "y":952.25
-                }, 
-                {
-                 "height":8,
-                 "id":40,
-                 "name":"Bat Wave",
-                 "properties":[
-                        {
-                         "name":"Count",
-                         "type":"string",
-                         "value":"1"
-                        }],
-                 "rotation":0,
-                 "type":"bat-wave",
-                 "visible":true,
-                 "width":8,
-                 "x":32,
-                 "y":1152.73
+                 "x":-0.40909090909091,
+                 "y":1280.43181818182
                 }, 
                 {
                  "height":8,
@@ -508,8 +260,8 @@
                  "type":"knight",
                  "visible":true,
                  "width":8,
-                 "x":71.8182,
-                 "y":1079.27
+                 "x":167.8182,
+                 "y":1023.81545454545
                 }, 
                 {
                  "height":8,
@@ -519,8 +271,8 @@
                  "type":"knight",
                  "visible":true,
                  "width":8,
-                 "x":31.6364,
-                 "y":1071.82
+                 "x":119.818218181818,
+                 "y":1016.00181818182
                 }, 
                 {
                  "height":8,
@@ -530,8 +282,8 @@
                  "type":"knight",
                  "visible":true,
                  "width":8,
-                 "x":168.182,
-                 "y":1063.64
+                 "x":167.818363636364,
+                 "y":1040.18545454545
                 }, 
                 {
                  "height":8,
@@ -541,8 +293,8 @@
                  "type":"knight",
                  "visible":true,
                  "width":8,
-                 "x":120,
-                 "y":1048.25
+                 "x":32.3636363636364,
+                 "y":1031.88636363636
                 }, 
                 {
                  "height":8,
@@ -552,8 +304,8 @@
                  "type":"knight",
                  "visible":true,
                  "width":8,
-                 "x":72,
-                 "y":1032.5
+                 "x":32.1818181818182,
+                 "y":991.954545454545
                 }, 
                 {
                  "height":8,
@@ -563,8 +315,8 @@
                  "type":"knight",
                  "visible":true,
                  "width":8,
-                 "x":32.25,
-                 "y":1024.5
+                 "x":72.25,
+                 "y":999.954545454545
                 }, 
                 {
                  "height":8,
@@ -574,8 +326,8 @@
                  "type":"knight",
                  "visible":true,
                  "width":8,
-                 "x":167.977272727273,
-                 "y":1016.13636363636
+                 "x":120.158818181818,
+                 "y":976.321818181818
                 }, 
                 {
                  "height":8,
@@ -585,8 +337,8 @@
                  "type":"knight",
                  "visible":true,
                  "width":8,
-                 "x":120.136363636364,
-                 "y":1008.38636363636
+                 "x":168.317818181818,
+                 "y":984.208181818182
                 }, 
                 {
                  "height":8,
@@ -596,8 +348,8 @@
                  "type":"blob",
                  "visible":true,
                  "width":8,
-                 "x":168.5,
-                 "y":952
+                 "x":168.318181818182,
+                 "y":959.818181818182
                 }, 
                 {
                  "height":8,
@@ -607,87 +359,8 @@
                  "type":"blob",
                  "visible":true,
                  "width":8,
-                 "x":32.25,
-                 "y":975.5
-                }, 
-                {
-                 "height":8,
-                 "id":51,
-                 "name":"Blob",
-                 "rotation":0,
-                 "type":"blob",
-                 "visible":true,
-                 "width":8,
-                 "x":168,
-                 "y":984
-                }, 
-                {
-                 "height":8,
-                 "id":52,
-                 "name":"Bat Wave",
-                 "properties":[
-                        {
-                         "name":"Count",
-                         "type":"string",
-                         "value":"1"
-                        }],
-                 "rotation":0,
-                 "type":"bat-wave",
-                 "visible":true,
-                 "width":8,
-                 "x":31,
-                 "y":1126.75
-                }, 
-                {
-                 "height":8,
-                 "id":53,
-                 "name":"Bat Wave",
-                 "properties":[
-                        {
-                         "name":"Count",
-                         "type":"string",
-                         "value":"1"
-                        }],
-                 "rotation":0,
-                 "type":"bat-wave",
-                 "visible":true,
-                 "width":8,
-                 "x":32.25,
-                 "y":944.25
-                }, 
-                {
-                 "height":8,
-                 "id":54,
-                 "name":"Bat Wave",
-                 "properties":[
-                        {
-                         "name":"Count",
-                         "type":"string",
-                         "value":"1"
-                        }],
-                 "rotation":0,
-                 "type":"bat-wave",
-                 "visible":true,
-                 "width":8,
-                 "x":199.875,
-                 "y":919.625
-                }, 
-                {
-                 "height":8,
-                 "id":55,
-                 "name":"Bat Wave",
-                 "properties":[
-                        {
-                         "name":"Count",
-                         "type":"string",
-                         "value":"1"
-                        }],
-                 "rotation":0,
-                 "type":"bat-wave",
-                 "visible":true,
-                 "width":8,
-                 "x":32.25,
-                 "y":928.5
+                 "x":32.0681818181818,
+                 "y":944.227272727273
                 }, 
                 {
                  "height":8,
@@ -697,53 +370,8 @@
                  "type":"blob",
                  "visible":true,
                  "width":8,
-                 "x":120.375,
-                 "y":928.25
-                }, 
-                {
-                 "height":8,
-                 "id":57,
-                 "name":"Bat Wave",
-                 "properties":[
-                        {
-                         "name":"Count",
-                         "type":"string",
-                         "value":"1"
-                        }],
-                 "rotation":0,
-                 "type":"bat-wave",
-                 "visible":true,
-                 "width":8,
-                 "x":199.875,
-                 "y":935.75
-                }, 
-                {
-                 "height":8,
-                 "id":58,
-                 "name":"Bat Wave",
-                 "properties":[
-                        {
-                         "name":"Count",
-                         "type":"string",
-                         "value":"1"
-                        }],
-                 "rotation":0,
-                 "type":"bat-wave",
-                 "visible":true,
-                 "width":8,
-                 "x":199.75,
-                 "y":927.75
-                }, 
-                {
-                 "height":8,
-                 "id":59,
-                 "name":"Blob",
-                 "rotation":0,
-                 "type":"blob",
-                 "visible":true,
-                 "width":8,
-                 "x":208,
-                 "y":919.875
+                 "x":168.375,
+                 "y":928.068181818182
                 }, 
                 {
                  "height":8,
@@ -770,25 +398,8 @@
                  "type":"bat-wave",
                  "visible":true,
                  "width":8,
-                 "x":200.136363636364,
-                 "y":864.272727272727
-                }, 
-                {
-                 "height":8,
-                 "id":62,
-                 "name":"Bat Wave",
-                 "properties":[
-                        {
-                         "name":"Count",
-                         "type":"string",
-                         "value":"5"
-                        }],
-                 "rotation":0,
-                 "type":"bat-wave",
-                 "visible":true,
-                 "width":8,
-                 "x":200.295454545455,
-                 "y":840.431818181818
+                 "x":31.9541818181818,
+                 "y":839.727545454545
                 }, 
                 {
                  "height":8,
@@ -815,71 +426,10 @@
                  "type":"blob",
                  "visible":true,
                  "width":8,
-                 "x":121.5,
-                 "y":904
-                }, 
-                {
-                 "height":8,
-                 "id":65,
-                 "name":"Blob",
-                 "rotation":0,
-                 "type":"blob",
-                 "visible":true,
-                 "width":8,
-                 "x":32.25,
-                 "y":760.25
-                }, 
-                {
-                 "height":8,
-                 "id":66,
-                 "name":"Bat",
-                 "properties":[
-                        {
-                         "name":"Count",
-                         "type":"string",
-                         "value":"5"
-                        }],
-                 "rotation":0,
-                 "type":"bat",
-                 "visible":true,
-                 "width":8,
-                 "x":247.25,
-                 "y":695.5
-                }, 
-                {
-                 "height":8,
-                 "id":67,
-                 "name":"Bat",
-                 "properties":[
-                        {
-                         "name":"Count",
-                         "type":"string",
-                         "value":"5"
-                        }],
-                 "rotation":0,
-                 "type":"bat",
-                 "visible":true,
-                 "width":8,
-                 "x":0.5,
-                 "y":664.5
-                }, 
-                {
-                 "height":8,
-                 "id":68,
-                 "name":"Bat",
-                 "properties":[
-                        {
-                         "name":"Count",
-                         "type":"string",
-                         "value":"5"
-                        }],
-                 "rotation":0,
-                 "type":"bat",
-                 "visible":true,
-                 "width":8,
-                 "x":0.75,
-                 "y":736
-                }, 
+                 "x":119.681818181818,
+                 "y":880.181818181818
+                },
+            
                 {
                  "height":8,
                  "id":69,
@@ -888,8 +438,8 @@
                  "type":"blob",
                  "visible":true,
                  "width":8,
-                 "x":71.75,
-                 "y":776.5
+                 "x":72.1136363636364,
+                 "y":744.318181818182
                 }, 
                 {
                  "height":8,
@@ -899,8 +449,8 @@
                  "type":"blob",
                  "visible":true,
                  "width":8,
-                 "x":120.5,
-                 "y":584.5
+                 "x":119.954545454545,
+                 "y":592.318181818182
                 }, 
                 {
                  "height":8,
@@ -911,18 +461,7 @@
                  "visible":true,
                  "width":8,
                  "x":168.25,
-                 "y":648.25
-                }, 
-                {
-                 "height":8,
-                 "id":72,
-                 "name":"Blob",
-                 "rotation":0,
-                 "type":"blob",
-                 "visible":true,
-                 "width":8,
-                 "x":215.5,
-                 "y":568.25
+                 "y":640.431818181818
                 }, 
                 {
                  "height":8,
@@ -932,8 +471,8 @@
                  "type":"blob",
                  "visible":true,
                  "width":8,
-                 "x":168,
-                 "y":608.5
+                 "x":168.75,
+                 "y":503.75
                 }, 
                 {
                  "height":8,
@@ -965,19 +504,8 @@
                  "type":"blob",
                  "visible":true,
                  "width":8,
-                 "x":32.25,
-                 "y":511.75
-                }, 
-                {
-                 "height":8,
-                 "id":77,
-                 "name":"Knight",
-                 "rotation":0,
-                 "type":"knight",
-                 "visible":true,
-                 "width":8,
-                 "x":176,
-                 "y":456.25
+                 "x":31.8863636363636,
+                 "y":519.75
                 }, 
                 {
                  "height":8,
@@ -989,17 +517,6 @@
                  "width":8,
                  "x":32,
                  "y":448.5
-                }, 
-                {
-                 "height":8,
-                 "id":79,
-                 "name":"Knight",
-                 "rotation":0,
-                 "type":"knight",
-                 "visible":true,
-                 "width":8,
-                 "x":176.25,
-                 "y":440.75
                 }, 
                 {
                  "height":8,
@@ -1028,23 +545,6 @@
                  "width":8,
                  "x":208,
                  "y":432.5
-                }, 
-                {
-                 "height":8,
-                 "id":82,
-                 "name":"Bat Wave",
-                 "properties":[
-                        {
-                         "name":"Count",
-                         "type":"string",
-                         "value":"1"
-                        }],
-                 "rotation":0,
-                 "type":"bat-wave",
-                 "visible":true,
-                 "width":8,
-                 "x":32.25,
-                 "y":424.25
                 }, 
                 {
                  "height":8,
@@ -1099,23 +599,6 @@
                 }, 
                 {
                  "height":8,
-                 "id":86,
-                 "name":"Bat Wave",
-                 "properties":[
-                        {
-                         "name":"Count",
-                         "type":"string",
-                         "value":"1"
-                        }],
-                 "rotation":0,
-                 "type":"bat-wave",
-                 "visible":true,
-                 "width":8,
-                 "x":32.5,
-                 "y":383.5
-                }, 
-                {
-                 "height":8,
                  "id":87,
                  "name":"Bat Wave",
                  "properties":[
@@ -1129,46 +612,7 @@
                  "visible":true,
                  "width":8,
                  "x":207.75,
-                 "y":383.5
-                }, 
-                {
-                 "height":8,
-                 "id":88,
-                 "name":"Bat Wave",
-                 "properties":[
-                        {
-                         "name":"Count",
-                         "type":"string",
-                         "value":"1"
-                        }],
-                 "rotation":0,
-                 "type":"bat-wave",
-                 "visible":true,
-                 "width":8,
-                 "x":32.25,
-                 "y":375.5
-                }, 
-                {
-                 "height":8,
-                 "id":90,
-                 "name":"Blob",
-                 "rotation":0,
-                 "type":"blob",
-                 "visible":true,
-                 "width":8,
-                 "x":168.25,
-                 "y":344.75
-                }, 
-                {
-                 "height":8,
-                 "id":91,
-                 "name":"Blob",
-                 "rotation":0,
-                 "type":"blob",
-                 "visible":true,
-                 "width":8,
-                 "x":32,
-                 "y":328
+                 "y":399.25
                 }, 
                 {
                  "height":8,
@@ -1424,91 +868,6 @@
                  "y":183.5
                 }, 
                 {
-                 "height":8,
-                 "id":109,
-                 "name":"Bat Wave",
-                 "properties":[
-                        {
-                         "name":"Count",
-                         "type":"string",
-                         "value":"1"
-                        }],
-                 "rotation":0,
-                 "type":"bat-wave",
-                 "visible":true,
-                 "width":8,
-                 "x":208,
-                 "y":152.25
-                }, 
-                {
-                 "height":8,
-                 "id":110,
-                 "name":"Bat Wave",
-                 "properties":[
-                        {
-                         "name":"Count",
-                         "type":"string",
-                         "value":"1"
-                        }],
-                 "rotation":0,
-                 "type":"bat-wave",
-                 "visible":true,
-                 "width":8,
-                 "x":24,
-                 "y":144
-                }, 
-                {
-                 "height":8,
-                 "id":111,
-                 "name":"Bat Wave",
-                 "properties":[
-                        {
-                         "name":"Count",
-                         "type":"string",
-                         "value":"1"
-                        }],
-                 "rotation":0,
-                 "type":"bat-wave",
-                 "visible":true,
-                 "width":8,
-                 "x":24.5,
-                 "y":128.25
-                }, 
-                {
-                 "height":8,
-                 "id":112,
-                 "name":"Bat Wave",
-                 "properties":[
-                        {
-                         "name":"Count",
-                         "type":"string",
-                         "value":"1"
-                        }],
-                 "rotation":0,
-                 "type":"bat-wave",
-                 "visible":true,
-                 "width":8,
-                 "x":208.5,
-                 "y":136
-                }, 
-                {
-                 "height":8,
-                 "id":113,
-                 "name":"Bat Wave",
-                 "properties":[
-                        {
-                         "name":"Count",
-                         "type":"string",
-                         "value":"1"
-                        }],
-                 "rotation":0,
-                 "type":"bat-wave",
-                 "visible":true,
-                 "width":8,
-                 "x":208.25,
-                 "y":120.5
-                }, 
-                {
                  "height":16,
                  "id":116,
                  "name":"Block",
@@ -1524,7 +883,8 @@
                  "width":16,
                  "x":64,
                  "y":1696
-                }, 
+                },
+            
                 {
                  "height":16,
                  "id":118,
@@ -1591,7 +951,7 @@
                  "visible":true,
                  "width":16,
                  "x":112.125,
-                 "y":1472.04166666667
+                 "y":1472.04
                 }, 
                 {
                  "height":16,
@@ -1949,6 +1309,520 @@
                  "width":16,
                  "x":224,
                  "y":864
+                }, 
+                {
+                 "height":8,
+                 "id":143,
+                 "name":"Bat Wave",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"5"
+                        }],
+                 "rotation":0,
+                 "type":"bat-wave",
+                 "visible":true,
+                 "width":8,
+                 "x":208.363636363636,
+                 "y":1408
+                }, 
+                {
+                 "height":8,
+                 "id":144,
+                 "name":"Blob",
+                 "rotation":0,
+                 "type":"blob",
+                 "visible":true,
+                 "width":8,
+                 "x":168.363636363636,
+                 "y":1336.18181818182
+                }, 
+                {
+                 "height":8,
+                 "id":145,
+                 "name":"Blob",
+                 "rotation":0,
+                 "type":"blob",
+                 "visible":true,
+                 "width":8,
+                 "x":128.363636363636,
+                 "y":1320.18181818182
+                }, 
+                {
+                 "height":8,
+                 "id":149,
+                 "name":"Blob",
+                 "rotation":0,
+                 "type":"blob",
+                 "visible":true,
+                 "width":8,
+                 "x":168,
+                 "y":1216.18181818182
+                }, 
+                {
+                 "height":8,
+                 "id":146,
+                 "name":"Bat",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"1"
+                        }],
+                 "rotation":0,
+                 "type":"bat",
+                 "visible":true,
+                 "width":8,
+                 "x":248.181818181818,
+                 "y":1247.38636363636
+                }, 
+                {
+                 "height":8,
+                 "id":147,
+                 "name":"Bat",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"2"
+                        }],
+                 "rotation":0,
+                 "type":"bat",
+                 "visible":true,
+                 "width":8,
+                 "x":0.181818181818166,
+                 "y":1240
+                }, 
+                {
+                 "height":8,
+                 "id":148,
+                 "name":"Bat",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"1"
+                        }],
+                 "rotation":0,
+                 "type":"bat",
+                 "visible":true,
+                 "width":8,
+                 "x":248.25,
+                 "y":1232.31818181818
+                },
+            
+                {
+                 "height":8,
+                 "id":150,
+                 "name":"Blob",
+                 "rotation":0,
+                 "type":"blob",
+                 "visible":true,
+                 "width":8,
+                 "x":32.3636363636363,
+                 "y":1200.18181818182
+                }, 
+                {
+                 "height":8,
+                 "id":151,
+                 "name":"Bat Wave",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"1"
+                        }],
+                 "rotation":0,
+                 "type":"bat-wave",
+                 "visible":true,
+                 "width":8,
+                 "x":216.181818181818,
+                 "y":1183.63636363636
+                }, 
+                {
+                 "height":8,
+                 "id":152,
+                 "name":"Bat Wave",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"1"
+                        }],
+                 "rotation":0,
+                 "type":"bat-wave",
+                 "visible":true,
+                 "width":8,
+                 "x":32,
+                 "y":1175.63636363636
+                }, 
+                {
+                 "height":8,
+                 "id":153,
+                 "name":"Bat Wave",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"1"
+                        }],
+                 "rotation":0,
+                 "type":"bat-wave",
+                 "visible":true,
+                 "width":8,
+                 "x":31.8181818181818,
+                 "y":1152.18181818182
+                }, 
+                {
+                 "height":8,
+                 "id":154,
+                 "name":"Bat Wave",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"1"
+                        }],
+                 "rotation":0,
+                 "type":"bat-wave",
+                 "visible":true,
+                 "width":8,
+                 "x":215.818181818182,
+                 "y":1160.36363636364
+                }, 
+                {
+                 "height":8,
+                 "id":155,
+                 "name":"Bat Wave",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"1"
+                        }],
+                 "rotation":0,
+                 "type":"bat-wave",
+                 "visible":true,
+                 "width":8,
+                 "x":216,
+                 "y":1143.81818181818
+                }, 
+                {
+                 "height":8,
+                 "id":156,
+                 "name":"Bat Wave",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"1"
+                        }],
+                 "rotation":0,
+                 "type":"bat-wave",
+                 "visible":true,
+                 "width":8,
+                 "x":31.8181818181818,
+                 "y":1136
+                }, 
+                {
+                 "height":8,
+                 "id":157,
+                 "name":"Bat Wave",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"1"
+                        }],
+                 "rotation":0,
+                 "type":"bat-wave",
+                 "visible":true,
+                 "width":8,
+                 "x":216.181818181818,
+                 "y":1111.81818181818
+                }, 
+                {
+                 "height":8,
+                 "id":158,
+                 "name":"Bat Wave",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"1"
+                        }],
+                 "rotation":0,
+                 "type":"bat-wave",
+                 "visible":true,
+                 "width":8,
+                 "x":32.3636363636364,
+                 "y":1104.36363636364
+                }, 
+                {
+                 "height":8,
+                 "id":159,
+                 "name":"Bat Wave",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"1"
+                        }],
+                 "rotation":0,
+                 "type":"bat-wave",
+                 "visible":true,
+                 "width":8,
+                 "x":32.1818181818182,
+                 "y":1088
+                }, 
+                {
+                 "height":8,
+                 "id":160,
+                 "name":"Bat Wave",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"1"
+                        }],
+                 "rotation":0,
+                 "type":"bat-wave",
+                 "visible":true,
+                 "width":8,
+                 "x":32,
+                 "y":920.181818181818
+                }, 
+                {
+                 "height":8,
+                 "id":161,
+                 "name":"Bat Wave",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"1"
+                        }],
+                 "rotation":0,
+                 "type":"bat-wave",
+                 "visible":true,
+                 "width":8,
+                 "x":216.181818181818,
+                 "y":1096.36363636364
+                }, 
+                {
+                 "height":8,
+                 "id":162,
+                 "name":"Bat Wave",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"1"
+                        }],
+                 "rotation":0,
+                 "type":"bat-wave",
+                 "visible":true,
+                 "width":8,
+                 "x":216,
+                 "y":928
+                }, 
+                {
+                 "height":8,
+                 "id":163,
+                 "name":"Bat Wave",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"1"
+                        }],
+                 "rotation":0,
+                 "type":"bat-wave",
+                 "visible":true,
+                 "width":8,
+                 "x":216.545454545455,
+                 "y":895.818181818182
+                }, 
+                {
+                 "height":8,
+                 "id":165,
+                 "name":"Bat Wave",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"1"
+                        }],
+                 "rotation":0,
+                 "type":"bat-wave",
+                 "visible":true,
+                 "width":8,
+                 "x":31.6363636363636,
+                 "y":904
+                }, 
+                {
+                 "height":8,
+                 "id":166,
+                 "name":"Bat Wave",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"1"
+                        }],
+                 "rotation":0,
+                 "type":"bat-wave",
+                 "visible":true,
+                 "width":8,
+                 "x":216,
+                 "y":912.181818181818
+                }, 
+                {
+                 "height":8,
+                 "id":167,
+                 "name":"Bat Wave",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"1"
+                        }],
+                 "rotation":0,
+                 "type":"bat-wave",
+                 "visible":true,
+                 "width":8,
+                 "x":31.6363636363636,
+                 "y":888.363636363636
+                }, 
+                {
+                 "height":8,
+                 "id":168,
+                 "name":"Blob",
+                 "rotation":0,
+                 "type":"blob",
+                 "visible":true,
+                 "width":8,
+                 "x":208,
+                 "y":895.636363636364
+                }, 
+                {
+                 "height":8,
+                 "id":169,
+                 "name":"Blob",
+                 "rotation":0,
+                 "type":"blob",
+                 "visible":true,
+                 "width":8,
+                 "x":119.818181818182,
+                 "y":912
+                }, 
+                {
+                 "height":8,
+                 "id":170,
+                 "name":"Bat Wave",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"5"
+                        }],
+                 "rotation":0,
+                 "type":"bat-wave",
+                 "visible":true,
+                 "width":8,
+                 "x":216.113636363636,
+                 "y":680.181818181818
+                }, 
+                {
+                 "height":8,
+                 "id":171,
+                 "name":"Blob",
+                 "rotation":0,
+                 "type":"blob",
+                 "visible":true,
+                 "width":8,
+                 "x":32.3636363636364,
+                 "y":720.181818181818
+                }, 
+                {
+                 "height":8,
+                 "id":173,
+                 "name":"Bat Wave",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"5"
+                        }],
+                 "rotation":0,
+                 "type":"bat-wave",
+                 "visible":true,
+                 "width":8,
+                 "x":216.5,
+                 "y":768
+                }, 
+                {
+                 "height":8,
+                 "id":174,
+                 "name":"Bat",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"5"
+                        }],
+                 "rotation":0,
+                 "type":"bat",
+                 "visible":true,
+                 "width":8,
+                 "x":0.5,
+                 "y":600.5
+                }, 
+                {
+                 "height":8,
+                 "id":175,
+                 "name":"Bat",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"5"
+                        }],
+                 "rotation":0,
+                 "type":"bat",
+                 "visible":true,
+                 "width":8,
+                 "x":247.75,
+                 "y":584.75
+                }, 
+                {
+                 "height":8,
+                 "id":176,
+                 "name":"Bat",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"5"
+                        }],
+                 "rotation":0,
+                 "type":"bat",
+                 "visible":true,
+                 "width":8,
+                 "x":247.75,
+                 "y":560.25
+                }, 
+                {
+                 "height":8,
+                 "id":177,
+                 "name":"Blob",
+                 "rotation":0,
+                 "type":"blob",
+                 "visible":true,
+                 "width":8,
+                 "x":119.5,
+                 "y":464.25
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1957,10 +1831,10 @@
          "y":0
         }],
  "nextlayerid":8,
- "nextobjectid":143,
+ "nextobjectid":178,
  "orientation":"orthogonal",
  "renderorder":"left-up",
- "tiledversion":"1.8.0",
+ "tiledversion":"1.10.2",
  "tileheight":8,
  "tilesets":[
         {
@@ -1969,6 +1843,6 @@
         }],
  "tilewidth":8,
  "type":"map",
- "version":"1.8",
+ "version":"1.10",
  "width":32
 }
