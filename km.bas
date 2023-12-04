@@ -45,7 +45,7 @@ sub run_stage(stage%)
 
         ' Process enemies shots
         if timer - g_eshot_timer >= ENEMIES_SHOTS_MS then
-            if stage% > 1 or g_row% < 110 then enemies_fire()
+            if stage% > 1 or g_row% < 125 then enemies_fire()
             g_eshot_timer=timer
         end if
 
@@ -659,7 +659,7 @@ sub enemies_fire()
     get_free_shot_slots(free_slots%())
 
     for i%=0 to bound(g_obj())
-        ' Has object or is in the min Y position?
+        ' Has object or it is in the min Y position?
         if g_obj(i%,0) = 0 or g_obj(i%,0) > 16 or g_obj(i%,2) < TILE_SIZEx2 then
             continue for
         end if
@@ -680,10 +680,11 @@ sub enemy_fire(enemy_ix%, shot_ix%)
     local enemy_spr_id%=OBJ_INI_SPRITE_ID + enemy_ix%
     local cx=sprite(W, enemy_spr_id%)/2, cy=sprite(H, enemy_spr_id%)/2
     local angle=deg(sprite(V, enemy_spr_id%, 1))
-    local idx%=22,rot%
+    local idx%=22,rot%,speed
 
     select case g_obj(enemy_ix%,0)
         case 4 ' Knight
+            speed=0.6
             rot%=fix((angle+22.5)/45)
             if rot%=0 or rot%=4 then
                 idx%=23: rot%=choice(rot%=0,2,0)
@@ -694,13 +695,15 @@ sub enemy_fire(enemy_ix%, shot_ix%)
             else
                 idx%=25: rot%=choice(rot%=1,3,2)
             end if
+        case else
+            speed=0.5
     end select
     ' Create the shot state
     g_shots(shot_ix%,0)=1                     ' weapon
     g_shots(shot_ix%,1)=g_obj(enemy_ix%,1)+cx ' X
     g_shots(shot_ix%,2)=g_obj(enemy_ix%,2)+cy ' Y
-    g_shots(shot_ix%,3)=0.5*sin(angle)        ' Speed X
-    g_shots(shot_ix%,4)=0.5*-cos(angle)       ' Speed Y
+    g_shots(shot_ix%,3)=speed*sin(angle)      ' Speed X
+    g_shots(shot_ix%,4)=speed*-cos(angle)     ' Speed Y
     ' Create the shot sprite
     sprite read shot_ix%+2, OBJ_TILE%(idx%,0), OBJ_TILE%(idx%,1), OBJ_TILE%(idx%,2), OBJ_TILE%(idx%,3), OBJ_TILES_BUFFER
     sprite show safe shot_ix%+2, g_shots(shot_ix%,1),g_shots(shot_ix%,2), 1, rot%

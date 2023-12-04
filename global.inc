@@ -1,6 +1,6 @@
 ' Global variables
 
-dim g_sound_on%=0
+dim g_sound_on%=1
 dim g_map(MAP_SIZE) as integer ' Map data
 dim g_row%                     ' Current top map row. Zero is the bottom row.
 dim g_game_tick                ' The game tick
