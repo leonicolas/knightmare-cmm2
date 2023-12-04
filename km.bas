@@ -9,7 +9,7 @@ option default float
 #include "print.inc"
 #include "init.inc"
 
-init()
+init_game()
 run_stage(1)
 page write 0: end
 

@@ -1,8 +1,8 @@
 ' Game and Stage initialization routines
 
+sub init_game()
 '
 ' Initialize the game
-sub init()
     ' screen mode
     font 1,1
     mode 3,12 ' 320x200
