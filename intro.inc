@@ -1,5 +1,3 @@
-'
-' Show the game intro
 sub intro()
     local kb%
     do while kb% <> KB_SPACE

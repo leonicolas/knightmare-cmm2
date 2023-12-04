@@ -70,8 +70,6 @@ sub run_stage(stage%)
     sprite close all
 end sub
 
-'
-' Show and countdown freeze timer
 sub process_freeze_timer()
     local fraction%=fix((g_freeze_timer - fix(g_freeze_timer)) * 100)
     print_freeze_timer(g_freeze_timer)
@@ -83,8 +81,6 @@ sub process_freeze_timer()
     end if
 end sub
 
-'
-' Show and countdown the power-up timer
 sub process_power_up_timer()
     print_power_up_timer(g_power_up_timer)
     inc g_power_up_timer, -0.03
@@ -93,8 +89,6 @@ sub process_power_up_timer()
     end if
 end sub
 
-'
-' Check the collision interruption
 sub check_collision()
     local i%
     if sprite(S) then
@@ -106,8 +100,6 @@ sub check_collision()
     end if
 end sub
 
-'
-' Process the collision
 sub process_collision(sprite_id%)
     local i%, collided_id%
     local o
@@ -143,8 +135,6 @@ sub process_collision(sprite_id%)
     next
 end sub
 
-'
-' Process the actions queue executing the enqueue actions
 sub process_actions_queue()
     local i%, time_ms, obj_id%
 
@@ -175,8 +165,6 @@ sub process_actions_queue()
     next
 end sub
 
-'
-' Replace block tiles
 sub replace_block(i%)
     local x%, y%, l%, sprite_id%, obj_id%, max_hits%=block_max_hits(i%)
 
@@ -203,22 +191,16 @@ sub replace_block(i%)
     end if
 end sub
 
-'
-' Process the player hit
 ' TODO: implement!!!
 sub hit_player(collided_id%)
 end sub
 
-'
-' Destroy the shot sprite
 sub destroy_shot(sprite_id%)
     sprite hide safe sprite_id%
     sprite close sprite_id%
     g_shots(sprite_id% - 2, 0) = 0
 end sub
 
-'
-' Process block hit. Returns true if the block was hit
 function hit_block(sprite_id%) as integer
     local i%=sprite_id% - BLOCK_INI_SPRITE_ID
     local max_hits%=block_max_hits(i%)
@@ -243,8 +225,6 @@ function hit_block(sprite_id%) as integer
     end if
 end function
 
-'
-' Collects the block bonus if it is available
 sub collect_block_bonus(sprite_id%)
     local i%=sprite_id% - BLOCK_INI_SPRITE_ID
     local max_hits%=block_max_hits(i%)
@@ -270,8 +250,6 @@ sub collect_block_bonus(sprite_id%)
     enqueue_action(1, 31+i%, sprite(X, sprite_id%), sprite(Y, sprite_id%))
 end sub
 
-'
-' Kill all visible enemies
 sub kill_all_enemies()
     local i%
     play effect KILL_ALL_ENEMIES_SFX
@@ -282,8 +260,6 @@ sub kill_all_enemies()
     next
 end sub
 
-'
-' Calculate max hits for the block
 function block_max_hits(i%) as integer
     if g_blocks(i%,0) = 6 then
         ' collected block doesn't have max hits
@@ -294,8 +270,6 @@ function block_max_hits(i%) as integer
     end if
 end function
 
-'
-' Process the enemy hit
 sub hit_enemy(enemy_sprite_id%, instakill%)
     local i%,sprite_id%
 
@@ -324,8 +298,6 @@ sub hit_enemy(enemy_sprite_id%, instakill%)
     next
 end sub
 
-'
-' Increment the score and the hiscore and update the HUD
 sub increment_score(points%)
     local i%=g_score%\NEW_LIFE_POINTS
     inc g_score%, points%
@@ -341,8 +313,6 @@ sub increment_score(points%)
     end if
 end sub
 
-'
-' Update the player lives and the HUD
 sub update_life(value%)
     if value% >= 0 then
         play effect NEW_LIFE_SFX
@@ -353,14 +323,10 @@ sub update_life(value%)
     print_lives(g_lives%)
 end sub
 
-'
-' Initialize and start the enemy death animation
 sub start_enemy_death_animation(i%)
     enqueue_action(1, 20, g_obj(i%,1), g_obj(i%,2))
 end sub
 
-'
-' Delete an object shadow
 sub delete_shadow(src_obj_ix%)
     local shadow_ix%=g_obj(src_obj_ix%,6)
 
@@ -372,8 +338,6 @@ sub delete_shadow(src_obj_ix%)
     sprite close OBJ_INI_SPRITE_ID + shadow_ix%
 end sub
 
-'
-' Animate the game objects (enemies, power-ups)
 sub animate_objects()
     local i%, obj_id%, sprite_ix%, offset%, flip%
     inc g_anim_tick%
@@ -417,8 +381,6 @@ sub animate_objects()
     next
 end sub
 
-'
-' Move screen shots
 sub move_shots()
     local i%,x,y
     for i%=0 to bound(g_shots())
@@ -437,8 +399,6 @@ sub move_shots()
     next
 end sub
 
-'
-' Move screen objects
 sub move_and_process_objects()
     local i%, sprite_id%, obj_id%, screen_offset%, offset_y%
 
@@ -511,8 +471,6 @@ sub move_and_process_objects()
     next
 end sub
 
-'
-' Spawn a new object and initialize its state and sprite
 sub spawn_object(obj_id%, x%, y%, map_data%)
     local sprite_id%, offset_x%, offset_y%, layer%=1, i%=get_free_object_slot()
     if i% < 0 then exit sub
@@ -546,8 +504,6 @@ sub spawn_object(obj_id%, x%, y%, map_data%)
     sprite show safe sprite_id%, g_obj(i%,1),g_obj(i%,2), layer%
 end sub
 
-'
-' Spawn a map block
 sub spawn_block(x%, y%, type%)
     local i%, block_id%, row%, col%
     for i%=0 to bound(g_blocks())
@@ -562,8 +518,6 @@ sub spawn_block(x%, y%, type%)
     sprite show safe BLOCK_INI_SPRITE_ID + i%, x%,0, 1
 end sub
 
-'
-' Enqueues an object spawn
 sub enqueue_action(spawn_count%, obj_id%, x%, y%, spawn_speed_ms)
     local i%
     for i%=0 to bound(g_actions_queue())
@@ -578,8 +532,6 @@ sub enqueue_action(spawn_count%, obj_id%, x%, y%, spawn_speed_ms)
     next
 end sub
 
-'
-' Create the object shadow
 sub create_shadow(obj_ix%, height%)
     local sprite_id%, i%=get_free_object_slot()
     if i% < 0 then exit sub
@@ -595,8 +547,6 @@ sub create_shadow(obj_ix%, height%)
     sprite show safe sprite_id%, g_obj(i%,1),g_obj(i%,2), 3
 end sub
 
-'
-' Find a free slot in the objects data array
 ' Returns -1 if there are no free slots
 function get_free_object_slot() as integer
     local i%
@@ -609,8 +559,6 @@ function get_free_object_slot() as integer
     next
 end function
 
-'
-' Find free slots in the shots data array.
 sub get_free_shot_slots(free_slots%())
     local i%,c%=0
     ' Starts from 3 because 0 to 2 slots are reserved for the player
@@ -622,8 +570,6 @@ sub get_free_shot_slots(free_slots%())
     next
 end sub
 
-'
-' Create the shot sprite
 sub fire()
     ' Cooldown
     if timer - g_pshot_timer < g_player_shot_ms then exit sub
@@ -650,8 +596,6 @@ sub fire()
     next
 end sub
 
-'
-' Visible enemies shoot
 sub enemies_fire()
     local i%,c%,slot_ix%
     local free_slots%(bound(g_shots())-3)
@@ -673,8 +617,6 @@ sub enemies_fire()
     next
 end sub
 
-'
-' Single enemy shoot
 sub enemy_fire(enemy_ix%, shot_ix%)
     if g_obj(enemy_ix%,2) > MAX_ENEMIES_SHOOT_Y or rnd > ENEMIES_SHOOT_CHANCE then exit sub
     local enemy_spr_id%=OBJ_INI_SPRITE_ID + enemy_ix%
@@ -709,8 +651,6 @@ sub enemy_fire(enemy_ix%, shot_ix%)
     sprite show safe shot_ix%+2, g_shots(shot_ix%,1),g_shots(shot_ix%,2), 1, rot%
 end sub
 
-'
-' Process the player movement
 sub move_player(direction%)
     local x=g_player(0), y=g_player(1)
 
@@ -738,9 +678,6 @@ sub move_player(direction%)
     end select
 end sub
 
-'
-' Check the player collision after map scroll
-' Moves the player down in case of collision
 sub check_scroll_collision()
     if map_collide(g_player()) then
         inc g_player(1),2
@@ -748,15 +685,11 @@ sub check_scroll_collision()
     end if
 end sub
 
-'
-' Destroy block sprite
 sub destroy_block(block_ix%)
     g_blocks(block_ix%,0)=0
     sprite close BLOCK_INI_SPRITE_ID + block_ix%
 end sub
 
-'
-' Scrolls the map
 sub scroll_map()
     local i%, sprite_id%
 
@@ -784,8 +717,6 @@ sub scroll_map()
     end if
 end sub
 
-'
-' Process keyboard keys
 sub process_kb()
     local kb1%=KeyDown(1), kb2%=KeyDown(2), kb3%=KeyDown(3)
 
@@ -815,7 +746,7 @@ sub process_kb()
 end sub
 
 '
-' Checks the player collision against solid tiles
+' Returns false (0) or true (1)
 function map_collide(player()) as integer
     local col%=player(0)\TILE_SIZE
     local row%=(player(1)-g_tile_px%)\TILE_SIZE+g_row%
@@ -830,9 +761,6 @@ function map_collide(player()) as integer
     ' TODO: Check horizontal wrapping collision
 end function
 
-'
-' Draw map row to the top of the screen buffer
-' and create objects sprites from the map row data
 sub process_map_row(row%)
     local tile%,col%,tx%,ty%,obj_id%,tile_data%,extra%
 

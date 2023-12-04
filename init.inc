@@ -1,8 +1,6 @@
 ' Game and Stage initialization routines
 
 sub init_game()
-'
-' Initialize the game
     ' screen mode
     font 1,1
     mode 3,12 ' 320x200
@@ -28,8 +26,6 @@ sub init_game()
     g_tile_px%=0
 end sub
 
-'
-' Initialize the given stage
 sub init_stage(stage%)
     g_kb_released%=true
     load_map(stage%)
@@ -57,8 +53,6 @@ sub init_stage(stage%)
     timer=0
 end sub
 
-'
-' Load the map to the map global array g_map
 sub load_map(stage%)
     local i%=0, value%, solid_bit%
     local file_name$ = MAPS_DIR + "stage" + str$(stage%) + ".map"
@@ -74,15 +68,10 @@ sub load_map(stage%)
     close #1
 end sub
 
-'
-' Update the map tiles position moving the current stage tiles
-' to the 0,0 buffer position. Each stage has 3 tiles rows.
 sub init_map_tiles(stage%)
     page scroll MAP_TILES_BUFFER, 0, (stage% - 1) * 3 * TILE_SIZE
 end sub
 
-'
-' Draw initial screen to the screen buffer
 sub initialize_screen_buffer()
     local row%
 
@@ -95,8 +84,6 @@ sub initialize_screen_buffer()
     page scroll SCREEN_BUFFER,0,TILE_SIZE
 end sub
 
-'
-' Initialize player state and sprite
 sub init_player()
     g_player(0)=SCREEN_WIDTH/2-TILE_SIZE  ' x
     g_player(1)=SCREEN_HEIGHT-TILE_SIZE*3 ' y
