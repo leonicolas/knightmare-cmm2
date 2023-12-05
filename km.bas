@@ -141,7 +141,7 @@ sub process_actions_queue()
     ' Process enqueued actions
     for i%=0 to bound(g_actions_queue())
         if g_actions_queue(i%, 0) = 0 then continue for
-        if timer < g_actions_queue(i%, 4) then continue for
+        if timer < g_actions_queue(i%, 5) then continue for
 
         obj_id%=g_actions_queue(i%, 1)
         ' Objects and enemies
@@ -155,34 +155,36 @@ sub process_actions_queue()
             spawn_object(obj_id%, g_actions_queue(i%, 2), g_actions_queue(i%, 3))
 
         ' Blocks
-        else
-            replace_block(obj_id%-31)
+        else if obj_id% = 31 then
+            replace_block(g_actions_queue(i%, 2))
         end if
 
         ' Decrement execution count
         inc g_actions_queue(i%, 0), -1
-        g_actions_queue(i%, 4)=timer+time_ms
+        g_actions_queue(i%, 5)=timer+time_ms
     next
 end sub
 
 sub replace_block(i%)
-    local x%, y%, l%, sprite_id%, obj_id%, max_hits%=block_max_hits(i%)
+    local max_hits%=block_max_hits(i%)
 
     if g_blocks(i%,0) < 6 and g_blocks(i%,1) > 1 and g_blocks(i%,1) < max_hits% then
         end sub
     end if
 
+    local x%, y%, l%, sprite_id%, offset%
+
     ' Calculate the block sprite index
     sprite_id%=BLOCK_INI_SPRITE_ID+i%
-    ' Calculate the object id. Block id + block type. Question mark or block type
-    obj_id%=31 + choice(g_blocks(i%,1) < max_hits%, 0, g_blocks(i%,0))
+    ' Calculate the tile X offset
+    offset%=choice(g_blocks(i%,1) < max_hits%, 0, TILE_SIZEx2*g_blocks(i%,0))
     ' Save sprite position and layer
     x%=sprite(X, sprite_id%)
     y%=sprite(Y, sprite_id%)
     l%=sprite(L, sprite_id%)
     ' Replace buffer tiles
     sprite hide safe sprite_id%
-    blit OBJ_TILE%(obj_id%,0),OBJ_TILE%(obj_id%,1), x%, y%, OBJ_TILE%(obj_id%,2), OBJ_TILE%(obj_id%,3), OBJ_TILES_BUFFER
+    blit OBJ_TILE%(31,0)+offset%,OBJ_TILE%(31,1), x%, y%, OBJ_TILE%(31,2), OBJ_TILE%(31,3), OBJ_TILES_BUFFER
     if g_blocks(i%, 0) = 6 then
         sprite close sprite_id%
         g_blocks(i%, 0) = 0
@@ -221,7 +223,7 @@ function hit_block(sprite_id%) as integer
 
     if g_blocks(i%,1)=1 or g_blocks(i%,1)=max_hits% then
         ' Spawn new block tile
-        enqueue_action(1, 31+i%, sprite(X, sprite_id%), sprite(Y, sprite_id%))
+        enqueue_action(1, 31, i%)
     end if
 end function
 
@@ -247,7 +249,7 @@ sub collect_block_bonus(sprite_id%)
     end select
 
     g_blocks(i%,0)=6
-    enqueue_action(1, 31+i%, sprite(X, sprite_id%), sprite(Y, sprite_id%))
+    enqueue_action(1, 31, i%)
 end sub
 
 sub kill_all_enemies()
@@ -489,7 +491,7 @@ sub spawn_object(obj_id%, x%, y%, map_data%)
             if x% < SCREEN_CENTER then g_obj(i%,4)=g_obj(i%,4)+180
             ' Initialize bat spawning data
             if map_data% then
-                enqueue_action(map_data%, obj_id%, x%, y%, choice(obj_id%=2, BAT_SPAWN_SPEED_MS, BAT_WAVE_SPAWN_SPEED_MS))
+                enqueue_action(map_data%, obj_id%, x%, y%,, choice(obj_id%=2, BAT_SPAWN_SPEED_MS, BAT_WAVE_SPAWN_SPEED_MS))
             end if
             ' Spawn the bat shadow
             create_shadow(i%, TILE_SIZEx2+TILE_SIZE/2)
@@ -518,16 +520,17 @@ sub spawn_block(x%, y%, type%)
     sprite show safe BLOCK_INI_SPRITE_ID + i%, x%,0, 1
 end sub
 
-sub enqueue_action(spawn_count%, obj_id%, x%, y%, spawn_speed_ms)
+sub enqueue_action(exec_count%, action_id%, gpr1, gpr2, gpr3, next_exec_ms)
     local i%
     for i%=0 to bound(g_actions_queue())
         if g_actions_queue(i%,0) then continue for
 
-        g_actions_queue(i%,0)=spawn_count% ' Spawn count
-        g_actions_queue(i%,1)=obj_id%      ' Object Id
-        g_actions_queue(i%,2)=x%           ' X
-        g_actions_queue(i%,3)=y%           ' Y
-        g_actions_queue(i%,4)=timer+spawn_speed_ms
+        g_actions_queue(i%,0)=exec_count% ' Execution count
+        g_actions_queue(i%,1)=action_id%  ' Action Id
+        g_actions_queue(i%,2)=gpr1        ' GPR 1
+        g_actions_queue(i%,3)=gpr2        ' GPR 2
+        g_actions_queue(i%,4)=gpr3        ' GPR 3
+        g_actions_queue(i%,5)=timer + next_exec_ms
         exit for
     next
 end sub
