@@ -16,7 +16,7 @@ dim g_eshot_timer              ' Enemies shots timer
 dim g_freeze_timer=-1          ' Enemies freeze timer
 dim g_power_up_timer=-1        ' Power-up timer
 
-' Player state: x, y, animation counter, weapon, speed
+' Player state: 0: x | 1: y | 2: animation counter | 3: weapon | 4: speed
 dim g_player(4)
 dim g_player_shot_ms=SHOT_COOLDOWN_MS
 dim g_player_animation_ms=PLAYER_ANIMATION_MS

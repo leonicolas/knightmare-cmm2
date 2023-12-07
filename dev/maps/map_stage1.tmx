@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="left-up" width="32" height="238" tilewidth="8" tileheight="8" infinite="0" nextlayerid="8" nextobjectid="178">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="left-up" width="32" height="238" tilewidth="8" tileheight="8" infinite="0" nextlayerid="8" nextobjectid="192">
  <editorsettings>
   <export target="map_stage1.json" format="json"/>
  </editorsettings>
@@ -24,30 +24,30 @@
   <object id="7" name="Blob" type="blob" x="72" y="1584.5" width="8" height="8"/>
   <object id="8" name="Blob" type="blob" x="31.8864" y="1560" width="8" height="8"/>
   <object id="9" name="Blob" type="blob" x="175.75" y="1552" width="8" height="8"/>
-  <object id="10" name="Bat Wave" type="bat-wave" x="207.705" y="1551.82" width="8" height="8">
+  <object id="10" name="Bat Wave" type="bat_wave" x="207.705" y="1551.82" width="8" height="8">
    <properties>
     <property name="Count" value="5"/>
    </properties>
   </object>
   <object id="11" name="Blob" type="blob" x="128.318" y="1528.27" width="8" height="8"/>
-  <object id="12" name="Bat Wave" type="bat-wave" x="208" y="1504.25" width="8" height="8">
+  <object id="12" name="Bat Wave" type="bat_wave" x="208" y="1504.25" width="8" height="8">
    <properties>
     <property name="Count" value="5"/>
    </properties>
   </object>
-  <object id="13" name="Bat Wave" type="bat-wave" x="32.2955" y="1447.82" width="8" height="8">
+  <object id="13" name="Bat Wave" type="bat_wave" x="32.2955" y="1447.82" width="8" height="8">
    <properties>
     <property name="Count" value="5"/>
    </properties>
   </object>
   <object id="16" name="Blob" type="blob" x="168.682" y="1368.23" width="8" height="8"/>
-  <object id="17" name="Blob" type="blob" x="32.1818" y="1351.5" width="8" height="8"/>
+  <object id="17" name="Blob" type="blob" x="32" y="1352" width="8" height="8"/>
   <object id="20" name="Bat" type="bat" x="248.477" y="1295.66" width="8" height="8">
    <properties>
     <property name="Count" value="2"/>
    </properties>
   </object>
-  <object id="21" name="Bat" type="bat" x="-0.409091" y="1280.43" width="8" height="8">
+  <object id="21" name="Bat" type="bat" x="0" y="1280.43" width="8" height="8">
    <properties>
     <property name="Count" value="2"/>
    </properties>
@@ -64,12 +64,12 @@
   <object id="50" name="Blob" type="blob" x="32.0682" y="944.227" width="8" height="8"/>
   <object id="56" name="Blob" type="blob" x="168.375" y="928.068" width="8" height="8"/>
   <object id="60" name="Blob" type="blob" x="32.375" y="624.375" width="8" height="8"/>
-  <object id="61" name="Bat Wave" type="bat-wave" x="31.9542" y="839.728" width="8" height="8">
+  <object id="61" name="Bat Wave" type="bat_wave" x="31.9542" y="839.728" width="8" height="8">
    <properties>
     <property name="Count" value="5"/>
    </properties>
   </object>
-  <object id="63" name="Bat Wave" type="bat-wave" x="31.75" y="800.25" width="8" height="8">
+  <object id="63" name="Bat Wave" type="bat_wave" x="31.75" y="800.25" width="8" height="8">
    <properties>
     <property name="Count" value="5"/>
    </properties>
@@ -84,85 +84,85 @@
   <object id="76" name="Blob" type="blob" x="31.8864" y="519.75" width="8" height="8"/>
   <object id="78" name="Knight" type="knight" x="32" y="448.5" width="8" height="8"/>
   <object id="80" name="Knight" type="knight" x="120" y="432.25" width="8" height="8"/>
-  <object id="81" name="Bat Wave" type="bat-wave" x="208" y="432.5" width="8" height="8">
+  <object id="81" name="Bat Wave" type="bat_wave" x="208" y="432.5" width="8" height="8">
    <properties>
     <property name="Count" value="1"/>
    </properties>
   </object>
-  <object id="83" name="Bat Wave" type="bat-wave" x="208" y="327.75" width="8" height="8">
+  <object id="83" name="Bat Wave" type="bat_wave" x="208" y="327.75" width="8" height="8">
    <properties>
     <property name="Count" value="1"/>
    </properties>
   </object>
-  <object id="84" name="Bat Wave" type="bat-wave" x="32" y="407.75" width="8" height="8">
+  <object id="84" name="Bat Wave" type="bat_wave" x="32" y="407.75" width="8" height="8">
    <properties>
     <property name="Count" value="1"/>
    </properties>
   </object>
-  <object id="85" name="Bat Wave" type="bat-wave" x="32.25" y="392" width="8" height="8">
+  <object id="85" name="Bat Wave" type="bat_wave" x="32.25" y="392" width="8" height="8">
    <properties>
     <property name="Count" value="1"/>
    </properties>
   </object>
-  <object id="87" name="Bat Wave" type="bat-wave" x="207.75" y="399.25" width="8" height="8">
+  <object id="87" name="Bat Wave" type="bat_wave" x="207.75" y="399.25" width="8" height="8">
    <properties>
     <property name="Count" value="1"/>
    </properties>
   </object>
-  <object id="92" name="Bat Wave" type="bat-wave" x="207.5" y="414.5" width="8" height="8">
+  <object id="92" name="Bat Wave" type="bat_wave" x="207.5" y="414.5" width="8" height="8">
    <properties>
     <property name="Count" value="1"/>
    </properties>
   </object>
-  <object id="93" name="Bat Wave" type="bat-wave" x="208.75" y="280" width="8" height="8">
+  <object id="93" name="Bat Wave" type="bat_wave" x="208.75" y="280" width="8" height="8">
    <properties>
     <property name="Count" value="1"/>
    </properties>
   </object>
-  <object id="94" name="Bat Wave" type="bat-wave" x="32.25" y="320" width="8" height="8">
+  <object id="94" name="Bat Wave" type="bat_wave" x="32.25" y="320" width="8" height="8">
    <properties>
     <property name="Count" value="1"/>
    </properties>
   </object>
   <object id="95" name="Blob" type="blob" x="168" y="304.5" width="8" height="8"/>
-  <object id="96" name="Bat Wave" type="bat-wave" x="208.5" y="311.75" width="8" height="8">
+  <object id="96" name="Bat Wave" type="bat_wave" x="208.5" y="311.75" width="8" height="8">
    <properties>
     <property name="Count" value="1"/>
    </properties>
   </object>
-  <object id="97" name="Bat Wave" type="bat-wave" x="32.25" y="304.25" width="8" height="8">
+  <object id="97" name="Bat Wave" type="bat_wave" x="32.25" y="304.25" width="8" height="8">
    <properties>
     <property name="Count" value="1"/>
    </properties>
   </object>
   <object id="98" name="Blob" type="blob" x="119.75" y="288.5" width="8" height="8"/>
-  <object id="99" name="Bat Wave" type="bat-wave" x="208" y="295.5" width="8" height="8">
+  <object id="99" name="Bat Wave" type="bat_wave" x="208" y="295.5" width="8" height="8">
    <properties>
     <property name="Count" value="1"/>
    </properties>
   </object>
-  <object id="100" name="Bat Wave" type="bat-wave" x="208.25" y="224" width="8" height="8">
+  <object id="100" name="Bat Wave" type="bat_wave" x="208.25" y="224" width="8" height="8">
    <properties>
     <property name="Count" value="1"/>
    </properties>
   </object>
-  <object id="101" name="Bat Wave" type="bat-wave" x="24" y="216.25" width="8" height="8">
+  <object id="101" name="Bat Wave" type="bat_wave" x="24" y="216.25" width="8" height="8">
    <properties>
     <property name="Count" value="1"/>
    </properties>
   </object>
-  <object id="102" name="Bat Wave" type="bat-wave" x="208" y="208" width="8" height="8">
+  <object id="102" name="Bat Wave" type="bat_wave" x="208" y="208" width="8" height="8">
    <properties>
     <property name="Count" value="1"/>
    </properties>
   </object>
-  <object id="103" name="Bat Wave" type="bat-wave" x="24" y="200" width="8" height="8">
+  <object id="103" name="Bat Wave" type="bat_wave" x="24" y="200" width="8" height="8">
    <properties>
     <property name="Count" value="1"/>
    </properties>
   </object>
   <object id="104" name="Knight" type="knight" x="168.5" y="208.5" width="8" height="8"/>
-  <object id="105" name="Bat Wave" type="bat-wave" x="207.75" y="192.5" width="8" height="8">
+  <object id="105" name="Bat Wave" type="bat_wave" x="207.75" y="192.5" width="8" height="8">
    <properties>
     <property name="Count" value="1"/>
    </properties>
@@ -300,7 +300,7 @@
     <property name="Type" value="queen"/>
    </properties>
   </object>
-  <object id="143" name="Bat Wave" type="bat-wave" x="208.364" y="1408" width="8" height="8">
+  <object id="143" name="Bat Wave" type="bat_wave" x="208.364" y="1408" width="8" height="8">
    <properties>
     <property name="Count" value="5"/>
    </properties>
@@ -324,95 +324,95 @@
    </properties>
   </object>
   <object id="150" name="Blob" type="blob" x="32.3636" y="1200.18" width="8" height="8"/>
-  <object id="151" name="Bat Wave" type="bat-wave" x="216.182" y="1183.64" width="8" height="8">
+  <object id="151" name="Bat Wave" type="bat_wave" x="216.182" y="1183.64" width="8" height="8">
    <properties>
     <property name="Count" value="1"/>
    </properties>
   </object>
-  <object id="152" name="Bat Wave" type="bat-wave" x="32" y="1175.64" width="8" height="8">
+  <object id="152" name="Bat Wave" type="bat_wave" x="32" y="1175.64" width="8" height="8">
    <properties>
     <property name="Count" value="1"/>
    </properties>
   </object>
-  <object id="153" name="Bat Wave" type="bat-wave" x="31.8182" y="1152.18" width="8" height="8">
+  <object id="153" name="Bat Wave" type="bat_wave" x="31.8182" y="1152.18" width="8" height="8">
    <properties>
     <property name="Count" value="1"/>
    </properties>
   </object>
-  <object id="154" name="Bat Wave" type="bat-wave" x="215.818" y="1160.36" width="8" height="8">
+  <object id="154" name="Bat Wave" type="bat_wave" x="215.818" y="1160.36" width="8" height="8">
    <properties>
     <property name="Count" value="1"/>
    </properties>
   </object>
-  <object id="155" name="Bat Wave" type="bat-wave" x="216" y="1143.82" width="8" height="8">
+  <object id="155" name="Bat Wave" type="bat_wave" x="216" y="1143.82" width="8" height="8">
    <properties>
     <property name="Count" value="1"/>
    </properties>
   </object>
-  <object id="156" name="Bat Wave" type="bat-wave" x="31.8182" y="1136" width="8" height="8">
+  <object id="156" name="Bat Wave" type="bat_wave" x="31.8182" y="1136" width="8" height="8">
    <properties>
     <property name="Count" value="1"/>
    </properties>
   </object>
-  <object id="157" name="Bat Wave" type="bat-wave" x="216.182" y="1111.82" width="8" height="8">
+  <object id="157" name="Bat Wave" type="bat_wave" x="216.182" y="1111.82" width="8" height="8">
    <properties>
     <property name="Count" value="1"/>
    </properties>
   </object>
-  <object id="158" name="Bat Wave" type="bat-wave" x="32.3636" y="1104.36" width="8" height="8">
+  <object id="158" name="Bat Wave" type="bat_wave" x="32" y="1104" width="8" height="8">
    <properties>
     <property name="Count" value="1"/>
    </properties>
   </object>
-  <object id="159" name="Bat Wave" type="bat-wave" x="32.1818" y="1088" width="8" height="8">
+  <object id="159" name="Bat Wave" type="bat_wave" x="32.1818" y="1088" width="8" height="8">
    <properties>
     <property name="Count" value="1"/>
    </properties>
   </object>
-  <object id="160" name="Bat Wave" type="bat-wave" x="32" y="920.182" width="8" height="8">
+  <object id="160" name="Bat Wave" type="bat_wave" x="32" y="920.182" width="8" height="8">
    <properties>
     <property name="Count" value="1"/>
    </properties>
   </object>
-  <object id="161" name="Bat Wave" type="bat-wave" x="216.182" y="1096.36" width="8" height="8">
+  <object id="161" name="Bat Wave" type="bat_wave" x="216.182" y="1096.36" width="8" height="8">
    <properties>
     <property name="Count" value="1"/>
    </properties>
   </object>
-  <object id="162" name="Bat Wave" type="bat-wave" x="216" y="928" width="8" height="8">
+  <object id="162" name="Bat Wave" type="bat_wave" x="216" y="928" width="8" height="8">
    <properties>
     <property name="Count" value="1"/>
    </properties>
   </object>
-  <object id="163" name="Bat Wave" type="bat-wave" x="216.545" y="895.818" width="8" height="8">
+  <object id="163" name="Bat Wave" type="bat_wave" x="216.545" y="895.818" width="8" height="8">
    <properties>
     <property name="Count" value="1"/>
    </properties>
   </object>
-  <object id="165" name="Bat Wave" type="bat-wave" x="31.6364" y="904" width="8" height="8">
+  <object id="165" name="Bat Wave" type="bat_wave" x="31.6364" y="904" width="8" height="8">
    <properties>
     <property name="Count" value="1"/>
    </properties>
   </object>
-  <object id="166" name="Bat Wave" type="bat-wave" x="216" y="912.182" width="8" height="8">
+  <object id="166" name="Bat Wave" type="bat_wave" x="216" y="912.182" width="8" height="8">
    <properties>
     <property name="Count" value="1"/>
    </properties>
   </object>
-  <object id="167" name="Bat Wave" type="bat-wave" x="31.6364" y="888.364" width="8" height="8">
+  <object id="167" name="Bat Wave" type="bat_wave" x="31.6364" y="888.364" width="8" height="8">
    <properties>
     <property name="Count" value="1"/>
    </properties>
   </object>
   <object id="168" name="Blob" type="blob" x="208" y="895.636" width="8" height="8"/>
   <object id="169" name="Blob" type="blob" x="119.818" y="912" width="8" height="8"/>
-  <object id="170" name="Bat Wave" type="bat-wave" x="216.114" y="680.182" width="8" height="8">
+  <object id="170" name="Bat Wave" type="bat_wave" x="216.114" y="680.182" width="8" height="8">
    <properties>
     <property name="Count" value="5"/>
    </properties>
   </object>
   <object id="171" name="Blob" type="blob" x="32.3636" y="720.182" width="8" height="8"/>
-  <object id="173" name="Bat Wave" type="bat-wave" x="216.5" y="768" width="8" height="8">
+  <object id="173" name="Bat Wave" type="bat_wave" x="216.5" y="768" width="8" height="8">
    <properties>
     <property name="Count" value="5"/>
    </properties>
@@ -433,5 +433,15 @@
    </properties>
   </object>
   <object id="177" name="Blob" type="blob" x="119.5" y="464.25" width="8" height="8"/>
+  <object id="179" name="Power Up" type="power_up" x="0" y="1528" width="8" height="8"/>
+  <object id="180" name="Weapon" type="weapon" x="0" y="944" width="8" height="8"/>
+  <object id="181" name="Power Up" type="power_up" x="0" y="1336" width="8" height="8"/>
+  <object id="182" name="Weapon" type="weapon" x="0" y="1144" width="8" height="8"/>
+  <object id="183" name="Power Up" type="power_up" x="0" y="840" width="8" height="8"/>
+  <object id="186" name="Weapon" type="weapon" x="0" y="752" width="8" height="8"/>
+  <object id="188" name="Power Up" type="power_up" x="0" y="568" width="8" height="8"/>
+  <object id="189" name="Power Up" type="power_up" x="0" y="368" width="8" height="8"/>
+  <object id="190" name="Weapon" type="weapon" x="0" y="176" width="8" height="8"/>
+  <object id="191" name="Power Up" type="power_up" x="0" y="1688" width="8" height="8"/>
  </objectgroup>
 </map>

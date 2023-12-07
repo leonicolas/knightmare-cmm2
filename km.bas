@@ -374,6 +374,15 @@ sub animate_objects()
                 offset%=FIRE_ANIM(g_obj(i%, 3))*TILE_SIZEx2
                 inc g_obj(i%, 3),1
 
+            case 30 ' Power up
+                if g_anim_tick% mod 1.5 > 0 then continue for
+                offset%=PUP_ANIM(0, g_obj(i%, 3))*TILE_SIZEx2
+                if g_obj(i%, 3) = bound(PUP_ANIM(),2) then
+                    g_obj(i%, 3)=0
+                else
+                    inc g_obj(i%, 3),1
+                end if
+
             case else ' Other objects
                 if g_anim_tick% mod 6 > 2 then offset%=TILE_SIZEx2
         end select
@@ -483,9 +492,9 @@ sub spawn_object(obj_id%, x%, y%, map_data%)
     g_obj(i%,0)=obj_id%             ' Object Id
     g_obj(i%,1)=x%                  ' X
     g_obj(i%,2)=y%                  ' Y
-    g_obj(i%,3)=OBJ_DATA(obj_id%,2) ' Life
-    g_obj(i%,4)=OBJ_DATA(obj_id%,3) ' GPR 1
-    g_obj(i%,5)=OBJ_DATA(obj_id%,4) ' GPR 2
+    g_obj(i%,3)=OBJ_DATA(obj_id%,2) ' GPR 1
+    g_obj(i%,4)=OBJ_DATA(obj_id%,3) ' GPR 2
+    g_obj(i%,5)=OBJ_DATA(obj_id%,4) ' GPR 3
     g_obj(i%,6)=-1                  ' Shadow index
 
     select case obj_id%
@@ -777,11 +786,16 @@ sub process_map_row(row%)
         ' Create object
         obj_id%=(tile_data% AND &H1F00) >> 8
         if obj_id% then
+            debug_print("OBJ "+str$(obj_id%));
+
             extra%=(tile_data% AND &HE000) >> 13
             select case obj_id%
+                case 30 ' Power Up
+                    spawn_object(30, g_player(0), 0)
+                    debug_print("HEY 30!!!!", 14);
                 case 31 ' Block
                     spawn_block(col%*TILE_SIZE, 0, extra%)
-                case else
+                case else ' Enemies and other objects
                     spawn_object(obj_id%, col%*TILE_SIZE, 0, extra%)
             end select
         end if
