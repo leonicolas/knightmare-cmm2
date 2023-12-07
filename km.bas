@@ -185,11 +185,9 @@ sub replace_block(i%)
     ' Replace buffer tiles
     sprite hide safe sprite_id%
     blit OBJ_TILE%(31,0)+offset%,OBJ_TILE%(31,1), x%, y%, OBJ_TILE%(31,2), OBJ_TILE%(31,3), OBJ_TILES_BUFFER
+    sprite show safe sprite_id%, x%, y%, l%
     if g_blocks(i%, 0) = 6 then
-        sprite close sprite_id%
-        g_blocks(i%, 0) = 0
-    else
-        sprite show safe sprite_id%, x%, y%, l%
+        destroy_block(i%)
     end if
 end sub
 
@@ -201,6 +199,20 @@ sub destroy_shot(sprite_id%)
     sprite hide safe sprite_id%
     sprite close sprite_id%
     g_shots(sprite_id% - 2, 0) = 0
+end sub
+
+sub destroy_object(obj_ix%)
+    local sprite_id%=OBJ_INI_SPRITE_ID + obj_ix%
+    g_obj(obj_ix%, 0)=0
+    sprite hide safe sprite_id%
+    sprite close sprite_id%
+end sub
+
+sub destroy_block(block_ix%)
+    local sprite_id%=BLOCK_INI_SPRITE_ID + block_ix%
+    g_blocks(block_ix%,0)=0
+    sprite hide safe sprite_id%
+    sprite close sprite_id%
 end sub
 
 function hit_block(sprite_id%) as integer
@@ -273,12 +285,11 @@ function block_max_hits(i%) as integer
 end function
 
 sub hit_enemy(enemy_sprite_id%, instakill%)
-    local i%,sprite_id%
+    local i%
 
     ' Delete the enemy
     for i%=0 to bound(g_obj())
-        sprite_id%=OBJ_INI_SPRITE_ID + i%
-        if sprite_id% <> enemy_sprite_id% then continue for
+        if OBJ_INI_SPRITE_ID + i% <> enemy_sprite_id% then continue for
 
         ' Decrement life
         inc g_obj(i%,3), -1 ' TODO: Implement weapon force
@@ -288,9 +299,7 @@ sub hit_enemy(enemy_sprite_id%, instakill%)
         increment_score(OBJ_POINTS(g_obj(i%,0)))
 
         ' Delete enemy's object
-        g_obj(i%,0) = 0
-        sprite hide safe sprite_id%
-        sprite close sprite_id%
+        destroy_object(i%)
 
         delete_shadow(i%)
         start_enemy_death_animation(i%)
@@ -334,10 +343,8 @@ sub delete_shadow(src_obj_ix%)
 
     if shadow_ix% < 0 then exit sub
 
-    g_obj(shadow_ix%,0) = 0
     g_obj(src_obj_ix%,6) = -1
-    sprite hide safe OBJ_INI_SPRITE_ID + shadow_ix%
-    sprite close OBJ_INI_SPRITE_ID + shadow_ix%
+    destroy_object(shadow_ix%)
 end sub
 
 sub animate_objects()
@@ -361,9 +368,7 @@ sub animate_objects()
 
             case 20 ' Fire
                 if g_obj(i%, 3) > bound(FIRE_ANIM()) then
-                    g_obj(i%, 0)=0
-                    sprite hide safe sprite_ix%
-                    sprite close sprite_ix%
+                    destroy_object(i%)
                     continue for
                 end if
                 offset%=FIRE_ANIM(g_obj(i%, 3))*TILE_SIZEx2
@@ -466,9 +471,7 @@ sub move_and_process_objects()
         else if obj_id% = 39 then ' Shadow
             delete_shadow(g_obj(i%,6))
         else
-            g_obj(i%,0)=0
-            sprite hide safe sprite_id%
-            sprite close sprite_id%
+            destroy_object(i%)
         end if
     next
 end sub
@@ -686,11 +689,6 @@ sub check_scroll_collision()
         inc g_player(1),2
         'TODO: Implement player kill by crush
     end if
-end sub
-
-sub destroy_block(block_ix%)
-    g_blocks(block_ix%,0)=0
-    sprite close BLOCK_INI_SPRITE_ID + block_ix%
 end sub
 
 sub scroll_map()
