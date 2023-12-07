@@ -27,8 +27,6 @@ const SHOT_COOLDOWN_MS=150                ' Player shot cooldown in ms
 const ENEMIES_SHOTS_MS=2000               ' Enemies shots in ms
 const PLAYER_ANIMATION_MS=300             ' Default player animation frame time in ms
 const OBJECTS_ANIMATION_MS=50             ' Objects animation frame time in ms
-const ANIM_TICK_DIVIDER=6                 ' Animation frame time tick divider. Used for slowing some animations
-const HALF_ANIM_TICK_DIVIDER=ANIM_TICK_DIVIDER/2
 
 ' Map data
 const MAP_COLS=32                         ' Map columns number

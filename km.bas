@@ -357,7 +357,7 @@ sub animate_objects()
         ' Config animation
         select case obj_id%
             case 4  ' Knight
-                if g_anim_tick% mod ANIM_TICK_DIVIDER < HALF_ANIM_TICK_DIVIDER then flip%=1
+                if g_anim_tick% mod 6 > 2 then flip%=1
 
             case 20 ' Fire
                 if g_obj(i%, 3) > bound(FIRE_ANIM()) then
@@ -370,7 +370,7 @@ sub animate_objects()
                 inc g_obj(i%, 3),1
 
             case else ' Other objects
-                if g_anim_tick% mod ANIM_TICK_DIVIDER < HALF_ANIM_TICK_DIVIDER then offset%=TILE_SIZEx2
+                if g_anim_tick% mod 6 > 2 then offset%=TILE_SIZEx2
         end select
 
         ' Read or flip next frame's sprite
@@ -433,7 +433,7 @@ sub move_and_process_objects()
                 ' Increment Y
                 inc g_obj(i%,2),OBJ_DATA(obj_id%,1)
                 ' Compensates sprite's tile misalignment
-                if g_anim_tick% mod ANIM_TICK_DIVIDER >= HALF_ANIM_TICK_DIVIDER then offset_y%=OBJ_TILE%(obj_id%,3)/2
+                if g_anim_tick% mod 6 < 3 then offset_y%=OBJ_TILE%(obj_id%,3)/2
 
             case 4 ' Knight
                 ' Check if it is time to change direction
