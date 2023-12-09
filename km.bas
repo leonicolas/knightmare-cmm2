@@ -56,7 +56,7 @@ sub run_stage(stage%)
         process_kb()
         ' Move sprites
         move_shots()
-        if g_freeze_timer < 0 then move_and_process_objects()
+        move_and_process_objects()
         ' Spawn enqueued objects
         process_actions_queue()
         ' Move player - ensure player always on top
@@ -195,6 +195,14 @@ end sub
 sub hit_player(collided_id%)
 end sub
 
+sub destroy_all_shots()
+    local i%
+
+    for i%=3 to bound(g_shots())
+        if g_shots(i%, 0) > 0 then destroy_shot(i% + 2)
+    next
+end sub
+
 sub destroy_shot(sprite_id%)
     sprite hide safe sprite_id%
     sprite close sprite_id%
@@ -255,6 +263,7 @@ sub collect_block_bonus(sprite_id%)
             update_life(1)
         case 4 ' King - Freeze enemies
             g_freeze_timer=FREEZE_TIME
+            destroy_all_shots()
         case 5 ' Barrier
             increment_score(BLOCK_POINTS)
             play effect "POINTS_SFX"
@@ -416,6 +425,8 @@ sub move_shots()
 end sub
 
 sub move_and_process_objects()
+    if g_freeze_timer >= 0 then exit sub
+
     local i%, sprite_id%, obj_id%, screen_offset%, offset_y%
 
     for i%=0 to bound(g_obj())
@@ -612,6 +623,8 @@ sub fire()
 end sub
 
 sub enemies_fire()
+    if g_freeze_timer >= 0 then exit sub
+
     local i%,c%,slot_ix%
     local free_slots%(bound(g_shots())-3)
 
