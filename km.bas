@@ -18,9 +18,9 @@ sub run_stage(stage%)
 
     do
         ' Game tick
-        if timer - g_game_tick < GAME_TICK_MS then continue do
-        g_game_tick=timer
-
+        if timer - g_prev_frame_timer < GAME_TICK_MS then continue do
+        g_delta_time=(timer-g_prev_frame_timer)/1000
+        g_prev_frame_timer=timer
 
         ' Scrolls the map
         if g_freeze_timer < 0 and g_row% >= 0 and timer - g_scroll_timer >= SCROLL_SPEED_MS then
@@ -75,7 +75,7 @@ sub process_freeze_timer()
     print_freeze_timer(g_freeze_timer)
     if fraction% = 0 or (g_freeze_timer < 4 and fraction% = 50) then play effect "FREEZE_TICK_SFX"
 
-    inc g_freeze_timer, -0.01
+    inc g_freeze_timer, -1 * g_delta_time
     if g_freeze_timer < 0 then
         clear_freeze_timer()
     end if
@@ -412,8 +412,8 @@ sub move_shots()
         ' Checks weapon id
         if g_shots(i%,0)=0 then continue for
         ' Moves shot
-        inc g_shots(i%,1),g_shots(i%,3)
-        inc g_shots(i%,2),g_shots(i%,4)
+        inc g_shots(i%,1),g_shots(i%,3)*g_delta_time
+        inc g_shots(i%,2),g_shots(i%,4)*g_delta_time
         x = g_shots(i%,1)
         y = g_shots(i%,2)
         if y < 0 or y > SCREEN_HEIGHT+TILE_SIZEx2 or x < 0 or x > SCREEN_WIDTH then
@@ -454,9 +454,9 @@ sub move_and_process_objects()
                 end if
 
                 ' Increment angle by the speed
-                inc g_obj(i%,4),OBJ_DATA(obj_id%,0)
+                inc g_obj(i%,4),OBJ_DATA(obj_id%,0)*g_delta_time
                 ' Increment Y
-                inc g_obj(i%,2),OBJ_DATA(obj_id%,1)
+                inc g_obj(i%,2),OBJ_DATA(obj_id%,1)*g_delta_time
                 ' Compensates sprite's tile misalignment
                 if g_anim_tick% mod 6 < 3 then offset_y%=OBJ_TILE%(obj_id%,3)/2
 
@@ -470,9 +470,9 @@ sub move_and_process_objects()
                 end if
 
                 if g_obj(i%,5) then
-                    inc g_obj(i%,1),OBJ_DATA(obj_id%,0)*g_obj(i%,5)
+                    inc g_obj(i%,1),OBJ_DATA(obj_id%,0)*g_delta_time*g_obj(i%,5)
                 else
-                    inc g_obj(i%,2),OBJ_DATA(obj_id%,1)
+                    inc g_obj(i%,2),OBJ_DATA(obj_id%,1)*g_delta_time
                 end if
             case 39 ' Shadow
                 g_obj(i%,1)=g_obj(g_obj(i%,6),1)
@@ -480,8 +480,8 @@ sub move_and_process_objects()
                 screen_offset%=-TILE_SIZE
 
             case else
-                inc g_obj(i%,1),OBJ_DATA(obj_id%,0)
-                inc g_obj(i%,2),OBJ_DATA(obj_id%,1)
+                inc g_obj(i%,1),OBJ_DATA(obj_id%,0)*g_delta_time
+                inc g_obj(i%,2),OBJ_DATA(obj_id%,1)*g_delta_time
         end select
 
         ' Move or destroy the sprite if out of bounds
@@ -606,11 +606,12 @@ sub fire()
         if g_shots(i%,0) then continue for
 
         ' Create the shot state
+        ' TODO: Create wapons data table
         g_shots(i%,0)=g_player(3)                   ' weapon
         g_shots(i%,1)=g_player(0)+OBJ_TILE%(40,2)/2 ' X
         g_shots(i%,2)=g_player(1)-OBJ_TILE%(40,3)-1 ' Y
         g_shots(i%,3)=0                             ' Speed X
-        g_shots(i%,4)=-2.2                          ' Speed Y
+        g_shots(i%,4)=-220                          ' Speed Y
         ' Create the shot sprite
         sprite read i%+2, OBJ_TILE%(40,0), OBJ_TILE%(40,1), OBJ_TILE%(40,2), OBJ_TILE%(40,3), OBJ_TILES_BUFFER
         sprite show safe i%+2, g_shots(i%,1),g_shots(i%,2), 1
@@ -653,8 +654,12 @@ sub enemy_fire(enemy_ix%, shot_ix%)
     local idx%=22,rot%,speed
 
     select case g_obj(enemy_ix%,0)
-        case 4 ' Knight
-            speed=0.6
+        case 1   ' Blob
+            speed=BLOB_SHOT_SPEED
+        case 2,3 ' Bat
+            speed=BAT_SHOT_SPEED
+        case 4   ' Knight
+            speed=KNIGHT_SHOT_SPEED
             rot%=fix((angle+22.5)/45)
             if rot%=0 or rot%=4 then
                 idx%=23: rot%=choice(rot%=0,2,0)
@@ -665,8 +670,6 @@ sub enemy_fire(enemy_ix%, shot_ix%)
             else
                 idx%=25: rot%=choice(rot%=1,3,2)
             end if
-        case else
-            speed=0.5
     end select
     ' Create the shot state
     g_shots(shot_ix%,0)=1                     ' weapon
@@ -684,22 +687,22 @@ sub move_player(direction%)
 
     select case direction%
         case KB_LEFT
-            inc g_player(0), -g_player(4)
+            inc g_player(0), -g_player(4)*g_delta_time
             if map_collide(g_player()) then g_player(0)=x
             if g_player(0) < 0 then g_player(0)=SCREEN_WIDTH - TILE_SIZE * 2
             check_scroll_collision()
         case KB_RIGHT
-            inc g_player(0), g_player(4)
+            inc g_player(0), g_player(4)*g_delta_time
             if map_collide(g_player()) then g_player(0)=x
             if g_player(0) > SCREEN_WIDTH - TILE_SIZE * 2 then g_player(0)=0
             check_scroll_collision()
         case KB_UP
-            inc g_player(1), -g_player(4)
+            inc g_player(1), -g_player(4)*g_delta_time
             if map_collide(g_player()) then g_player(1)=y
             if g_player(1) < TILE_SIZE * 6 then g_player(1)=TILE_SIZE * 6
             check_scroll_collision()
         case KB_DOWN
-            inc g_player(1), g_player(4)
+            inc g_player(1), g_player(4)*g_delta_time
             if map_collide(g_player()) then g_player(1)=y
             if g_player(1) > SCREEN_HEIGHT then g_player(1)=SCREEN_HEIGHT
             check_scroll_collision()
@@ -799,13 +802,10 @@ sub process_map_row(row%)
         ' Create object
         obj_id%=(tile_data% AND &H1F00) >> 8
         if obj_id% then
-            debug_print("OBJ "+str$(obj_id%));
-
             extra%=(tile_data% AND &HE000) >> 13
             select case obj_id%
                 case 30 ' Power Up
                     spawn_object(30, g_player(0), 0)
-                    debug_print("HEY 30!!!!", 14);
                 case 31 ' Block
                     spawn_block(col%*TILE_SIZE, 0, extra%)
                 case else ' Enemies and other objects

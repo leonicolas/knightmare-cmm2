@@ -33,7 +33,7 @@ const GENERAL_USE_BUFFER=6                ' General use byffer number
 
 ' Speed control
 const SCROLL_SPEED_MS=128                 ' Scroll speed in ms
-const GAME_TICK_MS=10                     ' Game tick in ms
+const GAME_TICK_MS=1000/120               ' Game tick in ms for max 120 FPS
 const SHOT_COOLDOWN_MS=150                ' Player shot cooldown in ms
 const ENEMIES_SHOTS_MS=2000               ' Enemies shots in ms
 const PLAYER_ANIMATION_MS=300             ' Default player animation frame time in ms
@@ -70,7 +70,7 @@ const TRANSPARENT_BLOCK_Y=64
 const PLAYER_SKIN_Y=0
 const PLAYER_SKIN1_X_L=0
 const PLAYER_SKIN1_X_R=TILE_SIZE*2
-const PLAYER_INIT_SPEED=0.6
+const PLAYER_INIT_SPEED=60
 const NEW_LIFE_POINTS=100000
 
 const MAX_ENEMIES_SHOOT_Y=SCREEN_HEIGHT*0.6
@@ -123,28 +123,31 @@ OBJ_TILE%(30,0)=0: OBJ_TILE%(30,1)=80: OBJ_TILE%(30,2)=16: OBJ_TILE%(30,3)=16
 OBJ_TILE%(31,0)=0: OBJ_TILE%(31,1)=104: OBJ_TILE%(31,2)=16: OBJ_TILE%(31,3)=16
 dim PUP_ANIM(4,3)=(0,3,6,9,12, 1,4,7,10,13, 0,3,6,9,12, 2,5,8,11,14)
 
-' Object data: speed X, speed Y, auxiliary data 1 and 2
+' Object data: 0: speed X | 1: speed Y | 2: GPR 1 | 3: GPR 2 | 4: GPR 3
 ' TODO: Move to data block
 dim OBJ_DATA(38,4)
 ' Blob
-OBJ_DATA(1,1)=0.15   ' Y speed
+OBJ_DATA(1,1)=20     ' Y speed
 OBJ_DATA(1,2)=1      ' Life
+const BLOB_SHOT_SPEED=70
 ' Bat
-OBJ_DATA(2,0)=0.7    ' X speed (angle increment)
-OBJ_DATA(2,1)=0.6    ' Y speed
+OBJ_DATA(2,0)=75     ' X speed (angle increment)
+OBJ_DATA(2,1)=65     ' Y speed
 OBJ_DATA(2,2)=1      ' Life
 OBJ_DATA(2,3)=90     ' Angle
 const BAT_SPAWN_SPEED_MS=500
+const BAT_SHOT_SPEED=70
 ' Bat wave
-OBJ_DATA(3,0)=1.2    ' X speed (angle increment)
-OBJ_DATA(3,1)=0.33   ' Y speed
+OBJ_DATA(3,0)=120    ' X speed (angle increment)
+OBJ_DATA(3,1)=33     ' Y speed
 OBJ_DATA(3,2)=1      ' Life
 const BAT_WAVE_SPAWN_SPEED_MS=200
 ' Knight
-OBJ_DATA(4,0)=0.4    ' X speed - applied when it changes to horizontal movement
-OBJ_DATA(4,1)=0.4    ' Y speed
+OBJ_DATA(4,0)=40     ' X speed - applied when it changes to horizontal movement
+OBJ_DATA(4,1)=40     ' Y speed
 OBJ_DATA(4,2)=3      ' Life
 const KNIGHT_CHANGE_DIRECT_DIST_PX=55
 const KNIGHT_MAX_HORIZONTAL_DIST_PX=48
+const KNIGHT_SHOT_SPEED=70
 ' Power Up
-OBJ_DATA(30,1)=0.19  ' Y speed
+OBJ_DATA(30,1)=20    ' Y speed

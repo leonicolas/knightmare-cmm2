@@ -3,7 +3,8 @@
 dim g_sound_on%=1
 dim g_map(MAP_SIZE) as integer ' Map data
 dim g_row%                     ' Current top map row. Zero is the bottom row.
-dim g_game_tick                ' The game tick
+dim g_prev_frame_timer         ' Previous frame timer value
+dim g_delta_time               ' Frame delta time
 dim g_tile_px%                 ' The rendered tile row pixel
 dim g_kb_released%             ' Tracks kb keys releasing
 
