@@ -356,7 +356,7 @@ sub animate_objects()
         ' Skip free slots and shadows
         if obj_id% = 0 or obj_id%=39 then continue for
         ' Skip enemies if freeze is enabled, except fire animation
-        if obj_id% <> 20 and g_freeze_timer >= 0 then continue for
+        if obj_id% < 20 and g_freeze_timer >= 0 then continue for
 
         offset%=0
         sprite_ix%=OBJ_INI_SPRITE_ID + i%
