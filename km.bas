@@ -21,8 +21,6 @@ sub run_stage(stage%)
         if timer - g_game_tick < GAME_TICK_MS then continue do
         g_game_tick=timer
 
-        ' Process keyboard
-        process_kb()
 
         ' Scrolls the map
         if g_freeze_timer < 0 and g_row% >= 0 and timer - g_scroll_timer >= SCROLL_SPEED_MS then
@@ -54,6 +52,8 @@ sub run_stage(stage%)
         blit 0,TILE_SIZEx2, SCREEN_OFFSET,0, SCREEN_WIDTH,SCREEN_HEIGHT, SCREEN_BUFFER
         page write SCREEN_BUFFER
 
+        ' Process keyboard
+        process_kb()
         ' Move sprites
         move_shots()
         if g_freeze_timer < 0 then move_and_process_objects()
