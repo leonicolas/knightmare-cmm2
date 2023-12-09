@@ -17,10 +17,10 @@ sub init_game()
     page write GENERAL_USE_BUFFER: cls 0
 
     page write MAP_TILES_BUFFER
-    load png MAP_TILESET_IMG
+    load png "MAP_TILESET_IMG"
 
     page write OBJ_TILES_BUFFER
-    load png OBJ_TILESET_IMG
+    load png "OBJ_TILESET_IMG"
 
     ' init stage state variables
     g_tile_px%=0
@@ -55,7 +55,7 @@ end sub
 
 sub load_map(stage%)
     local i%=0, value%, solid_bit%
-    local file_name$ = MAPS_DIR + "stage" + str$(stage%) + ".map"
+    local file_name$ = "MAPS_DIRstage" + str$(stage%) + ".map"
     open file_name$ for input as #1
     do while not eof(1)
         value%=asc(input$(1, #1))

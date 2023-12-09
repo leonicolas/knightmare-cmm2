@@ -73,7 +73,7 @@ end sub
 sub process_freeze_timer()
     local fraction%=fix((g_freeze_timer - fix(g_freeze_timer)) * 100)
     print_freeze_timer(g_freeze_timer)
-    if fraction% = 0 or (g_freeze_timer < 4 and fraction% = 50) then play effect FREEZE_TICK_SFX
+    if fraction% = 0 or (g_freeze_timer < 4 and fraction% = 50) then play effect "FREEZE_TICK_SFX"
 
     inc g_freeze_timer, -0.01
     if g_freeze_timer < 0 then
@@ -227,9 +227,9 @@ function hit_block(sprite_id%) as integer
 
     if g_sound_on% then
         if g_blocks(i%,1) < max_hits% then
-            play effect BLOCK_HIT_SFX
+            play effect "BLOCK_HIT_SFX"
         else if g_blocks(i%,1) = max_hits% then
-            play effect BLOCK_OPEN_SFX
+            play effect "BLOCK_OPEN_SFX"
         end if
     end if
 
@@ -248,7 +248,7 @@ sub collect_block_bonus(sprite_id%)
     select case g_blocks(i%,0)
         case 1 ' Hook - points
             increment_score(BLOCK_POINTS)
-            play effect POINTS_SFX
+            play effect "POINTS_SFX"
         case 2 ' Knight - kill all enemies in the screen
             kill_all_enemies()
         case 3 ' Queen - Extra life
@@ -257,7 +257,7 @@ sub collect_block_bonus(sprite_id%)
             g_freeze_timer=FREEZE_TIME
         case 5 ' Barrier
             increment_score(BLOCK_POINTS)
-            play effect POINTS_SFX
+            play effect "POINTS_SFX"
     end select
 
     g_blocks(i%,0)=6
@@ -266,7 +266,7 @@ end sub
 
 sub kill_all_enemies()
     local i%
-    play effect KILL_ALL_ENEMIES_SFX
+    play effect "KILL_ALL_ENEMIES_SFX"
     for i%=0 to bound(g_obj())
         ' Check for free slots
         if g_obj(i%,0)=0 then continue for
@@ -303,7 +303,7 @@ sub hit_enemy(enemy_sprite_id%, instakill%)
 
         delete_shadow(i%)
         start_enemy_death_animation(i%)
-        if g_sound_on% and not instakill% then play effect ENEMY_DEATH_SFX
+        if g_sound_on% and not instakill% then play effect "ENEMY_DEATH_SFX"
 
         exit for
     next
@@ -326,9 +326,9 @@ end sub
 
 sub update_life(value%)
     if value% >= 0 then
-        play effect NEW_LIFE_SFX
+        play effect "NEW_LIFE_SFX"
     else
-        play effect PLAYER_DEATH_SFX
+        play effect "PLAYER_DEATH_SFX"
     end if
     inc g_lives%, choice(value%, value%, 1)
     print_lives(g_lives%)
@@ -604,7 +604,7 @@ sub fire()
         sprite read i%+2, OBJ_TILE%(40,0), OBJ_TILE%(40,1), OBJ_TILE%(40,2), OBJ_TILE%(40,3), OBJ_TILES_BUFFER
         sprite show safe i%+2, g_shots(i%,1),g_shots(i%,2), 1
         ' Play SFX
-        if g_sound_on% then play effect SHOT_SFX
+        if g_sound_on% then play effect "SHOT_SFX"
         ' Increment timer
         g_pshot_timer=timer
         exit for

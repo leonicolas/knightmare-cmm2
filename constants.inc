@@ -8,10 +8,21 @@ const KB_DOWN=129
 const KB_LEFT=130
 const KB_RIGHT=131
 
-const MAP_TILESET_IMG="tiles/maps.png"
-const OBJ_TILESET_IMG="tiles/objects.png"
-const BOSSES_TILESET_IMG="tiles/bosses.png"
-const MAPS_DIR="maps/"
+#define "MAP_TILESET_IMG", "tiles/maps.png"
+#define "OBJ_TILESET_IMG", "tiles/objects.png"
+#define "BOSSES_TILESET_IMG", "tiles/bosses.png"
+#define "MAPS_DIR", "maps/"
+
+' Effects
+#define "SHOT_SFX", "sfx/shot.wav"
+#define "ENEMY_DEATH_SFX", "sfx/enemy_death.wav"
+#define "PLAYER_DEATH_SFX", "sfx/player_death.wav"
+#define "NEW_LIFE_SFX", "sfx/new_life.wav"
+#define "POINTS_SFX", "sfx/points.wav"
+#define "KILL_ALL_ENEMIES_SFX", "sfx/kill_all_enemies.wav"
+#define "BLOCK_HIT_SFX", "sfx/block_hit.wav"
+#define "BLOCK_OPEN_SFX", "sfx/block_open.wav"
+#define "FREEZE_TICK_SFX", "sfx/freeze_tick.wav"
 
 ' Buffers
 const SCREEN_BUFFER=2                     ' Screen buffer number
@@ -69,16 +80,6 @@ const BLOCK_POINTS=500
 const FREEZE_TIME=10
 const POWER_UP_TIME=45
 
-' Effects
-const SHOT_SFX="sfx/shot.wav"
-const ENEMY_DEATH_SFX="sfx/enemy_death.wav"
-const PLAYER_DEATH_SFX="sfx/player_death.wav"
-const NEW_LIFE_SFX="sfx/new_life.wav"
-const POINTS_SFX="sfx/points.wav"
-const KILL_ALL_ENEMIES_SFX="sfx/kill_all_enemies.wav"
-const BLOCK_HIT_SFX="sfx/block_hit.wav"
-const BLOCK_OPEN_SFX="sfx/block_open.wav"
-const FREEZE_TICK_SFX="sfx/freeze_tick.wav"
 
 ' Music table
 dim MUSIC$(9)=("music/01_intro-psg.mod", "music/02_majou-densetsu-psg.mod", "", "", "", "", "", "", "", "")
