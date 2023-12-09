@@ -89,7 +89,7 @@ sub init_player()
     g_player(1)=SCREEN_HEIGHT-TILE_SIZE*3 ' y
     g_player(2)=0                         ' animation counter
     g_player(3)=1                         ' weapon
-    g_player(4)=0.6                       ' speed
+    g_player(4)=PLAYER_INIT_SPEED         ' speed
 
     sprite read #1, PLAYER_SKIN1_X_L,PLAYER_SKIN_Y, TILE_SIZEx2,TILE_SIZEx2, OBJ_TILES_BUFFER
     sprite show safe #1, g_player(0),g_player(1), 1,,1
