@@ -150,4 +150,6 @@ const KNIGHT_CHANGE_DIRECT_DIST_PX=55
 const KNIGHT_MAX_HORIZONTAL_DIST_PX=48
 const KNIGHT_SHOT_SPEED=70
 ' Power Up
-OBJ_DATA(30,1)=20    ' Y speed
+OBJ_DATA(30,0)=50   ' X speed (angle increment)
+OBJ_DATA(30,1)=20   ' Y speed
+OBJ_DATA(30,4)=-1   ' Angle for the wobbling movement. -1 means disabled

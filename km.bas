@@ -127,7 +127,7 @@ sub process_collision(sprite_id%)
 
             ' Player shot hits an enemy
             else if sprite_id% <= 4 and collided_id% >= OBJ_INI_SPRITE_ID then
-                hit_enemy(collided_id%)
+                hit_object(collided_id%)
                 destroy_shot(sprite_id%)
             end if
             inc o,16
@@ -279,7 +279,7 @@ sub kill_all_enemies()
     for i%=0 to bound(g_obj())
         ' Check for free slots
         if g_obj(i%,0)=0 then continue for
-        hit_enemy(OBJ_INI_SPRITE_ID + i%, true)
+        hit_object(OBJ_INI_SPRITE_ID + i%, true)
     next
 end sub
 
@@ -293,27 +293,35 @@ function block_max_hits(i%) as integer
     end if
 end function
 
-sub hit_enemy(enemy_sprite_id%, instakill%)
-    local i%
+sub hit_object(enemy_sprite_id%, instakill%)
+    local i%, obj_ix%
 
-    ' Delete the enemy
     for i%=0 to bound(g_obj())
-        if OBJ_INI_SPRITE_ID + i% <> enemy_sprite_id% then continue for
+        obj_ix%=OBJ_INI_SPRITE_ID + i%
+        if obj_ix% <> enemy_sprite_id% then continue for
 
-        ' Decrement life
-        inc g_obj(i%,3), -1 ' TODO: Implement weapon force
-        if not instakill% and g_obj(i%,3) > 0 then continue for
+        select case g_obj(i%,0)
+            case 30 ' Power up
+                inc g_obj(i%,4)
+                g_obj(i%,4)=g_obj(i%,4) mod 7
+                ' Enable the wobbling movement
+                if g_obj(i%,4) > 3 and g_obj(i%,5) < 0 then g_obj(i%,5)=0
 
-        ' Increment score
-        increment_score(OBJ_POINTS(g_obj(i%,0)))
+            case else ' Enemies
+                ' Decrement life
+                inc g_obj(i%,3), -1 ' TODO: Implement weapon force
+                if not instakill% and g_obj(i%,3) > 0 then continue for
 
-        ' Delete enemy's object
-        destroy_object(i%)
+                ' Increment score
+                increment_score(OBJ_POINTS(g_obj(i%,0)))
 
-        delete_shadow(i%)
-        start_enemy_death_animation(i%)
-        if g_sound_on% and not instakill% then play effect "ENEMY_DEATH_SFX"
+                ' Delete enemy's object
+                destroy_object(i%)
 
+                delete_shadow(i%)
+                start_enemy_death_animation(i%)
+                if g_sound_on% and not instakill% then play effect "ENEMY_DEATH_SFX"
+        end select
         exit for
     next
 end sub
@@ -385,7 +393,7 @@ sub animate_objects()
 
             case 30 ' Power up
                 if g_anim_tick% mod 1.5 > 0 then continue for
-                offset%=PUP_ANIM(0, g_obj(i%, 3))*TILE_SIZEx2
+                offset%=PUP_ANIM(max(0,g_obj(i%, 4) - 2), g_obj(i%, 3))*TILE_SIZEx2
                 if g_obj(i%, 3) = bound(PUP_ANIM(),2) then
                     g_obj(i%, 3)=0
                 else
@@ -427,10 +435,10 @@ end sub
 sub move_and_process_objects()
     if g_freeze_timer >= 0 then exit sub
 
-    local i%, sprite_id%, obj_id%, screen_offset%, offset_y%
+    local i%, sprite_id%, obj_id%, screen_offset%, offset_y%, offset_x%
 
     for i%=0 to bound(g_obj())
-        offset_y%=0
+        offset_x%=0: offset_y%=0
         obj_id%=g_obj(i%,0)
 
         ' Checks object id
@@ -474,12 +482,22 @@ sub move_and_process_objects()
                 else
                     inc g_obj(i%,2),OBJ_DATA(obj_id%,1)*g_delta_time
                 end if
+
+            case 30 ' Power up
+                if g_obj(i%,5) >= 0 then
+                    offset_x%=-TILE_SIZEx4*sin(g_obj(i%,5))
+                    ' Increment angle by the speed
+                    inc g_obj(i%,5),OBJ_DATA(obj_id%,0)*g_delta_time
+                end if
+                inc g_obj(i%,2),OBJ_DATA(obj_id%,1)*g_delta_time
+
             case 39 ' Shadow
                 g_obj(i%,1)=g_obj(g_obj(i%,6),1)
                 g_obj(i%,2)=g_obj(g_obj(i%,6),2)+g_obj(i%,4)
                 screen_offset%=-TILE_SIZE
 
             case else
+                ' Increment X and Y position
                 inc g_obj(i%,1),OBJ_DATA(obj_id%,0)*g_delta_time
                 inc g_obj(i%,2),OBJ_DATA(obj_id%,1)*g_delta_time
         end select
@@ -487,7 +505,7 @@ sub move_and_process_objects()
         ' Move or destroy the sprite if out of bounds
         sprite_id%=OBJ_INI_SPRITE_ID + i%
         if not sprite(e,sprite_id%) and g_obj(i%,2) <= SCREEN_HEIGHT then
-            sprite next sprite_id%, g_obj(i%,1), g_obj(i%,2)+offset_y%
+            sprite next sprite_id%, g_obj(i%,1)+offset_x%, g_obj(i%,2)+offset_y%
         else if obj_id% = 39 then ' Shadow
             delete_shadow(g_obj(i%,6))
         else
@@ -805,7 +823,7 @@ sub process_map_row(row%)
             extra%=(tile_data% AND &HE000) >> 13
             select case obj_id%
                 case 30 ' Power Up
-                    spawn_object(30, g_player(0), 0)
+                    spawn_object(30, min(SCREEN_WIDTH-TILE_SIZE*6,max(TILE_SIZEx4,g_player(0))), 0)
                 case 31 ' Block
                     spawn_block(col%*TILE_SIZE, 0, extra%)
                 case else ' Enemies and other objects
