@@ -208,6 +208,12 @@ sub power_up(obj_ix%)
         case 0 to 2 ' Black pill
             increment_score(1000)
 
+        case 3 ' Dark blue pill - speed
+            increment_score(200)
+            if g_player(4) < PLAYER_MAX_SPEED then
+                inc g_player(4), PLAYER_SPEED_INC
+            end if
+
 
     end select
     destroy_object(obj_ix%)
@@ -721,6 +727,8 @@ end sub
 sub move_player(direction%)
     local x=g_player(0), y=g_player(1)
 
+    g_player_animation_ms=PLAYER_ANIMATION_MS-g_player(4)
+
     select case direction%
         case KB_LEFT
             inc g_player(0), -g_player(4)*g_delta_time
@@ -784,7 +792,16 @@ sub process_kb()
 
     if not kb1% and not kb2% and not kb3% then
         g_kb_released%=true
+        g_player_animation_ms=PLAYER_ANIMATION_MS
         exit sub
+    end if
+
+    if g_kb_released% and (kb1%=KB_SPACE or kb2%=KB_SPACE or kb3%=KB_SPACE) then
+        fire()
+        g_player_animation_ms=PLAYER_ANIMATION_MS
+        g_kb_released%=false
+    else if kb1%<>KB_SPACE and kb2%<>KB_SPACE and kb3%<>KB_SPACE then
+        g_kb_released%=true
     end if
 
     if kb1%=KB_LEFT or kb2%=KB_LEFT or kb3%=KB_LEFT then
@@ -797,13 +814,6 @@ sub process_kb()
         move_player(KB_UP)
     else if kb1%=KB_DOWN or kb2%=KB_DOWN or kb3%=KB_DOWN then
         move_player(KB_DOWN)
-    end if
-
-    if g_kb_released% and (kb1%=KB_SPACE or kb2%=KB_SPACE or kb3%=KB_SPACE) then
-        fire()
-        g_kb_released%=false
-    else if kb1%<>KB_SPACE and kb2%<>KB_SPACE and kb3%<>KB_SPACE then
-        g_kb_released%=true
     end if
 end sub
 
