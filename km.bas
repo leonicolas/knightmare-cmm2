@@ -108,28 +108,30 @@ sub process_collision(sprite_id%)
         if collided_id% > 63 then continue for
 
         ' Check player collision
-        if sprite_id% = 1 then
-            ' Player hits a block
-            if collided_id% >= BLOCK_INI_SPRITE_ID then
-                collect_block_bonus(collided_id%)
-            else
-                hit_player(collided_id%)
-            end if
+        select case sprite_id%
+            case 1 ' Player
+                ' Player hits a block
+                if collided_id% >= BLOCK_INI_SPRITE_ID then
+                    collect_block_bonus(collided_id%)
 
-        ' Check shot hit
-        else if sprite_id% <= SHOTS_NUM% then
-            ' Player shot hits a block
-            if sprite_id% <= 4 and collided_id% >= BLOCK_INI_SPRITE_ID then
-                if hit_block(collided_id%) then
-                    destroy_shot(sprite_id%)
+                ' Player hits an object
+                else
+                    player_hit_obj(collided_id%)
                 end if
 
-            ' Player shot hits an enemy
-            else if sprite_id% <= 4 and collided_id% >= OBJ_INI_SPRITE_ID then
-                hit_object(collided_id%)
-                destroy_shot(sprite_id%)
-            end if
-        end if
+            case is <= SHOTS_NUM% ' Check shot hit
+                ' Player shot hits a block
+                if sprite_id% <= 4 and collided_id% >= BLOCK_INI_SPRITE_ID then
+                    if hit_block(collided_id%) then
+                        destroy_shot(sprite_id%)
+                    end if
+
+                ' Player shot hits an enemy
+                else if sprite_id% <= 4 and collided_id% >= OBJ_INI_SPRITE_ID then
+                    hit_object(collided_id%)
+                    destroy_shot(sprite_id%)
+                end if
+        end select
     next
 end sub
 
@@ -187,6 +189,28 @@ sub replace_block(i%)
     if g_blocks(i%, 0) = 6 then
         destroy_block(i%)
     end if
+end sub
+
+sub player_hit_obj(collided_id%)
+    local obj_ix%=collided_id% - OBJ_INI_SPRITE_ID
+    if obj_ix% < 0 then exit sub
+    select case g_obj(obj_ix%, 0)
+        case 30 ' Power up
+            power_up(obj_ix%)
+        case else
+            hit_player(collided_id%)
+    end select
+end sub
+
+sub power_up(obj_ix%)
+    if g_obj(obj_ix%, 0) <> 30 then exit sub
+    select case g_obj(obj_ix%, 4)
+        case 0 to 2 ' Black pill
+            increment_score(1000)
+
+
+    end select
+    destroy_object(obj_ix%)
 end sub
 
 ' TODO: implement!!!
