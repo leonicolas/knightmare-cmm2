@@ -291,37 +291,33 @@ function block_max_hits(i%) as integer
     end if
 end function
 
-sub hit_object(enemy_sprite_id%, instakill%)
-    local i%, obj_ix%
+sub hit_object(obj_sprite_id%, instakill%)
+    local i%
 
-    for i%=0 to bound(g_obj())
-        obj_ix%=OBJ_INI_SPRITE_ID + i%
-        if obj_ix% <> enemy_sprite_id% then continue for
+    i%=obj_sprite_id% - OBJ_INI_SPRITE_ID
 
-        select case g_obj(i%,0)
-            case 30 ' Power up
-                inc g_obj(i%,4)
-                g_obj(i%,4)=g_obj(i%,4) mod 7
-                ' Enable the wobbling movement
-                if g_obj(i%,4) > 3 and g_obj(i%,5) < 0 then g_obj(i%,5)=0
+    select case g_obj(i%,0)
+        case 30 ' Power up
+            inc g_obj(i%,4)
+            g_obj(i%,4)=g_obj(i%,4) mod 7
+            ' Enable the wobbling movement
+            if g_obj(i%,4) > 3 and g_obj(i%,5) < 0 then g_obj(i%,5)=0
 
-            case else ' Enemies
-                ' Decrement life
-                inc g_obj(i%,3), -1 ' TODO: Implement weapon force
-                if not instakill% and g_obj(i%,3) > 0 then continue for
+        case else ' Enemies
+            ' Decrement life
+            inc g_obj(i%,3), -1 ' TODO: Implement weapon force
+            if not instakill% and g_obj(i%,3) > 0 then continue for
 
-                ' Increment score
-                increment_score(OBJ_POINTS(g_obj(i%,0)))
+            ' Increment score
+            increment_score(OBJ_POINTS(g_obj(i%,0)))
 
-                ' Delete enemy's object
-                destroy_object(i%)
+            ' Delete enemy's object
+            destroy_object(i%)
 
-                delete_shadow(i%)
-                start_enemy_death_animation(i%)
-                if g_sound_on% and not instakill% then play effect "ENEMY_DEATH_SFX"
-        end select
-        exit for
-    next
+            delete_shadow(i%)
+            start_enemy_death_animation(i%)
+            if g_sound_on% and not instakill% then play effect "ENEMY_DEATH_SFX"
+    end select
 end sub
 
 sub increment_score(points%)
