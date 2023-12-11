@@ -251,30 +251,6 @@ sub destroy_block(block_ix%)
     sprite close sprite_id%
 end sub
 
-function hit_block(sprite_id%) as integer
-    local i%=sprite_id% - BLOCK_INI_SPRITE_ID
-    local max_hits%=block_max_hits(i%)
-
-    if g_blocks(i%,1) = max_hits% then exit function
-
-    ' Increment hits
-    inc g_blocks(i%,1), 1
-    hit_block = true
-
-    if g_sound_on% then
-        if g_blocks(i%,1) < max_hits% then
-            play effect "BLOCK_HIT_SFX"
-        else if g_blocks(i%,1) = max_hits% then
-            play effect "BLOCK_OPEN_SFX"
-        end if
-    end if
-
-    if g_blocks(i%,1)=1 or g_blocks(i%,1)=max_hits% then
-        ' Spawn new block tile
-        enqueue_action(1, 31, i%)
-    end if
-end function
-
 sub collect_block_bonus(sprite_id%)
     local i%=sprite_id% - BLOCK_INI_SPRITE_ID
     local max_hits%=block_max_hits(i%)
@@ -318,6 +294,30 @@ function block_max_hits(i%) as integer
     else
         ' Special blocks need twice of hits
         block_max_hits = choice(g_blocks(i%,0) > 1, BLOCK_HITS * 2, BLOCK_HITS)
+    end if
+end function
+
+function hit_block(sprite_id%) as integer
+    local i%=sprite_id% - BLOCK_INI_SPRITE_ID
+    local max_hits%=block_max_hits(i%)
+
+    if g_blocks(i%,1) = max_hits% then exit function
+
+    ' Increment hits
+    inc g_blocks(i%,1), 1
+    hit_block = true
+
+    if g_sound_on% then
+        if g_blocks(i%,1) < max_hits% then
+            play effect "BLOCK_HIT_SFX"
+        else if g_blocks(i%,1) = max_hits% then
+            play effect "BLOCK_OPEN_SFX"
+        end if
+    end if
+
+    if g_blocks(i%,1)=1 or g_blocks(i%,1)=max_hits% then
+        ' Spawn new block tile
+        enqueue_action(1, 31, i%)
     end if
 end function
 
