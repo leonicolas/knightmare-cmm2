@@ -102,7 +102,6 @@ end sub
 
 sub process_collision(sprite_id%)
     local i%, collided_id%
-    local o
 
     for i% = 1 to sprite(C, sprite_id%)
         collided_id%=sprite(C, sprite_id%, i%)
@@ -130,7 +129,6 @@ sub process_collision(sprite_id%)
                 hit_object(collided_id%)
                 destroy_shot(sprite_id%)
             end if
-            inc o,16
         end if
     next
 end sub
