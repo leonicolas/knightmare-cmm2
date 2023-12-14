@@ -17,13 +17,12 @@ dim g_eshot_timer              ' Enemies shots timer
 dim g_freeze_timer=-1          ' Enemies freeze timer
 dim g_power_up_timer=-1        ' Power-up timer
 
-' Player state: 0: x | 1: y | 2: animation counter | 3: weapon | 4: speed
-dim g_player(4)
+' Player state: 0: x | 1: y | 2: animation counter | 3: weapon | 4: speed | 5: power up | 6: shield | 7: lives
+dim g_player(7)
 dim g_player_shot_ms=SHOT_COOLDOWN_MS
 dim g_player_animation_ms=PLAYER_ANIMATION_MS
 dim g_score%=0
 dim g_hiscore%=0
-dim g_lives%=2
 
 ' Supports 12 shots at the same time: 0: id | 1: x | 2: y | 3: speed x | 4: speed y
 ' The three first slots are for the player shots, the other ones for enemies
@@ -47,5 +46,7 @@ dim g_actions_queue(bound(g_obj()),5)
 dim g_blocks(8,1)
 dim g_anim_tick%=0
 
-const OBJ_INI_SPRITE_ID=bound(g_shots()) + 3 ' Initial sprite Id for objects
-const BLOCK_INI_SPRITE_ID=OBJ_INI_SPRITE_ID+bound(g_obj()) + 1 ' Initial sprite Id for blocks
+' Sprites 1 = Player and 2 = Shield
+const SHOTS_INI_SPRITE_ID=3                                      ' Initial sprite Id for shots
+const OBJ_INI_SPRITE_ID=SHOTS_INI_SPRITE_ID+bound(g_shots()) + 3 ' Initial sprite Id for objects
+const BLOCK_INI_SPRITE_ID=OBJ_INI_SPRITE_ID+bound(g_obj()) + 1   ' Initial sprite Id for blocks

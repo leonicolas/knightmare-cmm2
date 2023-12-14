@@ -1,7 +1,7 @@
 sub debug_print(msg$, offset%)
     page write 0
     print @(0,192+offset%) msg$
-    page write SCREEN_BUFFER
+    page write SPRITES_BUFFER
 end sub
 
 sub print_score(score%)
@@ -65,5 +65,5 @@ sub print_text(line%, col%, text$, offset%, buffer%)
         end select
         inc col%
     next
-    page write SCREEN_BUFFER
+    page write SPRITES_BUFFER
 end sub

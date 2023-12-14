@@ -14,7 +14,7 @@ sub init_game()
     page write SCREEN_BUFFER: cls 0
     page write MAP_TILES_BUFFER: cls 0
     page write OBJ_TILES_BUFFER: cls 0
-    page write GENERAL_USE_BUFFER: cls 0
+    page write SPRITES_BUFFER: cls 0
 
     page write MAP_TILES_BUFFER
     load png "MAP_TILESET_IMG"
@@ -43,7 +43,7 @@ sub init_stage(stage%)
     print_text(SCREEN_ROWS  , 3, "SCORE  HISCORE  REST  STAGE", SCREEN_OFFSET)
     print_text(SCREEN_ROWS+1, 3, "   00       00    00     00", SCREEN_OFFSET)
     print_stage(stage%)
-    print_lives(g_lives%)
+    print_lives(g_player(7))
     print_hiscore(g_hiscore%)
     print_score(g_score%)
 
@@ -90,7 +90,9 @@ sub init_player()
     g_player(2)=0                         ' animation counter
     g_player(3)=1                         ' weapon
     g_player(4)=PLAYER_INIT_SPEED         ' speed
-
+    g_player(5)=0                         ' power up
+    g_player(6)=0                         ' shield
+    page write SPRITES_BUFFER
     sprite read #1, PLAYER_SKIN1_X_L,PLAYER_SKIN_Y, TILE_SIZEx2,TILE_SIZEx2, OBJ_TILES_BUFFER
     sprite show safe #1, g_player(0),g_player(1), 1,,1
 end sub

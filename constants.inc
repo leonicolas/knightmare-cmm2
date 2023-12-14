@@ -23,13 +23,15 @@ const KB_RIGHT=131
 #define "BLOCK_HIT_SFX", "sfx/block_hit.wav"
 #define "BLOCK_OPEN_SFX", "sfx/block_open.wav"
 #define "FREEZE_TICK_SFX", "sfx/freeze_tick.wav"
+#define "POWER_UP_HIT_SFX", "sfx/power_up_hit.wav"
+#define "POWER_UP_SFX", "sfx/power_up.wav"
 
 ' Buffers
 const SCREEN_BUFFER=2                     ' Screen buffer number
 const MAP_TILES_BUFFER=3                  ' Map tileset buffer number
 const OBJ_TILES_BUFFER=4                  ' Objects tileset buffer number
 const BOSSES_TILES_BUFFER=5               ' Bosses tileset buffer number
-const GENERAL_USE_BUFFER=6                ' General use byffer number
+const SPRITES_BUFFER=6
 
 ' Speed control
 const SCROLL_SPEED_MS=128                 ' Scroll speed in ms
@@ -74,6 +76,7 @@ const PLAYER_INIT_SPEED=60
 const PLAYER_SPEED_INC=20   ' Speed increment
 const PLAYER_MAX_SPEED=PLAYER_INIT_SPEED+PLAYER_SPEED_INC*4
 const NEW_LIFE_POINTS=100000
+const SHIELD_MAX_HITS=40
 
 const MAX_ENEMIES_SHOOT_Y=SCREEN_HEIGHT*0.6
 const ENEMIES_SHOOT_CHANCE=0.7
@@ -124,6 +127,8 @@ OBJ_TILE%(30,0)=0: OBJ_TILE%(30,1)=80: OBJ_TILE%(30,2)=16: OBJ_TILE%(30,3)=16
 ' Blocks
 OBJ_TILE%(31,0)=0: OBJ_TILE%(31,1)=104: OBJ_TILE%(31,2)=16: OBJ_TILE%(31,3)=16
 dim PUP_ANIM(4,3)=(0,3,6,9,12, 1,4,7,10,13, 0,3,6,9,12, 2,5,8,11,14)
+' Shield
+OBJ_TILE%(32,0)=184: OBJ_TILE%(32,1)=48: OBJ_TILE%(32,2)=16: OBJ_TILE%(32,3)=7
 
 ' Object data: 0: speed X | 1: speed Y | 2: GPR 1 | 3: GPR 2 | 4: GPR 3
 ' TODO: Move to data block
