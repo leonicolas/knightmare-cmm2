@@ -33,16 +33,15 @@ sub run_stage(stage%)
             g_scroll_timer=timer
         end if
 
-        ' Process player animation
-        if timer - g_player_timer >= g_player_animation_ms then
-            animate_player()
-            g_player_timer=timer
-        end if
+        ' Process keyboard
+        process_kb()
 
-        ' Process objects animation
-        if timer - g_obj_timer >= OBJECTS_ANIMATION_MS then
+        ' Process animations
+        if timer - g_anim_timer >= ANIM_TICK_MS then
+            inc g_anim_tick%
+            animate_player()
             animate_objects()
-            g_obj_timer=timer
+            g_anim_timer=timer
         end if
 
         ' Process enemies shots
@@ -51,15 +50,14 @@ sub run_stage(stage%)
             g_eshot_timer=timer
         end if
 
-        ' Process keyboard
-        process_kb()
-
         ' Move sprites
         move_shots()
         move_and_process_objects()
         ' Spawn enqueued objects
         process_actions_queue()
         sprite move
+        ' Move player ensuring always on top
+        sprite show safe 1, g_player(0), g_player(1),1,,1
 
         ' Map and sprites rendering
         page write 0
@@ -91,8 +89,10 @@ end sub
 
 sub process_power_up_timer()
     print_power_up_timer(g_power_up_timer)
-    inc g_power_up_timer, -0.03
+    inc g_power_up_timer, -0.025
     if g_power_up_timer < 0 then
+        ' Checks if the player has a shield
+        g_player(5)=choice(g_player(6) > 0, 1, 0)
         clear_power_up_timer()
     end if
 end sub
@@ -206,7 +206,6 @@ sub replace_block(block_ix%)
     ' Calculate the block sprite index
     sprite_id%=BLOCK_INI_SPRITE_ID+block_ix%
     ' Calculate the tile X offset
-    debug_print("B: "+str$(g_blocks(block_ix%,0))+" - "+str$(g_blocks(block_ix%,1)))
     if g_blocks(block_ix%,0) = 6 or g_blocks(block_ix%,1) >= max_hits% then
         offset%=TILE_SIZEx2*g_blocks(block_ix%,0)
     end if
@@ -232,7 +231,13 @@ sub player_hit_obj(collided_id%)
         case 30 ' Power up
             power_up(obj_ix%)
         case else
-            hit_player(collided_id%)
+            ' If player has invincibility
+            if g_player(5) = 4 then
+                hit_object(collided_id%, true)
+            ' If player is not invisible
+            else if g_player(5) <> 2 then
+                hit_player(collided_id%)
+            end if
     end select
 end sub
 
@@ -253,16 +258,21 @@ sub power_up(obj_ix%)
         case 4 ' Blue pill - shield
             increment_score(200)
             if g_sound_on% then play effect "POWER_UP_SFX"
+            g_player(5)=1
             g_player(6)=SHIELD_MAX_HITS
             enqueue_action(1, 32)
 
         case 5 ' White pill - invisibility
             increment_score(200)
             if g_sound_on% then play effect "POWER_UP_SFX"
+            g_player(5)=2
+            g_power_up_timer=POWER_UP_TIME
 
         case 6 ' Red pill - invincibility
             increment_score(200)
             if g_sound_on% then play effect "POWER_UP_SFX"
+            g_player(5)=4
+            g_power_up_timer=POWER_UP_TIME
 
     end select
     destroy_object(obj_ix%)
@@ -329,7 +339,7 @@ end sub
 
 sub kill_all_enemies()
     local i%
-    play effect "KILL_ALL_ENEMIES_SFX"
+    if g_sound_on% then play effect "KILL_ALL_ENEMIES_SFX"
     for i%=0 to bound(g_obj())
         ' Check for free slots
         if g_obj(i%,0)=0 then continue for
@@ -531,8 +541,8 @@ sub get_free_shot_slots(free_slots%())
 end sub
 
 sub fire()
-    ' Cooldown
-    if timer - g_pshot_timer < g_player_shot_ms then exit sub
+    ' Cooldown or invincibility power-up
+    if timer - g_pshot_timer < g_player_shot_ms or g_player(5) = 4 then exit sub
 
     local i%, sprite_id%
     ' Two or three shots depending on the weapon level
@@ -543,7 +553,7 @@ sub fire()
         ' Create the shot state
         ' TODO: Create weapons data table
         g_shots(i%,0)=g_player(3)                   ' weapon
-        g_shots(i%,1)=g_player(0)+OBJ_TILE%(40,2)/2 ' X
+        g_shots(i%,1)=g_player(0)+(OBJ_TILE%(40,2)+TILE_SIZE/2)/2 ' X
         g_shots(i%,2)=g_player(1)-OBJ_TILE%(40,3)-1 ' Y
         g_shots(i%,3)=0                             ' Speed X
         g_shots(i%,4)=-220                          ' Speed Y
@@ -622,43 +632,56 @@ end sub
 
 sub move_player(direction%)
     local x=g_player(0), y=g_player(1)
-
-    g_player_animation_ms=PLAYER_ANIMATION_MS-g_player(4)
-
+    ' Player speed or max speed for invincibility power-up
+    local speed=choice(g_player(5)=4,PLAYER_MAX_SPEED,g_player(4))
     select case direction%
         case KB_LEFT
-            inc g_player(0), -g_player(4)*g_delta_time
+            inc g_player(0), -speed*g_delta_time
             if map_collide(g_player()) then g_player(0)=x
             if g_player(0) < 0 then g_player(0)=SCREEN_WIDTH - TILE_SIZE * 2
+            g_player_is_moving=true
             check_scroll_collision()
         case KB_RIGHT
-            inc g_player(0), g_player(4)*g_delta_time
+            inc g_player(0), speed*g_delta_time
             if map_collide(g_player()) then g_player(0)=x
             if g_player(0) > SCREEN_WIDTH - TILE_SIZE * 2 then g_player(0)=0
+            g_player_is_moving=true
             check_scroll_collision()
         case KB_UP
-            inc g_player(1), -g_player(4)*g_delta_time
+            inc g_player(1), -speed*g_delta_time
             if map_collide(g_player()) then g_player(1)=y
             if g_player(1) < TILE_SIZE * 6 then g_player(1)=TILE_SIZE * 6
+            g_player_is_moving=true
             check_scroll_collision()
         case KB_DOWN
-            inc g_player(1), g_player(4)*g_delta_time
+            inc g_player(1), speed*g_delta_time
             if map_collide(g_player()) then g_player(1)=y
             if g_player(1) > SCREEN_HEIGHT then g_player(1)=SCREEN_HEIGHT
+            g_player_is_moving=true
             check_scroll_collision()
     end select
-
-    sprite next 1, g_player(0), g_player(1)
 end sub
 
 sub animate_player()
-    g_player(2)=not g_player(2)
-    sprite read #1, choice(g_player(2),PLAYER_SKIN1_X_R,PLAYER_SKIN1_X_L), PLAYER_SKIN_Y, TILE_SIZEx2, TILE_SIZEx2, OBJ_TILES_BUFFER
+    local offset%
+    local speed=choice(g_player(5)=4,PLAYER_MAX_SPEED,g_player(4))
+    inc g_player(2),choice(g_player_is_moving,2+speed/PLAYER_INIT_SPEED,1)
+    select case g_player(5)
+        case 1
+            if sprite(X, 2) > 1000 then sprite show safe 2, g_player(0),g_player(1)-TILE_SIZE, 1
+        case is > 1
+            if g_power_up_timer > 10 or (g_power_up_timer - fix(g_power_up_timer)) > 0.5 then
+                offset%=TILE_SIZEx2*g_player(5)
+            end if
+            if sprite(X, 2) < 1000 then sprite hide safe 2
+    end select
+
+    local x%=choice(g_player(2) mod 10 < 10/2,PLAYER_SKIN1_X_R,PLAYER_SKIN1_X_L)
+    sprite read #1, x%+offset%, PLAYER_SKIN_Y, TILE_SIZEx2, TILE_SIZEx2, OBJ_TILES_BUFFER
 end sub
 
 sub animate_objects()
     local i%, obj_id%, sprite_ix%, offset%, flip%
-    inc g_anim_tick%
 
     for i%=0 to bound(g_obj())
         obj_id% = g_obj(i%, 0)
@@ -856,15 +879,15 @@ end sub
 sub process_kb()
     local kb1%=KeyDown(1), kb2%=KeyDown(2), kb3%=KeyDown(3)
 
+    g_player_is_moving=false
+
     if not kb1% and not kb2% and not kb3% then
         g_kb_released%=true
-        g_player_animation_ms=PLAYER_ANIMATION_MS
         exit sub
     end if
 
     if g_kb_released% and (kb1%=KB_SPACE or kb2%=KB_SPACE or kb3%=KB_SPACE) then
         fire()
-        g_player_animation_ms=PLAYER_ANIMATION_MS
         g_kb_released%=false
     else if kb1%<>KB_SPACE and kb2%<>KB_SPACE and kb3%<>KB_SPACE then
         g_kb_released%=true

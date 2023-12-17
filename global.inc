@@ -1,6 +1,6 @@
 ' Global variables
 
-dim g_sound_on%=1
+dim g_sound_on%=0
 dim g_map(MAP_SIZE) as integer ' Map data
 dim g_row%                     ' Current top map row. Zero is the bottom row.
 dim g_prev_frame_timer         ' Previous frame timer value
@@ -11,7 +11,7 @@ dim g_kb_released%             ' Tracks kb keys releasing
 ' Timers
 dim g_scroll_timer             ' Scroll timer
 dim g_player_timer             ' Player timer
-dim g_obj_timer                ' Objects timer
+dim g_anim_timer                ' Objects timer
 dim g_pshot_timer              ' Player shot timer
 dim g_eshot_timer              ' Enemies shots timer
 dim g_freeze_timer=-1          ' Enemies freeze timer
@@ -19,8 +19,8 @@ dim g_power_up_timer=-1        ' Power-up timer
 
 ' Player state: 0: x | 1: y | 2: animation counter | 3: weapon | 4: speed | 5: power up | 6: shield | 7: lives
 dim g_player(7)
+dim g_player_is_moving=false
 dim g_player_shot_ms=SHOT_COOLDOWN_MS
-dim g_player_animation_ms=PLAYER_ANIMATION_MS
 dim g_score%=0
 dim g_hiscore%=0
 

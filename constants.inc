@@ -38,8 +38,7 @@ const SCROLL_SPEED_MS=128                 ' Scroll speed in ms
 const GAME_TICK_MS=1000/120               ' Game tick in ms for max 120 FPS
 const SHOT_COOLDOWN_MS=150                ' Player shot cooldown in ms
 const ENEMIES_SHOTS_MS=2000               ' Enemies shots in ms
-const PLAYER_ANIMATION_MS=300             ' Default player animation frame time in ms
-const OBJECTS_ANIMATION_MS=50             ' Objects animation frame time in ms
+const ANIM_TICK_MS=50                     ' Animation frame time in ms
 
 ' Map data
 const MAP_COLS=32                         ' Map columns number
@@ -74,7 +73,7 @@ const PLAYER_SKIN1_X_L=0
 const PLAYER_SKIN1_X_R=TILE_SIZE*2
 const PLAYER_INIT_SPEED=60
 const PLAYER_SPEED_INC=20   ' Speed increment
-const PLAYER_MAX_SPEED=PLAYER_INIT_SPEED+PLAYER_SPEED_INC*4
+const PLAYER_MAX_SPEED=PLAYER_INIT_SPEED+PLAYER_SPEED_INC*3
 const NEW_LIFE_POINTS=100000
 const SHIELD_MAX_HITS=40
 
