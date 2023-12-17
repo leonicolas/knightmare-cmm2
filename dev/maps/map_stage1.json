@@ -1923,17 +1923,6 @@
                  "width":8,
                  "x":0,
                  "y":176
-                }, 
-                {
-                 "height":8,
-                 "id":191,
-                 "name":"Power Up",
-                 "rotation":0,
-                 "type":"power_up",
-                 "visible":true,
-                 "width":8,
-                 "x":0,
-                 "y":1688
                 }],
          "opacity":1,
          "type":"objectgroup",

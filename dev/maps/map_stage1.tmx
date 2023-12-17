@@ -442,6 +442,5 @@
   <object id="188" name="Power Up" type="power_up" x="0" y="568" width="8" height="8"/>
   <object id="189" name="Power Up" type="power_up" x="0" y="368" width="8" height="8"/>
   <object id="190" name="Weapon" type="weapon" x="0" y="176" width="8" height="8"/>
-  <object id="191" name="Power Up" type="power_up" x="0" y="1688" width="8" height="8"/>
  </objectgroup>
 </map>
