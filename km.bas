@@ -397,7 +397,7 @@ sub hit_object(obj_sprite_id%, instakill%)
         case else ' Enemies
             ' Decrement life
             inc g_obj(i%,3), -1 ' TODO: Implement weapon force
-            if not instakill% and g_obj(i%,3) > 0 then continue for
+            if not instakill% and g_obj(i%,3) > 0 then exit sub
 
             ' Increment score
             increment_score(OBJ_POINTS(g_obj(i%,0)))
@@ -407,7 +407,7 @@ sub hit_object(obj_sprite_id%, instakill%)
 
             delete_shadow(i%)
             start_enemy_death_animation(i%)
-            if g_sound_on% and not instakill% then play effect "ENEMY_DEATH_SFX"
+            if g_sound_on% then play effect "ENEMY_DEATH_SFX"
     end select
 end sub
 
