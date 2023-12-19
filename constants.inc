@@ -25,6 +25,7 @@ const KB_RIGHT=131
 #define "FREEZE_TICK_SFX", "sfx/freeze_tick.wav"
 #define "POWER_UP_HIT_SFX", "sfx/power_up_hit.wav"
 #define "POWER_UP_SFX", "sfx/power_up.wav"
+#define "POWER_UP_ENDING", "sfx/power_up_ending.wav"
 
 ' Buffers
 const SCREEN_BUFFER=2                     ' Screen buffer number

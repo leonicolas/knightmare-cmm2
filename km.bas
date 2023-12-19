@@ -90,6 +90,9 @@ end sub
 sub process_power_up_timer()
     print_power_up_timer(g_power_up_timer)
     inc g_power_up_timer, -0.025
+    if g_power_up_timer < 11 and fix(g_power_up_timer*100) = fix(g_power_up_timer)*100 then
+        if g_sound_on% then play effect "POWER_UP_ENDING"
+    end if
     if g_power_up_timer < 0 then
         ' Checks if the player has a shield
         g_player(5)=choice(g_player(6) > 0, 1, 0)
