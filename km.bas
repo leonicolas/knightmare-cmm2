@@ -346,7 +346,7 @@ sub kill_all_enemies()
     for i%=0 to bound(g_obj())
         ' Check for free slots
         if g_obj(i%,0)=0 then continue for
-        hit_object(OBJ_INI_SPRITE_ID + i%, true)
+        hit_object(OBJ_INI_SPRITE_ID + i%, true, true)
     next
 end sub
 
@@ -384,7 +384,7 @@ function hit_block(sprite_id%) as integer
     end if
 end function
 
-sub hit_object(obj_sprite_id%, instakill%)
+sub hit_object(obj_sprite_id%, instakill%, no_sfx%)
     local i%
 
     i%=obj_sprite_id% - OBJ_INI_SPRITE_ID
@@ -395,7 +395,7 @@ sub hit_object(obj_sprite_id%, instakill%)
             g_obj(i%,4)=g_obj(i%,4) mod 7
             ' Enable the wobbling movement
             if g_obj(i%,4) > 3 and g_obj(i%,5) < 0 then g_obj(i%,5)=0
-            if g_sound_on% then play effect "POWER_UP_HIT_SFX"
+            if g_sound_on% and not no_sfx% then play effect "POWER_UP_HIT_SFX"
 
         case else ' Enemies
             ' Decrement life
@@ -410,7 +410,7 @@ sub hit_object(obj_sprite_id%, instakill%)
 
             delete_shadow(i%)
             start_enemy_death_animation(i%)
-            if g_sound_on% then play effect "ENEMY_DEATH_SFX"
+            if g_sound_on% and not no_sfx% then play effect "ENEMY_DEATH_SFX"
     end select
 end sub
 
