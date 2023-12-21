@@ -130,7 +130,7 @@ sub process_collision(sprite_id%)
                     player_hit_obj(collided_id%)
                 end if
             case 2 ' Shield
-
+                ' TODO: Implement
             case is <= SHOTS_NUM% ' Check shot hit
                 ' Player shot. Three first shots slots
                 if sprite_id% >= SHOTS_INI_SPRITE_ID and sprite_id% < SHOTS_INI_SPRITE_ID + 3 then
@@ -140,7 +140,7 @@ sub process_collision(sprite_id%)
                             destroy_shot(sprite_id%)
                         end if
 
-                    ' Shots an enemy
+                    ' Hits an objects
                     else if collided_id% >= OBJ_INI_SPRITE_ID then
                         hit_object(collided_id%)
                         destroy_shot(sprite_id%)
@@ -231,8 +231,12 @@ sub player_hit_obj(collided_id%)
     local obj_ix%=collided_id% - OBJ_INI_SPRITE_ID
     if obj_ix% < 0 then exit sub
     select case g_obj(obj_ix%, 0)
-        case 30 ' Power up
+        case 29 ' Weapon chrystal
+            change_weapon(obj_ix%)
+            destroy_object(obj_ix%)
+        case 30 ' Power-up chrystal
             power_up(obj_ix%)
+            destroy_object(obj_ix%)
         case else
             ' If player has invincibility
             if g_player(5) = 4 then
@@ -241,6 +245,21 @@ sub player_hit_obj(collided_id%)
             else if g_player(5) <> 2 then
                 hit_player(collided_id%)
             end if
+    end select
+end sub
+
+sub change_weapon(obj_ix%)
+    if g_obj(obj_ix%, 0) <> 29 then exit sub
+    select case g_obj(obj_ix%, 4)
+        case 0 to 2 ' No weapon
+            increment_score(1000)
+            if g_sound_on% then play effect "POINTS_SFX"
+        case else ' Weapon chrystal
+            increment_score(200)
+            if g_sound_on% then play effect "POINTS_SFX"
+            local weapon% = g_obj(obj_ix%, 4) - 1
+            if weapon% = 5 then increase_player_speed()
+            g_player(3)=weapon% + choice(g_player(3)=weapon% or g_player(3)=weapon%+5, 5, 0)
     end select
 end sub
 
@@ -253,9 +272,7 @@ sub power_up(obj_ix%)
 
         case 3 ' Dark blue pill - speed
             increment_score(200)
-            if g_player(4) < PLAYER_MAX_SPEED then
-                inc g_player(4), PLAYER_SPEED_INC
-            end if
+            increase_player_speed()
             if g_sound_on% then play effect "POWER_UP_SFX"
 
         case 4 ' Blue pill - shield
@@ -278,8 +295,11 @@ sub power_up(obj_ix%)
             g_power_up_timer=POWER_UP_TIME
 
     end select
-    destroy_object(obj_ix%)
 end sub
+
+sub increase_player_speed()
+    if g_player(4) < PLAYER_MAX_SPEED then inc g_player(4), PLAYER_SPEED_INC
+end if
 
 ' TODO: implement!!!
 sub hit_player(collided_id%)
@@ -390,9 +410,9 @@ sub hit_object(obj_sprite_id%, instakill%, no_sfx%)
     i%=obj_sprite_id% - OBJ_INI_SPRITE_ID
 
     select case g_obj(i%,0)
-        case 30 ' Power up
+        case 29,30 ' Weapon and power-up chrystal
             inc g_obj(i%,4)
-            g_obj(i%,4)=g_obj(i%,4) mod 7
+            g_obj(i%,4)=g_obj(i%,4) mod choice(g_obj(i%,0) = 29, 8, 7)
             ' Enable the wobbling movement
             if g_obj(i%,4) > 3 and g_obj(i%,5) < 0 then g_obj(i%,5)=0
             if g_sound_on% and not no_sfx% then play effect "POWER_UP_HIT_SFX"
@@ -547,23 +567,28 @@ sub fire()
     ' Cooldown or invincibility power-up
     if timer - g_pshot_timer < g_player_shot_ms or g_player(5) = 4 then exit sub
 
-    local i%, sprite_id%
-    ' Two or three shots depending on the weapon level
-    for i%=0 to choice(g_player(3)>5,2,1)
+    local i%, sprite_id%, weapon%, shots%=choice(g_player(3)>6,2,1)
+    ' Flames weapon only shots once
+    if g_player(3)=3 or g_player(3)=8 then shots%=0
+
+    ' One, two or three shots depending on the weapon level
+    for i%=0 to shots%
         ' Ignore used slots
         if g_shots(i%,0) then continue for
 
+        weapon%=39 + (g_player(3) - choice(g_player(3)>6,5,0))
+        debug_print("W: "+str$(g_player(3))+" - "+str$(weapon%))
         ' Create the shot state
         ' TODO: Create weapons data table
         g_shots(i%,0)=g_player(3)                   ' weapon
-        g_shots(i%,1)=g_player(0)+(OBJ_TILE%(40,2)+TILE_SIZE/2)/2 ' X
-        g_shots(i%,2)=g_player(1)-OBJ_TILE%(40,3)-1 ' Y
+        g_shots(i%,1)=g_player(0)+TILE_SIZE-OBJ_TILE%(weapon%,2)/2 ' X
+        g_shots(i%,2)=g_player(1)-OBJ_TILE%(weapon%,3)-1 ' Y
         g_shots(i%,3)=0                             ' Speed X
         g_shots(i%,4)=-220                          ' Speed Y
 
         ' Create the shot sprite
         sprite_id%=SHOTS_INI_SPRITE_ID+i%
-        sprite read sprite_id%, OBJ_TILE%(40,0), OBJ_TILE%(40,1), OBJ_TILE%(40,2), OBJ_TILE%(40,3), OBJ_TILES_BUFFER
+        sprite read sprite_id%, OBJ_TILE%(weapon%,0), OBJ_TILE%(weapon%,1), OBJ_TILE%(weapon%,2), OBJ_TILE%(weapon%,3), OBJ_TILES_BUFFER
         sprite show safe sprite_id%, g_shots(i%,1),g_shots(i%,2), 1
         ' Play SFX
         if g_sound_on% then play effect "SHOT_SFX"
@@ -709,14 +734,14 @@ sub animate_objects()
                 offset%=FIRE_ANIM(g_obj(i%, 3))*TILE_SIZEx2
                 inc g_obj(i%, 3),1
 
-            case 30 ' Power up
+            case 29 ' Weapon chrystal
+                offset%=WEAPON_ANIM(max(0,g_obj(i%, 4) - 2), g_obj(i%, 3))*TILE_SIZEx2
+                if g_obj(i%, 3) = bound(WEAPON_ANIM(),2) then g_obj(i%, 3)=0 else inc g_obj(i%, 3),1
+
+            case 30 ' Power-up chrystal
                 if g_anim_tick% mod 1.5 > 0 then continue for
                 offset%=PUP_ANIM(max(0,g_obj(i%, 4) - 2), g_obj(i%, 3))*TILE_SIZEx2
-                if g_obj(i%, 3) = bound(PUP_ANIM(),2) then
-                    g_obj(i%, 3)=0
-                else
-                    inc g_obj(i%, 3),1
-                end if
+                if g_obj(i%, 3) = bound(PUP_ANIM(),2) then g_obj(i%, 3)=0 else inc g_obj(i%, 3),1
 
             case 32 ' Shield
                 if g_player(6) < SHIELD_MAX_HITS*1/3 then
@@ -812,7 +837,7 @@ sub move_and_process_objects()
                     inc g_obj(i%,2),OBJ_DATA(obj_id%,1)*g_delta_time
                 end if
 
-            case 30 ' Power up
+            case 29,30 ' Weapon and power-up chrystal
                 if g_obj(i%,5) >= 0 then
                     offset_x%=-TILE_SIZEx4*sin(g_obj(i%,5))
                     ' Increment angle by the speed
@@ -943,8 +968,8 @@ sub process_map_row(row%)
         if obj_id% then
             extra%=(tile_data% AND &HE000) >> 13
             select case obj_id%
-                case 30 ' Power Up
-                    spawn_object(30, min(SCREEN_WIDTH-TILE_SIZE*6,max(TILE_SIZEx4,g_player(0))), 0)
+                case 29, 30 ' Weapon chrystal or power-up chrystal
+                    spawn_object(obj_id%, min(SCREEN_WIDTH-TILE_SIZE*6,max(TILE_SIZEx4,g_player(0))), 0)
                 case 31 ' Block
                     spawn_block(col%*TILE_SIZE, 0, extra%)
                 case else ' Enemies and other objects

@@ -24,18 +24,20 @@ dim g_player_shot_ms=SHOT_COOLDOWN_MS
 dim g_score%=0
 dim g_hiscore%=0
 
-' Supports 12 shots at the same time: 0: id | 1: x | 2: y | 3: speed x | 4: speed y
+' Supports 13 shots at the same time: 0: id | 1: x | 2: y | 3: speed x | 4: speed y
 ' The three first slots are for the player shots, the other ones for enemies
-' 0 - No shot
-' 1 - Player Arrow
-' 2 - Player Double arrow
-' 3 - Player Fire
-' 4 - Player Boomerang
-' 5 - Player Sword
-' 6 - Player Double arrow (level 2)
-' 7 - Player Fire (level 2)
-' 8 - Player Boomerang (level 2)
-' 9 - Player Sword (level 2)
+'  0 - No shot
+'  1 - Player Arrow
+'  2 - Player Twin arrow
+'  3 - Player Triple flames
+'  4 - Player Boomerang
+'  5 - Player Sword
+'  6 - Player Fire arrow
+'  7 - Player Twin arrow (level 2)
+'  8 - Player Triple flames (level 2)
+'  9 - Player Boomerang (level 2)
+' 10 - Player Sword (level 2)
+' 11 - Player Fire arrow (level 2)
 dim g_shots(12,4)
 const SHOTS_NUM%=bound(g_shots())
 ' Object data: 0: obj id | 1: x | 2: y | 3: life | 4: GPR 1 | 5: GPR 2 | 6: shadow
