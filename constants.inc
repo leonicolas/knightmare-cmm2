@@ -66,8 +66,8 @@ const NUMBERS_X=24
 const NUMBERS_Y=48
 const LETTERS_X=0
 const LETTERS_Y=56
-const TRANSPARENT_BLOCK_X=80
-const TRANSPARENT_BLOCK_Y=64
+const TRANSPARENT_BLOCK_X=224
+const TRANSPARENT_BLOCK_Y=104
 
 const PLAYER_SKIN_Y=0
 const PLAYER_SKIN1_X_L=0
@@ -106,29 +106,43 @@ OBJ_TILE%(3,0)=32: OBJ_TILE%(3,1)=16: OBJ_TILE%(3,2)=16: OBJ_TILE%(3,3)=11
 ' Knight
 OBJ_TILE%(4,0)=64: OBJ_TILE%(4,1)=16: OBJ_TILE%(4,2)=16: OBJ_TILE%(4,3)=16
 
-' VFX
-' Shadow
-OBJ_TILE%(39,0)=0: OBJ_TILE%(39,1)=33: OBJ_TILE%(39,2)=16: OBJ_TILE%(39,3)=6
-' Shots
-OBJ_TILE%(40,0)=1: OBJ_TILE%(40,1)=66: OBJ_TILE%(40,2)=5: OBJ_TILE%(40,3)=13
 ' Fire
 OBJ_TILE%(20,0)=112: OBJ_TILE%(20,1)=104: OBJ_TILE%(20,2)=16: OBJ_TILE%(20,3)=16
 dim FIRE_ANIM(15)=(1,0,1,0,1,0,2,1,2,1,2,1,3,2,3,2)
 ' Pink Fire
 OBJ_TILE%(21,0)=176: OBJ_TILE%(21,1)=104: OBJ_TILE%(21,2)=16: OBJ_TILE%(21,3)=16
+' Enemies shots
 ' Dot bullet
 OBJ_TILE%(22,0)=22: OBJ_TILE%(22,1)=38: OBJ_TILE%(22,2)=4: OBJ_TILE%(22,3)=4
 ' Arrow
 OBJ_TILE%(23,0)=133: OBJ_TILE%(23,1)=34: OBJ_TILE%(23,2)=5: OBJ_TILE%(23,3)=14
 OBJ_TILE%(24,0)=145: OBJ_TILE%(24,1)=38: OBJ_TILE%(24,2)=13: OBJ_TILE%(24,3)=5
 OBJ_TILE%(25,0)=163: OBJ_TILE%(25,1)=35: OBJ_TILE%(25,2)=11: OBJ_TILE%(25,3)=11
-' Power Up
+' Weapon crystals
+OBJ_TILE%(29,0)=0: OBJ_TILE%(29,1)=64: OBJ_TILE%(29,2)=16: OBJ_TILE%(29,3)=16
+' Power Up crystals
 OBJ_TILE%(30,0)=0: OBJ_TILE%(30,1)=80: OBJ_TILE%(30,2)=16: OBJ_TILE%(30,3)=16
+dim WEAPON_ANIM(5,3)=(0,3,5,7,9,11, 1,4,6,8,10,12, 0,3,5,7,9,11, 2,1,1,1,1,1)
 ' Blocks
 OBJ_TILE%(31,0)=0: OBJ_TILE%(31,1)=104: OBJ_TILE%(31,2)=16: OBJ_TILE%(31,3)=16
 dim PUP_ANIM(4,3)=(0,3,6,9,12, 1,4,7,10,13, 0,3,6,9,12, 2,5,8,11,14)
 ' Shield
-OBJ_TILE%(32,0)=184: OBJ_TILE%(32,1)=48: OBJ_TILE%(32,2)=16: OBJ_TILE%(32,3)=7
+OBJ_TILE%(32,0)=113: OBJ_TILE%(32,1)=48: OBJ_TILE%(32,2)=16: OBJ_TILE%(32,3)=7
+' Shadow
+OBJ_TILE%(39,0)=0: OBJ_TILE%(39,1)=33: OBJ_TILE%(39,2)=16: OBJ_TILE%(39,3)=6
+' Player Shots
+' Arrow
+OBJ_TILE%(40,0)=209: OBJ_TILE%(40,1)=50: OBJ_TILE%(40,2)=5: OBJ_TILE%(40,3)=13
+' Double Arrow
+OBJ_TILE%(41,0)=210: OBJ_TILE%(41,1)=66: OBJ_TILE%(41,2)=12: OBJ_TILE%(41,3)=13
+' Fire
+OBJ_TILE%(42,0)=226: OBJ_TILE%(42,1)=54: OBJ_TILE%(42,2)=4: OBJ_TILE%(42,3)=10
+' Boomerang
+OBJ_TILE%(43,0)=233: OBJ_TILE%(43,1)=54: OBJ_TILE%(43,2)=5: OBJ_TILE%(43,3)=10
+' Sword
+OBJ_TILE%(44,0)=241: OBJ_TILE%(44,1)=49: OBJ_TILE%(44,2)=6: OBJ_TILE%(44,3)=14
+' Fire arrow
+OBJ_TILE%(45,0)=248: OBJ_TILE%(45,1)=49: OBJ_TILE%(45,2)=8: OBJ_TILE%(45,3)=14
 
 ' Object data: 0: speed X | 1: speed Y | 2: GPR 1 | 3: GPR 2 | 4: GPR 3
 ' TODO: Move to data block
@@ -156,7 +170,11 @@ OBJ_DATA(4,2)=3      ' Life
 const KNIGHT_CHANGE_DIRECT_DIST_PX=55
 const KNIGHT_MAX_HORIZONTAL_DIST_PX=48
 const KNIGHT_SHOT_SPEED=70
-' Power Up
+' Weapon chrystal
+OBJ_DATA(29,0)=50   ' X speed (angle increment)
+OBJ_DATA(29,1)=20   ' Y speed
+OBJ_DATA(29,4)=-1   ' Angle for the wobbling movement. -1 means disabled
+' Power-up chrystal
 OBJ_DATA(30,0)=50   ' X speed (angle increment)
 OBJ_DATA(30,1)=20   ' Y speed
 OBJ_DATA(30,4)=-1   ' Angle for the wobbling movement. -1 means disabled
