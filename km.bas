@@ -299,7 +299,7 @@ end sub
 
 sub increase_player_speed()
     if g_player(4) < PLAYER_MAX_SPEED then inc g_player(4), PLAYER_SPEED_INC
-end if
+end sub
 
 ' TODO: implement!!!
 sub hit_player(collided_id%)
