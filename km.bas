@@ -56,8 +56,9 @@ sub run_stage(stage%)
         ' Spawn enqueued objects
         process_actions_queue()
         sprite move
-        ' Move player ensuring always on top
+        ' Move player and shield ensuring always on top
         sprite show safe 1, g_player(0), g_player(1),1,,1
+        if g_player(6) > 0 then sprite show safe 2, g_player(0), g_player(1)-TILE_SIZE,1,,1
 
         ' Map and sprites rendering
         page write 0
@@ -279,7 +280,6 @@ sub power_up(obj_ix%)
             increment_score(200)
             if g_sound_on% then play effect "POWER_UP_SFX"
             g_player(5)=1
-            g_player(6)=SHIELD_MAX_HITS
             enqueue_action(1, 32)
 
         case 5 ' White pill - invisibility
@@ -523,6 +523,7 @@ end sub
 sub spawn_shield()
     sprite read 2, OBJ_TILE%(32,0), OBJ_TILE%(32,1), OBJ_TILE%(32,2), OBJ_TILE%(32,3), OBJ_TILES_BUFFER
     if sprite(X, 2) = 10000 then sprite show 2, g_player(0),g_player(1)-TILE_SIZE, 1
+    g_player(6)=SHIELD_MAX_HITS
 end sub
 
 sub create_shadow(obj_ix%, height%)
@@ -783,9 +784,6 @@ sub move_shots()
 end sub
 
 sub move_and_process_objects()
-    ' Shield
-    if g_player(6) > 0 then sprite next 2, g_player(0), g_player(1)-TILE_SIZE
-
     ' Objects and enemies
     if g_freeze_timer >= 0 then exit sub
 
