@@ -319,6 +319,7 @@ sub destroy_shot(sprite_id%)
 end sub
 
 sub destroy_object(obj_ix%)
+    if not g_obj(obj_ix%, 0) then exit sub
     local sprite_id%=OBJ_INI_SPRITE_ID + obj_ix%
     g_obj(obj_ix%, 0)=0
     sprite hide safe sprite_id%
