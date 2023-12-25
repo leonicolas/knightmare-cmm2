@@ -137,9 +137,7 @@ sub process_collision(sprite_id%)
                 if sprite_id% >= SHOTS_INI_SPRITE_ID and sprite_id% < SHOTS_INI_SPRITE_ID + 3 then
                     ' Hits a block
                     if collided_id% >= BLOCK_INI_SPRITE_ID then
-                        if hit_block(collided_id%) then
-                            destroy_shot(sprite_id%)
-                        end if
+                        if hit_block(collided_id%) then destroy_shot(sprite_id%)
 
                     ' Hits an objects
                     else if collided_id% >= OBJ_INI_SPRITE_ID then
