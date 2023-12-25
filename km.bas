@@ -404,31 +404,29 @@ function hit_block(sprite_id%) as integer
 end function
 
 sub hit_object(obj_sprite_id%, instakill%, no_sfx%)
-    local i%
+    local obj_id%=obj_sprite_id% - OBJ_INI_SPRITE_ID
 
-    i%=obj_sprite_id% - OBJ_INI_SPRITE_ID
-
-    select case g_obj(i%,0)
+    select case g_obj(obj_id%,0)
         case 29,30 ' Weapon and power-up chrystal
-            inc g_obj(i%,4)
-            g_obj(i%,4)=g_obj(i%,4) mod choice(g_obj(i%,0) = 29, 8, 7)
+            inc g_obj(obj_id%,4)
+            g_obj(obj_id%,4)=g_obj(obj_id%,4) mod choice(g_obj(obj_id%,0) = 29, 8, 7)
             ' Enable the wobbling movement
-            if g_obj(i%,4) > 3 and g_obj(i%,5) < 0 then g_obj(i%,5)=0
+            if g_obj(obj_id%,4) > 3 and g_obj(obj_id%,5) < 0 then g_obj(obj_id%,5)=0
             if g_sound_on% and not no_sfx% then play effect "POWER_UP_HIT_SFX"
 
         case else ' Enemies
             ' Decrement life
-            inc g_obj(i%,3), -1 ' TODO: Implement weapon force
-            if not instakill% and g_obj(i%,3) > 0 then exit sub
+            inc g_obj(obj_id%,3), -1 ' TODO: Implement weapon force
+            if not instakill% and g_obj(obj_id%,3) > 0 then exit sub
 
             ' Increment score
-            increment_score(OBJ_POINTS(g_obj(i%,0)))
+            increment_score(OBJ_POINTS(g_obj(obj_id%,0)))
 
             ' Delete enemy's object
-            destroy_object(i%)
+            destroy_object(obj_id%)
 
-            delete_shadow(i%)
-            start_enemy_death_animation(i%)
+            delete_shadow(obj_id%)
+            start_enemy_death_animation(obj_id%)
             if g_sound_on% and not no_sfx% then play effect "ENEMY_DEATH_SFX"
     end select
 end sub
