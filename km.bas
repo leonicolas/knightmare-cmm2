@@ -40,6 +40,7 @@ sub run_stage(stage%)
         if timer - g_anim_timer >= ANIM_TICK_MS then
             inc g_anim_tick%
             animate_player()
+            animate_shots()
             animate_objects()
             g_anim_timer=timer
         end if
@@ -122,8 +123,13 @@ sub process_collision(sprite_id%)
         ' Check player collision
         select case sprite_id%
             case 1 ' Player
+                ' Player shot. Three first shots slots
+                if collided_id% >= SHOTS_INI_SPRITE_ID and collided_id% < SHOTS_INI_SPRITE_ID + 3 then
+                    ' Destroy boomerang
+                    if g_player(3) = 4 or g_player(3) = 9 then destroy_shot(collided_id%)
+
                 ' Player hits a block
-                if collided_id% >= BLOCK_INI_SPRITE_ID then
+                else if collided_id% >= BLOCK_INI_SPRITE_ID then
                     collect_block_bonus(collided_id%)
 
                 ' Player hits an object
@@ -142,7 +148,7 @@ sub process_collision(sprite_id%)
                     ' Hits an objects
                     else if collided_id% >= OBJ_INI_SPRITE_ID then
                         hit_object(collided_id%)
-                        destroy_shot(sprite_id%)
+                        if not is_super_weapon() or is_chrystal(collided_id%) then destroy_shot(sprite_id%)
                     end if
                 end if
         end select
@@ -249,13 +255,14 @@ end sub
 
 sub change_weapon(obj_ix%)
     if g_obj(obj_ix%, 0) <> 29 then exit sub
+
     select case g_obj(obj_ix%, 4)
         case 0 to 2 ' No weapon
             increment_score(1000)
             if g_sound_on% then play effect "POINTS_SFX"
         case else ' Weapon chrystal
             increment_score(200)
-            if g_sound_on% then play effect "POINTS_SFX"
+            if g_sound_on% then play effect "CHRYSTAL_SFX"
             local weapon% = g_obj(obj_ix%, 4) - 1
             if weapon% = 5 then increase_player_speed()
             g_player(3)=weapon% + choice(g_player(3)=weapon% or g_player(3)=weapon%+5, 5, 0)
@@ -268,31 +275,21 @@ sub power_up(obj_ix%)
         case 0 to 2 ' Black pill
             increment_score(1000)
             if g_sound_on% then play effect "POINTS_SFX"
-
+            exit sub
         case 3 ' Dark blue pill - speed
-            increment_score(200)
             increase_player_speed()
-            if g_sound_on% then play effect "POWER_UP_SFX"
-
         case 4 ' Blue pill - shield
-            increment_score(200)
-            if g_sound_on% then play effect "POWER_UP_SFX"
-            g_player(5)=1
             enqueue_action(1, 32)
-
         case 5 ' White pill - invisibility
-            increment_score(200)
-            if g_sound_on% then play effect "POWER_UP_SFX"
             g_player(5)=2
             g_power_up_timer=POWER_UP_TIME
-
         case 6 ' Red pill - invincibility
-            increment_score(200)
-            if g_sound_on% then play effect "POWER_UP_SFX"
             g_player(5)=4
             g_power_up_timer=POWER_UP_TIME
-
     end select
+
+    increment_score(200)
+    if g_sound_on% then play effect "CHRYSTAL_SFX"
 end sub
 
 sub increase_player_speed()
@@ -389,6 +386,7 @@ function hit_block(sprite_id%) as integer
     inc g_blocks(i%,1), 1
     hit_block = true
 
+    g_cont_sfx$=""
     if g_sound_on% then
         if g_blocks(i%,1) < max_hits% then
             play effect "BLOCK_HIT_SFX"
@@ -406,6 +404,7 @@ end function
 sub hit_object(obj_sprite_id%, instakill%, no_sfx%)
     local obj_id%=obj_sprite_id% - OBJ_INI_SPRITE_ID
 
+    g_cont_sfx$=""
     select case g_obj(obj_id%,0)
         case 29,30 ' Weapon and power-up chrystal
             inc g_obj(obj_id%,4)
@@ -430,6 +429,11 @@ sub hit_object(obj_sprite_id%, instakill%, no_sfx%)
             if g_sound_on% and not no_sfx% then play effect "ENEMY_DEATH_SFX"
     end select
 end sub
+
+function is_chrystal(obj_sprite_id%) as integer
+    local obj_id%=g_obj(obj_sprite_id% - OBJ_INI_SPRITE_ID, 0)
+    is_chrystal=(obj_id%=29 or obj_id%=30)
+end function
 
 sub increment_score(points%)
     local i%=g_score%\NEW_LIFE_POINTS
@@ -520,6 +524,7 @@ end sub
 sub spawn_shield()
     sprite read 2, OBJ_TILE%(32,0), OBJ_TILE%(32,1), OBJ_TILE%(32,2), OBJ_TILE%(32,3), OBJ_TILES_BUFFER
     if sprite(X, 2) = 10000 then sprite show 2, g_player(0),g_player(1)-TILE_SIZE, 1
+    g_player(5)=1
     g_player(6)=SHIELD_MAX_HITS
 end sub
 
@@ -565,36 +570,75 @@ sub fire()
     ' Cooldown or invincibility power-up
     if timer - g_pshot_timer < g_player_shot_ms or g_player(5) = 4 then exit sub
 
-    local i%, sprite_id%, weapon%, shots%=choice(g_player(3)>6,2,1)
-    ' Flames weapon only shots once
-    if g_player(3)=3 or g_player(3)=8 then shots%=0
+    local i%, sprite_id%, shots%=choice(g_player(3)>6,2,1)
+    local tile_id%=40
+    local speed_x=0, speed_y=-220, offset%
+    local sfx$="SHOT_SFX"
+    local x=g_player(0)+(TILE_SIZE-OBJ_TILE%(tile_id%,2)/2)
+    local y=g_player(1)-OBJ_TILE%(tile_id%,3)-1
+
+    select case g_player(3)
+        case 2 ' Twin arrows
+            tile_id%=41
+        case 3,8 ' Triple flames
+            if g_shots(0,0) or g_shots(1,0) or g_shots(2,0) then exit sub
+            shots%=2
+            inc x, -TILE_SIZEx2
+            speed_y=-200
+            tile_id%=42
+            sfx$="FLAME_SFX"
+        case 4,9 ' Boomerang
+            tile_id%=43
+            sfx$=""
+            g_cont_sfx$="BOOMERANG_SFX"
+        case 5,10 ' Sword
+            shots%=2
+            tile_id%=choice(g_player(3) = 5, 45, 46)
+            sfx$="SWORD_SFX"
+        case 6,11 ' Fire arrow
+            tile_id%=47
+            sfx$="FIRE_ARROW_SFX"
+    end select
 
     ' One, two or three shots depending on the weapon level
     for i%=0 to shots%
+        offset%=0
         ' Ignore used slots
         if g_shots(i%,0) then continue for
 
-        weapon%=39 + (g_player(3) - choice(g_player(3)>6,5,0))
-        debug_print("W: "+str$(g_player(3))+" - "+str$(weapon%))
+        select case g_player(3)
+            case 3, 8 ' Flames
+                if i% > 0 then inc x, TILE_SIZEx2
+                if i% = 1 then offset%=TILE_SIZE
+                if g_player(3) = 3 then speed_x=50*i%-50
+        end select
+
         ' Create the shot state
-        ' TODO: Create weapons data table
-        g_shots(i%,0)=g_player(3)                   ' weapon
-        g_shots(i%,1)=g_player(0)+TILE_SIZE-OBJ_TILE%(weapon%,2)/2 ' X
-        g_shots(i%,2)=g_player(1)-OBJ_TILE%(weapon%,3)-1 ' Y
-        g_shots(i%,3)=0                             ' Speed X
-        g_shots(i%,4)=-220                          ' Speed Y
+        g_shots(i%,0)=g_player(3) ' weapon
+        g_shots(i%,1)=x           ' X
+        g_shots(i%,2)=y-offset%   ' Y
+        g_shots(i%,3)=speed_x     ' Speed X
+        g_shots(i%,4)=speed_y     ' Speed Y
 
         ' Create the shot sprite
         sprite_id%=SHOTS_INI_SPRITE_ID+i%
-        sprite read sprite_id%, OBJ_TILE%(weapon%,0), OBJ_TILE%(weapon%,1), OBJ_TILE%(weapon%,2), OBJ_TILE%(weapon%,3), OBJ_TILES_BUFFER
+        sprite read sprite_id%, OBJ_TILE%(tile_id%,0), OBJ_TILE%(tile_id%,1), OBJ_TILE%(tile_id%,2), OBJ_TILE%(tile_id%,3), OBJ_TILES_BUFFER
         sprite show safe sprite_id%, g_shots(i%,1),g_shots(i%,2), 1
         ' Play SFX
-        if g_sound_on% then play effect "SHOT_SFX"
+        if g_sound_on% and sfx$ <> "" then play effect sfx$
+
         ' Increment timer
         g_pshot_timer=timer
-        exit for
+        if g_player(3) <> 3 and g_player(3) <> 8 then exit for
     next
 end sub
+
+function is_super_weapon() as integer
+    select case g_player(3)
+        case 3,4,6,8,9,11
+            is_super_weapon = true
+    end select
+end function
 
 sub enemies_fire()
     if g_freeze_timer >= 0 then exit sub
@@ -762,16 +806,66 @@ sub animate_objects()
     next
 end sub
 
+sub animate_shots()
+    local i%, sprite_id%, rot%=-1, tile_id%, playing%
+    for i%=0 to bound(g_shots())
+        ' Checks weapon id
+        if g_shots(i%,0)=0 then continue for
+
+        sprite_id%=i% + SHOTS_INI_SPRITE_ID
+
+        ' Animate shot
+        select case g_shots(i%,0)
+            case 4,9 ' Boomerang
+                inc g_shots(i%,3)
+                select case g_shots(i%,3) mod 12
+                    case 9
+                        rot%=3: tile_id%=44
+                    case 6
+                        rot%=3: tile_id%=43
+                    case 3
+                        rot%=0: tile_id%=44
+                    case 0
+                        rot%=0: tile_id%=43
+                end select
+                ' Rotate boomerang
+                if rot% >= 0 then
+                    if g_sound_on% and g_cont_sfx$ <> "" and not playing% then
+                        play effect g_cont_sfx$
+                        playing%=true
+                    end if
+                    sprite hide safe sprite_id%
+                    sprite close sprite_id%
+                    sprite read sprite_id%, OBJ_TILE%(tile_id%,0), OBJ_TILE%(tile_id%,1), OBJ_TILE%(tile_id%,2), OBJ_TILE%(tile_id%,3), OBJ_TILES_BUFFER
+                    sprite show safe sprite_id%, g_shots(i%,1),g_shots(i%,2), 1, rot%
+                end if
+
+        end select
+    next
+end sub
+
 sub move_shots()
     local i%,x,y
     for i%=0 to bound(g_shots())
         ' Checks weapon id
         if g_shots(i%,0)=0 then continue for
         ' Moves shot
-        inc g_shots(i%,1),g_shots(i%,3)*g_delta_time
+        select case g_shots(i%,0)
+            case 4,9 ' Boomerang
+                x = g_player(0)
+                inc g_shots(i%,4),2.5
+            case else ' Other weapons
+                inc g_shots(i%,1),g_shots(i%,3)*g_delta_time
+                x = g_shots(i%,1)
+        end select
+
         inc g_shots(i%,2),g_shots(i%,4)*g_delta_time
-        x = g_shots(i%,1)
+        select case g_shots(i%,0)
+            case 4,9 ' Boomerang
+                if g_shots(i%,2) < 0 then g_shots(i%,2) = 0
+        end select
         y = g_shots(i%,2)
+
         if y < 0 or y > SCREEN_HEIGHT+TILE_SIZEx2 or x < 0 or x > SCREEN_WIDTH then
             destroy_shot(i% + SHOTS_INI_SPRITE_ID)
         else

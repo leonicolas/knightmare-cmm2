@@ -6,6 +6,7 @@ const objectsIds = {
     bat: 2,
     bat_wave: 3,
     knight: 4,
+    weapon: 29,
     power_up: 30,
     block: 31,
 };
