@@ -81,7 +81,7 @@ sub process_freeze_timer()
     print_freeze_timer(g_freeze_timer)
     if g_sound_on% then
         if fraction% = 0 or (g_freeze_timer < 4 and fraction% = 50) then play effect "FREEZE_TICK_SFX"
-    end
+    end if
 
     inc g_freeze_timer, -1 * g_delta_time
     if g_freeze_timer < 0 then
@@ -304,8 +304,7 @@ end sub
 
 sub destroy_enemies_all_shots()
     local i%
-
-    ' 0 to 3 is reserved for player shots
+    ' 0 to 2 is reserved for player shots
     for i%=3 to bound(g_shots())
         if g_shots(i%, 0) > 0 then destroy_shot(i% + SHOTS_INI_SPRITE_ID)
     next
@@ -353,6 +352,7 @@ sub collect_block_bonus(sprite_id%)
             increment_score(BLOCK_POINTS)
             if g_sound_on% then play effect "POINTS_SFX"
     end select
+    ' Replace block content by empty block
 
     g_blocks(i%,0)=6
     enqueue_action(1, 31, i%)
