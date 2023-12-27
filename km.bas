@@ -296,10 +296,6 @@ sub increase_player_speed()
     if g_player(4) < PLAYER_MAX_SPEED then inc g_player(4), PLAYER_SPEED_INC
 end sub
 
-' TODO: implement!!!
-sub hit_player(collided_id%)
-end sub
-
 sub destroy_enemies_all_shots()
     local i%
 
@@ -375,6 +371,10 @@ function block_max_hits(i%) as integer
         block_max_hits = choice(g_blocks(i%,0) > 1, BLOCK_HITS * 2, BLOCK_HITS)
     end if
 end function
+
+' TODO: implement!!!
+sub hit_player(collided_id%)
+end sub
 
 function hit_block(sprite_id%) as integer
     local i%=sprite_id% - BLOCK_INI_SPRITE_ID
