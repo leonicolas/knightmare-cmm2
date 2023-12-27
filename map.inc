@@ -2,7 +2,7 @@ sub replace_block(block_ix%)
     local max_hits%=block_max_hits(block_ix%)
 
     if g_blocks(block_ix%,0) < 6 and g_blocks(block_ix%,1) > 1 and g_blocks(block_ix%,1) < max_hits% then
-        end sub
+        exit sub
     end if
 
     local offset%, sprite_id%=BLOCK_INI_SPRITE_ID+block_ix%
