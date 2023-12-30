@@ -12,14 +12,15 @@ sub init_game()
     page write 0: cls 0
     page write 1: cls 0
     page write SCREEN_BUFFER: cls 0
-    page write MAP_TILES_BUFFER: cls 0
-    page write OBJ_TILES_BUFFER: cls 0
     page write SPRITES_BUFFER: cls 0
 
-    page write MAP_TILES_BUFFER
+    page write BOSS_TILES_BUFFER: cls 0
+    load png "BOSS_TILESET_IMG"
+
+    page write MAP_TILES_BUFFER: cls 0
     load png "MAP_TILESET_IMG"
 
-    page write OBJ_TILES_BUFFER
+    page write OBJ_TILES_BUFFER: cls 0
     load png "OBJ_TILESET_IMG"
 
     ' init stage state variables
@@ -27,10 +28,12 @@ sub init_game()
 end sub
 
 sub init_stage(stage%)
+    g_stage%=stage%
     g_kb_released%=true
     load_map(stage%)
     init_map_tiles(stage%)
-    initialize_screen_buffer()
+    'draw_map(MAP_ROWS_0)
+    draw_map(32)
 
     sprite interrupt check_collision
 
@@ -38,6 +41,7 @@ sub init_stage(stage%)
     page write 1: cls 0
     page write SCREEN_BUFFER
     init_player()
+    g_boss(0)=0
 
     ' Print the HUD
     print_text(SCREEN_ROWS  , 3, "SCORE  HISCORE  REST  STAGE", SCREEN_OFFSET)
@@ -48,7 +52,7 @@ sub init_stage(stage%)
     print_score(g_score%)
 
     ' Play stage music
-    if g_sound_on% then play modfile MUSIC$(stage%), 16000
+    if g_sound_on% and g_row% > 8 then play modfile MUSIC$(stage%), 16000
 
     timer=0
 end sub
@@ -70,18 +74,6 @@ end sub
 
 sub init_map_tiles(stage%)
     page scroll MAP_TILES_BUFFER, 0, (stage% - 1) * 3 * TILE_SIZE
-end sub
-
-sub initialize_screen_buffer()
-    local row%
-
-    page write SCREEN_BUFFER
-    for row%=MAP_ROWS_0 to MAP_ROWS_0 - (SCREEN_ROWS + 1) step -1
-        process_map_row(row%)
-        page scroll SCREEN_BUFFER,0,-TILE_SIZE
-    next
-    g_row%=row%+1
-    page scroll SCREEN_BUFFER,0,TILE_SIZE
 end sub
 
 sub init_player()

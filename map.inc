@@ -37,9 +37,11 @@ sub scroll_map()
         if sprite(Y, sprite_id%) > SCREEN_HEIGHT+TILE_SIZEx2 then destroy_block(i%)
     next
 
+    ' Scroll boss vertically
+    if g_boss(0) > 0 then inc g_obj(g_boss(1), 2)
+
     ' Scroll map tiles
     page scroll SCREEN_BUFFER, 0, -1
-    'sprite scrollr 0,0,SCREEN_WIDTH,SCREEN_HEIGHT+TILE_SIZE*2,0,-1
 
     check_scroll_collision()
     inc g_tile_px%,1
@@ -49,9 +51,7 @@ sub scroll_map()
         g_tile_px%=0
         inc g_row%,-1
         ' Draw the next map row on the top of the screen buffer
-        if g_row% >= 0 then
-            process_map_row(g_row%)
-        end if
+        process_map_row(g_row%, true)
     end if
 end sub
 
@@ -78,8 +78,36 @@ function map_collide(player()) as integer
     ' TODO: Check horizontal wrapping collision
 end function
 
-sub process_map_row(row%)
+sub draw_map(row%)
+    local r%
+
+    page write SCREEN_BUFFER
+    for r%=row% to row% - (SCREEN_ROWS + 1) step -1
+        process_map_row(r%)
+        page scroll SCREEN_BUFFER,0,-TILE_SIZE
+    next
+    g_row%=r%+1
+    page scroll SCREEN_BUFFER,0,TILE_SIZE
+end sub
+
+sub process_map_row(row%, spawn%)
     local tile%,col%,tx%,ty%,obj_id%,tile_data%,extra%
+
+    ' Boss triggers
+    select case row%
+        case is < 0
+            activate_boss()
+            exit sub
+        case 7
+            spawn_boss(g_stage%, true)
+        case 8
+            if g_sound_on% then
+                play stop
+                play modfile "DEMON_MOD", 16000
+            end if
+            destroy_enemies_shots()
+            kill_all_enemies()
+    end select
 
     for col%=MAP_COLS_0 to 0 step -1
         ' Tile drawing
@@ -92,6 +120,7 @@ sub process_map_row(row%)
         page write SPRITES_BUFFER
 
         ' Create object
+        if not spawn% then continue for
         obj_id%=(tile_data% AND &H1F00) >> 8
         if obj_id% then
             extra%=(tile_data% AND &HE000) >> 13
@@ -128,12 +157,12 @@ sub collect_block_bonus(sprite_id%)
             increment_score(BLOCK_POINTS)
             if g_sound_on% then play effect "POINTS_SFX"
         case 2 ' Knight - kill all enemies in the screen
-            kill_all_enemies()
+            kill_all_enemies(true)
         case 3 ' Queen - Extra life
             update_life(1)
         case 4 ' King - Freeze enemies
             g_freeze_timer=FREEZE_TIME
-            destroy_enemies_all_shots()
+            destroy_enemies_shots()
         case 5 ' Barrier
             increment_score(BLOCK_POINTS)
             if g_sound_on% then play effect "POINTS_SFX"
