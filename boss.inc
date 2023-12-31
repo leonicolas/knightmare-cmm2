@@ -36,13 +36,12 @@ sub hit_boss(sprite_id%)
             if g_obj(sprite_obj_id%,3) <= 0 then inc g_obj(id%,3), -1
 
             if g_obj(id%,3) <= 0 then
-                if g_sound_on% then play effect "BOSS_KILL_SFX"
                 increment_score(10000)
                 destroy_enemies_shots()
                 kill_all_enemies()
                 kill_boss()
             else
-                if g_sound_on% then play effect "BOSS_HIT_SFX"
+                play_sfx("BOSS_HIT_SFX")
             end if
     end select
 end sub
@@ -57,6 +56,9 @@ sub kill_boss()
             destroy_object(g_boss(i%))
         end if
     next
+    play_song("SILENCE_MOD")
+    play_sfx("BOSS_KILL_SFX")
+
     ' Spawn fire
     enqueue_action(1, 24, x%+TILE_SIZE*2, y%+TILE_SIZE)
     enqueue_action(1, 24, x%, y%+TILE_SIZE*2)

@@ -4,10 +4,10 @@ sub change_weapon(obj_ix%)
     select case g_obj(obj_ix%, 4)
         case 0 to 2 ' No weapon
             increment_score(1000)
-            if g_sound_on% then play effect "POINTS_SFX"
+            play_sfx("POINTS_SFX")
         case else ' Weapon chrystal
             increment_score(200)
-            if g_sound_on% then play effect "CHRYSTAL_SFX"
+            play_sfx("CHRYSTAL_SFX")
             local weapon% = g_obj(obj_ix%, 4) - 1
             if weapon% = 5 then increase_player_speed()
             g_player(3)=weapon% + choice(g_player(3)=weapon% or g_player(3)=weapon%+5, 5, 0)
@@ -19,7 +19,7 @@ sub power_up(obj_ix%)
     select case g_obj(obj_ix%, 4)
         case 0 to 2 ' Black pill
             increment_score(1000)
-            if g_sound_on% then play effect "POINTS_SFX"
+            play_sfx("POINTS_SFX")
             exit sub
         case 3 ' Dark blue pill - speed
             increase_player_speed()
@@ -34,17 +34,17 @@ sub power_up(obj_ix%)
     end select
 
     increment_score(200)
-    if g_sound_on% then play effect "CHRYSTAL_SFX"
-end sub
-
-sub increase_player_speed()
-    if g_player(4) < PLAYER_MAX_SPEED then inc g_player(4), PLAYER_SPEED_INC
+    play_sfx("CHRYSTAL_SFX")
 end sub
 
 function is_chrystal(obj_sprite_id%) as integer
     local obj_id%=g_obj(obj_sprite_id% - OBJ_INI_SPRITE_ID, 0)
     is_chrystal=(obj_id%=29 or obj_id%=30)
 end function
+
+sub increase_player_speed()
+    if g_player(4) < PLAYER_MAX_SPEED then inc g_player(4), PLAYER_SPEED_INC
+end sub
 
 sub increment_score(points%)
     local i%=g_score%\NEW_LIFE_POINTS
@@ -63,9 +63,9 @@ end sub
 
 sub update_life(value%)
     if value% >= 0 then
-        play effect "NEW_LIFE_SFX"
+        play_sfx("NEW_LIFE_SFX")
     else
-        play effect "PLAYER_DEATH_SFX"
+        play_sfx("PLAYER_DEATH_SFX")
     end if
     inc g_player(7), choice(value%, value%, 1)
     print_lives(g_player(7))
@@ -89,12 +89,10 @@ function hit_block(sprite_id%) as integer
     hit_block = true
 
     g_cont_sfx$=""
-    if g_sound_on% then
-        if g_blocks(i%,1) < max_hits% then
-            play effect "BLOCK_HIT_SFX"
-        else if g_blocks(i%,1) = max_hits% then
-            play effect "BLOCK_OPEN_SFX"
-        end if
+    if g_blocks(i%,1) < max_hits% then
+        play_sfx("BLOCK_HIT_SFX")
+    else if g_blocks(i%,1) = max_hits% then
+        play_sfx("BLOCK_OPEN_SFX")
     end if
 
     if g_blocks(i%,1)=1 or g_blocks(i%,1)=max_hits% then

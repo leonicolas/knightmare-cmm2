@@ -101,10 +101,7 @@ sub process_map_row(row%, spawn%)
         case 7
             spawn_boss(g_stage%, true)
         case 8
-            if g_sound_on% then
-                play stop
-                play modfile "DEMON_MOD", 16000
-            end if
+            play_song("DEMON_MOD")
             destroy_enemies_shots()
             kill_all_enemies()
     end select
@@ -155,7 +152,7 @@ sub collect_block_bonus(sprite_id%)
     select case g_blocks(i%,0)
         case 1 ' Hook - points
             increment_score(BLOCK_POINTS)
-            if g_sound_on% then play effect "POINTS_SFX"
+            play_sfx("POINTS_SFX")
         case 2 ' Knight - kill all enemies in the screen
             kill_all_enemies(true)
         case 3 ' Queen - Extra life
@@ -165,7 +162,7 @@ sub collect_block_bonus(sprite_id%)
             destroy_enemies_shots()
         case 5 ' Barrier
             increment_score(BLOCK_POINTS)
-            if g_sound_on% then play effect "POINTS_SFX"
+            play_sfx("POINTS_SFX")
     end select
     ' Replace block content by empty block
     g_blocks(i%,0)=6

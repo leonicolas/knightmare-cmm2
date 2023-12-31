@@ -90,8 +90,8 @@ sub animate_shots()
                 end select
                 ' Rotate boomerang
                 if rot% >= 0 then
-                    if g_sound_on% and g_cont_sfx$ <> "" and not playing% then
-                        play effect g_cont_sfx$
+                    if g_cont_sfx$ <> "" and not playing% then
+                        play_sfx(g_cont_sfx$)
                         playing%=true
                     end if
                     sprite hide safe sprite_id%
@@ -313,7 +313,7 @@ sub fire()
         sprite read sprite_id%, OBJ_TILE%(tile_id%,0), OBJ_TILE%(tile_id%,1), OBJ_TILE%(tile_id%,2), OBJ_TILE%(tile_id%,3), OBJ_TILES_BUFFER
         sprite show safe sprite_id%, g_shots(i%,1),g_shots(i%,2), 1
         ' Play SFX
-        if g_sound_on% and sfx$ <> "" then play effect sfx$
+        play_sfx(sfx$)
 
         ' Increment timer
         g_pshot_timer=timer
@@ -436,7 +436,7 @@ sub hit_object(obj_sprite_id%, sfx%, instakill%)
             g_obj(obj_id%,4)=g_obj(obj_id%,4) mod choice(g_obj(obj_id%,0) = 29, 8, 7)
             ' Enable the wobbling movement
             if g_obj(obj_id%,4) > 3 and g_obj(obj_id%,5) < 0 then g_obj(obj_id%,5)=0
-            if g_sound_on% and sfx% then play effect "POWER_UP_HIT_SFX"
+            if sfx% then play_sfx("POWER_UP_HIT_SFX")
 
         case is > 50 ' Boss
             hit_boss(obj_sprite_id%)
@@ -454,14 +454,14 @@ sub hit_object(obj_sprite_id%, sfx%, instakill%)
 
             destroy_shadow(obj_id%)
             start_enemy_death_animation(obj_id%)
-            if g_sound_on% and sfx% then play effect "ENEMY_DEATH_SFX"
+            if sfx% then play_sfx("ENEMY_DEATH_SFX")
     end select
 end sub
 
 sub hit_shield()
     if g_player(6)=0 then exit sub
     inc g_player(6), -1
-    if g_sound_on% then play effect "SHIELD_SFX"
+    play_sfx("SHIELD_SFX")
     select case g_player(6)
         case 0
             g_player(5)=0
@@ -510,7 +510,7 @@ end sub
 
 sub kill_all_enemies(sfx%)
     local i%
-    if g_sound_on% and sfx% then play effect "KILL_ALL_ENEMIES_SFX"
+    if sfx% then play_sfx("KILL_ALL_ENEMIES_SFX")
     for i%=0 to bound(g_obj())
         ' Check for free slots or boss id
         if g_obj(i%,0)=0 or g_obj(i%,0) > 50 then continue for

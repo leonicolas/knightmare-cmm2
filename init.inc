@@ -52,7 +52,7 @@ sub init_stage(stage%)
     print_score(g_score%)
 
     ' Play stage music
-    if g_sound_on% and g_row% > 8 then play modfile MUSIC$(stage%), 16000
+    if g_row% > 8 then play_song(MUSIC$(stage%))
 
     timer=0
 end sub

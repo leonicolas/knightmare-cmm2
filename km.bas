@@ -11,6 +11,7 @@ option default float
 #include "init.inc"
 #include "intro.inc"
 #include "map.inc"
+#include "music.inc"
 #include "objects.inc"
 #include "power_ups.inc"
 #include "print.inc"

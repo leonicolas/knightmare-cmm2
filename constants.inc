@@ -1,3 +1,8 @@
+#define "MAP_TILESET_IMG", "tiles/maps.png"
+#define "OBJ_TILESET_IMG", "tiles/objects.png"
+#define "BOSS_TILESET_IMG", "tiles/bosses.png"
+#define "MAPS_DIR", "maps/"
+
 const false=0
 const true=1
 
@@ -7,39 +12,6 @@ const KB_UP=128
 const KB_DOWN=129
 const KB_LEFT=130
 const KB_RIGHT=131
-
-#define "MAP_TILESET_IMG", "tiles/maps.png"
-#define "OBJ_TILESET_IMG", "tiles/objects.png"
-#define "BOSS_TILESET_IMG", "tiles/bosses.png"
-#define "MAPS_DIR", "maps/"
-
-' Sound tracks
-#define "MAJOU_MOD", "music/majou-densetsu.mod"
-#define "DEMON_MOD", "music/facing-the-demon.mod"
-
-' Music table
-dim MUSIC$(9)=("INTRO_MOD", "MAJOU_MOD", "", "", "", "", "", "", "", "")
-
-' Sound effects
-#define "BOSS_HIT_SFX", "sfx/boss_hit.wav"
-#define "BOSS_KILL_SFX", "sfx/boss_kill.wav"
-#define "BLOCK_HIT_SFX", "sfx/block_hit.wav"
-#define "BLOCK_OPEN_SFX", "sfx/block_open.wav"
-#define "BOOMERANG_SFX", "sfx/shot_boomerang.wav"
-#define "CHRYSTAL_SFX", "sfx/chrystal.wav"
-#define "ENEMY_DEATH_SFX", "sfx/enemy_death.wav"
-#define "FIRE_ARROW_SFX", "sfx/shot_fire_arrow.wav"
-#define "FLAME_SFX", "sfx/shot_flame.wav"
-#define "FREEZE_TICK_SFX", "sfx/freeze_tick.wav"
-#define "KILL_ALL_ENEMIES_SFX", "sfx/kill_all_enemies.wav"
-#define "NEW_LIFE_SFX", "sfx/new_life.wav"
-#define "PLAYER_DEATH_SFX", "sfx/player_death.wav"
-#define "POINTS_SFX", "sfx/points.wav"
-#define "POWER_UP_ENDING", "sfx/power_up_ending.wav"
-#define "POWER_UP_HIT_SFX", "sfx/power_up_hit.wav"
-#define "SHIELD_SFX", "sfx/shield.wav"
-#define "SHOT_SFX", "sfx/shot.wav"
-#define "SWORD_SFX", "sfx/shot_sword.wav"
 
 ' Buffers
 const SCREEN_BUFFER=2                     ' Screen buffer number
