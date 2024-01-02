@@ -33,8 +33,8 @@ sub init_stage(stage%)
     g_kb_released%=true
     load_map(stage%)
     init_map_tiles(stage%)
-    'draw_map(MAP_ROWS_0)
-    draw_map(40)
+    draw_map(MAP_ROWS_0)
+    'draw_map(40)
 
     sprite interrupt check_collision
 
@@ -43,7 +43,7 @@ sub init_stage(stage%)
 
     ' Print the status bar
     print_status()
-    g_player(3)=6
+
     ' Play stage music
     if g_row% > 8 then play_song(MUSIC$(stage%))
 
