@@ -3,7 +3,7 @@ dim MUSIC$(9)=("INTRO_MOD", "MAJOU_MOD", "", "", "", "", "", "", "", "")
 
 sub play_song(song$)
     if not g_sound_on% then exit sub
-    on error ignore
+    on error skip
     play stop
     select case song$
         case "DEMON_MOD"
@@ -30,8 +30,10 @@ sub play_sfx(sfx$)
             play effect "sfx/shot_boomerang.wav"
         case "CHRYSTAL_SFX"
             play effect "sfx/chrystal.wav"
-        case "ENEMY_DEATH_SFX"
-            play effect "sfx/enemy_death.wav"
+        case "END_STAGE_SFX"
+            play effect "sfx/end_stage.wav"
+        case "ENEMY_KILL_SFX"
+            play effect "sfx/enemy_kill.wav"
         case "FIRE_ARROW_SFX"
             play effect "sfx/shot_fire_arrow.wav"
         case "FLAME_SFX"

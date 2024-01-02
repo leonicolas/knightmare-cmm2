@@ -5,6 +5,7 @@ option default float
 
 #include "constants.inc"
 #include "global.inc"
+#include "screen.inc"
 
 #include "boss.inc"
 #include "collision.inc"
@@ -20,11 +21,16 @@ option default float
 
 init_game()
 g_player(7)=2 ' Lives
-run_stage(1)
+do
+    run_stage(1)
+    do while g_player(8) = 5: loop
+loop
 page write 1: cls 0
-page write 0: cls 0: end
+page write 0: cls 0
+end
 
 sub run_stage(stage%)
+    local on_top%
     init_stage(stage%)
 
     do
@@ -37,13 +43,15 @@ sub run_stage(stage%)
         page write SPRITES_BUFFER
 
         ' Scrolls the map
-        if g_freeze_timer < 0 and g_row% >= 0 and timer - g_scroll_timer >= SCROLL_SPEED_MS then
+        if g_freeze_timer < 0 and g_row% >= -1 and timer - g_scroll_timer >= SCROLL_SPEED_MS then
             scroll_map()
             g_scroll_timer=timer
         end if
 
         ' Process keyboard
         process_kb()
+        ' Auto move player
+        if g_player(8) = 3 then auto_move_player_to_portal()
 
         ' Process animations
         if timer - g_anim_timer >= ANIM_TICK_MS then
@@ -67,12 +75,14 @@ sub run_stage(stage%)
         move_shots()
         move_and_process_objects()
         if g_boss(0) > 0 then move_boss()
+
         ' Spawn enqueued objects
         process_actions_queue()
         sprite move
         ' Move player and shield ensuring always on top
-        sprite show safe 1, g_player(0), g_player(1),1,,1
-        if g_player(6) > 0 then sprite show safe 2, g_player(0), g_player(1)-TILE_SIZE,1,,1
+        on_top%=choice(g_player(8) = 3,0,1)
+        sprite show safe 1, g_player(0), g_player(1),1,,on_top%
+        if g_player(6) > 0 then sprite show safe 2, g_player(0), g_player(1)-TILE_SIZE,1,,on_top%
 
         ' Map and sprites rendering
         page write 0
@@ -81,12 +91,22 @@ sub run_stage(stage%)
         blit 0,TILE_SIZEx2, SCREEN_OFFSET,0, SCREEN_WIDTH,SCREEN_HEIGHT, SPRITES_BUFFER
         page write SPRITES_BUFFER
 
+        ' Power up timers
         if g_freeze_timer >= 0 then process_freeze_timer()
         if g_power_up_timer >= 0 then process_power_up_timer()
+
+        ' Check player status
+        if g_player(8) >= 4 then exit do
     loop
 
-    ' Close all sprites
-    sprite close all
+    ' Close all sprites and free memory
+    destroy_all()
+
+    select case g_player(8)
+        case 4 ' Dead
+        case 5 ' Ready for next stage
+            show_stage_screen(stage% + 1)
+    end select
 end sub
 
 sub process_kb()

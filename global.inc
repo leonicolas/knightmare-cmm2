@@ -36,6 +36,8 @@ dim g_power_up_timer=-1        ' Power-up timer
 '  1 - Frozen
 '  2 - Pause
 '  3 - Moving to ending portal
+'  4 - Dead
+'  5 - Ready for next stage
 dim g_player(8)
 dim g_player_is_moving=false
 dim g_player_shot_ms=SHOT_COOLDOWN_MS

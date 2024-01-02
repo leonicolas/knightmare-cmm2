@@ -82,24 +82,25 @@ sub draw_map(row%)
     local r%
 
     page write SCREEN_BUFFER
-    for r%=row% to row% - (SCREEN_ROWS + 1) step -1
-        process_map_row(r%)
+    for r%=SCREEN_ROWS+row%-1 to row%-2 step -1
         page scroll SCREEN_BUFFER,0,-TILE_SIZE
+        process_map_row(r%, false, row%=0)
     next
     g_row%=r%+1
-    page scroll SCREEN_BUFFER,0,TILE_SIZE
 end sub
 
-sub process_map_row(row%, spawn%)
+sub process_map_row(row%, spawn%, line_zero%)
     local tile%,col%,tx%,ty%,obj_id%,tile_data%,extra%
 
     ' Boss triggers
     select case row%
-        case is < 0
+        case is < -1
             activate_boss()
             exit sub
+        case is < 0
+            exit sub
         case 7
-            spawn_boss(g_stage%, true)
+            spawn_boss(g_stage%, not line_zero%)
         case 8
             play_song("DEMON_MOD")
             destroy_enemies_shots()
@@ -167,4 +168,25 @@ sub collect_block_bonus(sprite_id%)
     ' Replace block content by empty block
     g_blocks(i%,0)=6
     enqueue_action(1, 31, i%)
+end sub
+
+sub destroy_block(block_ix%)
+    local sprite_id%=BLOCK_INI_SPRITE_ID + block_ix%
+    g_blocks(block_ix%,0)=0
+    sprite hide safe sprite_id%
+    sprite close sprite_id%
+end sub
+
+sub spawn_block(x%, y%, type%)
+    local i%, block_id%, row%, col%
+    for i%=0 to bound(g_blocks())
+        if g_blocks(i%, 0) = 0 then exit for
+    next
+
+    block_id%=31
+    g_blocks(i%,0)=type% ' Block type
+    g_blocks(i%,1)=0     ' Hits
+
+    sprite read BLOCK_INI_SPRITE_ID + i%, TRANSPARENT_BLOCK_X, TRANSPARENT_BLOCK_Y, TILE_SIZEx2, TILE_SIZEx2, OBJ_TILES_BUFFER
+    sprite show safe BLOCK_INI_SPRITE_ID + i%, x%,0, 1
 end sub

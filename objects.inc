@@ -104,6 +104,28 @@ sub animate_shots()
     next
 end sub
 
+sub auto_move_player_to_portal()
+    local y%=choice(fix(g_player(1)) > TILE_SIZE*6, TILE_SIZE*6, 0)
+    move_player_to(SCREEN_WIDTH/2-TILE_SIZE, y%)
+    if fix(g_player(1)) = 0 then
+        g_player(8)=5 ' Ready to next stage
+    end if
+end sub
+
+sub move_player_to(x%, y%)
+    local ang=atan2(y% - g_player(1) + TILE_SIZE, x% - g_player(0))
+    inc g_player(0), PLAYER_INIT_SPEED*g_delta_time*cos(ang)*1.5
+    if fix(g_player(1)) >= y% then
+        inc g_player(1), -PLAYER_INIT_SPEED*g_delta_time
+    end if
+end sub
+
+sub move_player_to_portal()
+    create_portal()
+    g_player(8)=3 ' Move to portal state
+    play_sfx("END_STAGE_SFX")
+end sub
+
 sub move_player(direction%)
     local x=g_player(0), y=g_player(1)
     ' Player speed or max speed for invincibility power-up
@@ -250,8 +272,8 @@ sub move_and_process_objects()
     next
 end sub
 
-sub start_enemy_death_animation(i%)
-    enqueue_action(1, 24, g_obj(i%,1), g_obj(i%,2))
+sub start_enemy_death_animation(i%, sfx%)
+    enqueue_action(1, 24, g_obj(i%,1), g_obj(i%,2), sfx%)
 end sub
 
 sub fire()
@@ -426,57 +448,6 @@ sub get_free_shot_slots(free_slots%())
     next
 end sub
 
-sub hit_object(obj_sprite_id%, sfx%, instakill%)
-    local obj_id%=obj_sprite_id% - OBJ_INI_SPRITE_ID
-
-    g_cont_sfx$=""
-    select case g_obj(obj_id%,0)
-        case 29,30 ' Weapon and power-up chrystal
-            inc g_obj(obj_id%,4)
-            g_obj(obj_id%,4)=g_obj(obj_id%,4) mod choice(g_obj(obj_id%,0) = 29, 8, 7)
-            ' Enable the wobbling movement
-            if g_obj(obj_id%,4) > 3 and g_obj(obj_id%,5) < 0 then g_obj(obj_id%,5)=0
-            if sfx% then play_sfx("POWER_UP_HIT_SFX")
-
-        case is > 50 ' Boss
-            hit_boss(obj_sprite_id%)
-
-        case is < 14 ' Enemies
-            ' Decrement life
-            inc g_obj(obj_id%,3), -1 ' TODO: Implement weapon force
-            if not instakill% and g_obj(obj_id%,3) > 0 then exit sub
-
-            ' Increment score
-            increment_score(OBJ_POINTS(g_obj(obj_id%,0)))
-
-            ' Delete enemy's object
-            destroy_object(obj_id%)
-
-            destroy_shadow(obj_id%)
-            start_enemy_death_animation(obj_id%)
-            if sfx% then play_sfx("ENEMY_DEATH_SFX")
-    end select
-end sub
-
-sub hit_shield()
-    if g_player(6)=0 then exit sub
-    inc g_player(6), -1
-    play_sfx("SHIELD_SFX")
-    select case g_player(6)
-        case 0
-            g_player(5)=0
-            sprite hide safe 2
-        case fix(SHIELD_MAX_HITS/6)
-            sprite read 2, OBJ_TILE%(32,0)+TILE_SIZEx4, OBJ_TILE%(32,1), OBJ_TILE%(32,2), OBJ_TILE%(32,3), OBJ_TILES_BUFFER
-        case fix(SHIELD_MAX_HITS/6*2)
-            sprite read 2, OBJ_TILE%(32,0)+TILE_SIZEx2, OBJ_TILE%(32,1), OBJ_TILE%(32,2), OBJ_TILE%(32,3), OBJ_TILES_BUFFER
-    end select
-end sub
-
-' TODO: implement!!!
-sub hit_player(collided_id%)
-end sub
-
 sub destroy_enemies_shots()
     local i%
     ' 0 to 2 is reserved for player shots
@@ -492,7 +463,9 @@ sub destroy_shot(sprite_id%)
 end sub
 
 sub destroy_object(obj_ix%)
-    if not g_obj(obj_ix%, 0) then exit sub
+    if obj_ix% < 0 or g_obj(obj_ix%, 0) <= 0 then
+        exit sub
+    end if
     local sprite_id%=OBJ_INI_SPRITE_ID + obj_ix%
     g_obj(obj_ix%, 0)=0
     sprite hide safe sprite_id%
@@ -506,6 +479,20 @@ sub destroy_shadow(src_obj_ix%)
 
     g_obj(src_obj_ix%,6) = -1
     destroy_object(shadow_ix%)
+end sub
+
+sub destroy_all()
+    local i%
+    ' Destroy objects
+    for i%=0 to bound(g_obj())
+        if g_obj(i%,0)=0 then continue for
+        destroy_object(i%)
+    next
+    ' Destroy shots
+    for i%=0 to bound(g_shots())
+        if g_shots(i%, 0) > 0 then destroy_shot(i% + SHOTS_INI_SPRITE_ID)
+    next
+    sprite close all()
 end sub
 
 sub kill_all_enemies(sfx%)
@@ -532,7 +519,7 @@ function allocate_object(obj_id%, x%, y%, gpr1, gpr2, gpr3) as integer
     g_obj(i%,6)=-1   ' Shadow index
 end function
 
-sub spawn_object(obj_id%, x%, y%, map_data%)
+sub spawn_object(obj_id%, x%, y%, obj_cfg%)
     local i%=allocate_object(obj_id%, x%, y%)
     if i% < 0 then exit sub
 
@@ -548,8 +535,8 @@ sub spawn_object(obj_id%, x%, y%, map_data%)
             ' Calculate the correct bat angle
             if x% < SCREEN_CENTER then g_obj(i%,4)=g_obj(i%,4)+180
             ' Initialize bat spawning data
-            if map_data% then
-                enqueue_action(map_data%, obj_id%, x%, y%,, choice(obj_id%=2, BAT_SPAWN_SPEED_MS, BAT_WAVE_SPAWN_SPEED_MS))
+            if obj_cfg% then
+                enqueue_action(obj_data%, obj_id%, x%, y%,, choice(obj_id%=2, BAT_SPAWN_SPEED_MS, BAT_WAVE_SPAWN_SPEED_MS))
             end if
             ' Spawn the bat shadow
             spawn_shadow(i%, TILE_SIZEx2+TILE_SIZE/2)
@@ -557,7 +544,7 @@ sub spawn_object(obj_id%, x%, y%, map_data%)
         case 24 ' Fire
             offset_x%=FIRE_ANIM(0)*TILE_SIZEx2
             layer%=4
-
+            if obj_cfg% then play_sfx("ENEMY_KILL_SFX")
     end select
 
     sprite_id%=OBJ_INI_SPRITE_ID + i%

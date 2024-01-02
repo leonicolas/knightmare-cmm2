@@ -41,6 +41,7 @@ const TILES_COLS=32                       ' Tileset columns number
 
 const SCREEN_OFFSET=32                    ' Left screen offset in pixels
 const SCREEN_ROWS=22                      ' Screen rows number
+const SCREEN_COLS=MAP_COLS                ' Screen cols number
 const SCREEN_WIDTH=MAP_COLS*TILE_SIZE     ' Screen width in pixels
 const SCREEN_HEIGHT=SCREEN_ROWS*TILE_SIZE ' Screen height in pixels
 const SCREEN_CENTER=SCREEN_WIDTH/2        ' Screen center

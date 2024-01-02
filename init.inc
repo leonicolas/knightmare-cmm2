@@ -1,12 +1,9 @@
 ' Game and Stage initialization routines
-
 sub init_game()
     ' screen mode
-    font 1,1
-    'mode 3,12 ' 320x200 Original size
-    mode 7,12 ' 320x240
+    mode 3,12 ' 320x200 Original size
+    'mode 7,12 ' 320x240
     'mode 4,12 ' debug mode
-    color rgb(white), rgb(black)
 
     ' init screen and buffers
     page write 0: cls 0
@@ -28,29 +25,25 @@ sub init_game()
 end sub
 
 sub init_stage(stage%)
+    page write 0: cls 0
+    page write 1: cls 0
+
+    g_boss(0)=0
     g_stage%=stage%
     g_kb_released%=true
     load_map(stage%)
     init_map_tiles(stage%)
     'draw_map(MAP_ROWS_0)
-    draw_map(32)
+    draw_map(40)
 
     sprite interrupt check_collision
 
-    page write 0: cls 0
-    page write 1: cls 0
     page write SCREEN_BUFFER
     init_player()
-    g_boss(0)=0
 
-    ' Print the HUD
-    print_text(SCREEN_ROWS  , 3, "SCORE  HISCORE  REST  STAGE", SCREEN_OFFSET)
-    print_text(SCREEN_ROWS+1, 3, "   00       00    00     00", SCREEN_OFFSET)
-    print_stage(stage%)
-    print_lives(g_player(7))
-    print_hiscore(g_hiscore%)
-    print_score(g_score%)
-
+    ' Print the status bar
+    print_status()
+    g_player(3)=6
     ' Play stage music
     if g_row% > 8 then play_song(MUSIC$(stage%))
 
