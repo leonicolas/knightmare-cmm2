@@ -466,6 +466,8 @@ sub destroy_object(obj_ix%)
     if obj_ix% < 0 or g_obj(obj_ix%, 0) <= 0 then
         exit sub
     end if
+    if is_enemy(g_obj(obj_ix%, 0)) then inc g_enemies_count%, -1
+
     local sprite_id%=OBJ_INI_SPRITE_ID + obj_ix%
     g_obj(obj_ix%, 0)=0
     sprite hide safe sprite_id%
@@ -547,6 +549,8 @@ sub spawn_object(obj_id%, x%, y%, obj_cfg%)
             if obj_cfg% then play_sfx("ENEMY_KILL_SFX")
     end select
 
+    if is_enemy(obj_id%) then inc g_enemies_count%
+
     sprite_id%=OBJ_INI_SPRITE_ID + i%
     sprite read sprite_id%, OBJ_TILE%(obj_id%,0)+offset_x%, OBJ_TILE%(obj_id%,1)+offset_y%, OBJ_TILE%(obj_id%,2), OBJ_TILE%(obj_id%,3), OBJ_TILES_BUFFER
     sprite show safe sprite_id%, g_obj(i%,1),g_obj(i%,2), layer%
@@ -574,3 +578,6 @@ sub spawn_shadow(obj_ix%, height%)
     sprite show safe sprite_id%, g_obj(i%,1),g_obj(i%,2), 3
 end sub
 
+function is_enemy(obj_id%) as integer
+    is_enemy = (obj_id% > 0 and obj_id% < 14)
+end function

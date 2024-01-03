@@ -7,7 +7,7 @@ dim g_delta_time               ' Frame delta time
 dim g_tile_px%                 ' The rendered tile row pixel
 dim g_kb_released%             ' Tracks kb keys releasing
 dim g_stage%                   ' Current stage number
-
+dim g_enemies_count%           ' Total enemies at the screen
 ' Timers
 dim g_scroll_timer             ' Scroll timer
 dim g_player_timer             ' Player timer
