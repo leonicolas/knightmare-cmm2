@@ -25,6 +25,7 @@ sub init_game()
 end sub
 
 sub init_stage(stage%)
+    timer=0
     page write 0: cls 0
     page write 1: cls 0
 
@@ -46,8 +47,6 @@ sub init_stage(stage%)
 
     ' Play stage music
     if g_row% > 8 then play_song(MUSIC$(stage%))
-
-    timer=0
 end sub
 
 sub load_map(stage%)
