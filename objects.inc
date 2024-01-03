@@ -536,7 +536,7 @@ sub spawn_object(obj_id%, x%, y%, obj_cfg%)
             if x% < SCREEN_CENTER then g_obj(i%,4)=g_obj(i%,4)+180
             ' Initialize bat spawning data
             if obj_cfg% then
-                enqueue_action(obj_data%, obj_id%, x%, y%,, choice(obj_id%=2, BAT_SPAWN_SPEED_MS, BAT_WAVE_SPAWN_SPEED_MS))
+                enqueue_action(obj_cfg%, obj_id%, x%, y%,, choice(obj_id%=2, BAT_SPAWN_SPEED_MS, BAT_WAVE_SPAWN_SPEED_MS))
             end if
             ' Spawn the bat shadow
             spawn_shadow(i%, TILE_SIZEx2+TILE_SIZE/2)
