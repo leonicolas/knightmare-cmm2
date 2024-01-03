@@ -80,7 +80,7 @@ end function
 
 sub draw_map(row%)
     local r%
-
+    row%=min(MAP_ROWS_0-SCREEN_ROWS,row%)
     page write SCREEN_BUFFER
     for r%=SCREEN_ROWS+row%-1 to row%-2 step -1
         page scroll SCREEN_BUFFER,0,-TILE_SIZE
