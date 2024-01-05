@@ -26,6 +26,21 @@ sub replace_block(block_ix%)
     end if
 end sub
 
+sub load_map(stage%)
+    local i%=0, value%, solid_bit%
+    local file_name$ = "MAPS_DIRstage" + str$(stage%) + ".map"
+    open file_name$ for input as #5
+    do while not eof(5)
+        value%=asc(input$(1, #5))
+        solid_bit%=value% and &H80
+        ' Recalculates the stage tiles position. 96 tiles per stage
+        value%=(value% and &H7F) + (96 * (stage% - 1))
+        g_map(i%)=((solid_bit% or value%) << 8) or asc(input$(1, #5))
+        inc i%
+    loop
+    close #5
+end sub
+
 sub scroll_map()
     local i%, sprite_id%
 

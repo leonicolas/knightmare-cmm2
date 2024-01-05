@@ -123,7 +123,7 @@ end sub
 sub move_player_to_portal()
     create_portal()
     g_player(8)=3 ' Move to portal state
-    play_sfx("END_STAGE_SFX")
+    play_sfx("START_STAGE_SFX")
 end sub
 
 sub move_player(direction%)

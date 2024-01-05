@@ -21,17 +21,27 @@ option default float
 
 init_game()
 g_player(7)=2 ' Lives
+g_player(8)=5 ' Status ready to next stage
+g_stage%=1
+play_song("SILENCE_MOD")
+play_sfx("START_STAGE_SFX")
 do
-    run_stage(1)
-    do while g_player(8) = 5: loop
+    timer=0
+    show_stage_screen(g_stage%)
+    do while g_player(8) = 5
+        if timer > choice(g_stage%=1,6000,4000) then g_player(8)=0
+    loop
+    run_stage()
+    inc g_stage%
 loop
+
 page write 1: cls 0
 page write 0: cls 0
 end
 
-sub run_stage(stage%)
+sub run_stage()
     local on_top%
-    init_stage(stage%)
+    init_stage()
 
     do
         ' Game tick
@@ -65,7 +75,7 @@ sub run_stage(stage%)
 
         ' Process enemies shots
         if timer - g_eshot_timer >= ENEMIES_SHOTS_MS then
-            if stage% > 1 or g_row% < 125 then enemies_fire()
+            if g_stage% > 1 or g_row% < 125 then enemies_fire()
             g_eshot_timer=timer
         end if
         ' Process boss shots
@@ -104,8 +114,6 @@ sub run_stage(stage%)
 
     select case g_player(8)
         case 4 ' Dead
-        case 5 ' Ready for next stage
-            show_stage_screen(stage% + 1)
     end select
 end sub
 
