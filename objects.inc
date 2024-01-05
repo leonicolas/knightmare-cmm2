@@ -105,9 +105,9 @@ sub animate_shots()
 end sub
 
 sub auto_move_player_to_portal()
-    local y%=choice(fix(g_player(1)) > TILE_SIZE*6, TILE_SIZE*6, 0)
+    local y%=choice(fix(g_player(1)) > TILE_SIZE*6, TILE_SIZE*6, TILE_SIZE)
     move_player_to(SCREEN_WIDTH/2-TILE_SIZE, y%)
-    if fix(g_player(1)) = 0 then
+    if fix(g_player(1)) = TILE_SIZE then
         g_player(8)=5 ' Ready to next stage
     end if
 end sub
