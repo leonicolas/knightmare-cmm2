@@ -55,3 +55,10 @@ sub process_actions_queue()
         g_actions_queue(i%, 5)=timer+time_ms
     next
 end sub
+
+sub clear_queue()
+    local i%
+    for i%=0 to bound(g_actions_queue())
+        g_actions_queue(i%, 0) = 0
+    next
+end sub

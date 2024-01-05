@@ -20,6 +20,7 @@ sub activate_boss()
 end sub
 
 sub boss_enemy_destroyed(obj_id%, gpr1, gpr2)
+    if g_boss(0) <> 2 then exit sub
     select case g_stage%
         case 1
             ' Enqueue cloud spawning
@@ -53,9 +54,6 @@ sub hit_boss(sprite_id%)
             if g_obj(sprite_obj_id%,3) <= 0 then inc g_obj(id%,3), -1
 
             if g_obj(id%,3) <= 0 then
-                increment_score(10000)
-                destroy_enemies_shots()
-                kill_all_enemies()
                 kill_boss()
             else
                 play_sfx("BOSS_HIT_SFX")
@@ -66,6 +64,10 @@ end sub
 sub kill_boss()
     g_boss(0)=1    ' Deactivate boss
     g_player(8)=2  ' Freeze player
+    increment_score(10000)
+    clear_queue()
+    destroy_enemies_shots()
+    kill_all_enemies()
     animate_boss() ' Animates boss to initial state
     play_song("SILENCE_MOD")
     play_sfx("BOSS_KILL_SFX")

@@ -117,9 +117,15 @@ sub hit_object(obj_sprite_id%, sfx%, instakill%)
             hit_boss(obj_sprite_id%)
 
         case 5 ' Cloud
-            local angle=deg(sprite(V, obj_sprite_id%, 1))
-            g_obj(obj_id%,3)=CLOUD_ATTACK_SPEED*sin(angle)+0.01 ' Speed X
-            g_obj(obj_id%,4)=CLOUD_ATTACK_SPEED*-cos(angle)     ' Speed Y
+            if instakill% then
+                destroy_object(obj_id%)
+                destroy_shadow(obj_id%)
+                start_enemy_death_animation(obj_id%, true)
+            else
+                local angle=deg(sprite(V, obj_sprite_id%, 1))
+                g_obj(obj_id%,3)=CLOUD_ATTACK_SPEED*sin(angle)+0.01 ' Speed X
+                g_obj(obj_id%,4)=CLOUD_ATTACK_SPEED*-cos(angle)     ' Speed Y
+            end if
 
         case is < 14 ' Enemies
             ' Decrement life

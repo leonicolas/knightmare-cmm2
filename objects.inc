@@ -230,17 +230,51 @@ sub move_and_process_objects()
                 ' Check if it is time to change direction
                 if g_obj(i%,4)=0 and g_player(1)-g_obj(i%,2) < KNIGHT_CHANGE_DIRECT_DIST_PX then
                     g_obj(i%,4)=g_obj(i%,1) ' Save the last X position
-                    g_obj(i%,5)=choice(g_obj(i%,1)>SCREEN_CENTER,-1,1) ' Horizontal movement direction
+                    g_obj(i%,5)=choice(g_obj(i%,1)>SCREEN_CENTER,left,right) ' Horizontal movement direction
                 else if g_obj(i%,5) and abs(g_obj(i%,4)-g_obj(i%,1)) > KNIGHT_MAX_HORIZONTAL_DIST_PX then
                     g_obj(i%,5)=0
                 end if
 
                 if g_obj(i%,5) then
-                    inc g_obj(i%,1),OBJ_DATA(data_id%,0)*g_delta_time*g_obj(i%,5)
+                    inc g_obj(i%,1),OBJ_DATA(4,0)*g_delta_time*g_obj(i%,5)
                 else
-                    inc g_obj(i%,2),OBJ_DATA(data_id%,1)*g_delta_time
+                    inc g_obj(i%,2),OBJ_DATA(4,1)*g_delta_time
                 end if
 
+            case 5 ' Cloud
+                ' Attack movement
+                if g_obj(i%,3) <> 0 then
+                    ' Increment X and Y position
+                    inc g_obj(i%,1),g_obj(i%,3)*g_delta_time
+                    inc g_obj(i%,2),g_obj(i%,4)*g_delta_time
+
+                ' Floating movement
+                else
+                    if g_obj(i%,2) > SCREEN_HEIGHT/2+TILE_SIZEx2 then
+                        if g_obj(i%,1) <=0 or g_obj(i%,1) >= SCREEN_WIDTH-TILE_SIZEx2 then
+                            destroy_object(i%)
+                            destroy_shadow(i%)
+                            continue for
+                        end if
+                    else if g_obj(i%,5)=left and g_obj(i%,1) <= TILE_SIZEx2 then
+                        g_obj(i%,5)=right
+                    else if g_obj(i%,5)=right and g_obj(i%,1) >= SCREEN_WIDTH-TILE_SIZEx4 then
+                        g_obj(i%,5)=left
+                    end if
+
+                    inc g_obj(i%,1),OBJ_DATA(data_id%,0)*g_delta_time*g_obj(i%,5)
+                    if g_obj(i%,4) < 0 then
+                        ' Change row
+                        inc g_obj(i%,4),10*g_delta_time
+                        inc g_obj(i%,2),10*g_delta_time
+                    else
+                        inc g_obj(i%,2),-TILE_SIZE/2*sin(g_obj(i%,4))
+                        inc g_obj(i%,4),1 ' Increment angle
+                        inc g_obj(i%,2),TILE_SIZE/2*sin(g_obj(i%,4))
+                        ' Prepare for changing line
+                        if g_obj(i%,4) mod OBJ_DATA(5,1) = 0 then g_obj(i%,4)=-TILE_SIZE-TILE_SIZE/2
+                    end if
+                end if
             case 29,30 ' Weapon and power-up chrystal
                 if g_obj(i%,5) >= 0 then
                     offset_x%=-TILE_SIZEx4*sin(g_obj(i%,5))
@@ -400,6 +434,8 @@ sub enemy_fire(enemy_ix%, shot_ix%)
             idx%=15
             speed=BOSS_SHOT_SPEED
 
+        case else
+            exit sub
     end select
     ' Create the shot state
     g_shots(shot_ix%,0)=1                     ' weapon
@@ -463,15 +499,18 @@ sub destroy_shot(sprite_id%)
 end sub
 
 sub destroy_object(obj_ix%)
-    if obj_ix% < 0 or g_obj(obj_ix%, 0) <= 0 then
+    local obj_id%=g_obj(obj_ix%, 0)
+    if obj_ix% < 0 or obj_id% <= 0 then
         exit sub
     end if
-    if is_enemy(g_obj(obj_ix%, 0)) then inc g_enemies_count%, -1
-
     local sprite_id%=OBJ_INI_SPRITE_ID + obj_ix%
     g_obj(obj_ix%, 0)=0
     sprite hide safe sprite_id%
     sprite close sprite_id%
+    if is_enemy(obj_id%) then
+        inc g_enemies_count%, -1
+        if g_boss(0) = 2 then boss_enemy_destroyed(obj_id%, g_obj(obj_ix%, 4), g_obj(obj_ix%, 5))
+    end if
 end sub
 
 sub destroy_shadow(src_obj_ix%)
@@ -543,17 +582,24 @@ sub spawn_object(obj_id%, x%, y%, obj_cfg%)
             ' Spawn the bat shadow
             spawn_shadow(i%, TILE_SIZEx2+TILE_SIZE/2)
 
+        case 5 ' Cloud
+            g_obj(i%,1)=choice(obj_cfg%=left, 0, SCREEN_WIDTH-TILE_SIZEx2)
+            g_obj(i%,2)=TILE_SIZEx4
+            g_obj(i%,5)=choice(obj_cfg%=0, right, obj_cfg%)
+            spawn_shadow(i%, TILE_SIZEx2)
+
         case 24 ' Fire
             offset_x%=FIRE_ANIM(0)*TILE_SIZEx2
             layer%=4
             if obj_cfg% then play_sfx("ENEMY_KILL_SFX")
     end select
 
+    ' Enemies range
     if is_enemy(obj_id%) then inc g_enemies_count%
 
     sprite_id%=OBJ_INI_SPRITE_ID + i%
     sprite read sprite_id%, OBJ_TILE%(obj_id%,0)+offset_x%, OBJ_TILE%(obj_id%,1)+offset_y%, OBJ_TILE%(obj_id%,2), OBJ_TILE%(obj_id%,3), OBJ_TILES_BUFFER
-    sprite show safe sprite_id%, g_obj(i%,1),g_obj(i%,2), layer%
+    sprite show safe sprite_id%, g_obj(i%,1),g_obj(i%,2), layer%,, 1
 end sub
 
 sub spawn_shield()
