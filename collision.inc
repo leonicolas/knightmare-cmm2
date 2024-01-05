@@ -116,17 +116,17 @@ sub hit_object(obj_sprite_id%, sfx%, instakill%)
         case is > 50 ' Boss
             hit_boss(obj_sprite_id%)
 
+        case 5 ' Cloud
+            local angle=deg(sprite(V, obj_sprite_id%, 1))
+            g_obj(obj_id%,3)=CLOUD_ATTACK_SPEED*sin(angle)+0.01 ' Speed X
+            g_obj(obj_id%,4)=CLOUD_ATTACK_SPEED*-cos(angle)     ' Speed Y
+
         case is < 14 ' Enemies
             ' Decrement life
-            inc g_obj(obj_id%,3), -1 ' TODO: Implement weapon force
+            inc g_obj(obj_id%,3), -1
             if not instakill% and g_obj(obj_id%,3) > 0 then exit sub
-
-            ' Increment score
             increment_score(OBJ_POINTS(g_obj(obj_id%,0)))
-
-            ' Delete enemy's object
             destroy_object(obj_id%)
-
             destroy_shadow(obj_id%)
             start_enemy_death_animation(obj_id%, true)
     end select

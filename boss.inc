@@ -9,6 +9,22 @@ sub activate_boss()
             sprite show sprite_id%, g_obj(g_boss(1), 1)+TILE_SIZEx2,g_obj(g_boss(1), 2)+TILE_SIZE, 1
         end if
     next
+
+    select case g_stage%
+        case 1
+            ' Enqueue clouds spawning
+            enqueue_action(1, 5,,,right,3000)
+            enqueue_action(1, 5,,,left,6500)
+            enqueue_action(1, 5,,,right,9500)
+    end select
+end sub
+
+sub boss_enemy_destroyed(obj_id%, gpr1, gpr2)
+    select case g_stage%
+        case 1
+            ' Enqueue cloud spawning
+            enqueue_action(1, 5,,,gpr2,fix(rnd()*2000+3000))
+    end select
 end sub
 
 function is_boss_hit_box(sprite_id%) as integer
@@ -140,7 +156,7 @@ sub move_boss()
             case 1
                 inc g_obj(id%, 4) ' Boss tick
                 if fix(g_obj(id%, 1)) = fix(g_obj(id%, 5)) then
-                    if g_obj(id%, 4) mod 120 = 0 then
+                    if g_obj(id%, 4) mod 150 = 0 then
                         g_obj(id%, 5)=min(max(g_player(0)-TILE_SIZEx2, TILE_SIZEx4),SCREEN_WIDTH-TILE_SIZE*9)
                     end if
                 else

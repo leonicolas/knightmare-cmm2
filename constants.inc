@@ -5,6 +5,8 @@
 
 const false=0
 const true=1
+const left=-1
+const right=1
 
 const KB_ESC=27
 const KB_SPACE=32
@@ -93,7 +95,7 @@ OBJ_TILE%(3,0)=32: OBJ_TILE%(3,1)=16: OBJ_TILE%(3,2)=16: OBJ_TILE%(3,3)=11: OBJ_
 ' Knight
 OBJ_TILE%(4,0)=64: OBJ_TILE%(4,1)=16: OBJ_TILE%(4,2)=16: OBJ_TILE%(4,3)=16: OBJ_TILE%(4,4)=4
 ' Cloud
-OBJ_TILE%(5,0)=113: OBJ_TILE%(5,1)=17: OBJ_TILE%(5,2)=14: OBJ_TILE%(5,3)=14
+OBJ_TILE%(5,0)=113: OBJ_TILE%(5,1)=17: OBJ_TILE%(5,2)=14: OBJ_TILE%(5,3)=14: OBJ_TILE%(5,4)=5
 ' Demon blue
 OBJ_TILE%(6,0)=144: OBJ_TILE%(6,1)=16: OBJ_TILE%(6,2)=16: OBJ_TILE%(6,3)=16
 ' Skeleton
@@ -189,6 +191,11 @@ OBJ_DATA(4,2)=3      ' Life
 const KNIGHT_CHANGE_DIRECT_DIST_PX=55
 const KNIGHT_MAX_HORIZONTAL_DIST_PX=48
 const KNIGHT_SHOT_SPEED=70
+' Cloud
+OBJ_DATA(5,0)=25     ' X speed
+OBJ_DATA(5,1)=360    ' Cycle angle before changing row
+const CLOUD_ATTACK_SPEED=250
+
 ' Weapon chrystal
 OBJ_DATA(29,0)=50   ' X speed (angle increment)
 OBJ_DATA(29,1)=20   ' Y speed
