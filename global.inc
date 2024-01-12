@@ -2,7 +2,6 @@
 dim g_sound_on%=1
 dim g_map(MAP_SIZE) as integer ' Map data
 dim g_row%                     ' Current top map row. Zero is the bottom row.
-dim g_prev_frame_timer         ' Previous frame timer value
 dim g_delta_time               ' Frame delta time
 dim g_tile_px%                 ' The rendered tile row pixel
 dim g_kb_released%             ' Tracks kb keys releasing
@@ -11,11 +10,12 @@ dim g_enemies_count%           ' Total enemies at the screen
 ' Timers
 dim g_scroll_timer             ' Scroll timer
 dim g_player_timer             ' Player timer
-dim g_anim_timer                ' Objects timer
+dim g_anim_timer               ' Objects timer
 dim g_pshot_timer              ' Player shot timer
 dim g_eshot_timer              ' Enemies shots timer
-dim g_freeze_timer=-1          ' Enemies freeze timer
-dim g_power_up_timer=-1        ' Power-up timer
+dim g_freeze_timer             ' Enemies freeze timer
+dim g_power_up_timer           ' Power-up timer
+dim g_prev_frame_timer         ' Previous frame timer value
 
 ' Player state: 0: x | 1: y | 2: animation counter | 3: weapon | 4: speed | 5: power up | 6: shield | 7: lives | 8: state
 ' Weapons:
