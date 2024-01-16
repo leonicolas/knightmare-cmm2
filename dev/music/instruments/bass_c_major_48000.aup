@@ -1,0 +1,15 @@
+<?xml version="1.0" standalone="no" ?>
+<!DOCTYPE project PUBLIC "-//audacityproject-1.3.0//DTD//EN" "http://audacity.sourceforge.net/xml/audacityproject-1.3.0.dtd" >
+<project xmlns="http://audacity.sourceforge.net/xml/" projname="bass_c_major_48000_data" version="1.3.0" audacityversion="2.4.2" sel0="0.0000000000" sel1="1.0209967419" vpos="0" h="0.0000000000" zoom="541.1381451371" rate="8287.0" snapto="off" selectionformat="hh:mm:ss + milliseconds" frequencyformat="Hz" bandwidthformat="octaves">
+	<tags/>
+	<wavetrack name="390951__gmcerveny__bass-2-feel" isSelected="1" height="150" minimized="0" channel="2" linked="0" mute="0" solo="0" rate="8287" gain="1.0" pan="0.0" colorindex="0">
+		<waveclip offset="0.00000000" colorindex="0">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="8461">
+				<waveblock start="0">
+					<simpleblockfile filename="eff1ffc7.au" len="8461" min="-0.766188" max="0.767085" rms="0.246809"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+</project>
