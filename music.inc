@@ -1,5 +1,5 @@
 ' Music table
-dim MUSIC$(9)=("INTRO_MOD", "MAJOU_MOD", "", "", "", "", "", "", "", "")
+dim MUSIC$(9)=("INTRO_MOD", "MAJOU_MOD", "KNIGHTMARE_MOD", "", "", "", "", "", "", "")
 
 sub play_song(song$)
     if not g_sound_on% then exit sub
@@ -10,6 +10,8 @@ sub play_song(song$)
             play modfile "music/facing-the-demon.mod", 16000
         case "MAJOU_MOD"
             play modfile "music/majou-densetsu.mod", 16000
+        case "KNIGHTMARE_MOD"
+            play modfile "music/knightmare.mod", 16000
         case "SILENCE_MOD"
             play modfile "music/silence.mod", 16000
     end select
