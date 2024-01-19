@@ -141,7 +141,7 @@ sub process_map_row(row%, spawn%, line_zero%)
                 case 29, 30 ' Weapon chrystal or power-up chrystal
                     spawn_object(obj_id%, min(SCREEN_WIDTH-TILE_SIZE*6,max(TILE_SIZEx4,g_player(0))), 0)
                 case 31 ' Block
-                    spawn_block(col%*TILE_SIZE, 0, extra%)
+                    spawn_block(row%, col%, extra%)
                 case else ' Enemies and other objects
                     spawn_object(obj_id%, col%*TILE_SIZE, 0, extra%)
             end select
@@ -192,8 +192,9 @@ sub destroy_block(block_ix%)
     sprite close sprite_id%
 end sub
 
-sub spawn_block(x%, y%, type%)
-    local i%, block_id%, row%, col%
+sub spawn_block(row%, col%, type%)
+    local i%, block_id%
+
     for i%=0 to bound(g_blocks())
         if g_blocks(i%, 0) = 0 then exit for
     next
@@ -201,7 +202,9 @@ sub spawn_block(x%, y%, type%)
     block_id%=31
     g_blocks(i%,0)=type% ' Block type
     g_blocks(i%,1)=0     ' Hits
+    g_blocks(i%,2)=row%  ' Row
+    g_blocks(i%,3)=col%  ' Col
 
     sprite read BLOCK_INI_SPRITE_ID + i%, TRANSPARENT_BLOCK_X, TRANSPARENT_BLOCK_Y, TILE_SIZEx2, TILE_SIZEx2, OBJ_TILES_BUFFER
-    sprite show safe BLOCK_INI_SPRITE_ID + i%, x%,0, 1
+    sprite show safe BLOCK_INI_SPRITE_ID + i%, col%*TILE_SIZE,0, 1
 end sub

@@ -59,8 +59,8 @@ const SHOTS_NUM%=bound(g_shots())
 dim g_obj(20,6)
 ' Actions data queue: 0: num of executions | 1: action id | 2: GPR 1 | 3: GPR 2 | 4: GPR 3 | 5: next execution time
 dim g_actions_queue(bound(g_obj()),5)
-' Blocks: 0: type | 1: hits
-dim g_blocks(9,1)
+' Blocks: 0: type | 1: hits | 2: row | 3: col
+dim g_blocks(9,3)
 dim g_anim_tick%=0
 
 dim g_cont_sfx$ ' Continuous SFX
