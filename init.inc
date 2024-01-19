@@ -44,8 +44,7 @@ sub init_stage()
     g_boss(0)=0
     g_kb_released%=true
     load_map(g_stage%)
-    'draw_map(MAP_ROWS_0)
-    draw_map(0)
+    draw_map(MAP_ROWS_0)
 
     sprite interrupt check_collision
 
