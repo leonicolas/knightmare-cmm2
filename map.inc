@@ -27,15 +27,13 @@ sub replace_block(block_ix%)
 end sub
 
 sub load_map(stage%)
-    local i%=0, value%, solid_bit%
+    local i%=0, lhs%, rhs%, solid_bit%
     local file_name$ = "MAPS_DIRstage" + str$(stage%) + ".map"
     open file_name$ for input as #5
     do while not eof(5)
-        value%=asc(input$(1, #5))
-        solid_bit%=value% and &H80
-        ' Recalculates the stage tiles position. 96 tiles per stage
-        value%=(value% and &H7F) + (96 * (stage% - 1))
-        g_map(i%)=((solid_bit% or value%) << 8) or asc(input$(1, #5))
+        lhs%=asc(input$(1, #5)) ' Object data
+        rhs%=asc(input$(1, #5)) ' Tile data
+        g_map(i%)=(lhs% << 8) or rhs%
         inc i%
     loop
     close #5
@@ -128,7 +126,7 @@ sub process_map_row(row%, spawn%, line_zero%)
         tile_data%=g_map(row%*MAP_COLS+col%)
         tile%=(tile_data% AND &H7F) - 1
         tx%=(tile% mod TILES_COLS) * TILE_SIZE
-        ty%=(tile% \ TILES_COLS) * TILE_SIZE
+        ty%=(tile% \ TILES_COLS) * TILE_SIZE + (g_stage% - 1) * TILE_SIZE*3
         blit tx%,ty%, col%*TILE_SIZE,0, TILE_SIZE,TILE_SIZE, MAP_TILES_BUFFER
         page write SPRITES_BUFFER
 
@@ -136,7 +134,7 @@ sub process_map_row(row%, spawn%, line_zero%)
         if not spawn% then continue for
         obj_id%=(tile_data% AND &H1F00) >> 8
         if obj_id% then
-            extra%=(tile_data% AND &HE000) >> 13
+            extra%=tile_data% >> 13
             select case obj_id%
                 case 29, 30 ' Weapon chrystal or power-up chrystal
                     spawn_object(obj_id%, min(SCREEN_WIDTH-TILE_SIZE*6,max(TILE_SIZEx4,g_player(0))), 0)

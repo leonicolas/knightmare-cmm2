@@ -44,7 +44,6 @@ sub init_stage()
     g_boss(0)=0
     g_kb_released%=true
     load_map(g_stage%)
-    init_map_tiles(g_stage%)
     'draw_map(MAP_ROWS_0)
     draw_map(0)
 
@@ -58,10 +57,6 @@ sub init_stage()
 
     ' Play stage music
     if g_row% > 8 then play_song(MUSIC$(g_stage%))
-end sub
-
-sub init_map_tiles(stage%)
-    page scroll MAP_TILES_BUFFER, 0, (stage% - 1) * 3 * TILE_SIZE
 end sub
 
 sub init_player()
