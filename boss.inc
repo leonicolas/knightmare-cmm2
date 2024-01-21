@@ -73,7 +73,7 @@ sub kill_boss()
     play_sfx("BOSS_KILL_SFX")
 
     ' Blink screen 30 times
-    enqueue_action(30, 100)
+    enqueue_action(30, 100,,,,40)
 end sub
 
 sub destroy_boss()
