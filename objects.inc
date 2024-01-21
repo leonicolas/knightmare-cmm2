@@ -275,6 +275,15 @@ sub move_and_process_objects()
                         if g_obj(i%,4) mod OBJ_DATA(5,1) = 0 then g_obj(i%,4)=-TILE_SIZE-TILE_SIZE/2
                     end if
                 end if
+
+            case 6 ' Blue demon
+                ' Check if it is time to attack
+                if g_obj(i%,4)=0 and g_player(1)-g_obj(i%,2) < DEMON_CHANGE_DIRECT_DIST_PX then
+                    g_obj(i%,4)=choice(g_obj(i%,1)>g_player(1),left,right)
+                end if
+                inc g_obj(i%,1),OBJ_DATA(data_id%,0)*g_delta_time*g_obj(i%,4)
+                inc g_obj(i%,2),OBJ_DATA(data_id%,1)*g_delta_time
+
             case 29,30 ' Weapon and power-up chrystal
                 if g_obj(i%,5) >= 0 then
                     offset_x%=-TILE_SIZEx4*sin(g_obj(i%,5))
@@ -411,15 +420,10 @@ sub enemy_fire(enemy_ix%, shot_ix%)
     local shot_spr_id%=shot_ix%+SHOTS_INI_SPRITE_ID
     local cx=sprite(W, enemy_spr_id%)/2, cy=sprite(H, enemy_spr_id%)/2
     local angle=deg(sprite(V, enemy_spr_id%, 1))
-    local idx%=14,rot%,speed
+    local idx%=14,rot%,speed=DEFAULT_SHOT_SPEED
 
     select case obj_id%
-        case 1   ' Blob
-            speed=BLOB_SHOT_SPEED
-        case 2,3 ' Bat
-            speed=BAT_SHOT_SPEED
         case 4   ' Knight
-            speed=KNIGHT_SHOT_SPEED
             rot%=fix((angle+22.5)/45)
             if rot%=0 or rot%=4 then
                 idx%=20: rot%=choice(rot%=0,2,0)
@@ -434,8 +438,6 @@ sub enemy_fire(enemy_ix%, shot_ix%)
             idx%=15
             speed=BOSS_SHOT_SPEED
 
-        case else
-            exit sub
     end select
     ' Create the shot state
     g_shots(shot_ix%,0)=1                     ' weapon

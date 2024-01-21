@@ -97,7 +97,7 @@ OBJ_TILE%(4,0)=64: OBJ_TILE%(4,1)=16: OBJ_TILE%(4,2)=16: OBJ_TILE%(4,3)=16: OBJ_
 ' Cloud
 OBJ_TILE%(5,0)=113: OBJ_TILE%(5,1)=17: OBJ_TILE%(5,2)=14: OBJ_TILE%(5,3)=14: OBJ_TILE%(5,4)=5
 ' Blue Demon
-OBJ_TILE%(6,0)=144: OBJ_TILE%(6,1)=16: OBJ_TILE%(6,2)=16: OBJ_TILE%(6,3)=16
+OBJ_TILE%(6,0)=144: OBJ_TILE%(6,1)=16: OBJ_TILE%(6,2)=16: OBJ_TILE%(6,3)=16: OBJ_TILE%(6,4)=6
 ' Skeleton
 OBJ_TILE%(7,0)=176: OBJ_TILE%(7,1)=16: OBJ_TILE%(7,2)=16: OBJ_TILE%(7,3)=16
 ' Demon
@@ -168,17 +168,16 @@ OBJ_TILE%(47,0)=232: OBJ_TILE%(47,1)=49: OBJ_TILE%(47,2)=8: OBJ_TILE%(47,3)=14
 ' Object data: 0: speed X | 1: speed Y | 2: GPR 1 | 3: GPR 2 | 4: GPR 3
 ' TODO: Move to data block
 dim OBJ_DATA(30,4)
+const DEFAULT_SHOT_SPEED=70
 ' Blob
 OBJ_DATA(1,1)=20     ' Y speed
 OBJ_DATA(1,2)=1      ' Life
-const BLOB_SHOT_SPEED=70
 ' Bat
 OBJ_DATA(2,0)=75     ' X speed (angle increment)
 OBJ_DATA(2,1)=65     ' Y speed
 OBJ_DATA(2,2)=1      ' Life
 OBJ_DATA(2,3)=90     ' Angle
 const BAT_SPAWN_SPEED_MS=500
-const BAT_SHOT_SPEED=70
 ' Bat wave
 OBJ_DATA(3,0)=120    ' X speed (angle increment)
 OBJ_DATA(3,1)=33     ' Y speed
@@ -190,11 +189,15 @@ OBJ_DATA(4,1)=40     ' Y speed
 OBJ_DATA(4,2)=3      ' Life
 const KNIGHT_CHANGE_DIRECT_DIST_PX=55
 const KNIGHT_MAX_HORIZONTAL_DIST_PX=48
-const KNIGHT_SHOT_SPEED=70
 ' Cloud
 OBJ_DATA(5,0)=25     ' X speed
 OBJ_DATA(5,1)=360    ' Cycle angle before changing row
 const CLOUD_ATTACK_SPEED=250
+' Blue demon
+OBJ_DATA(6,0)=70     ' X speed
+OBJ_DATA(6,1)=70     ' Y speed
+OBJ_DATA(6,2)=1      ' Life
+const DEMON_CHANGE_DIRECT_DIST_PX=55
 
 ' Weapon chrystal
 OBJ_DATA(29,0)=50   ' X speed (angle increment)
