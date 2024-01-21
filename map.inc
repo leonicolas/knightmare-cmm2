@@ -12,7 +12,7 @@ sub replace_block(block_ix%)
         offset%=TILE_SIZEx2*g_blocks(block_ix%,0)
     end if
 
-    if g_blocks(block_ix%, 0) = 6 then
+    if g_blocks(block_ix%,0) = 6 then
         ' Save sprite position and layer
         local x%=sprite(X, sprite_id%), y%=sprite(Y, sprite_id%)
         destroy_block(block_ix%)
@@ -23,7 +23,22 @@ sub replace_block(block_ix%)
     else
         ' Replace buffer tiles
         sprite read sprite_id%, OBJ_TILE%(31,0)+offset%, OBJ_TILE%(31,1), OBJ_TILE%(31,2), OBJ_TILE%(31,3), OBJ_TILES_BUFFER
+        ' Makes the barrier solid
+        if g_blocks(block_ix%, 0) = 5 and g_blocks(block_ix%,1) = max_hits% then
+            make_block_solid(g_blocks(block_ix%, 2), g_blocks(block_ix%, 3))
+        end if
     end if
+end sub
+
+sub make_block_solid(row%, col%)
+    make_tile_solid(row%, col%)
+    make_tile_solid(row%, col%+1)
+    make_tile_solid(row%+1, col%)
+    make_tile_solid(row%+1, col%+1)
+end sub
+
+sub make_tile_solid(row%, col%)
+    g_map(row%*MAP_COLS+col%)=g_map(row%*MAP_COLS+col%) or &H80
 end sub
 
 sub load_map(stage%)
@@ -153,7 +168,7 @@ function block_max_hits(i%) as integer
         block_max_hits = 0
     else
         ' Special blocks need twice of hits
-        block_max_hits = choice(g_blocks(i%,0) > 1, BLOCK_HITS * 2, BLOCK_HITS)
+        block_max_hits = choice(g_blocks(i%,0) > 1 and g_blocks(i%,0) < 5, BLOCK_HITS * 2, BLOCK_HITS)
     end if
 end function
 
@@ -161,7 +176,7 @@ sub collect_block_bonus(sprite_id%)
     local i%=sprite_id% - BLOCK_INI_SPRITE_ID
     local max_hits%=block_max_hits(i%)
 
-    if g_blocks(i%,1) < max_hits% or g_blocks(i%,0) = 6 then exit sub
+    if g_blocks(i%,1) < max_hits% or g_blocks(i%,0) > 4 then exit sub
 
     select case g_blocks(i%,0)
         case 1 ' Hook - points
@@ -174,9 +189,6 @@ sub collect_block_bonus(sprite_id%)
         case 4 ' King - Freeze enemies
             g_freeze_timer=FREEZE_TIME
             destroy_enemies_shots()
-        case 5 ' Barrier
-            increment_score(BLOCK_POINTS)
-            play_sfx("POINTS_SFX")
     end select
     ' Replace block content by empty block
     g_blocks(i%,0)=6
