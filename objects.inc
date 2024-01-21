@@ -434,6 +434,9 @@ sub enemy_fire(enemy_ix%, shot_ix%)
             else
                 idx%=22: rot%=choice(rot%=1,3,2)
             end if
+        case 5 ' Cloud
+            exit sub
+
         case 51 ' Boss stage 1
             idx%=15
             speed=BOSS_SHOT_SPEED
