@@ -410,7 +410,7 @@ end sub
 
 sub enemy_fire(enemy_ix%, shot_ix%)
     local obj_id%=g_obj(enemy_ix%,0)
-    if obj_id% < 50 and (g_obj(enemy_ix%,2) > MAX_ENEMIES_SHOOT_Y or rnd > ENEMIES_SHOOT_CHANCE) then exit sub
+    if obj_id% < 50 and (g_obj(enemy_ix%,2) > MAX_ENEMIES_SHOOT_Y or rnd > SHOOT_CHANGE(g_stage%)) then exit sub
     if shot_ix%=0 then
         shot_ix%=get_free_shot_slot()
         if shot_ix% < 0 then exit sub

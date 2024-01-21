@@ -72,7 +72,8 @@ const BOSS_SHOT_SPEED=120
 const BOSS_FIRE_SPEED=70
 
 const MAX_ENEMIES_SHOOT_Y=SCREEN_HEIGHT*0.6
-const ENEMIES_SHOOT_CHANCE=0.7
+'Chance of enemy shoot per stage
+dim SHOOT_CHANGE(8)=(0,0.5,0.5,0.6,0.6,0.7,0.7,0.8,0.8)
 
 const BLOCK_HITS=5
 const BLOCK_POINTS=500
