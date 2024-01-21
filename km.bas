@@ -20,20 +20,23 @@ option default float
 #include "timer.inc"
 
 init_game()
-g_player(7)=2 ' Lives
-g_player(8)=5 ' Status ready to next stage
-g_stage%=1
-play_song("SILENCE_MOD")
-play_sfx("START_STAGE_SFX")
-do
-    timer=0
-    show_stage_screen(g_stage%)
-    do while g_player(8) = 5
-        if timer > choice(g_stage%=1,6000,4000) then g_player(8)=0
+start_game()
+
+sub start_game()
+    init_player()
+    g_stage%=1
+    play_song("SILENCE_MOD")
+    play_sfx("START_STAGE_SFX")
+    do
+        timer=0
+        show_stage_screen(g_stage%)
+        do while g_player(8) = 5
+            if timer > choice(g_stage%=1,6000,4000) then g_player(8)=0
+        loop
+        run_stage()
+        inc g_stage%
     loop
-    run_stage()
-    inc g_stage%
-loop
+end sub
 
 page write 1: cls 0
 page write 0: cls 0

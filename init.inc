@@ -44,12 +44,20 @@ sub init_stage()
     g_boss(0)=0
     g_kb_released%=true
     load_map(g_stage%)
+    'draw_map(choice(g_stage% = 1, 0, MAP_ROWS_0))
     draw_map(MAP_ROWS_0)
 
     sprite interrupt check_collision
 
+    ' Set initial player position
+    page write SPRITES_BUFFER
+    g_player(0)=SCREEN_WIDTH/2-TILE_SIZE  ' x
+    g_player(1)=SCREEN_HEIGHT-TILE_SIZE*3 ' y
+    g_player(2)=0                         ' animation counter
+    sprite read #1, PLAYER_SKIN1_X_L,PLAYER_SKIN_Y, TILE_SIZEx2,TILE_SIZEx2, OBJ_TILES_BUFFER
+    sprite show safe #1, g_player(0),g_player(1), 1,,1
+
     page write SCREEN_BUFFER
-    init_player()
 
     ' Print the status bar
     print_status()
@@ -59,14 +67,10 @@ sub init_stage()
 end sub
 
 sub init_player()
-    g_player(0)=SCREEN_WIDTH/2-TILE_SIZE  ' x
-    g_player(1)=SCREEN_HEIGHT-TILE_SIZE*3 ' y
-    g_player(2)=0                         ' animation counter
-    g_player(3)=1                         ' weapon
-    g_player(4)=PLAYER_INIT_SPEED         ' speed
-    g_player(5)=0                         ' power up
-    g_player(6)=0                         ' shield
-    page write SPRITES_BUFFER
-    sprite read #1, PLAYER_SKIN1_X_L,PLAYER_SKIN_Y, TILE_SIZEx2,TILE_SIZEx2, OBJ_TILES_BUFFER
-    sprite show safe #1, g_player(0),g_player(1), 1,,1
+    g_player(3)=1                 ' weapon
+    g_player(4)=PLAYER_INIT_SPEED ' speed
+    g_player(5)=0                 ' power up
+    g_player(6)=0                 ' shield
+    g_player(7)=2                 ' Lives
+    g_player(8)=5                 ' Status ready to next stage
 end sub
