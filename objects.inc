@@ -279,7 +279,7 @@ sub move_and_process_objects()
             case 6 ' Blue demon
                 ' Check if it is time to attack
                 if g_obj(i%,4)=0 and g_player(1)-g_obj(i%,2) < DEMON_CHANGE_DIRECT_DIST_PX then
-                    g_obj(i%,4)=choice(g_obj(i%,1)>g_player(1),left,right)
+                    g_obj(i%,4)=choice(g_obj(i%,1)>g_player(0),left,right)
                 end if
                 inc g_obj(i%,1),OBJ_DATA(data_id%,0)*g_delta_time*g_obj(i%,4)
                 inc g_obj(i%,2),OBJ_DATA(data_id%,1)*g_delta_time
@@ -589,6 +589,9 @@ sub spawn_object(obj_id%, x%, y%, obj_cfg%)
             g_obj(i%,2)=TILE_SIZEx4
             g_obj(i%,5)=choice(obj_cfg%=0, right, obj_cfg%)
             spawn_shadow(i%, TILE_SIZEx2)
+
+        case 6 ' Blue demon
+            spawn_shadow(i%, TILE_SIZEx2+TILE_SIZE/2)
 
         case 24 ' Fire
             offset_x%=FIRE_ANIM(0)*TILE_SIZEx2
