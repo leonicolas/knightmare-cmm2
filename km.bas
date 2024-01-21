@@ -97,7 +97,7 @@ sub run_stage()
         ' Move player and shield ensuring always on top
         on_top%=choice(g_player(8) = 3,0,1)
         sprite show safe 1, g_player(0), g_player(1),1,,on_top%
-        if g_player(6) > 0 then sprite show safe 2, g_player(0), g_player(1)-TILE_SIZE,1,,on_top%
+        if g_player(5) = 1 and g_player(6) > 0 then sprite show safe 2, g_player(0), g_player(1)-TILE_SIZE,1,,on_top%
 
         ' Map and sprites rendering
         page write 0
