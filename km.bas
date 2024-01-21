@@ -23,6 +23,7 @@ init_game()
 start_game()
 
 sub start_game()
+    local first_stage%=true
     init_player()
     g_stage%=1
     play_song("SILENCE_MOD")
@@ -31,8 +32,9 @@ sub start_game()
         timer=0
         show_stage_screen(g_stage%)
         do while g_player(8) = 5
-            if timer > choice(g_stage%=1,6000,4000) then g_player(8)=0
+            if timer > choice(first_stage%,6000,4000) then g_player(8)=0
         loop
+        first_stage%=false
         run_stage()
         inc g_stage%
     loop
