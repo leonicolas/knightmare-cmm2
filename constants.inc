@@ -190,6 +190,7 @@ OBJ_DATA(4,1)=40     ' Y speed
 OBJ_DATA(4,2)=3      ' Life
 const KNIGHT_CHANGE_DIRECT_DIST_PX=55
 const KNIGHT_MAX_HORIZONTAL_DIST_PX=48
+const KNIGHT_SPAWN_SPEED_MS=500
 ' Cloud
 OBJ_DATA(5,0)=25     ' X speed
 OBJ_DATA(5,1)=360    ' Cycle angle before changing row

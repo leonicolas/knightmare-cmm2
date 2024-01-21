@@ -583,6 +583,10 @@ sub spawn_object(obj_id%, x%, y%, obj_cfg%)
             end if
             ' Spawn the bat shadow
             spawn_shadow(i%, TILE_SIZEx2+TILE_SIZE/2)
+        case 4 ' Knight
+            if obj_cfg% then
+                enqueue_action(obj_cfg%, obj_id%, x%, y%,, KNIGHT_SPAWN_SPEED_MS)
+            end if
 
         case 5 ' Cloud
             g_obj(i%,1)=choice(obj_cfg%=left, 0, SCREEN_WIDTH-TILE_SIZEx2)
