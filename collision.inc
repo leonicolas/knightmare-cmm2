@@ -43,6 +43,11 @@ sub process_collision(sprite_id%)
                     else if collided_id% >= OBJ_INI_SPRITE_ID then
                         hit_object(collided_id%, true)
                         if is_boss_hit_box(collided_id%) or not is_super_weapon() or is_chrystal(collided_id%) then destroy_shot(sprite_id%)
+
+                    ' Hits another shot
+                    else if collided_id% >= SHOTS_INI_SPRITE_ID then
+                        if hit_shot(collided_id%) then destroy_shot(collided_id%)
+
                     end if
 
                 ' Enemies shots
@@ -99,6 +104,13 @@ function hit_block(sprite_id%) as integer
         ' Spawn new block tile
         enqueue_action(1, 31, i%)
     end if
+end function
+
+function hit_shot(sprite_id%) as integer
+    local shot_id%=sprite_id% - SHOTS_INI_SPRITE_ID
+    local weapon%=g_shots(shot_id%, 0)
+    ' Check if hit a scythe
+    hit_shot=(weapon% = 26)
 end function
 
 sub hit_object(obj_sprite_id%, sfx%, instakill%)

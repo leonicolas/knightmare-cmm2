@@ -128,7 +128,7 @@ sub process_map_row(row%, spawn%, line_zero%)
         case is < 0
             exit sub
         case 7
-            spawn_boss(g_stage%, not line_zero%)
+            spawn_boss(not line_zero%)
         case 8
             play_song("DEMON_MOD")
             destroy_enemies_shots()

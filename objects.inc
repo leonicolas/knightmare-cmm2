@@ -68,6 +68,7 @@ end sub
 
 sub animate_shots()
     local i%, sprite_id%, rot%=-1, tile_id%, playing%
+    local offset_x%, offset_y%
     for i%=0 to bound(g_shots())
         ' Checks weapon id
         if g_shots(i%,0)=0 then continue for
@@ -88,19 +89,23 @@ sub animate_shots()
                     case 0
                         rot%=0: tile_id%=43
                 end select
-                ' Rotate boomerang
-                if rot% >= 0 then
-                    if g_cont_sfx$ <> "" and not playing% then
-                        play_sfx(g_cont_sfx$)
-                        playing%=true
-                    end if
-                    sprite hide safe sprite_id%
-                    sprite close sprite_id%
-                    sprite read sprite_id%, OBJ_TILE%(tile_id%,0), OBJ_TILE%(tile_id%,1), OBJ_TILE%(tile_id%,2), OBJ_TILE%(tile_id%,3), OBJ_TILES_BUFFER
-                    sprite show safe sprite_id%, g_shots(i%,1),g_shots(i%,2), 1, rot%
-                end if
 
+            case 26 ' Scythe
+                tile_id%=26: rot%=0
+                offset_x%=TILE_SIZEx2*(g_anim_tick% mod 4)
         end select
+
+        ' Render next frame
+        if rot% >= 0 then
+            if g_cont_sfx$ <> "" and not playing% then
+                play_sfx(g_cont_sfx$)
+                playing%=true
+            end if
+            sprite hide safe sprite_id%
+            sprite close sprite_id%
+            sprite read sprite_id%, OBJ_TILE%(tile_id%,0)+offset_x%, OBJ_TILE%(tile_id%,1)+offset_y%, OBJ_TILE%(tile_id%,2), OBJ_TILE%(tile_id%,3), OBJ_TILES_BUFFER
+            sprite show safe sprite_id%, g_shots(i%,1),g_shots(i%,2), 1, rot%
+        end if
     next
 end sub
 
@@ -159,26 +164,42 @@ sub move_player(direction%)
 end sub
 
 sub move_shots()
-    local i%,x,y
+    local i%,x,y,speed_x,speed_y
     for i%=0 to bound(g_shots())
         ' Checks weapon id
         if g_shots(i%,0)=0 then continue for
         ' Moves shot
         select case g_shots(i%,0)
             case 4,9 ' Boomerang
-                x = g_player(0)
+                g_shots(i%,1) = g_player(0)
                 inc g_shots(i%,4),2.5
+                speed_y=g_shots(i%,4)
+
+            case 26 ' Scythe
+                inc g_shots(i%,5),choice(i% mod 2,1,-1)
+                if abs(g_shots(i%,5)) > 720 then
+                    destroy_shot(i% + SHOTS_INI_SPRITE_ID)
+                    continue for
+                end if
+
+                g_shots(i%,1)=g_shots(i%,3)+TILE_SIZE*7*sin(g_shots(i%,5))
+                g_shots(i%,2)=g_shots(i%,4)+TILE_SIZE*7*-cos(g_shots(i%,5))
+
             case else ' Other weapons
-                inc g_shots(i%,1),g_shots(i%,3)*g_delta_time
-                x = g_shots(i%,1)
+                speed_x=g_shots(i%,3)
+                speed_y=g_shots(i%,4)
         end select
 
-        inc g_shots(i%,2),g_shots(i%,4)*g_delta_time
+        inc g_shots(i%,1),speed_x*g_delta_time
+        inc g_shots(i%,2),speed_y*g_delta_time
+
+        ' Adjust shot position
         select case g_shots(i%,0)
             case 4,9 ' Boomerang
                 if g_shots(i%,2) < 0 then g_shots(i%,2) = 0
         end select
-        y = g_shots(i%,2)
+
+        x=g_shots(i%,1): y=g_shots(i%,2)
 
         if y < 0 or y > SCREEN_HEIGHT+TILE_SIZEx2 or x < 0 or x > SCREEN_WIDTH then
             destroy_shot(i% + SHOTS_INI_SPRITE_ID)
@@ -292,9 +313,10 @@ sub move_and_process_objects()
                 end if
                 inc g_obj(i%,2),OBJ_DATA(data_id%,1)*g_delta_time
 
-            case 39 ' Shadow
+            case 38,39 ' Shadow
                 g_obj(i%,1)=g_obj(g_obj(i%,6),1)
-                g_obj(i%,2)=g_obj(g_obj(i%,6),2)+g_obj(i%,4)
+                ' Changes Y if it is not fixed height
+                if not g_obj(i%,5) then g_obj(i%,2)=g_obj(g_obj(i%,6),2)+g_obj(i%,4)
                 screen_offset%=-TILE_SIZE
 
             case else
@@ -410,7 +432,12 @@ end sub
 
 sub enemy_fire(enemy_ix%, shot_ix%)
     local obj_id%=g_obj(enemy_ix%,0)
-    if obj_id% < 50 and (g_obj(enemy_ix%,2) > MAX_ENEMIES_SHOOT_Y or rnd > SHOOT_CHANGE(g_stage%)) then exit sub
+    ' Checks screen limit for shooting and shoot chance
+    if g_obj(enemy_ix%,2) > MAX_ENEMIES_SHOOT_Y or rnd > SHOOT_CHANGE(g_stage%) then exit sub
+    ' Ignores boss body
+    if obj_id% > 50 and g_boss(1) = obj_id% then exit sub
+
+    ' Allocate new shot
     if shot_ix%=0 then
         shot_ix%=get_free_shot_slot()
         if shot_ix% < 0 then exit sub
@@ -420,11 +447,11 @@ sub enemy_fire(enemy_ix%, shot_ix%)
     local shot_spr_id%=shot_ix%+SHOTS_INI_SPRITE_ID
     local cx=sprite(W, enemy_spr_id%)/2, cy=sprite(H, enemy_spr_id%)/2
     local angle=deg(sprite(V, enemy_spr_id%, 1))
-    local idx%=14,rot%,speed=DEFAULT_SHOT_SPEED
+    local idx%=14, rot%=fix((angle+22.5)/45)
+    local gpr1, gpr2, gpr3
 
     select case obj_id%
         case 4   ' Knight
-            rot%=fix((angle+22.5)/45)
             if rot%=0 or rot%=4 then
                 idx%=20: rot%=choice(rot%=0,2,0)
             else if rot%=2 or rot%=6 then
@@ -434,20 +461,35 @@ sub enemy_fire(enemy_ix%, shot_ix%)
             else
                 idx%=22: rot%=choice(rot%=1,3,2)
             end if
+            gpr1=DEFAULT_SHOT_SPEED*sin(angle)
+            gpr2=DEFAULT_SHOT_SPEED*-cos(angle)
+
         case 5 ' Cloud
             exit sub
 
         case 51 ' Boss stage 1
             idx%=15
-            speed=BOSS_SHOT_SPEED
+            gpr1=120*sin(angle)
+            gpr2=120*-cos(angle)
+
+        case 52 ' Boss stage 2
+            idx%=26
+            ' Center of rotation
+            gpr1=g_obj(enemy_ix%,1)             ' X
+            gpr2=g_obj(enemy_ix%,2)+TILE_SIZE*8 ' Y
+
+        case else
+            gpr1=DEFAULT_SHOT_SPEED*sin(angle)
+            gpr2=DEFAULT_SHOT_SPEED*-cos(angle)
 
     end select
     ' Create the shot state
-    g_shots(shot_ix%,0)=1                     ' weapon
+    g_shots(shot_ix%,0)=idx%                  ' weapon
     g_shots(shot_ix%,1)=g_obj(enemy_ix%,1)+cx ' X
     g_shots(shot_ix%,2)=g_obj(enemy_ix%,2)+cy ' Y
-    g_shots(shot_ix%,3)=speed*sin(angle)      ' Speed X
-    g_shots(shot_ix%,4)=speed*-cos(angle)     ' Speed Y
+    g_shots(shot_ix%,3)=gpr1
+    g_shots(shot_ix%,4)=gpr2
+    g_shots(shot_ix%,5)=gpr3
     ' Create the shot sprite
     sprite read shot_spr_id%, OBJ_TILE%(idx%,0), OBJ_TILE%(idx%,1), OBJ_TILE%(idx%,2), OBJ_TILE%(idx%,3), OBJ_TILES_BUFFER
     sprite show safe shot_spr_id%, g_shots(shot_ix%,1),g_shots(shot_ix%,2), 1, rot%
@@ -621,18 +663,21 @@ sub spawn_shield()
     g_player(6)=SHIELD_MAX_HITS
 end sub
 
-sub spawn_shadow(obj_ix%, height%)
-    local sprite_id%, i%=get_free_object_slot()
+sub spawn_shadow(obj_ix%, height%, fixed_height%, shadow_tile_id%)
+    local i%=get_free_object_slot()
     if i% < 0 then exit sub
+
+    local sprite_id%, id%=choice(shadow_tile_id%, shadow_tile_id%, 39)
 
     g_obj(i%,0)=39                       ' Shadow id
     g_obj(i%,1)=g_obj(obj_ix%,1)         ' X
     g_obj(i%,2)=g_obj(obj_ix%,2)+height% ' Y
     g_obj(i%,4)=height%                  ' Height
+    g_obj(i%,5)=fixed_height%            ' Is fixed hight?
     g_obj(i%,6)=obj_ix%                  ' Shadow -> source object index
     g_obj(obj_ix%,6)=i%                  ' Source object -> shadow index
     sprite_id%=OBJ_INI_SPRITE_ID + i%
-    sprite read sprite_id%, OBJ_TILE%(39,0), OBJ_TILE%(39,1), OBJ_TILE%(39,2), OBJ_TILE%(39,3), OBJ_TILES_BUFFER
+    sprite read sprite_id%, OBJ_TILE%(id%,0), OBJ_TILE%(id%,1), OBJ_TILE%(id%,2), OBJ_TILE%(id%,3), OBJ_TILES_BUFFER
     sprite show safe sprite_id%, g_obj(i%,1),g_obj(i%,2), 3
 end sub
 

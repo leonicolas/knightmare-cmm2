@@ -51,9 +51,9 @@ dim g_hiscore%=0
 ' 2 - Active
 dim g_boss(7)
 
-' Supports 13 shots at the same time: 0: id | 1: x | 2: y | 3: speed x | 4: speed y
+' Supports 13 shots at the same time: 0: id | 1: x | 2: y | 3: GPR 1 | 4: GPR 2 | 5: GPR 3
 ' The three first slots are for the player shots, the other ones for enemies
-dim g_shots(12,4)
+dim g_shots(12,5)
 const SHOTS_NUM%=bound(g_shots())
 ' Object data: 0: obj id | 1: x | 2: y | 3: life | 4: GPR 1 | 5: GPR 2 | 6: shadow
 dim g_obj(20,6)

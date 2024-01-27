@@ -32,6 +32,9 @@ sub process_actions_queue()
             case 32 ' Shield
                 spawn_shield()
 
+            case 90 ' Replace boss skin
+                show_boss_body(g_actions_queue(i%, 2), g_actions_queue(i%, 3))
+
             case 100 ' Boss death blinks the screen
                 page write 0
                 cls choice(g_actions_queue(i%, 0) mod 2, 0, rgb(gray))
