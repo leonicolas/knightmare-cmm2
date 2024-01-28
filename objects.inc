@@ -447,11 +447,12 @@ sub enemy_fire(enemy_ix%, shot_ix%)
     local shot_spr_id%=shot_ix%+SHOTS_INI_SPRITE_ID
     local cx=sprite(W, enemy_spr_id%)/2, cy=sprite(H, enemy_spr_id%)/2
     local angle=deg(sprite(V, enemy_spr_id%, 1))
-    local idx%=14, rot%=fix((angle+22.5)/45)
+    local rot%=fix((angle+22.5)/45), idx%=14 ' Dot bullet
     local gpr1, gpr2, gpr3
 
     select case obj_id%
         case 4   ' Knight
+            ' Arrow idx%
             if rot%=0 or rot%=4 then
                 idx%=20: rot%=choice(rot%=0,2,0)
             else if rot%=2 or rot%=6 then
@@ -468,12 +469,12 @@ sub enemy_fire(enemy_ix%, shot_ix%)
             exit sub
 
         case 51 ' Boss stage 1
-            idx%=15
+            idx%=15 ' Energy ray
             gpr1=120*sin(angle)
             gpr2=120*-cos(angle)
 
         case 52 ' Boss stage 2
-            idx%=26
+            idx%=26 ' Scythe
             ' Center of rotation
             gpr1=g_obj(enemy_ix%,1)             ' X
             gpr2=g_obj(enemy_ix%,2)+TILE_SIZE*8 ' Y
