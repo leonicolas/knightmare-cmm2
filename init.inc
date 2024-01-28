@@ -52,13 +52,16 @@ sub init_stage()
     ' Print the status bar
     print_status()
 
-    ' Set initial player position
+    ' Initialize player
     page write SPRITES_BUFFER
     g_player(0)=SCREEN_WIDTH/2-TILE_SIZE  ' x
     g_player(1)=SCREEN_HEIGHT-TILE_SIZE*3 ' y
     g_player(2)=0                         ' animation counter
     sprite read #1, PLAYER_SKIN1_X_L,PLAYER_SKIN_Y, TILE_SIZEx2,TILE_SIZEx2, OBJ_TILES_BUFFER
     sprite show safe #1, g_player(0),g_player(1), 1,,1
+
+    ' Initialize shield
+    if g_player(6) > 0 then spawn_shield()
 
     ' Play stage music
     if g_row% > 8 then play_song(MUSIC$(g_stage%))
