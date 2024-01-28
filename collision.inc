@@ -158,9 +158,9 @@ sub hit_shield()
         case 0
             g_player(5)=0
             sprite hide safe 2
-        case fix(SHIELD_MAX_HITS/6)
+        case is <= SHIELD_MAX_HITS\6
             sprite read 2, OBJ_TILE%(32,0)+TILE_SIZEx4, OBJ_TILE%(32,1), OBJ_TILE%(32,2), OBJ_TILE%(32,3), OBJ_TILES_BUFFER
-        case fix(SHIELD_MAX_HITS/6*2)
+        case is <= SHIELD_MAX_HITS\6*2
             sprite read 2, OBJ_TILE%(32,0)+TILE_SIZEx2, OBJ_TILE%(32,1), OBJ_TILE%(32,2), OBJ_TILE%(32,3), OBJ_TILES_BUFFER
     end select
 end sub
