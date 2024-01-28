@@ -54,7 +54,7 @@ sub process_collision(sprite_id%)
                 else
                     ' Hits the shield
                     if collided_id% = 2 then
-                        hit_shield()
+                        hit_shield(sprite_id%)
                         destroy_shot(sprite_id%)
                     end if
                 end if
@@ -150,9 +150,18 @@ sub hit_object(obj_sprite_id%, sfx%, instakill%)
     end select
 end sub
 
-sub hit_shield()
+sub hit_shield(shot_sprite_id%)
     if g_player(6)=0 then exit sub
-    inc g_player(6), -1
+
+    local force%=1
+
+    select case g_shots(shot_sprite_id% - SHOTS_INI_SPRITE_ID,0)
+        ' Energy ray, Scythe
+        case 15,26
+            force%=3
+    end select
+
+    inc g_player(6), -force%
     play_sfx("SHIELD_SFX")
     select case g_player(6)
         case 0
