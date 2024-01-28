@@ -54,8 +54,7 @@ sub hit_boss(sprite_id%)
     select case g_stage%
         case 2
             aux%=BOSS_LIFE(g_stage%) \ 3
-            debug_print("LIFE "+str$(g_obj(sprite_obj_id%,3)+1)+"   ")
-            if g_obj(sprite_obj_id%,3)+1 mod aux% = 0 then
+            if g_obj(sprite_obj_id%,3) mod aux% = 0 then
                 enqueue_action(1, 90, obj_id%, choice(g_obj(sprite_obj_id%,3)\aux%<=1,TILE_SIZE*10,TILE_SIZE*5))
             end if
     end select
