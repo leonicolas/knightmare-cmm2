@@ -130,7 +130,7 @@ sub process_map_row(row%, spawn%, line_zero%)
         case 7
             spawn_boss(not line_zero%)
         case 8
-            play_song("DEMON_MOD")
+            play_song(choice(g_stage%=1,"DEMON_MOD","BOSS_MOD"))
             destroy_enemies_shots()
             kill_all_enemies()
     end select

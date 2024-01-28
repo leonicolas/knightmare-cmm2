@@ -6,6 +6,8 @@ sub play_song(song$)
     on error skip
     play stop
     select case song$
+        case "BOSS_MOD"
+            play modfile "music/boss.mod", 16000
         case "DEMON_MOD"
             play modfile "music/facing-the-demon.mod", 16000
         case "MAJOU_MOD"
