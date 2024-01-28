@@ -16,6 +16,8 @@ sub activate_boss()
             enqueue_action(1, 5,,,right,3000)
             enqueue_action(1, 5,,,left,6500)
             enqueue_action(1, 5,,,right,9500)
+        case 2
+            g_obj(g_obj(id%,6),5) = true ' Fix shadow hight
     end select
 end sub
 
@@ -133,7 +135,7 @@ sub show_boss_body(obj_id%, tile_offset%, show_shadow%)
     select case g_stage%
         case 2
             tile_x%=80
-            if show_shadow% then spawn_shadow(obj_id%, TILE_SIZE*8, true, 37)
+            if show_shadow% then spawn_shadow(obj_id%, TILE_SIZE*6, false, 37)
     end select
 
     sprite read OBJ_INI_SPRITE_ID + obj_id%, tile_x%+tile_offset%, tile_y%, tile_w%, tile_h%, BOSS_TILES_BUFFER
@@ -192,10 +194,11 @@ sub move_boss()
                 g_obj(id%, 1)=ini_pos+(ini_pos-TILE_SIZEx4)*sin(g_obj(id%, 4))
                 g_obj(id%, 2)=TILE_SIZE*6+6*cos(g_obj(id%, 5))
         end select
+
+        ' Boss hit box
+        sprite next OBJ_INI_SPRITE_ID + g_boss(2), g_obj(id%, 1)+TILE_SIZEx2,g_obj(id%, 2)+TILE_SIZE
     end if
 
-    ' Hit box
-    sprite next OBJ_INI_SPRITE_ID + g_boss(2), g_obj(id%, 1)+TILE_SIZEx2,g_obj(id%, 2)+TILE_SIZE
-    ' Box body
+    ' Boss body
     sprite next OBJ_INI_SPRITE_ID + g_boss(1), g_obj(id%, 1), g_obj(id%, 2)
 end sub
