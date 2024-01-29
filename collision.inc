@@ -164,8 +164,9 @@ sub hit_shield(shot_sprite_id%)
     inc g_player(6), -force%
     play_sfx("SHIELD_SFX")
     select case g_player(6)
-        case 0
+        case is <= 0
             g_player(5)=0
+            g_player(6)=0
             sprite hide safe 2
         case is <= SHIELD_MAX_HITS\6
             sprite read 2, OBJ_TILE%(32,0)+TILE_SIZEx4, OBJ_TILE%(32,1), OBJ_TILE%(32,2), OBJ_TILE%(32,3), OBJ_TILES_BUFFER
