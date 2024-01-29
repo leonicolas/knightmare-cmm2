@@ -108,7 +108,7 @@ OBJ_TILE%(10,0)=176: OBJ_TILE%(10,1)=1: OBJ_TILE%(10,2)=16: OBJ_TILE%(10,3)=15
 ' Ghost
 OBJ_TILE%(11,0)=208: OBJ_TILE%(11,1)=0: OBJ_TILE%(11,2)=16: OBJ_TILE%(11,3)=16
 ' Yellow thing
-OBJ_TILE%(12,0)=225: OBJ_TILE%(12,1)=2: OBJ_TILE%(12,2)=13: OBJ_TILE%(12,3)=13
+OBJ_TILE%(12,0)=225: OBJ_TILE%(12,1)=2: OBJ_TILE%(12,2)=13: OBJ_TILE%(12,3)=13: OBJ_TILE%(12,4)=12
 ' Red thing
 OBJ_TILE%(13,0)=240: OBJ_TILE%(13,1)=1: OBJ_TILE%(13,2)=15: OBJ_TILE%(13,3)=14
 
@@ -204,6 +204,10 @@ OBJ_DATA(6,0)=70     ' X speed
 OBJ_DATA(6,1)=70     ' Y speed
 OBJ_DATA(6,2)=1      ' Life
 const DEMON_CHANGE_DIRECT_DIST_PX=55
+' Yellow thing
+OBJ_DATA(12,0)=240    ' X speed
+OBJ_DATA(12,1)=240    ' Y speed
+OBJ_DATA(12,2)=1      ' Life
 
 ' Weapon chrystal
 OBJ_DATA(29,0)=50   ' X speed (angle increment)

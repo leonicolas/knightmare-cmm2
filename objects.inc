@@ -35,6 +35,9 @@ sub animate_objects()
             case 4  ' Knight
                 if g_anim_tick% mod 6 > 2 then flip%=1
 
+            case 12 ' Yellow thing
+                offset_x%=0
+
             case 24 ' Fire
                 if g_obj(i%, 3) > bound(FIRE_ANIM()) then
                     destroy_object(i%)
@@ -305,6 +308,10 @@ sub move_and_process_objects()
                 inc g_obj(i%,1),OBJ_DATA(data_id%,0)*g_delta_time*g_obj(i%,4)
                 inc g_obj(i%,2),OBJ_DATA(data_id%,1)*g_delta_time
 
+            case 12 ' Yellow thing
+                inc g_obj(i%,1),g_obj(i%,4)*g_delta_time
+                inc g_obj(i%,2),OBJ_DATA(data_id%,1)*g_delta_time
+
             case 29,30 ' Weapon and power-up chrystal
                 if g_obj(i%,5) >= 0 then
                     offset_x%=-TILE_SIZEx4*sin(g_obj(i%,5))
@@ -339,161 +346,6 @@ end sub
 
 sub start_enemy_death_animation(i%, sfx%)
     enqueue_action(1, 24, g_obj(i%,1), g_obj(i%,2), sfx%)
-end sub
-
-sub fire()
-    ' Cooldown or invincibility power-up
-    if timer - g_pshot_timer < g_player_shot_ms or g_player(5) = 4 then exit sub
-
-    local i%, sprite_id%, shots%=choice(g_player(3)>6,2,1)
-    local tile_id%=40
-    local speed_x=0, speed_y=-220, offset%
-    local sfx$="SHOT_SFX"
-    local x=g_player(0)+(TILE_SIZE-OBJ_TILE%(tile_id%,2)/2)
-    local y=g_player(1)-OBJ_TILE%(tile_id%,3)-1
-
-    select case g_player(3)
-        case 2 ' Twin arrows
-            tile_id%=41
-        case 3,8 ' Triple flames
-            if g_shots(0,0) or g_shots(1,0) or g_shots(2,0) then exit sub
-            shots%=2
-            inc x, -TILE_SIZEx2
-            speed_y=-200
-            tile_id%=42
-            sfx$="FLAME_SFX"
-        case 4,9 ' Boomerang
-            tile_id%=43
-            sfx$=""
-            g_cont_sfx$="BOOMERANG_SFX"
-        case 5,10 ' Sword
-            shots%=2
-            tile_id%=choice(g_player(3) = 5, 45, 46)
-            sfx$="SWORD_SFX"
-        case 6,11 ' Fire arrow
-            tile_id%=47
-            sfx$="FIRE_ARROW_SFX"
-    end select
-
-    ' One, two or three shots depending on the weapon level
-    for i%=0 to shots%
-        offset%=0
-        ' Ignore used slots
-        if g_shots(i%,0) then continue for
-
-        select case g_player(3)
-            case 3, 8 ' Flames
-                if i% > 0 then inc x, TILE_SIZEx2
-                if i% = 1 then offset%=TILE_SIZE
-                if g_player(3) = 3 then speed_x=50*i%-50
-        end select
-
-        ' Create the shot state
-        g_shots(i%,0)=g_player(3) ' weapon
-        g_shots(i%,1)=x           ' X
-        g_shots(i%,2)=y-offset%   ' Y
-        g_shots(i%,3)=speed_x     ' Speed X
-        g_shots(i%,4)=speed_y     ' Speed Y
-
-        ' Create the shot sprite
-        sprite_id%=SHOTS_INI_SPRITE_ID+i%
-        sprite read sprite_id%, OBJ_TILE%(tile_id%,0), OBJ_TILE%(tile_id%,1), OBJ_TILE%(tile_id%,2), OBJ_TILE%(tile_id%,3), OBJ_TILES_BUFFER
-        sprite show safe sprite_id%, g_shots(i%,1),g_shots(i%,2), 1
-        ' Play SFX
-        play_sfx(sfx$)
-
-        ' Increment timer
-        g_pshot_timer=timer
-        if g_player(3) <> 3 and g_player(3) <> 8 then exit for
-    next
-end sub
-
-sub enemies_fire()
-    if g_freeze_timer >= 0 then exit sub
-
-    local i%,c%,slot_ix%
-    local free_slots%(bound(g_shots()))
-    get_free_shot_slots(free_slots%())
-
-    for i%=0 to bound(g_obj())
-        ' Has object or it is in the min Y position?
-        if g_obj(i%,0) = 0 or g_obj(i%,0) > 16 or g_obj(i%,2) < TILE_SIZEx2 then
-            continue for
-        end if
-
-        slot_ix%=free_slots%(c%)
-        ' Has free slot?
-        if slot_ix% = 0 then exit for
-
-        enemy_fire(i%, slot_ix%)
-        inc c%
-    next
-end sub
-
-sub enemy_fire(enemy_ix%, shot_ix%)
-    local obj_id%=g_obj(enemy_ix%,0)
-    ' Checks screen limit for shooting and shoot chance
-    if g_obj(enemy_ix%,2) > MAX_ENEMIES_SHOOT_Y or rnd > SHOOT_CHANGE(g_stage%) then exit sub
-    ' Ignores boss body
-    if obj_id% > 50 and g_boss(1) = obj_id% then exit sub
-
-    ' Allocate new shot
-    if shot_ix%=0 then
-        shot_ix%=get_free_shot_slot()
-        if shot_ix% < 0 then exit sub
-    end if
-
-    local enemy_spr_id%=OBJ_INI_SPRITE_ID + enemy_ix%
-    local shot_spr_id%=shot_ix%+SHOTS_INI_SPRITE_ID
-    local cx=sprite(W, enemy_spr_id%)/2, cy=sprite(H, enemy_spr_id%)/2
-    local angle=deg(sprite(V, enemy_spr_id%, 1))
-    local rot%=fix((angle+22.5)/45), idx%=14 ' Dot bullet
-    local gpr1, gpr2, gpr3
-
-    select case obj_id%
-        case 4   ' Knight
-            ' Arrow idx%
-            if rot%=0 or rot%=4 then
-                idx%=20: rot%=choice(rot%=0,2,0)
-            else if rot%=2 or rot%=6 then
-                idx%=21: rot%=choice(rot%=2,1,0)
-            else if rot%=3 or rot%=5 then
-                idx%=22: rot%=choice(rot%=3,1,0)
-            else
-                idx%=22: rot%=choice(rot%=1,3,2)
-            end if
-            gpr1=DEFAULT_SHOT_SPEED*sin(angle)
-            gpr2=DEFAULT_SHOT_SPEED*-cos(angle)
-
-        case 5 ' Cloud
-            exit sub
-
-        case 51 ' Boss stage 1
-            idx%=15 ' Energy ray
-            gpr1=120*sin(angle)
-            gpr2=120*-cos(angle)
-
-        case 52 ' Boss stage 2
-            idx%=26 ' Scythe
-            ' Center of rotation
-            gpr1=g_obj(enemy_ix%,1)             ' X
-            gpr2=g_obj(enemy_ix%,2)+TILE_SIZE*8 ' Y
-
-        case else
-            gpr1=DEFAULT_SHOT_SPEED*sin(angle)
-            gpr2=DEFAULT_SHOT_SPEED*-cos(angle)
-
-    end select
-    ' Create the shot state
-    g_shots(shot_ix%,0)=idx%                  ' weapon
-    g_shots(shot_ix%,1)=g_obj(enemy_ix%,1)+cx ' X
-    g_shots(shot_ix%,2)=g_obj(enemy_ix%,2)+cy ' Y
-    g_shots(shot_ix%,3)=gpr1
-    g_shots(shot_ix%,4)=gpr2
-    g_shots(shot_ix%,5)=gpr3
-    ' Create the shot sprite
-    sprite read shot_spr_id%, OBJ_TILE%(idx%,0), OBJ_TILE%(idx%,1), OBJ_TILE%(idx%,2), OBJ_TILE%(idx%,3), OBJ_TILES_BUFFER
-    sprite show safe shot_spr_id%, g_shots(shot_ix%,1),g_shots(shot_ix%,2), 1, rot%
 end sub
 
 ' Returns -1 if there are no free slots
@@ -612,7 +464,8 @@ sub spawn_object(obj_id%, x%, y%, obj_cfg%)
     local i%=allocate_object(obj_id%, x%, y%)
     if i% < 0 then exit sub
 
-    local sprite_id%, offset_x%, offset_y%, layer%=1, data_id%
+    local sprite_id%=OBJ_INI_SPRITE_ID + i%
+    local offset_x%, offset_y%, layer%=1, data_id%, angle
     data_id%=OBJ_TILE%(obj_id%,4)
 
     g_obj(i%,3)=OBJ_DATA(data_id%,2) ' GPR 1
@@ -643,6 +496,13 @@ sub spawn_object(obj_id%, x%, y%, obj_cfg%)
         case 6 ' Blue demon
             spawn_shadow(i%, TILE_SIZEx2+TILE_SIZE/2)
 
+        case 7 ' Skeleton
+
+        case 12 ' Yellow thing
+            angle=min(20,math(ATAN3 abs(g_obj(i%,1)-g_player(0)), abs(g_obj(i%,2)-g_player(1))))
+            g_obj(i%,4)=OBJ_DATA(data_id%,0)*choice(g_obj(i%,1)>g_player(0),left,right)*sin(angle)
+            spawn_shadow(i%, TILE_SIZEx2)
+
         case 24 ' Fire
             offset_x%=FIRE_ANIM(0)*TILE_SIZEx2
             layer%=4
@@ -652,7 +512,6 @@ sub spawn_object(obj_id%, x%, y%, obj_cfg%)
     ' Enemies range
     if is_enemy(obj_id%) then inc g_enemies_count%
 
-    sprite_id%=OBJ_INI_SPRITE_ID + i%
     sprite read sprite_id%, OBJ_TILE%(obj_id%,0)+offset_x%, OBJ_TILE%(obj_id%,1)+offset_y%, OBJ_TILE%(obj_id%,2), OBJ_TILE%(obj_id%,3), OBJ_TILES_BUFFER
     sprite show safe sprite_id%, g_obj(i%,1),g_obj(i%,2), layer%,, 1
 end sub
@@ -680,6 +539,161 @@ sub spawn_shadow(obj_ix%, height%, fixed_height%, shadow_tile_id%)
     sprite_id%=OBJ_INI_SPRITE_ID + i%
     sprite read sprite_id%, OBJ_TILE%(id%,0), OBJ_TILE%(id%,1), OBJ_TILE%(id%,2), OBJ_TILE%(id%,3), OBJ_TILES_BUFFER
     sprite show safe sprite_id%, g_obj(i%,1),g_obj(i%,2), 3
+end sub
+
+sub fire()
+    ' Cooldown or invincibility power-up
+    if timer - g_pshot_timer < g_player_shot_ms or g_player(5) = 4 then exit sub
+
+    local i%, sprite_id%, shots%=choice(g_player(3)>6,2,1)
+    local tile_id%=40
+    local speed_x=0, speed_y=-220, offset%
+    local sfx$="SHOT_SFX"
+    local x=g_player(0)+(TILE_SIZE-OBJ_TILE%(tile_id%,2)/2)
+    local y=g_player(1)-OBJ_TILE%(tile_id%,3)-1
+
+    select case g_player(3)
+        case 2 ' Twin arrows
+            tile_id%=41
+        case 3,8 ' Triple flames
+            if g_shots(0,0) or g_shots(1,0) or g_shots(2,0) then exit sub
+            shots%=2
+            inc x, -TILE_SIZEx2
+            speed_y=-200
+            tile_id%=42
+            sfx$="FLAME_SFX"
+        case 4,9 ' Boomerang
+            tile_id%=43
+            sfx$=""
+            g_cont_sfx$="BOOMERANG_SFX"
+        case 5,10 ' Sword
+            shots%=2
+            tile_id%=choice(g_player(3) = 5, 45, 46)
+            sfx$="SWORD_SFX"
+        case 6,11 ' Fire arrow
+            tile_id%=47
+            sfx$="FIRE_ARROW_SFX"
+    end select
+
+    ' One, two or three shots depending on the weapon level
+    for i%=0 to shots%
+        offset%=0
+        ' Ignore used slots
+        if g_shots(i%,0) then continue for
+
+        select case g_player(3)
+            case 3, 8 ' Flames
+                if i% > 0 then inc x, TILE_SIZEx2
+                if i% = 1 then offset%=TILE_SIZE
+                if g_player(3) = 3 then speed_x=50*i%-50
+        end select
+
+        ' Create the shot state
+        g_shots(i%,0)=g_player(3) ' weapon
+        g_shots(i%,1)=x           ' X
+        g_shots(i%,2)=y-offset%   ' Y
+        g_shots(i%,3)=speed_x     ' Speed X
+        g_shots(i%,4)=speed_y     ' Speed Y
+
+        ' Create the shot sprite
+        sprite_id%=SHOTS_INI_SPRITE_ID+i%
+        sprite read sprite_id%, OBJ_TILE%(tile_id%,0), OBJ_TILE%(tile_id%,1), OBJ_TILE%(tile_id%,2), OBJ_TILE%(tile_id%,3), OBJ_TILES_BUFFER
+        sprite show safe sprite_id%, g_shots(i%,1),g_shots(i%,2), 1
+        ' Play SFX
+        play_sfx(sfx$)
+
+        ' Increment timer
+        g_pshot_timer=timer
+        if g_player(3) <> 3 and g_player(3) <> 8 then exit for
+    next
+end sub
+
+sub enemies_fire()
+    if g_freeze_timer >= 0 then exit sub
+
+    local i%,c%,slot_ix%
+    local free_slots%(bound(g_shots()))
+    get_free_shot_slots(free_slots%())
+
+    for i%=0 to bound(g_obj())
+        ' Has object or it is in the min Y position?
+        if g_obj(i%,0) = 0 or g_obj(i%,0) > 16 or g_obj(i%,2) < TILE_SIZEx2 then
+            continue for
+        end if
+
+        slot_ix%=free_slots%(c%)
+        ' Has free slot?
+        if slot_ix% = 0 then exit for
+
+        enemy_fire(i%, slot_ix%)
+        inc c%
+    next
+end sub
+
+sub enemy_fire(enemy_ix%, shot_ix%)
+    local obj_id%=g_obj(enemy_ix%,0)
+    ' Checks screen limit for shooting and shoot chance
+    if g_obj(enemy_ix%,2) > MAX_ENEMIES_SHOOT_Y or rnd > SHOOT_CHANGE(g_stage%) then exit sub
+    ' Ignores boss body
+    if obj_id% > 50 and g_boss(1) = obj_id% then exit sub
+
+    ' Allocate new shot
+    if shot_ix%=0 then
+        shot_ix%=get_free_shot_slot()
+        if shot_ix% < 0 then exit sub
+    end if
+
+    local enemy_spr_id%=OBJ_INI_SPRITE_ID + enemy_ix%
+    local shot_spr_id%=shot_ix%+SHOTS_INI_SPRITE_ID
+    local cx=sprite(W, enemy_spr_id%)/2, cy=sprite(H, enemy_spr_id%)/2
+    local angle=deg(sprite(V, enemy_spr_id%, 1))
+    local rot%=fix((angle+22.5)/45), idx%=14 ' Dot bullet
+    local gpr1, gpr2, gpr3
+
+    select case obj_id%
+        case 5,12 ' Cloud, Yellow thing
+            exit sub ' Do not shoot
+
+        case 4   ' Knight
+            ' Arrow idx%
+            if rot%=0 or rot%=4 then
+                idx%=20: rot%=choice(rot%=0,2,0)
+            else if rot%=2 or rot%=6 then
+                idx%=21: rot%=choice(rot%=2,1,0)
+            else if rot%=3 or rot%=5 then
+                idx%=22: rot%=choice(rot%=3,1,0)
+            else
+                idx%=22: rot%=choice(rot%=1,3,2)
+            end if
+            gpr1=DEFAULT_SHOT_SPEED*sin(angle)
+            gpr2=DEFAULT_SHOT_SPEED*-cos(angle)
+
+        case 51 ' Boss stage 1
+            idx%=15 ' Energy ray
+            gpr1=120*sin(angle)
+            gpr2=120*-cos(angle)
+
+        case 52 ' Boss stage 2
+            idx%=26 ' Scythe
+            ' Center of rotation
+            gpr1=g_obj(enemy_ix%,1)             ' X
+            gpr2=g_obj(enemy_ix%,2)+TILE_SIZE*8 ' Y
+
+        case else
+            gpr1=DEFAULT_SHOT_SPEED*sin(angle)
+            gpr2=DEFAULT_SHOT_SPEED*-cos(angle)
+
+    end select
+    ' Create the shot state
+    g_shots(shot_ix%,0)=idx%                  ' weapon
+    g_shots(shot_ix%,1)=g_obj(enemy_ix%,1)+cx ' X
+    g_shots(shot_ix%,2)=g_obj(enemy_ix%,2)+cy ' Y
+    g_shots(shot_ix%,3)=gpr1
+    g_shots(shot_ix%,4)=gpr2
+    g_shots(shot_ix%,5)=gpr3
+    ' Create the shot sprite
+    sprite read shot_spr_id%, OBJ_TILE%(idx%,0), OBJ_TILE%(idx%,1), OBJ_TILE%(idx%,2), OBJ_TILE%(idx%,3), OBJ_TILES_BUFFER
+    sprite show safe shot_spr_id%, g_shots(shot_ix%,1),g_shots(shot_ix%,2), 1, rot%
 end sub
 
 function is_enemy(obj_id%) as integer
