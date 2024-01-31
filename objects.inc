@@ -35,6 +35,10 @@ sub animate_objects()
             case 4  ' Knight
                 if g_anim_tick% mod 6 > 2 then flip%=1
 
+            case 8 ' Black demon
+                offset_x%=0
+                if g_obj(i%,5) <= 0 then obj_id%=5 ' cloud form
+
             case 12 ' Yellow thing
                 offset_x%=0
 
@@ -216,7 +220,7 @@ sub move_and_process_objects()
     ' Objects and enemies
     if g_freeze_timer >= 0 then exit sub
 
-    local i%, sprite_id%, obj_id%, screen_offset%, offset_y%, offset_x%, data_id%
+    local i%, sprite_id%, obj_id%, screen_offset%, offset_y%, offset_x%, data_id%, direction%
 
     for i%=0 to bound(g_obj())
         offset_x%=0: offset_y%=0
@@ -227,6 +231,7 @@ sub move_and_process_objects()
 
         data_id%=OBJ_TILE%(obj_id%,4)
         screen_offset%=TILE_SIZE
+        sprite_id%=OBJ_INI_SPRITE_ID + i%
 
         ' Moves object
         select case obj_id%
@@ -307,6 +312,28 @@ sub move_and_process_objects()
                 inc g_obj(i%,1),OBJ_DATA(data_id%,0)*g_delta_time*g_obj(i%,4)
                 inc g_obj(i%,2),OBJ_DATA(data_id%,1)*g_delta_time
 
+            case 8 ' Black demon
+                ' Check if it is time to attack
+                if g_obj(i%,5)=0 and g_player(1)-g_obj(i%,2) < DEMON_ATTACK_DIST_PX then
+                    g_obj(i%,5)=1 ' Starts attack timer
+                    ' Transform cloud to demon
+                    replace_sprite_skin(sprite_id%, obj_id%, g_obj(i%,1),g_obj(i%,2))
+                end if
+                if g_obj(i%,5) <= 0 then
+                    direction%=choice(g_obj(i%,5) < 0, -1, 1)
+                    inc g_obj(i%,1),g_obj(i%,4)*g_delta_time
+                    inc g_obj(i%,2),OBJ_DATA(data_id%,1)*g_delta_time*direction%
+                else
+                    offset_y%=TILE_SIZE/2 ' Land
+                    inc g_obj(i%,5),g_delta_time
+                    if g_obj(i%,5) > 2 then
+                        g_obj(i%,5)=-1
+                        enemy_fire(i%)
+                        ' Transform demon to cloud
+                        replace_sprite_skin(sprite_id%, 5, g_obj(i%,1),g_obj(i%,2))
+                    end if
+                end if
+
             case 12 ' Yellow thing
                 inc g_obj(i%,1),g_obj(i%,4)*g_delta_time
                 inc g_obj(i%,2),OBJ_DATA(data_id%,1)*g_delta_time
@@ -332,7 +359,6 @@ sub move_and_process_objects()
         end select
 
         ' Move or destroy the sprite if out of bounds
-        sprite_id%=OBJ_INI_SPRITE_ID + i%
         if not sprite(e,sprite_id%) and g_obj(i%,2) <= SCREEN_HEIGHT then
             sprite next sprite_id%, g_obj(i%,1)+offset_x%, g_obj(i%,2)+offset_y%
         else if obj_id% = 39 then ' Shadow
@@ -402,6 +428,7 @@ sub destroy_object(obj_ix%)
     if obj_ix% < 0 or obj_id% <= 0 then
         exit sub
     end if
+
     local sprite_id%=OBJ_INI_SPRITE_ID + obj_ix%
     destroy_shadow(obj_ix%)
 
@@ -463,6 +490,13 @@ function allocate_object(obj_id%, x%, y%, gpr1, gpr2, gpr3) as integer
     g_obj(i%,6)=-1   ' Shadow index
 end function
 
+sub replace_sprite_skin(sprite_id%, obj_id%, x%, y%)
+    sprite hide safe sprite_id%
+    sprite close sprite_id%
+    sprite read sprite_id%, OBJ_TILE%(obj_id%,0), OBJ_TILE%(obj_id%,1), OBJ_TILE%(obj_id%,2), OBJ_TILE%(obj_id%,3), OBJ_TILES_BUFFER
+    sprite show safe sprite_id%, x%, y%, 1,, 1
+end sub
+
 sub spawn_object(obj_id%, x%, y%, obj_cfg%)
     local i%=allocate_object(obj_id%, x%, y%)
     if i% < 0 then exit sub
@@ -501,10 +535,11 @@ sub spawn_object(obj_id%, x%, y%, obj_cfg%)
 
         case 7 ' Skeleton
 
-        case 12 ' Yellow thing
+        case 8,12 ' Black demon, Yellow thing
             angle=min(20,math(ATAN3 abs(g_obj(i%,1)-g_player(0)), abs(g_obj(i%,2)-g_player(1))))
             g_obj(i%,4)=OBJ_DATA(data_id%,0)*choice(g_obj(i%,1)>g_player(0),left,right)*sin(angle)
             spawn_shadow(i%, TILE_SIZEx2)
+            if obj_id%=8 then obj_id%=5 ' Spawns as a cloud
 
         case 24 ' Fire
             offset_x%=FIRE_ANIM(0)*TILE_SIZEx2
@@ -620,15 +655,16 @@ sub enemies_fire()
 
     for i%=0 to bound(g_obj())
         ' Has object or it is in the min Y position?
-        if g_obj(i%,0) = 0 or g_obj(i%,0) > 16 or g_obj(i%,2) < TILE_SIZEx2 then
-            continue for
-        end if
+        if g_obj(i%,0) = 0 or g_obj(i%,0) > 16 or g_obj(i%,2) < TILE_SIZEx2 then continue for
 
         slot_ix%=free_slots%(c%)
         ' Has free slot?
         if slot_ix% = 0 then exit for
 
-        enemy_fire(i%, slot_ix%)
+        ' If it is not a black demon
+        if g_obj(i%,0) <> 8 then
+            enemy_fire(i%, slot_ix%)
+        end if
         inc c%
     next
 end sub
@@ -647,55 +683,75 @@ sub enemy_fire(enemy_ix%, shot_ix%)
     end if
 
     local enemy_spr_id%=OBJ_INI_SPRITE_ID + enemy_ix%
-    local shot_spr_id%=shot_ix%+SHOTS_INI_SPRITE_ID
-    local cx=sprite(W, enemy_spr_id%)/2, cy=sprite(H, enemy_spr_id%)/2
+    local x=g_obj(enemy_ix%,1) + sprite(W, enemy_spr_id%)/2
+    local y=g_obj(enemy_ix%,2) + sprite(H, enemy_spr_id%)/2
     local angle=deg(sprite(V, enemy_spr_id%, 1))
-    local rot%=fix((angle+22.5)/45), idx%=14 ' Dot bullet
-    local gpr1, gpr2, gpr3
+    local rot%=fix((angle+22.5)/45), weapon_ix%=14 ' Dot bullet
+    local gpr1, gpr2, gpr3, speed=DEFAULT_SHOT_SPEED
 
     select case obj_id%
         case 5,12 ' Cloud, Yellow thing
             exit sub ' Do not shoot
 
-        case 4   ' Knight
-            ' Arrow idx%
+        case 4 ' Knight
+            ' Arrow weapon_ix%
             if rot%=0 or rot%=4 then
-                idx%=20: rot%=choice(rot%=0,2,0)
+                weapon_ix%=20: rot%=choice(rot%=0,2,0)
             else if rot%=2 or rot%=6 then
-                idx%=21: rot%=choice(rot%=2,1,0)
+                weapon_ix%=21: rot%=choice(rot%=2,1,0)
             else if rot%=3 or rot%=5 then
-                idx%=22: rot%=choice(rot%=3,1,0)
+                weapon_ix%=22: rot%=choice(rot%=3,1,0)
             else
-                idx%=22: rot%=choice(rot%=1,3,2)
+                weapon_ix%=22: rot%=choice(rot%=1,3,2)
             end if
-            gpr1=DEFAULT_SHOT_SPEED*sin(angle)
-            gpr2=DEFAULT_SHOT_SPEED*-cos(angle)
+            gpr1=speed*sin(angle)
+            gpr2=speed*-cos(angle)
+
+        case 8 ' Black Demon
+            weapon_ix%=15 ' Energy ray
+            speed=speed*1.3
+            create_shot(shot_ix%            , weapon_ix%, x, y, speed*sin(angle-30), speed*-cos(angle-30))
+            create_shot(get_free_shot_slot(), weapon_ix%, x, y, speed*sin(angle-10), speed*-cos(angle-10))
+            create_shot(get_free_shot_slot(), weapon_ix%, x, y, speed*sin(angle+10), speed*-cos(angle+10))
+            create_shot(get_free_shot_slot(), weapon_ix%, x, y, speed*sin(angle+30), speed*-cos(angle+30))
+            shot_ix%=-1
 
         case 51 ' Boss stage 1
-            idx%=15 ' Energy ray
+            weapon_ix%=15 ' Energy ray
             gpr1=120*sin(angle)
             gpr2=120*-cos(angle)
 
         case 52 ' Boss stage 2
-            idx%=26 ' Scythe
+            weapon_ix%=26 ' Scythe
             ' Center of rotation
             gpr1=g_obj(enemy_ix%,1)             ' X
             gpr2=g_obj(enemy_ix%,2)+TILE_SIZE*8 ' Y
 
         case else
-            gpr1=DEFAULT_SHOT_SPEED*sin(angle)
-            gpr2=DEFAULT_SHOT_SPEED*-cos(angle)
+            gpr1=speed*sin(angle)
+            gpr2=speed*-cos(angle)
 
     end select
+
+    if shot_ix% >= 0 then
+        create_shot(shot_ix%, weapon_ix%, x, y, gpr1, gpr2, gpr3, rot%)
+    end if
+end sub
+
+sub create_shot(shot_ix%, weapon_ix%, x, y, gpr1, gpr2, gpr3, rot%)
+    if shot_ix% < 0 then exit sub
+
+    local shot_spr_id%=shot_ix%+SHOTS_INI_SPRITE_ID
+
     ' Create the shot state
-    g_shots(shot_ix%,0)=idx%                  ' weapon
-    g_shots(shot_ix%,1)=g_obj(enemy_ix%,1)+cx ' X
-    g_shots(shot_ix%,2)=g_obj(enemy_ix%,2)+cy ' Y
+    g_shots(shot_ix%,0)=weapon_ix% ' Weapon Index
+    g_shots(shot_ix%,1)=x          ' X
+    g_shots(shot_ix%,2)=y          ' Y
     g_shots(shot_ix%,3)=gpr1
     g_shots(shot_ix%,4)=gpr2
     g_shots(shot_ix%,5)=gpr3
     ' Create the shot sprite
-    sprite read shot_spr_id%, OBJ_TILE%(idx%,0), OBJ_TILE%(idx%,1), OBJ_TILE%(idx%,2), OBJ_TILE%(idx%,3), OBJ_TILES_BUFFER
+    sprite read shot_spr_id%, OBJ_TILE%(weapon_ix%,0), OBJ_TILE%(weapon_ix%,1), OBJ_TILE%(weapon_ix%,2), OBJ_TILE%(weapon_ix%,3), OBJ_TILES_BUFFER
     sprite show safe shot_spr_id%, g_shots(shot_ix%,1),g_shots(shot_ix%,2), 1, rot%
 end sub
 

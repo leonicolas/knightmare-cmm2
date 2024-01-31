@@ -100,7 +100,7 @@ OBJ_TILE%(6,0)=144: OBJ_TILE%(6,1)=16: OBJ_TILE%(6,2)=16: OBJ_TILE%(6,3)=16: OBJ
 ' Skeleton
 OBJ_TILE%(7,0)=176: OBJ_TILE%(7,1)=16: OBJ_TILE%(7,2)=16: OBJ_TILE%(7,3)=16
 ' Demon
-OBJ_TILE%(8,0)=224: OBJ_TILE%(8,1)=17: OBJ_TILE%(8,2)=16: OBJ_TILE%(8,3)=15
+OBJ_TILE%(8,0)=224: OBJ_TILE%(8,1)=17: OBJ_TILE%(8,2)=16: OBJ_TILE%(8,3)=15: OBJ_TILE%(8,4)=8
 ' Death ghost
 OBJ_TILE%(9,0)=241: OBJ_TILE%(9,1)=16: OBJ_TILE%(9,2)=15: OBJ_TILE%(9,3)=16
 ' Stone monster
@@ -204,6 +204,11 @@ OBJ_DATA(6,0)=70     ' X speed
 OBJ_DATA(6,1)=70     ' Y speed
 OBJ_DATA(6,2)=1      ' Life
 const DEMON_CHANGE_DIRECT_DIST_PX=55
+' Black demon
+OBJ_DATA(8,0)=160     ' X speed
+OBJ_DATA(8,1)=160     ' Y speed
+OBJ_DATA(8,2)=1       ' Life
+const DEMON_ATTACK_DIST_PX=60
 ' Yellow thing
 OBJ_DATA(12,0)=240    ' X speed
 OBJ_DATA(12,1)=240    ' Y speed
