@@ -277,7 +277,6 @@ sub move_and_process_objects()
                     if g_obj(i%,2) > SCREEN_HEIGHT/2+TILE_SIZEx2 then
                         if g_obj(i%,1) <=0 or g_obj(i%,1) >= SCREEN_WIDTH-TILE_SIZEx2 then
                             destroy_object(i%)
-                            destroy_shadow(i%)
                             continue for
                         end if
                     else if g_obj(i%,5)=left and g_obj(i%,1) <= TILE_SIZEx2 then
@@ -404,6 +403,8 @@ sub destroy_object(obj_ix%)
         exit sub
     end if
     local sprite_id%=OBJ_INI_SPRITE_ID + obj_ix%
+    destroy_shadow(obj_ix%)
+
     g_obj(obj_ix%, 0)=0
     sprite hide safe sprite_id%
     sprite close sprite_id%
@@ -415,11 +416,13 @@ end sub
 
 sub destroy_shadow(src_obj_ix%)
     local shadow_ix%=g_obj(src_obj_ix%,6)
-
     if shadow_ix% < 0 then exit sub
 
+    local sprite_id%=OBJ_INI_SPRITE_ID + shadow_ix%
     g_obj(src_obj_ix%,6) = -1
-    destroy_object(shadow_ix%)
+    g_obj(shadow_ix%, 0)=0
+    sprite hide safe sprite_id%
+    sprite close sprite_id%
 end sub
 
 sub destroy_all()

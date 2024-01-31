@@ -131,7 +131,6 @@ sub hit_object(obj_sprite_id%, sfx%, instakill%)
         case 5 ' Cloud
             if instakill% then
                 destroy_object(obj_id%)
-                destroy_shadow(obj_id%)
                 start_enemy_death_animation(obj_id%, true)
             else
                 local angle=deg(sprite(V, obj_sprite_id%, 1))
@@ -145,7 +144,6 @@ sub hit_object(obj_sprite_id%, sfx%, instakill%)
             if not instakill% and g_obj(obj_id%,3) > 0 then exit sub
             increment_score(OBJ_POINTS(g_obj(obj_id%,0)))
             destroy_object(obj_id%)
-            destroy_shadow(obj_id%)
             start_enemy_death_animation(obj_id%, true)
     end select
 end sub

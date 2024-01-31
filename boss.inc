@@ -90,7 +90,6 @@ sub destroy_boss()
     for i%=1 to 7
         if g_boss(i%) >= 0 then destroy_object(g_boss(i%))
     next
-    destroy_shadow(g_boss(1))
     g_boss(0)=0
     x%=g_obj(g_boss(1),1)
     y%=g_obj(g_boss(1),2)
