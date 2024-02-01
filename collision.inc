@@ -41,8 +41,7 @@ sub process_collision(sprite_id%)
 
                     ' Hits an objects
                     else if collided_id% >= OBJ_INI_SPRITE_ID then
-                        hit_object(collided_id%, true)
-                        if is_boss_hit_box(collided_id%) or not is_super_weapon() or is_chrystal(collided_id%) then destroy_shot(sprite_id%)
+                        if hit_object(collided_id%, true) then destroy_shot(sprite_id%)
 
                     ' Hits another shot
                     else if collided_id% >= SHOTS_INI_SPRITE_ID then
@@ -75,7 +74,7 @@ sub player_hit_obj(collided_id%)
         case else
             ' If player has invincibility
             if g_player(5) = 4 then
-                hit_object(collided_id%, true, true)
+                local hit=hit_object(collided_id%, true, true)
             ' If player is not invisible
             else if g_player(5) <> 2 then
                 hit_player(collided_id%)
@@ -83,6 +82,7 @@ sub player_hit_obj(collided_id%)
     end select
 end sub
 
+' Return true if the hit destroys the shot
 function hit_block(sprite_id%) as integer
     local i%=sprite_id% - BLOCK_INI_SPRITE_ID
     local max_hits%=block_max_hits(i%)
@@ -106,6 +106,7 @@ function hit_block(sprite_id%) as integer
     end if
 end function
 
+' Return true if the hit destroys the shot
 function hit_shot(sprite_id%) as integer
     local shot_id%=sprite_id% - SHOTS_INI_SPRITE_ID
     local weapon%=g_shots(shot_id%, 0)
@@ -113,9 +114,11 @@ function hit_shot(sprite_id%) as integer
     hit_shot=(weapon% = 26)
 end function
 
-sub hit_object(obj_sprite_id%, sfx%, instakill%)
-    local obj_id%=obj_sprite_id% - OBJ_INI_SPRITE_ID
+' Return true if the hit destroys the shot
+function hit_object(collided_id%, sfx%, instakill%) as integer
+    local obj_id%=collided_id% - OBJ_INI_SPRITE_ID
 
+    hit_object=false
     g_cont_sfx$=""
     select case g_obj(obj_id%,0)
         case 29,30 ' Weapon and power-up chrystal
@@ -124,16 +127,18 @@ sub hit_object(obj_sprite_id%, sfx%, instakill%)
             ' Enable the wobbling movement
             if g_obj(obj_id%,4) > 3 and g_obj(obj_id%,5) < 0 then g_obj(obj_id%,5)=0
             if sfx% then play_sfx("POWER_UP_HIT_SFX")
+            hit_object=true
 
         case is > 50 ' Boss
-            hit_boss(obj_sprite_id%)
+            hit_boss(collided_id%)
+            if is_boss_hit_box(collided_id%) then hit_object=true
 
         case 5 ' Cloud
             if instakill% then
                 destroy_object(obj_id%)
                 start_enemy_death_animation(obj_id%, true)
             else
-                local angle=deg(sprite(V, obj_sprite_id%, 1))
+                local angle=deg(sprite(V, collided_id%, 1))
                 g_obj(obj_id%,3)=CLOUD_ATTACK_SPEED*sin(angle)+0.01 ' Speed X
                 g_obj(obj_id%,4)=CLOUD_ATTACK_SPEED*-cos(angle)     ' Speed Y
             end if
@@ -141,12 +146,15 @@ sub hit_object(obj_sprite_id%, sfx%, instakill%)
         case is < 14 ' Enemies
             ' Decrement life
             inc g_obj(obj_id%,3), -1
-            if not instakill% and g_obj(obj_id%,3) > 0 then exit sub
+            if not instakill% and g_obj(obj_id%,3) > 0 then exit function
             increment_score(OBJ_POINTS(g_obj(obj_id%,0)))
             destroy_object(obj_id%)
             start_enemy_death_animation(obj_id%, true)
     end select
-end sub
+
+    if not is_super_weapon() then hit_object=true
+
+end function
 
 sub hit_shield(shot_sprite_id%)
     if g_player(6)=0 then exit sub

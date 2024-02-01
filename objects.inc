@@ -477,12 +477,12 @@ sub destroy_all()
 end sub
 
 sub kill_all_enemies(sfx%)
-    local i%
+    local i%,hit
     if sfx% then play_sfx("KILL_ALL_ENEMIES_SFX")
     for i%=0 to bound(g_obj())
         ' Check for free slots or boss id
         if g_obj(i%,0)=0 or g_obj(i%,0) > 50 then continue for
-        hit_object(OBJ_INI_SPRITE_ID + i%, false, true)
+        hit=hit_object(OBJ_INI_SPRITE_ID + i%, false, true)
     next
 end sub
 
