@@ -98,7 +98,7 @@ OBJ_TILE%(5,0)=113: OBJ_TILE%(5,1)=17: OBJ_TILE%(5,2)=14: OBJ_TILE%(5,3)=14: OBJ
 ' Blue Demon
 OBJ_TILE%(6,0)=144: OBJ_TILE%(6,1)=16: OBJ_TILE%(6,2)=16: OBJ_TILE%(6,3)=16: OBJ_TILE%(6,4)=6
 ' Skeleton
-OBJ_TILE%(7,0)=176: OBJ_TILE%(7,1)=16: OBJ_TILE%(7,2)=16: OBJ_TILE%(7,3)=16
+OBJ_TILE%(7,0)=176: OBJ_TILE%(7,1)=16: OBJ_TILE%(7,2)=16: OBJ_TILE%(7,3)=16: OBJ_TILE%(7,4)=7
 ' Demon
 OBJ_TILE%(8,0)=240: OBJ_TILE%(8,1)=17: OBJ_TILE%(8,2)=16: OBJ_TILE%(8,3)=15: OBJ_TILE%(8,4)=8
 ' Death ghost
@@ -204,15 +204,19 @@ OBJ_DATA(6,0)=70     ' X speed
 OBJ_DATA(6,1)=70     ' Y speed
 OBJ_DATA(6,2)=1      ' Life
 const DEMON_CHANGE_DIRECT_DIST_PX=55
+' Skeleton
+OBJ_DATA(7,0)=50     ' X speed
+OBJ_DATA(7,1)=15     ' Y speed
+OBJ_DATA(7,2)=3      ' Life
 ' Black demon
-OBJ_DATA(8,0)=160     ' X speed
-OBJ_DATA(8,1)=160     ' Y speed
-OBJ_DATA(8,2)=1       ' Life
+OBJ_DATA(8,0)=160    ' X speed
+OBJ_DATA(8,1)=160    ' Y speed
+OBJ_DATA(8,2)=1      ' Life
 const DEMON_ATTACK_DIST_PX=60
 ' Yellow thing
-OBJ_DATA(12,0)=240    ' X speed
-OBJ_DATA(12,1)=240    ' Y speed
-OBJ_DATA(12,2)=1      ' Life
+OBJ_DATA(12,0)=240   ' X speed
+OBJ_DATA(12,1)=240   ' Y speed
+OBJ_DATA(12,2)=1     ' Life
 
 ' Weapon chrystal
 OBJ_DATA(29,0)=50   ' X speed (angle increment)

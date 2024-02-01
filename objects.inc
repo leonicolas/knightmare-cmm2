@@ -312,6 +312,16 @@ sub move_and_process_objects()
                 inc g_obj(i%,1),OBJ_DATA(data_id%,0)*g_delta_time*g_obj(i%,4)
                 inc g_obj(i%,2),OBJ_DATA(data_id%,1)*g_delta_time
 
+            case 7 ' Skeleton
+                ' Increment X and Y position
+                inc g_obj(i%,1),OBJ_DATA(data_id%,0)*g_delta_time*g_obj(i%,4)
+                inc g_obj(i%,2),OBJ_DATA(data_id%,1)*g_delta_time
+                if g_obj(i%,1) < TILE_SIZEx4 then
+                    g_obj(i%,4)=right
+                else if g_obj(i%,1) > SCREEN_WIDTH - TILE_SIZE*6 then
+                    g_obj(i%,4)=left
+                end if
+
             case 8 ' Black demon
                 ' Check if it is time to attack
                 if g_obj(i%,5)=0 and g_player(1)-g_obj(i%,2) < DEMON_ATTACK_DIST_PX then
@@ -534,7 +544,13 @@ sub spawn_object(obj_id%, x%, y%, obj_cfg%)
             spawn_shadow(i%, TILE_SIZEx2+TILE_SIZE/2)
 
         case 7 ' Skeleton
-
+            if x% < SCREEN_CENTER then
+                g_obj(i%,1)=TILE_SIZEx4
+                g_obj(i%,4)=right
+            else
+                g_obj(i%,1)=SCREEN_WIDTH-TILE_SIZE*6
+                g_obj(i%,4)=left
+            end if
         case 8,12 ' Black demon, Yellow thing
             angle=min(20,math(ATAN3 abs(g_obj(i%,1)-g_player(0)), abs(g_obj(i%,2)-g_player(1))))
             g_obj(i%,4)=OBJ_DATA(data_id%,0)*choice(g_obj(i%,1)>g_player(0),left,right)*sin(angle)
