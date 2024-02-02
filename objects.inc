@@ -42,7 +42,7 @@ sub animate_objects()
             case 12 ' Yellow thing
                 offset_x%=0
 
-            case 24 ' Fire
+            case 27 ' Fire
                 if g_obj(i%, 3) > bound(FIRE_ANIM()) then
                     destroy_object(i%)
                     continue for
@@ -220,7 +220,7 @@ sub move_and_process_objects()
     ' Objects and enemies
     if g_freeze_timer >= 0 then exit sub
 
-    local i%, sprite_id%, obj_id%, screen_offset%, offset_y%, offset_x%, data_id%, direction%
+    local i%, sprite_id%, obj_id%, screen_offset%, offset_y%, offset_x%, data_id%, direction%, speed
 
     for i%=0 to bound(g_obj())
         offset_x%=0: offset_y%=0
@@ -313,15 +313,22 @@ sub move_and_process_objects()
                 inc g_obj(i%,2),OBJ_DATA(data_id%,1)*g_delta_time
 
             case 7 ' Skeleton
-                ' Increment X and Y position
-                inc g_obj(i%,1),OBJ_DATA(data_id%,0)*g_delta_time*g_obj(i%,4)
-                inc g_obj(i%,2),OBJ_DATA(data_id%,1)*g_delta_time
-                if g_obj(i%,1) < TILE_SIZEx4 then
-                    g_obj(i%,4)=right
-                else if g_obj(i%,1) > SCREEN_WIDTH - TILE_SIZE*6 then
-                    g_obj(i%,4)=left
+                if g_obj(i%,5) = 0 then
+                    speed=OBJ_DATA(data_id%,0)+OBJ_DATA(data_id%,0)/3*(OBJ_DATA(data_id%,2)-g_obj(i%,3)+1)
+                    ' Increment X and Y position
+                    inc g_obj(i%,1),speed*g_delta_time*g_obj(i%,4)
+                    inc g_obj(i%,2),OBJ_DATA(data_id%,1)*g_delta_time
+                    if g_obj(i%,1) < TILE_SIZEx4 then
+                        g_obj(i%,4)=right
+                    else if g_obj(i%,1) > SCREEN_WIDTH - TILE_SIZE*6 then
+                        g_obj(i%,4)=left
+                    end if
+                else
+                    inc g_obj(i%,5),g_delta_time
+                    if g_obj(i%,5) > 5 then
+                        g_obj(i%,5)=0
+                    end if
                 end if
-
             case 8 ' Black demon
                 ' Check if it is time to attack
                 if g_obj(i%,5)=0 and g_player(1)-g_obj(i%,2) < DEMON_ATTACK_DIST_PX then
@@ -380,7 +387,7 @@ sub move_and_process_objects()
 end sub
 
 sub start_enemy_death_animation(i%, sfx%)
-    enqueue_action(1, 24, g_obj(i%,1), g_obj(i%,2), sfx%)
+    enqueue_action(1, 27, g_obj(i%,1), g_obj(i%,2), sfx%)
 end sub
 
 ' Returns -1 if there are no free slots
@@ -702,7 +709,7 @@ sub enemy_fire(enemy_ix%, shot_ix%)
     local x=g_obj(enemy_ix%,1) + sprite(W, enemy_spr_id%)/2
     local y=g_obj(enemy_ix%,2) + sprite(H, enemy_spr_id%)/2
     local angle=deg(sprite(V, enemy_spr_id%, 1))
-    local rot%=fix((angle+22.5)/45), weapon_ix%=14 ' Dot bullet
+    local rot%=fix((angle+22.5)/45), weapon_ix%=16 ' Dot bullet
     local gpr1, gpr2, gpr3, speed=DEFAULT_SHOT_SPEED
 
     select case obj_id%
@@ -712,19 +719,19 @@ sub enemy_fire(enemy_ix%, shot_ix%)
         case 4 ' Knight
             ' Arrow weapon_ix%
             if rot%=0 or rot%=4 then
-                weapon_ix%=20: rot%=choice(rot%=0,2,0)
+                weapon_ix%=22: rot%=choice(rot%=0,2,0)
             else if rot%=2 or rot%=6 then
-                weapon_ix%=21: rot%=choice(rot%=2,1,0)
+                weapon_ix%=23: rot%=choice(rot%=2,1,0)
             else if rot%=3 or rot%=5 then
-                weapon_ix%=22: rot%=choice(rot%=3,1,0)
+                weapon_ix%=24: rot%=choice(rot%=3,1,0)
             else
-                weapon_ix%=22: rot%=choice(rot%=1,3,2)
+                weapon_ix%=24: rot%=choice(rot%=1,3,2)
             end if
             gpr1=speed*sin(angle)
             gpr2=speed*-cos(angle)
 
         case 8 ' Black Demon
-            weapon_ix%=15 ' Energy ray
+            weapon_ix%=17 ' Energy ray
             speed=speed*1.3
             create_shot(shot_ix%            , weapon_ix%, x, y, speed*sin(angle-30), speed*-cos(angle-30))
             create_shot(get_free_shot_slot(), weapon_ix%, x, y, speed*sin(angle-10), speed*-cos(angle-10))
@@ -733,7 +740,7 @@ sub enemy_fire(enemy_ix%, shot_ix%)
             shot_ix%=-1
 
         case 51 ' Boss stage 1
-            weapon_ix%=15 ' Energy ray
+            weapon_ix%=17 ' Energy ray
             gpr1=120*sin(angle)
             gpr2=120*-cos(angle)
 
@@ -772,5 +779,5 @@ sub create_shot(shot_ix%, weapon_ix%, x, y, gpr1, gpr2, gpr3, rot%)
 end sub
 
 function is_enemy(obj_id%) as integer
-    is_enemy = (obj_id% > 0 and obj_id% < 14)
+    is_enemy = (obj_id% > 0 and obj_id% < 16)
 end function

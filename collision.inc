@@ -116,16 +116,17 @@ end function
 
 ' Return true if the hit destroys the shot
 function hit_object(collided_id%, sfx%, instakill%) as integer
-    local obj_id%=collided_id% - OBJ_INI_SPRITE_ID
+    local i%=collided_id% - OBJ_INI_SPRITE_ID, obj_id%=g_obj(i%,0)
 
     hit_object=false
     g_cont_sfx$=""
-    select case g_obj(obj_id%,0)
+
+    select case obj_id%
         case 29,30 ' Weapon and power-up chrystal
-            inc g_obj(obj_id%,4)
-            g_obj(obj_id%,4)=g_obj(obj_id%,4) mod choice(g_obj(obj_id%,0) = 29, 8, 7)
+            inc g_obj(i%,4)
+            g_obj(i%,4)=g_obj(i%,4) mod choice(g_obj(i%,0) = 29, 8, 7)
             ' Enable the wobbling movement
-            if g_obj(obj_id%,4) > 3 and g_obj(obj_id%,5) < 0 then g_obj(obj_id%,5)=0
+            if g_obj(i%,4) > 3 and g_obj(i%,5) < 0 then g_obj(i%,5)=0
             if sfx% then play_sfx("POWER_UP_HIT_SFX")
             hit_object=true
 
@@ -135,21 +136,27 @@ function hit_object(collided_id%, sfx%, instakill%) as integer
 
         case 5 ' Cloud
             if instakill% then
-                destroy_object(obj_id%)
-                start_enemy_death_animation(obj_id%, true)
+                destroy_object(i%)
+                start_enemy_death_animation(i%, true)
             else
                 local angle=deg(sprite(V, collided_id%, 1))
-                g_obj(obj_id%,3)=CLOUD_ATTACK_SPEED*sin(angle)+0.01 ' Speed X
-                g_obj(obj_id%,4)=CLOUD_ATTACK_SPEED*-cos(angle)     ' Speed Y
+                g_obj(i%,3)=CLOUD_ATTACK_SPEED*sin(angle)+0.01 ' Speed X
+                g_obj(i%,4)=CLOUD_ATTACK_SPEED*-cos(angle)     ' Speed Y
             end if
 
         case is < 14 ' Enemies
-            ' Decrement life
-            inc g_obj(obj_id%,3), -1
-            if not instakill% and g_obj(obj_id%,3) > 0 then exit function
-            increment_score(OBJ_POINTS(g_obj(obj_id%,0)))
-            destroy_object(obj_id%)
-            start_enemy_death_animation(obj_id%, true)
+            ' Skeleton
+            if obj_id% = 7 then
+                ' Is it broken?
+                if g_obj(i%,5) >= 1 then exit function
+                g_obj(i%,5) = 1
+            end if
+
+            inc g_obj(i%,3), -1 ' Decrement life
+            if not instakill% and g_obj(i%,3) > 0 then exit function
+            increment_score(OBJ_POINTS(g_obj(i%,0)))
+            destroy_object(i%)
+            start_enemy_death_animation(i%, true)
     end select
 
     if not is_super_weapon() then hit_object=true
