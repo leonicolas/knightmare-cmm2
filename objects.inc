@@ -244,18 +244,18 @@ sub move_and_process_objects()
 
         ' Moves object
         select case obj_id%
-            case 2,3 ' Bat
+            case 2,3,14 ' Bat
                 ' Calculate new X
-                ' Simple bat
-                if obj_id%=2 then
-                    if g_obj(i%,1) > SCREEN_CENTER then
-                        g_obj(i%,1)=SCREEN_WIDTH+SCREEN_CENTER*cos(g_obj(i%,4))
-                    else
-                        g_obj(i%,1)=(SCREEN_CENTER-TILE_SIZE)*cos(g_obj(i%,4))
-                    end if
-                else ' Bat wave
-                    g_obj(i%,1)=(SCREEN_CENTER-TILE_SIZE)+(SCREEN_CENTER-TILE_SIZEx4)*cos(g_obj(i%,4))
-                end if
+                select case obj_id%
+                    case 2,14
+                        if g_obj(i%,1) > SCREEN_CENTER then
+                            g_obj(i%,1)=SCREEN_WIDTH+SCREEN_CENTER*cos(g_obj(i%,4))
+                        else
+                            g_obj(i%,1)=(SCREEN_CENTER-TILE_SIZE)*cos(g_obj(i%,4))
+                        end if
+                    case else ' Bat wave
+                        g_obj(i%,1)=(SCREEN_CENTER-TILE_SIZE)+(SCREEN_CENTER-TILE_SIZEx4)*cos(g_obj(i%,4))
+                end select
 
                 ' Increment angle by the speed
                 inc g_obj(i%,4),OBJ_DATA(data_id%,0)*g_delta_time
@@ -568,12 +568,19 @@ sub spawn_object(obj_id%, x%, y%, obj_cfg%)
     g_obj(i%,5)=OBJ_DATA(data_id%,4) ' GPR 3
 
     select case obj_id%
-        case 2,3 ' Bat
+        case 2,3,14 ' Bat
+            local spawn_speed=choice(obj_id%=2, BAT_SPAWN_SPEED_MS, BAT_WAVE_SPAWN_SPEED_MS)
+            g_obj(i%,5)=1
             ' Calculate the correct bat angle
             if x% < SCREEN_CENTER then g_obj(i%,4)=g_obj(i%,4)+180
+            ' If bat reverse
+            if obj_id%=14 then
+                g_obj(i%,2)=SCREEN_HEIGHT-TILE_SIZEx4
+                spawn_speed=BAT_REV_SPAWN_SPEED_MS
+            end if
             ' Initialize bat spawning data
             if obj_cfg% then
-                enqueue_action(obj_cfg%, obj_id%, x%, y%,, choice(obj_id%=2, BAT_SPAWN_SPEED_MS, BAT_WAVE_SPAWN_SPEED_MS))
+                enqueue_action(obj_cfg%, obj_id%, x%, y%,,spawn_speed)
             end if
             ' Spawn the bat shadow
             spawn_shadow(i%, TILE_SIZEx2+TILE_SIZE/2)

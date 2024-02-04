@@ -102,15 +102,17 @@ OBJ_TILE%(7,0)=176: OBJ_TILE%(7,1)=16: OBJ_TILE%(7,2)=16: OBJ_TILE%(7,3)=16: OBJ
 ' Demon
 OBJ_TILE%(8,0)=240: OBJ_TILE%(8,1)=17: OBJ_TILE%(8,2)=16: OBJ_TILE%(8,3)=15: OBJ_TILE%(8,4)=8
 ' Death ghost
-OBJ_TILE%(9,0)=240: OBJ_TILE%(9,1)=32: OBJ_TILE%(9,2)=15: OBJ_TILE%(9,3)=16
+OBJ_TILE%(9,0)=240: OBJ_TILE%(9,1)=32: OBJ_TILE%(9,2)=15: OBJ_TILE%(9,3)=16: OBJ_TILE%(9,4)=9
 ' Stone monster
-OBJ_TILE%(10,0)=176: OBJ_TILE%(10,1)=1: OBJ_TILE%(10,2)=16: OBJ_TILE%(10,3)=15
+OBJ_TILE%(10,0)=176: OBJ_TILE%(10,1)=1: OBJ_TILE%(10,2)=16: OBJ_TILE%(10,3)=15: OBJ_TILE%(10,4)=10
 ' Ghost
-OBJ_TILE%(11,0)=208: OBJ_TILE%(11,1)=0: OBJ_TILE%(11,2)=16: OBJ_TILE%(11,3)=16
+OBJ_TILE%(11,0)=208: OBJ_TILE%(11,1)=0: OBJ_TILE%(11,2)=16: OBJ_TILE%(11,3)=16: OBJ_TILE%(11,4)=11
 ' Yellow thing
 OBJ_TILE%(12,0)=225: OBJ_TILE%(12,1)=2: OBJ_TILE%(12,2)=13: OBJ_TILE%(12,3)=13: OBJ_TILE%(12,4)=12
 ' Red thing
-OBJ_TILE%(13,0)=240: OBJ_TILE%(13,1)=1: OBJ_TILE%(13,2)=15: OBJ_TILE%(13,3)=14
+OBJ_TILE%(13,0)=240: OBJ_TILE%(13,1)=1: OBJ_TILE%(13,2)=15: OBJ_TILE%(13,3)=14: OBJ_TILE%(13,4)=13
+' Bat Reverse
+OBJ_TILE%(14,0)=32: OBJ_TILE%(14,1)=16: OBJ_TILE%(14,2)=16: OBJ_TILE%(14,3)=11: OBJ_TILE%(14,4)=14
 
 ' Enemies shots
 ' Dot bullet
@@ -184,6 +186,12 @@ OBJ_DATA(2,1)=65     ' Y speed
 OBJ_DATA(2,2)=1      ' Life
 OBJ_DATA(2,3)=90     ' Angle
 const BAT_SPAWN_SPEED_MS=500
+' Bat Reverse
+OBJ_DATA(14,0)=50     ' X speed (angle increment)
+OBJ_DATA(14,1)=-20    ' Y speed
+OBJ_DATA(14,2)=1      ' Life
+OBJ_DATA(14,3)=90     ' Angle
+const BAT_REV_SPAWN_SPEED_MS=1000
 ' Bat wave
 OBJ_DATA(3,0)=120    ' X speed (angle increment)
 OBJ_DATA(3,1)=33     ' Y speed

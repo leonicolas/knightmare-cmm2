@@ -4,7 +4,7 @@ const path = require("path");
 const objectsIds = {
     blob: 1,
     bat: 2,
-    bat_rev: 22,
+    bat_rev: 14,
     bat_wave: 3,
     knight: 4,
     cloud: 5,
