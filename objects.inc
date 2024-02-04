@@ -327,7 +327,7 @@ sub move_and_process_objects()
                     offset_y%=-TILE_SIZE
                     select case g_obj(i%,5)
                         case is > 3.2
-                            destroy_object(i%): exit sub
+                            destroy_object(i%): continue for
                         case is > 3
                             speed=TILE_SIZE
                         case is > 2.8
