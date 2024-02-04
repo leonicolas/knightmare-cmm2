@@ -103,6 +103,6 @@ function getObjectPropertyValue(objectData) {
     return propertyValue;
 }
 
-for(let stage = 1; stage <= 2; ++stage) {
+for(let stage = 1; stage <= 3; ++stage) {
     generateMapBinary(stage);
 }
