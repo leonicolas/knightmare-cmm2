@@ -91,14 +91,19 @@ sub animate_shots()
             case 4,9 ' Boomerang
                 inc g_shots(i%,3)
                 select case g_shots(i%,3) mod 12
-                    case 9
-                        rot%=3: tile_id%=44
-                    case 6
-                        rot%=3: tile_id%=43
-                    case 3
-                        rot%=0: tile_id%=44
-                    case 0
-                        rot%=0: tile_id%=43
+                    case 9: rot%=3: tile_id%=44
+                    case 6: rot%=3: tile_id%=43
+                    case 3: rot%=0: tile_id%=44
+                    case 0: rot%=0: tile_id%=43
+                end select
+
+            case 18 ' Bone
+                inc g_shots(i%,5)
+                select case g_shots(i%,5) mod 4
+                    case 3: rot%=2: tile_id%=19
+                    case 2: rot%=0: tile_id%=20
+                    case 1: rot%=0: tile_id%=19
+                    case 0: rot%=0: tile_id%=18
                 end select
 
             case 26 ' Scythe
@@ -782,6 +787,7 @@ sub enemy_fire(i%, shot_ix%)
             if g_obj(i%,5) <> 0 or g_obj(i%,4) > 1 then exit sub
             gpr1=speed*sin(angle)
             gpr2=speed*-cos(angle)
+            weapon_ix%=18
 
         case 8 ' Black Demon
             weapon_ix%=17 ' Energy ray
