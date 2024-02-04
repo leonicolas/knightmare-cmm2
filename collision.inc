@@ -148,8 +148,14 @@ function hit_object(collided_id%, sfx%, instakill%) as integer
             ' Skeleton
             if obj_id% = 7 then
                 ' Is it broken?
-                if g_obj(i%,5) >= 1 then exit function
-                g_obj(i%,5) = 1
+                if g_obj(i%,5) > 0 or g_obj(i%,4) > 1 then exit function
+                ' Has life remaining
+                if g_obj(i%,3) > 1 then
+                    g_obj(i%,5) = 1
+                    enqueue_action(1,7,g_obj(i%,1),g_obj(i%,2),1)
+                    enqueue_action(1,7,g_obj(i%,1),g_obj(i%,2),2)
+                    sprite hide safe collided_id%
+                end if
             end if
 
             inc g_obj(i%,3), -1 ' Decrement life

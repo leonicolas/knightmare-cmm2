@@ -60,6 +60,10 @@ sub play_sfx(sfx$)
             play effect "sfx/shield.wav"
         case "SHOT_SFX"
             play effect "sfx/shot.wav"
+        case "SKELETON_BROKEN"
+            play effect "sfx/skeleton_broken.wav"
+        case "SKELETON_RESTORED"
+            play effect "sfx/skeleton_restored.wav"
         case "SWORD_SFX"
             play effect "sfx/shot_sword.wav"
     end select

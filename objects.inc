@@ -32,8 +32,12 @@ sub animate_objects()
 
         ' Config animation
         select case obj_id%
-            case 4  ' Knight
+            case 4 ' Knight
                 if g_anim_tick% mod 6 > 2 then flip%=1
+
+            case 7 ' Skeleton
+                if g_obj(i%, 4) > 1 then exit sub
+                if g_anim_tick% mod 6 > 2 then offset_x%=TILE_SIZEx2
 
             case 8 ' Black demon
                 offset_x%=0
@@ -313,7 +317,38 @@ sub move_and_process_objects()
                 inc g_obj(i%,2),OBJ_DATA(data_id%,1)*g_delta_time
 
             case 7 ' Skeleton
-                if g_obj(i%,5) = 0 then
+                if g_obj(i%,4) > 1 then
+                    inc g_obj(i%,5),g_delta_time
+                    offset_y%=-TILE_SIZE
+                    select case g_obj(i%,5)
+                        case is > 3.2
+                            destroy_object(i%): exit sub
+                        case is > 3
+                            speed=TILE_SIZE
+                        case is > 2.8
+                            speed=TILE_SIZE*2
+                        case is > 2.6
+                            if g_obj(i%,3) = 10 then
+                                play_sfx("SKELETON_RESTORED")
+                                g_obj(i%,3)=11
+                            end if
+                            speed=TILE_SIZE*3
+                        case is > 0.6
+                            speed=TILE_SIZEx4: offset_y%=0
+                        case is > 0.4
+                            speed=TILE_SIZE*3
+                        case is > 0.2
+                            speed=TILE_SIZEx2
+                        case else
+                            speed=TILE_SIZE
+                            if g_obj(i%,3) <> 10 then
+                                play_sfx("SKELETON_BROKEN")
+                                g_obj(i%,3)=10
+                            end if
+                    end select
+                    offset_x%=speed*choice(g_obj(i%,4)=2,-1,1)
+
+                else if g_obj(i%,5) = 0 then
                     speed=OBJ_DATA(data_id%,0)+OBJ_DATA(data_id%,0)/3*(OBJ_DATA(data_id%,2)-g_obj(i%,3)+1)
                     ' Increment X and Y position
                     inc g_obj(i%,1),speed*g_delta_time*g_obj(i%,4)
@@ -325,7 +360,8 @@ sub move_and_process_objects()
                     end if
                 else
                     inc g_obj(i%,5),g_delta_time
-                    if g_obj(i%,5) > 5 then
+                    if g_obj(i%,5) > 4.2 then
+                        sprite show safe sprite_id%, g_obj(i%,1)+offset_x%, g_obj(i%,2)+offset_y%, 1
                         g_obj(i%,5)=0
                     end if
                 end if
@@ -551,13 +587,25 @@ sub spawn_object(obj_id%, x%, y%, obj_cfg%)
             spawn_shadow(i%, TILE_SIZEx2+TILE_SIZE/2)
 
         case 7 ' Skeleton
-            if x% < SCREEN_CENTER then
-                g_obj(i%,1)=TILE_SIZEx4
-                g_obj(i%,4)=right
-            else
-                g_obj(i%,1)=SCREEN_WIDTH-TILE_SIZE*6
-                g_obj(i%,4)=left
-            end if
+            select case obj_cfg%
+                case 1 ' Body flying to the left
+                    offset_x%=TILE_SIZEx4
+                    g_obj(i%,4)=2
+
+                case 2 ' Body flying to the right
+                    offset_x%=TILE_SIZE*6
+                    g_obj(i%,4)=3
+
+                case else
+                    if x% < SCREEN_CENTER then
+                        g_obj(i%,1)=TILE_SIZEx4
+                        g_obj(i%,4)=right
+                    else
+                        g_obj(i%,1)=SCREEN_WIDTH-TILE_SIZE*6
+                        g_obj(i%,4)=left
+                    end if
+                end select
+
         case 8,12 ' Black demon, Yellow thing
             angle=min(20,math(ATAN3 abs(g_obj(i%,1)-g_player(0)), abs(g_obj(i%,2)-g_player(1))))
             g_obj(i%,4)=OBJ_DATA(data_id%,0)*choice(g_obj(i%,1)>g_player(0),left,right)*sin(angle)
@@ -692,10 +740,10 @@ sub enemies_fire()
     next
 end sub
 
-sub enemy_fire(enemy_ix%, shot_ix%)
-    local obj_id%=g_obj(enemy_ix%,0)
+sub enemy_fire(i%, shot_ix%)
+    local obj_id%=g_obj(i%,0)
     ' Checks screen limit for shooting and shoot chance
-    if g_obj(enemy_ix%,2) > MAX_ENEMIES_SHOOT_Y or rnd > SHOOT_CHANGE(g_stage%) then exit sub
+    if g_obj(i%,2) > MAX_ENEMIES_SHOOT_Y or rnd > SHOOT_CHANGE(g_stage%) then exit sub
     ' Ignores boss body
     if obj_id% > 50 and g_boss(1) = obj_id% then exit sub
 
@@ -705,9 +753,9 @@ sub enemy_fire(enemy_ix%, shot_ix%)
         if shot_ix% < 0 then exit sub
     end if
 
-    local enemy_spr_id%=OBJ_INI_SPRITE_ID + enemy_ix%
-    local x=g_obj(enemy_ix%,1) + sprite(W, enemy_spr_id%)/2
-    local y=g_obj(enemy_ix%,2) + sprite(H, enemy_spr_id%)/2
+    local enemy_spr_id%=OBJ_INI_SPRITE_ID + i%
+    local x=g_obj(i%,1) + sprite(W, enemy_spr_id%)/2
+    local y=g_obj(i%,2) + sprite(H, enemy_spr_id%)/2
     local angle=deg(sprite(V, enemy_spr_id%, 1))
     local rot%=fix((angle+22.5)/45), weapon_ix%=16 ' Dot bullet
     local gpr1, gpr2, gpr3, speed=DEFAULT_SHOT_SPEED
@@ -730,6 +778,11 @@ sub enemy_fire(enemy_ix%, shot_ix%)
             gpr1=speed*sin(angle)
             gpr2=speed*-cos(angle)
 
+        case 7 ' Skeleton
+            if g_obj(i%,5) <> 0 or g_obj(i%,4) > 1 then exit sub
+            gpr1=speed*sin(angle)
+            gpr2=speed*-cos(angle)
+
         case 8 ' Black Demon
             weapon_ix%=17 ' Energy ray
             speed=speed*1.3
@@ -747,8 +800,8 @@ sub enemy_fire(enemy_ix%, shot_ix%)
         case 52 ' Boss stage 2
             weapon_ix%=26 ' Scythe
             ' Center of rotation
-            gpr1=g_obj(enemy_ix%,1)             ' X
-            gpr2=g_obj(enemy_ix%,2)+TILE_SIZE*8 ' Y
+            gpr1=g_obj(i%,1)             ' X
+            gpr2=g_obj(i%,2)+TILE_SIZE*8 ' Y
 
         case else
             gpr1=speed*sin(angle)
