@@ -94,16 +94,19 @@ end sub
 ' Returns false (0) or true (1)
 function map_collide(player()) as integer
     local col%=player(0)\TILE_SIZE
-    local row%=(player(1)-g_tile_px%)\TILE_SIZE+g_row%
+    local row%=(player(1)-g_tile_px%)\TILE_SIZE+g_row%+1
+    local ix_top%=row%*MAP_COLS, ix_bottom%=(row%+1)*MAP_COLS
     ' Check top left
-    map_collide=g_map((row%+1)*MAP_COLS+col%) and &H80
+    map_collide=g_map(ix_top%+col%) and &H80
     ' Check top right
-    if not map_collide then map_collide=g_map((row%+1)*MAP_COLS+(col%+2)) >> 7 and 1
+    if not map_collide then map_collide=g_map(ix_top%+col%+2) >> 7 and 1
     ' Check bottom left
-    if not map_collide then map_collide=g_map((row%+2)*MAP_COLS+col%) >> 7 and 1
+    if not map_collide then map_collide=g_map(ix_bottom%+col%) >> 7 and 1
     ' Check bottom right
-    if not map_collide then map_collide=g_map((row%+2)*MAP_COLS+(col%+2)) >> 7 and 1
-    ' TODO: Check horizontal wrapping collision
+    if not map_collide then map_collide=g_map(ix_bottom%+col%+2) >> 7 and 1
+    ' Check horizontal wrapping collision
+    if not map_collide and player(0) < 0 then map_collide=(g_map((row%-1)*MAP_COLS+MAP_COLS_0) >> 7 and 1) or (g_map((row%+4)*MAP_COLS+MAP_COLS_0) >> 7 and 1)
+    if not map_collide and player(0) > SCREEN_WIDTH - TILE_SIZE * 2 then map_collide=(g_map((row%-1)*MAP_COLS) >> 7 and 1) or (g_map((row%+4)*MAP_COLS) >> 7 and 1)
 end function
 
 sub draw_map(row%)
