@@ -1,6 +1,12 @@
 const fs = require("fs");
 const path = require("path");
 
+const tilesCols = 32;
+const mapCols=32;
+const tileSize=8;
+const stageTilesOffset = [0, 3, 5, 9];
+const mapBufferBytesPerTile = 2;
+
 const objectsIds = {
     blob: 1,
     bat: 2,
@@ -28,6 +34,7 @@ const blockTypes = {
     queen: 3,
     king: 4,
     barrier: 5,
+    bridge: 6,
 };
 
 function generateMapBinary(stage) {
@@ -35,12 +42,9 @@ function generateMapBinary(stage) {
 
     const groundBuffer = Buffer.from(mapData.layers[0].data, "base64");
     const solidBuffer = Buffer.from(mapData.layers[1].data, "base64");
-
-    const mapBufferBytesPerTile = 2;
     const mapBuffer = Buffer.alloc(groundBuffer.length / mapBufferBytesPerTile);
 
-    const mapCols=32;
-    const tileSize=8;
+    const tileOffset = stageTilesOffset[stage - 1] * tilesCols;
 
     /**
      * Indexes objects by tile index
@@ -68,12 +72,21 @@ function generateMapBinary(stage) {
      */
     for (let i = 0; i < groundBuffer.length; i += 4) {
         // 96 tiles per stage
-        const groundValue = ((groundBuffer.readUInt32LE(i) - 1) % 96) + 1;
-        const solidValue = ((solidBuffer.readUInt32LE(i) - 1) % 96) + 1;
+        let groundValue = groundBuffer.readUInt32LE(i);
+        let solidValue = solidBuffer.readUInt32LE(i);
         const objectData = tileObjects[i / 4];
 
+        // Calculate tile offset
+        if (solidValue) {
+            solidValue -= tileOffset;
+            if (solidValue < 0) panic(`Solid tile ID is < 0\n- Stage ${stage}\n- Offset: ${tileOffset}\n- Index ${i}\n- ID ${solidValue}`);
+        } else {
+            groundValue -= tileOffset;
+            if (groundValue < 0) panic(`Ground tile ID is < 0\n- Stage ${stage}\n- Offset: ${tileOffset}\n- Index ${i}\n- ID ${groundValue}`);
+        }
         // Tile value + solid flag
         let value = solidValue ? solidValue | 0x80 : groundValue;
+
         // Object Id
         if (objectData) {
             value |= objectData.id << 8;
@@ -101,6 +114,11 @@ function getObjectPropertyValue(objectData) {
         return false;
     });
     return propertyValue;
+}
+
+function panic(message) {
+    console.error(`PANIC: ${message}`);
+    process.exit(-1);
 }
 
 for(let stage = 1; stage <= 3; ++stage) {

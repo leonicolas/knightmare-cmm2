@@ -144,7 +144,7 @@ sub process_map_row(row%, spawn%, line_zero%)
         tile_data%=g_map(row%*MAP_COLS+col%)
         tile%=(tile_data% AND &H7F) - 1
         tx%=(tile% mod TILES_COLS) * TILE_SIZE
-        ty%=(tile% \ TILES_COLS) * TILE_SIZE + (g_stage% - 1) * TILE_SIZE*3
+        ty%=(tile% \ TILES_COLS) * TILE_SIZE + TILES_OFFSET(g_stage% - 1)
         blit tx%,ty%, col%*TILE_SIZE,0, TILE_SIZE,TILE_SIZE, MAP_TILES_BUFFER
         page write SPRITES_BUFFER
 
