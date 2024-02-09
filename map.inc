@@ -1,7 +1,7 @@
 sub replace_block(block_ix%)
     local max_hits%=block_max_hits(block_ix%)
 
-    if g_blocks(block_ix%,0) < 6 and g_blocks(block_ix%,1) > 1 and g_blocks(block_ix%,1) < max_hits% then
+    if g_blocks(block_ix%,0) <> 6 and g_blocks(block_ix%,1) > 1 and g_blocks(block_ix%,1) < max_hits% then
         exit sub
     end if
 
@@ -12,6 +12,7 @@ sub replace_block(block_ix%)
         offset%=TILE_SIZEx2*g_blocks(block_ix%,0)
     end if
 
+    ' Collected block
     if g_blocks(block_ix%,0) = 6 then
         ' Save sprite position and layer
         local x%=sprite(X, sprite_id%), y%=sprite(Y, sprite_id%)
@@ -20,6 +21,14 @@ sub replace_block(block_ix%)
         page write SCREEN_BUFFER
         blit OBJ_TILE%(31,0)+offset%, OBJ_TILE%(31,1), x%,y%, OBJ_TILE%(31,2),OBJ_TILE%(31,3), OBJ_TILES_BUFFER
         page write SPRITES_BUFFER
+
+    ' Bridge block
+    else if g_blocks(block_ix%,0) = 7 and g_blocks(block_ix%,1) >= max_hits% then
+        spawn_bridge(sprite(X, sprite_id%), sprite(Y, sprite_id%))
+        make_bridge_ground(g_blocks(block_ix%, 2)+1, g_blocks(block_ix%, 3)-1, false)
+        destroy_block(block_ix%)
+
+    ' Other blocks
     else
         ' Replace buffer tiles
         sprite read sprite_id%, OBJ_TILE%(31,0)+offset%, OBJ_TILE%(31,1), OBJ_TILE%(31,2), OBJ_TILE%(31,3), OBJ_TILES_BUFFER
@@ -30,15 +39,37 @@ sub replace_block(block_ix%)
     end if
 end sub
 
-sub make_block_solid(row%, col%)
-    make_tile_solid(row%, col%)
-    make_tile_solid(row%, col%+1)
-    make_tile_solid(row%+1, col%)
-    make_tile_solid(row%+1, col%+1)
+sub spawn_bridge(x%, y%, down%)
+    local i%, offset%
+    page write SCREEN_BUFFER
+    for i%=0 to 3
+        offset%=TILE_SIZE*i%*choice(down%,1,-1)+TILE_SIZE
+        blit OBJ_TILE%(48,0), OBJ_TILE%(48,1), x%-TILE_SIZE,y%+offset%, OBJ_TILE%(48,2),OBJ_TILE%(48,3), OBJ_TILES_BUFFER
+    next
+    page write SPRITES_BUFFER
 end sub
 
-sub make_tile_solid(row%, col%)
-    g_map(row%*MAP_COLS+col%)=g_map(row%*MAP_COLS+col%) or &H80
+sub make_bridge_ground(row%, col%, down%)
+    local i%
+    for i%=0 to 3
+        make_tile_solid(row%, col%  , false)
+        make_tile_solid(row%, col%+1, false)
+        make_tile_solid(row%, col%+2, false)
+        make_tile_solid(row%, col%+3, false)
+        inc row%, choice(down%, 1, -1)
+    next
+end sub
+
+sub make_block_solid(row%, col%)
+    make_tile_solid(row%  , col%  , true)
+    make_tile_solid(row%  , col%+1, true)
+    make_tile_solid(row%+1, col%  , true)
+    make_tile_solid(row%+1, col%+1, true)
+end sub
+
+sub make_tile_solid(row%, col%, solid%)
+    local i%=row%*MAP_COLS+col%
+    g_map(i%)=choice(solid%, g_map(i%) or &H80, g_map(i%) and &HFF7F)
 end sub
 
 sub load_map(stage%)
@@ -179,9 +210,8 @@ end function
 
 sub collect_block_bonus(sprite_id%)
     local i%=sprite_id% - BLOCK_INI_SPRITE_ID
-    local max_hits%=block_max_hits(i%)
 
-    if g_blocks(i%,1) < max_hits% or g_blocks(i%,0) > 4 then exit sub
+    if g_blocks(i%,1) < block_max_hits(i%) or g_blocks(i%,0) > 4 then exit sub
 
     select case g_blocks(i%,0)
         case 1 ' Hook - points
@@ -195,6 +225,7 @@ sub collect_block_bonus(sprite_id%)
             g_freeze_timer=FREEZE_TIME
             destroy_enemies_shots()
     end select
+
     ' Replace block content by empty block
     g_blocks(i%,0)=6
     enqueue_action(1, 31, i%)

@@ -34,7 +34,7 @@ const blockTypes = {
     queen: 3,
     king: 4,
     barrier: 5,
-    bridge: 6,
+    bridge: 7,
 };
 
 function generateMapBinary(stage) {
