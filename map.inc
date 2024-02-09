@@ -27,6 +27,7 @@ sub replace_block(block_ix%)
         spawn_bridge(sprite(X, sprite_id%), sprite(Y, sprite_id%))
         make_bridge_ground(g_blocks(block_ix%, 2)+1, g_blocks(block_ix%, 3)-1, false)
         destroy_block(block_ix%)
+        play_sfx("BLOCK_OPEN_SFX")
 
     ' Other blocks
     else
