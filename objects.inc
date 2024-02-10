@@ -248,13 +248,13 @@ sub move_and_process_objects()
                 ' Calculate new X
                 select case obj_id%
                     case 2,14
-                        if g_obj(i%,1) > SCREEN_CENTER then
-                            g_obj(i%,1)=SCREEN_WIDTH+SCREEN_CENTER*cos(g_obj(i%,4))
+                        if g_obj(i%,1) > SCREEN_CENTER_W then
+                            g_obj(i%,1)=SCREEN_WIDTH+SCREEN_CENTER_W*cos(g_obj(i%,4))
                         else
-                            g_obj(i%,1)=(SCREEN_CENTER-TILE_SIZE)*cos(g_obj(i%,4))
+                            g_obj(i%,1)=(SCREEN_CENTER_W-TILE_SIZE)*cos(g_obj(i%,4))
                         end if
                     case else ' Bat wave
-                        g_obj(i%,1)=(SCREEN_CENTER-TILE_SIZE)+(SCREEN_CENTER-TILE_SIZEx4)*cos(g_obj(i%,4))
+                        g_obj(i%,1)=(SCREEN_CENTER_W-TILE_SIZE)+(SCREEN_CENTER_W-TILE_SIZEx4)*cos(g_obj(i%,4))
                 end select
 
                 ' Increment angle by the speed
@@ -268,7 +268,7 @@ sub move_and_process_objects()
                 ' Check if it is time to change direction
                 if g_obj(i%,4)=0 and g_player(1)-g_obj(i%,2) < KNIGHT_CHANGE_DIRECT_DIST_PX then
                     g_obj(i%,4)=g_obj(i%,1) ' Save the last X position
-                    g_obj(i%,5)=choice(g_obj(i%,1)>SCREEN_CENTER,left,right) ' Horizontal movement direction
+                    g_obj(i%,5)=choice(g_obj(i%,1)>SCREEN_CENTER_W,left,right) ' Horizontal movement direction
                 else if g_obj(i%,5) and abs(g_obj(i%,4)-g_obj(i%,1)) > KNIGHT_MAX_HORIZONTAL_DIST_PX then
                     g_obj(i%,5)=0
                 end if
@@ -572,7 +572,7 @@ sub spawn_object(obj_id%, x%, y%, obj_cfg%)
             local spawn_speed=choice(obj_id%=2, BAT_SPAWN_SPEED_MS, BAT_WAVE_SPAWN_SPEED_MS)
             g_obj(i%,5)=1
             ' Calculate the correct bat angle
-            if x% < SCREEN_CENTER then g_obj(i%,4)=g_obj(i%,4)+180
+            if x% < SCREEN_CENTER_W then g_obj(i%,4)=g_obj(i%,4)+180
             ' If bat reverse
             if obj_id%=14 then
                 g_obj(i%,2)=SCREEN_HEIGHT-TILE_SIZEx4
@@ -609,7 +609,7 @@ sub spawn_object(obj_id%, x%, y%, obj_cfg%)
                     g_obj(i%,4)=3
 
                 case else
-                    if x% < SCREEN_CENTER then
+                    if x% < SCREEN_CENTER_W then
                         g_obj(i%,1)=TILE_SIZEx4
                         g_obj(i%,4)=right
                     else
