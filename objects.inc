@@ -417,7 +417,7 @@ sub move_and_process_objects()
         end select
 
         ' Move or destroy the sprite if out of bounds
-        if not sprite(e,sprite_id%) and g_obj(i%,2) <= SCREEN_HEIGHT then
+        if not sprite(e,sprite_id%) and g_obj(i%,2) <= SCREEN_HEIGHT+TILE_SIZE then
             sprite next sprite_id%, g_obj(i%,1)+offset_x%, g_obj(i%,2)+offset_y%
         else if obj_id% = 39 then ' Shadow
             destroy_shadow(g_obj(i%,6))
