@@ -396,6 +396,40 @@ sub move_and_process_objects()
                 inc g_obj(i%,1),g_obj(i%,4)*g_delta_time
                 inc g_obj(i%,2),OBJ_DATA(data_id%,1)*g_delta_time
 
+            case 13 ' Red thing
+                ' Normal movement
+                if g_obj(i%,4) = 0 then
+                    ' Start circle movement when moving to the right
+                    if g_obj(i%,5) > 0 and g_obj(i%,1)-TILE_SIZE > SCREEN_CENTER_W + TILE_SIZEx4 then
+                        g_obj(i%,4)=315
+                        g_obj(i%,5)=g_obj(i%,2)+TILE_SIZEx4+TILE_SIZE/2
+
+                    ' Start circle movement when moving to the left
+                    else if g_obj(i%,5) < 0 and g_obj(i%,1)+TILE_SIZE < SCREEN_CENTER_W - TILE_SIZE*6 then
+                        g_obj(i%,4)=-135
+                        g_obj(i%,5)=g_obj(i%,2)+TILE_SIZEx4+TILE_SIZE/2
+
+                    else
+                        inc g_obj(i%,1),OBJ_DATA(data_id%,0)*g_delta_time*g_obj(i%,5)
+                        inc g_obj(i%,2),OBJ_DATA(data_id%,1)*g_delta_time
+                    end if
+
+                ' Upwards movement
+                else if g_obj(i%,4)=999 then
+                    inc g_obj(i%,1),OBJ_DATA(data_id%,0)*g_delta_time*g_obj(i%,5)
+                    inc g_obj(i%,2),OBJ_DATA(data_id%,1)*-g_delta_time
+
+                ' Circle movement
+                else
+                    g_obj(i%,1)=SCREEN_CENTER_W-TILE_SIZE+TILE_SIZE*9*cos(g_obj(i%,4))
+                    g_obj(i%,2)=g_obj(i%,5)+TILE_SIZE*6*sin(g_obj(i%,4))
+                    inc g_obj(i%,4), 0.9*choice(g_obj(i%,4) < 0,-1,1)
+                    if g_obj(i%,4) < -405 or g_obj(i%,4) >= 585 then
+                        g_obj(i%,5)=choice(g_obj(i%,4)>0,1,-1)
+                        g_obj(i%,4)=999
+                    end if
+                end if
+
             case 29,30 ' Weapon and power-up chrystal
                 if g_obj(i%,5) >= 0 then
                     offset_x%=-TILE_SIZEx4*sin(g_obj(i%,5))
@@ -559,7 +593,7 @@ sub spawn_object(obj_id%, x%, y%, obj_cfg%)
     local i%=allocate_object(obj_id%, x%, y%)
     if i% < 0 then exit sub
 
-    local sprite_id%=OBJ_INI_SPRITE_ID + i%
+    local sprite_id%=OBJ_INI_SPRITE_ID + i%, spawn_speed
     local offset_x%, offset_y%, layer%=1, data_id%, angle
     data_id%=OBJ_TILE%(obj_id%,4)
 
@@ -569,7 +603,7 @@ sub spawn_object(obj_id%, x%, y%, obj_cfg%)
 
     select case obj_id%
         case 2,3,14 ' Bat
-            local spawn_speed=choice(obj_id%=2, BAT_SPAWN_SPEED_MS, BAT_WAVE_SPAWN_SPEED_MS)
+            spawn_speed=choice(obj_id%=2, BAT_SPAWN_SPEED_MS, BAT_WAVE_SPAWN_SPEED_MS)
             g_obj(i%,5)=1
             ' Calculate the correct bat angle
             if x% < SCREEN_CENTER_W then g_obj(i%,4)=g_obj(i%,4)+180
@@ -578,16 +612,11 @@ sub spawn_object(obj_id%, x%, y%, obj_cfg%)
                 g_obj(i%,2)=SCREEN_HEIGHT-TILE_SIZEx4
                 spawn_speed=BAT_REV_SPAWN_SPEED_MS
             end if
-            ' Initialize bat spawning data
-            if obj_cfg% then
-                enqueue_action(obj_cfg%, obj_id%, x%, y%,,spawn_speed)
-            end if
             ' Spawn the bat shadow
             spawn_shadow(i%, TILE_SIZEx2+TILE_SIZE/2)
+
         case 4 ' Knight
-            if obj_cfg% then
-                enqueue_action(obj_cfg%, obj_id%, x%, y%,, KNIGHT_SPAWN_SPEED_MS)
-            end if
+            spawn_speed=KNIGHT_SPAWN_SPEED_MS
 
         case 5 ' Cloud
             g_obj(i%,1)=choice(obj_cfg%=left, 0, SCREEN_WIDTH-TILE_SIZEx2)
@@ -624,11 +653,20 @@ sub spawn_object(obj_id%, x%, y%, obj_cfg%)
             spawn_shadow(i%, TILE_SIZEx2)
             if obj_id%=8 then obj_id%=5 ' Spawns as a cloud
 
+        case 13 ' Red thing
+            g_obj(i%,1)=choice(g_obj(i%,1) < SCREEN_CENTER_W, 0, SCREEN_WIDTH-TILE_SIZEx2)
+            g_obj(i%,2)=TILE_SIZEx2
+            g_obj(i%,5)=choice(g_obj(i%,1)=0, 1, -1)
+            spawn_shadow(i%, TILE_SIZEx2+TILE_SIZE/2)
+            spawn_speed=RED_THING_SPAWN_SPEED_MS
+
         case 24 ' Fire
             offset_x%=FIRE_ANIM(0)*TILE_SIZEx2
             layer%=4
             if obj_cfg% then play_sfx("ENEMY_KILL_SFX")
     end select
+
+    if obj_cfg% and spawn_speed > 0 then enqueue_action(obj_cfg%, obj_id%, x%, y%,,spawn_speed)
 
     ' Enemies range
     if is_enemy(obj_id%) then inc g_enemies_count%
@@ -773,7 +811,7 @@ sub enemy_fire(i%, shot_ix%)
     local gpr1, gpr2, gpr3, speed=DEFAULT_SHOT_SPEED
 
     select case obj_id%
-        case 5,12 ' Cloud, Yellow thing
+        case 5,12,13 ' Cloud, Yellow and Red thing
             exit sub ' Do not shoot
 
         case 4 ' Knight
