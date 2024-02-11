@@ -248,10 +248,12 @@ sub move_and_process_objects()
                 ' Calculate new X
                 select case obj_id%
                     case 2,14
-                        if g_obj(i%,1) > SCREEN_CENTER_W then
-                            g_obj(i%,1)=SCREEN_WIDTH+SCREEN_CENTER_W*cos(g_obj(i%,4))
+                        if g_obj(i%,5) = right then
+                            direction%=SCREEN_CENTER_W+choice(obj_id%=2,0,TILE_SIZE*6)
+                            g_obj(i%,1)=SCREEN_WIDTH+direction%*cos(g_obj(i%,4))
                         else
-                            g_obj(i%,1)=(SCREEN_CENTER_W-TILE_SIZE)*cos(g_obj(i%,4))
+                            direction%=SCREEN_CENTER_W+choice(obj_id%=2,TILE_SIZE,TILE_SIZE*6)
+                            g_obj(i%,1)=direction%*cos(g_obj(i%,4))
                         end if
                     case else ' Bat wave
                         g_obj(i%,1)=(SCREEN_CENTER_W-TILE_SIZE)+(SCREEN_CENTER_W-TILE_SIZEx4)*cos(g_obj(i%,4))
@@ -604,9 +606,13 @@ sub spawn_object(obj_id%, x%, y%, obj_cfg%)
     select case obj_id%
         case 2,3,14 ' Bat
             spawn_speed=choice(obj_id%=2, BAT_SPAWN_SPEED_MS, BAT_WAVE_SPAWN_SPEED_MS)
-            g_obj(i%,5)=1
             ' Calculate the correct bat angle
-            if x% < SCREEN_CENTER_W then g_obj(i%,4)=g_obj(i%,4)+180
+            if x% < SCREEN_CENTER_W then
+                g_obj(i%,4)=g_obj(i%,4)+180
+                g_obj(i%,5)=left
+            else
+                g_obj(i%,5)=right
+            end if
             ' If bat reverse
             if obj_id%=14 then
                 g_obj(i%,2)=SCREEN_HEIGHT-TILE_SIZEx4
@@ -666,7 +672,7 @@ sub spawn_object(obj_id%, x%, y%, obj_cfg%)
             if obj_cfg% then play_sfx("ENEMY_KILL_SFX")
     end select
 
-    if obj_cfg% and spawn_speed > 0 then enqueue_action(obj_cfg%, obj_id%, x%, y%,,spawn_speed)
+    if obj_cfg% > 0 and spawn_speed > 0 then enqueue_action(obj_cfg%, obj_id%, x%, y%,,spawn_speed)
 
     ' Enemies range
     if is_enemy(obj_id%) then inc g_enemies_count%

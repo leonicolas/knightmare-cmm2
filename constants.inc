@@ -194,7 +194,7 @@ OBJ_DATA(2,3)=90     ' Angle
 const BAT_SPAWN_SPEED_MS=500
 ' Bat Reverse
 OBJ_DATA(14,0)=50     ' X speed (angle increment)
-OBJ_DATA(14,1)=-20    ' Y speed
+OBJ_DATA(14,1)=-35    ' Y speed
 OBJ_DATA(14,2)=1      ' Life
 OBJ_DATA(14,3)=90     ' Angle
 const BAT_REV_SPAWN_SPEED_MS=1000
