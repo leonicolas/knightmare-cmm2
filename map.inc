@@ -142,17 +142,18 @@ function map_collide(player()) as integer
 end function
 
 sub draw_map(row%)
-    local r%
+    local r%, offset_y%=SCREEN_HEIGHT+TILE_SIZE
     row%=min(MAP_ROWS_0-SCREEN_ROWS,row%)
     page write SCREEN_BUFFER
     for r%=SCREEN_ROWS+row%-1 to row%-2 step -1
         page scroll SCREEN_BUFFER,0,-TILE_SIZE
-        process_map_row(r%, false, row%=0)
+        process_map_row(r%, false, row%=0, offset_y%)
+        inc offset_y%, -TILE_SIZE
     next
     g_row%=r%+1
 end sub
 
-sub process_map_row(row%, spawn%, line_zero%)
+sub process_map_row(row%, spawn%, line_zero%, offset_y%)
     local tile%,col%,tx%,ty%,obj_id%,tile_data%,extra%
 
     ' Boss triggers
@@ -181,15 +182,15 @@ sub process_map_row(row%, spawn%, line_zero%)
         page write SPRITES_BUFFER
 
         ' Create object
-        if not spawn% then continue for
         obj_id%=(tile_data% AND &H1F00) >> 8
+        if not spawn% and obj_id% <> 31 then continue for
         if obj_id% then
             extra%=tile_data% >> 13
             select case obj_id%
                 case 29, 30 ' Weapon chrystal or power-up chrystal
                     spawn_object(obj_id%, min(SCREEN_WIDTH-TILE_SIZE*6,max(TILE_SIZEx4,g_player(0))), 0)
                 case 31 ' Block
-                    spawn_block(row%, col%, extra%)
+                    spawn_block(row%, col%, extra%, offset_y%)
                 case 5 ' Cloud
                     spawn_object(obj_id%, col%*TILE_SIZE, 0, choice(col% < MAP_COLS \ 2, left, right))
                 case else ' Enemies and other objects
@@ -239,7 +240,7 @@ sub destroy_block(block_ix%)
     sprite close sprite_id%
 end sub
 
-sub spawn_block(row%, col%, type%)
+sub spawn_block(row%, col%, type%, offset_y%)
     local i%, block_id%
 
     for i%=0 to bound(g_blocks())
@@ -253,5 +254,5 @@ sub spawn_block(row%, col%, type%)
     g_blocks(i%,3)=col%  ' Col
 
     sprite read BLOCK_INI_SPRITE_ID + i%, TRANSPARENT_BLOCK_X, TRANSPARENT_BLOCK_Y, TILE_SIZEx2, TILE_SIZEx2, OBJ_TILES_BUFFER
-    sprite show safe BLOCK_INI_SPRITE_ID + i%, col%*TILE_SIZE,0, 1
+    sprite show safe BLOCK_INI_SPRITE_ID + i%, col%*TILE_SIZE,offset_y%, 1
 end sub
