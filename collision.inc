@@ -136,8 +136,8 @@ function hit_object(collided_id%, sfx%, instakill%) as integer
 
         case 5 ' Cloud
             if instakill% then
+                start_fire_animation(g_obj(i%,1), g_obj(i%,2), true)
                 destroy_object(i%)
-                start_enemy_death_animation(i%, true)
             else
                 local angle=deg(sprite(V, collided_id%, 1))
                 g_obj(i%,3)=CLOUD_ATTACK_SPEED*sin(angle)+0.01 ' Speed X
@@ -161,8 +161,8 @@ function hit_object(collided_id%, sfx%, instakill%) as integer
             inc g_obj(i%,3), -1 ' Decrement life
             if not instakill% and g_obj(i%,3) > 0 then exit function
             increment_score(OBJ_POINTS(g_obj(i%,0)))
+            start_fire_animation(g_obj(i%,1), g_obj(i%,2), true)
             destroy_object(i%)
-            start_enemy_death_animation(i%, true)
     end select
 
     if not is_super_weapon() then hit_object=true

@@ -467,8 +467,8 @@ sub move_and_process_objects()
     next
 end sub
 
-sub start_enemy_death_animation(i%, sfx%)
-    enqueue_action(1, 27, g_obj(i%,1), g_obj(i%,2), sfx%)
+sub start_fire_animation(x%, y%, sfx%)
+    enqueue_action(1, 27, x%, y%, sfx%)
 end sub
 
 ' Returns -1 if there are no free slots
