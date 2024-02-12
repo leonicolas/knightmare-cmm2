@@ -515,10 +515,12 @@ sub destroy_enemies_shots()
     next
 end sub
 
-sub destroy_shot(sprite_id%)
+sub destroy_shot(sprite_id%, animate%)
+    local i%=sprite_id% - SHOTS_INI_SPRITE_ID
     sprite hide safe sprite_id%
     sprite close sprite_id%
-    g_shots(sprite_id% - SHOTS_INI_SPRITE_ID, 0) = 0
+    g_shots(i%, 0) = 0
+    if animate% then start_fire_animation(g_shots(i%,1), g_shots(i%,2), true)
 end sub
 
 sub destroy_object(obj_ix%)

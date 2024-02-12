@@ -45,7 +45,7 @@ sub process_collision(sprite_id%)
 
                     ' Hits another shot
                     else if collided_id% >= SHOTS_INI_SPRITE_ID then
-                        if hit_shot(collided_id%) then destroy_shot(collided_id%)
+                        if hit_shot(collided_id%) then destroy_shot(collided_id%, true)
 
                     end if
 
@@ -110,8 +110,8 @@ end function
 function hit_shot(sprite_id%) as integer
     local shot_id%=sprite_id% - SHOTS_INI_SPRITE_ID
     local weapon%=g_shots(shot_id%, 0)
-    ' Check if hit a scythe
-    hit_shot=(weapon% = 26)
+    ' Check if hit a scythe or bone
+    hit_shot=(weapon% = 18 or weapon% = 26)
 end function
 
 ' Return true if the hit destroys the shot
