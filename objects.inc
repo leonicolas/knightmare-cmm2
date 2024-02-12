@@ -41,7 +41,11 @@ sub animate_objects()
 
             case 8 ' Black demon
                 offset_x%=0
-                if g_obj(i%,5) <= 0 then obj_id%=5 ' cloud form
+                if g_obj(i%,5) <= 0 then
+                    obj_id%=5 ' cloud form
+                else if g_anim_tick% mod 6 > 2 then
+                    flip%=1
+                end if
 
             case 12 ' Yellow thing
                 offset_x%=0
