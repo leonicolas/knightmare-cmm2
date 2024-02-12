@@ -611,7 +611,7 @@ sub spawn_object(obj_id%, x%, y%, obj_cfg%)
 
     select case obj_id%
         case 2,3,14 ' Bat
-            spawn_speed=choice(obj_id%=2, BAT_SPAWN_SPEED_MS, BAT_WAVE_SPAWN_SPEED_MS)
+            spawn_speed=choice(obj_id%=2, 500, 200)
             ' Calculate the correct bat angle
             if x% < SCREEN_CENTER_W then
                 g_obj(i%,4)=g_obj(i%,4)+180
@@ -622,13 +622,13 @@ sub spawn_object(obj_id%, x%, y%, obj_cfg%)
             ' If bat reverse
             if obj_id%=14 then
                 g_obj(i%,2)=SCREEN_HEIGHT-TILE_SIZEx4
-                spawn_speed=BAT_REV_SPAWN_SPEED_MS
+                spawn_speed=1000
             end if
             ' Spawn the bat shadow
             spawn_shadow(i%, TILE_SIZEx2+TILE_SIZE/2)
 
         case 4 ' Knight
-            spawn_speed=KNIGHT_SPAWN_SPEED_MS
+            spawn_speed=500
 
         case 5 ' Cloud
             g_obj(i%,1)=choice(obj_cfg%=left, 0, SCREEN_WIDTH-TILE_SIZEx2)
@@ -638,6 +638,7 @@ sub spawn_object(obj_id%, x%, y%, obj_cfg%)
 
         case 6 ' Blue demon
             spawn_shadow(i%, TILE_SIZEx2+TILE_SIZE/2)
+            spawn_speed=400
 
         case 7 ' Skeleton
             select case obj_cfg%
@@ -670,7 +671,7 @@ sub spawn_object(obj_id%, x%, y%, obj_cfg%)
             g_obj(i%,2)=TILE_SIZEx2
             g_obj(i%,5)=choice(g_obj(i%,1)=0, 1, -1)
             spawn_shadow(i%, TILE_SIZEx2+TILE_SIZE/2)
-            spawn_speed=RED_THING_SPAWN_SPEED_MS
+            spawn_speed=300
 
         case 24 ' Fire
             offset_x%=FIRE_ANIM(0)*TILE_SIZEx2
@@ -819,8 +820,8 @@ sub enemy_fire(i%, shot_ix%)
     local x=g_obj(i%,1) + sprite(W, enemy_spr_id%)/2
     local y=g_obj(i%,2) + sprite(H, enemy_spr_id%)/2
     local angle=deg(sprite(V, enemy_spr_id%, 1))
-    local rot%=fix((angle+22.5)/45), weapon_ix%=16 ' Dot bullet
-    local gpr1, gpr2, gpr3, speed=DEFAULT_SHOT_SPEED
+    local rot%=fix((angle+22.5)/45) mod 8, weapon_ix%=16 ' Dot bullet
+    local gpr1, gpr2, gpr3, speed=70
 
     select case obj_id%
         case 5,12,13 ' Cloud, Yellow and Red thing

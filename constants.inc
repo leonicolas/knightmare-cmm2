@@ -182,7 +182,6 @@ OBJ_TILE%(48,0)=184: OBJ_TILE%(48,1)=136: OBJ_TILE%(48,2)=32: OBJ_TILE%(48,3)=8
 ' Object data: 0: speed X | 1: speed Y | 2: GPR 1 | 3: GPR 2 | 4: GPR 3
 ' TODO: Move to data block
 dim OBJ_DATA(30,4)
-const DEFAULT_SHOT_SPEED=70
 ' Blob
 OBJ_DATA(1,1)=20     ' Y speed
 OBJ_DATA(1,2)=1      ' Life
@@ -191,25 +190,21 @@ OBJ_DATA(2,0)=75     ' X speed (angle increment)
 OBJ_DATA(2,1)=65     ' Y speed
 OBJ_DATA(2,2)=1      ' Life
 OBJ_DATA(2,3)=90     ' Angle
-const BAT_SPAWN_SPEED_MS=500
 ' Bat Reverse
 OBJ_DATA(14,0)=50     ' X speed (angle increment)
 OBJ_DATA(14,1)=-35    ' Y speed
 OBJ_DATA(14,2)=1      ' Life
 OBJ_DATA(14,3)=90     ' Angle
-const BAT_REV_SPAWN_SPEED_MS=1000
 ' Bat wave
 OBJ_DATA(3,0)=120    ' X speed (angle increment)
 OBJ_DATA(3,1)=33     ' Y speed
 OBJ_DATA(3,2)=1      ' Life
-const BAT_WAVE_SPAWN_SPEED_MS=200
 ' Knight
 OBJ_DATA(4,0)=40     ' X speed - applied when it changes to horizontal movement
 OBJ_DATA(4,1)=40     ' Y speed
 OBJ_DATA(4,2)=3      ' Life
 const KNIGHT_CHANGE_DIRECT_DIST_PX=55
 const KNIGHT_MAX_HORIZONTAL_DIST_PX=48
-const KNIGHT_SPAWN_SPEED_MS=500
 ' Cloud
 OBJ_DATA(5,0)=25     ' X speed
 OBJ_DATA(5,1)=360    ' Cycle angle before changing row
@@ -236,7 +231,6 @@ OBJ_DATA(12,2)=1     ' Life
 OBJ_DATA(13,0)=140   ' X speed
 OBJ_DATA(13,1)=50    ' Y speed
 OBJ_DATA(13,2)=1     ' Life
-const RED_THING_SPAWN_SPEED_MS=300
 
 ' Weapon chrystal
 OBJ_DATA(29,0)=50   ' X speed (angle increment)
