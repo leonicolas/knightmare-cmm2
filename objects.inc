@@ -73,7 +73,7 @@ sub animate_objects()
 
         ' Read or flip next frame's sprite
         select case obj_id%
-            case 4
+            case 4,8 ' Knight, Demon
                 sprite show safe sprite_ix%, sprite(X, sprite_ix%), sprite(Y, sprite_ix%), sprite(L, sprite_ix%), flip%
             case else
                 sprite read sprite_ix%, OBJ_TILE%(obj_id%,0)+offset_x%, OBJ_TILE%(obj_id%,1)+offset_y%, OBJ_TILE%(obj_id%,2), OBJ_TILE%(obj_id%,3), buffer%
@@ -82,7 +82,7 @@ sub animate_objects()
 end sub
 
 sub animate_shots()
-    local i%, sprite_id%, rot%=-1, tile_id%, playing%
+    local i%, sprite_id%, rot%, tile_id%, playing%
     local offset_x%, offset_y%
     for i%=0 to bound(g_shots())
         ' Checks weapon id
@@ -113,19 +113,20 @@ sub animate_shots()
             case 26 ' Scythe
                 tile_id%=26: rot%=0
                 offset_x%=TILE_SIZEx2*(g_anim_tick% mod 4)
+
+            case else
+                continue for
         end select
 
         ' Render next frame
-        if rot% >= 0 then
-            if g_cont_sfx$ <> "" and not playing% then
-                play_sfx(g_cont_sfx$)
-                playing%=true
-            end if
-            sprite hide safe sprite_id%
-            sprite close sprite_id%
-            sprite read sprite_id%, OBJ_TILE%(tile_id%,0)+offset_x%, OBJ_TILE%(tile_id%,1)+offset_y%, OBJ_TILE%(tile_id%,2), OBJ_TILE%(tile_id%,3), OBJ_TILES_BUFFER
-            sprite show safe sprite_id%, g_shots(i%,1),g_shots(i%,2), 1, rot%
+        if g_cont_sfx$ <> "" and not playing% then
+            play_sfx(g_cont_sfx$)
+            playing%=true
         end if
+        sprite hide safe sprite_id%
+        sprite close sprite_id%
+        sprite read sprite_id%, OBJ_TILE%(tile_id%,0)+offset_x%, OBJ_TILE%(tile_id%,1)+offset_y%, OBJ_TILE%(tile_id%,2), OBJ_TILE%(tile_id%,3), OBJ_TILES_BUFFER
+        sprite show safe sprite_id%, g_shots(i%,1),g_shots(i%,2), 1, rot%
     next
 end sub
 
@@ -490,22 +491,11 @@ function get_free_shot_slot() as integer
     ' Starts from 3 because 0 to 2 slots are reserved for the player
     for i%=3 to bound(g_shots())
         ' Check for free slots
-        if g_shots(i%,0) then continue for
+        if g_shots(i%,0) > 0 then continue for
         get_free_shot_slot=i%
         exit for
     next
 end function
-
-sub get_free_shot_slots(free_slots%())
-    local i%,c%=0
-    ' Starts from 3 because 0 to 2 slots are reserved for the player
-    for i%=3 to bound(g_shots())
-        ' Check for free slots
-        if g_shots(i%,0) then continue for
-        free_slots%(c%)=i%
-        inc c%
-    next
-end sub
 
 sub destroy_enemies_shots()
     local i%
@@ -782,28 +772,20 @@ end sub
 
 sub enemies_fire()
     if g_freeze_timer >= 0 then exit sub
-
-    local i%,c%,slot_ix%
-    local free_slots%(bound(g_shots()))
-    get_free_shot_slots(free_slots%())
+    local i%
 
     for i%=0 to bound(g_obj())
         ' Has object or it is in the min Y position?
         if g_obj(i%,0) = 0 or g_obj(i%,0) > 16 or g_obj(i%,2) < TILE_SIZEx2 then continue for
 
-        slot_ix%=free_slots%(c%)
-        ' Has free slot?
-        if slot_ix% = 0 then exit for
-
         ' If it is not a black demon
         if g_obj(i%,0) <> 8 then
-            enemy_fire(i%, slot_ix%)
+            enemy_fire(i%)
         end if
-        inc c%
     next
 end sub
 
-sub enemy_fire(i%, shot_ix%)
+sub enemy_fire(i%)
     local obj_id%=g_obj(i%,0)
     ' Checks screen limit for shooting and shoot chance
     if g_obj(i%,2) > MAX_ENEMIES_SHOOT_Y or rnd > SHOOT_CHANGE(g_stage%) then exit sub
@@ -811,10 +793,8 @@ sub enemy_fire(i%, shot_ix%)
     if obj_id% > 50 and g_boss(1) = obj_id% then exit sub
 
     ' Allocate new shot
-    if shot_ix%=0 then
-        shot_ix%=get_free_shot_slot()
-        if shot_ix% < 0 then exit sub
-    end if
+    local shot_ix%=get_free_shot_slot()
+    if shot_ix% < 0 then exit sub
 
     local enemy_spr_id%=OBJ_INI_SPRITE_ID + i%
     local x=g_obj(i%,1) + sprite(W, enemy_spr_id%)/2
@@ -824,7 +804,7 @@ sub enemy_fire(i%, shot_ix%)
     local gpr1, gpr2, gpr3, speed=70
 
     select case obj_id%
-        case 5,12,13 ' Cloud, Yellow and Red thing
+        case 5 ' Cloud
             exit sub ' Do not shoot
 
         case 4 ' Knight
@@ -838,13 +818,9 @@ sub enemy_fire(i%, shot_ix%)
             else
                 weapon_ix%=24: rot%=choice(rot%=1,3,2)
             end if
-            gpr1=speed*sin(angle)
-            gpr2=speed*-cos(angle)
 
         case 7 ' Skeleton
             if g_obj(i%,5) <> 0 or g_obj(i%,4) > 1 then exit sub
-            gpr1=speed*sin(angle)
-            gpr2=speed*-cos(angle)
             weapon_ix%=18
 
         case 8 ' Black Demon
@@ -854,35 +830,32 @@ sub enemy_fire(i%, shot_ix%)
             create_shot(get_free_shot_slot(), weapon_ix%, x, y, speed*sin(angle-10), speed*-cos(angle-10))
             create_shot(get_free_shot_slot(), weapon_ix%, x, y, speed*sin(angle+10), speed*-cos(angle+10))
             create_shot(get_free_shot_slot(), weapon_ix%, x, y, speed*sin(angle+30), speed*-cos(angle+30))
-            shot_ix%=-1
+            exit sub
+
+        case 12, 13 ' Yellow thing and Red thing
+            if g_stage% > 2 and g_row% > MAP_ROWS \ 2 then exit sub
 
         case 51 ' Boss stage 1
             weapon_ix%=17 ' Energy ray
-            gpr1=120*sin(angle)
-            gpr2=120*-cos(angle)
+            speed=120
 
         case 52 ' Boss stage 2
             weapon_ix%=26 ' Scythe
             ' Center of rotation
             gpr1=g_obj(i%,1)             ' X
             gpr2=g_obj(i%,2)+TILE_SIZE*8 ' Y
-
-        case else
-            gpr1=speed*sin(angle)
-            gpr2=speed*-cos(angle)
-
     end select
 
-    if shot_ix% >= 0 then
-        create_shot(shot_ix%, weapon_ix%, x, y, gpr1, gpr2, gpr3, rot%)
+    if gpr1 = 0 and gpr2 = 0 then
+        gpr1=speed*sin(angle)
+        gpr2=speed*-cos(angle)
     end if
+    create_shot(shot_ix%, weapon_ix%, x, y, gpr1, gpr2, gpr3, rot%)
 end sub
 
 sub create_shot(shot_ix%, weapon_ix%, x, y, gpr1, gpr2, gpr3, rot%)
     if shot_ix% < 0 then exit sub
-
     local shot_spr_id%=shot_ix%+SHOTS_INI_SPRITE_ID
-
     ' Create the shot state
     g_shots(shot_ix%,0)=weapon_ix% ' Weapon Index
     g_shots(shot_ix%,1)=x          ' X
