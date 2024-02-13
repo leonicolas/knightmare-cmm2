@@ -234,7 +234,7 @@ sub move_and_process_objects()
     ' Objects and enemies
     if g_freeze_timer >= 0 then exit sub
 
-    local i%, sprite_id%, obj_id%, screen_offset%, offset_y%, offset_x%, data_id%, direction%, speed
+    local i%, sprite_id%, obj_id%, offset_y%, offset_x%, data_id%, direction%, speed
 
     for i%=0 to bound(g_obj())
         offset_x%=0: offset_y%=0
@@ -244,7 +244,6 @@ sub move_and_process_objects()
         if not obj_id% or obj_id% > 50 then continue for
 
         data_id%=OBJ_TILE%(obj_id%,4)
-        screen_offset%=TILE_SIZE
         sprite_id%=OBJ_INI_SPRITE_ID + i%
 
         ' Moves object
@@ -447,9 +446,12 @@ sub move_and_process_objects()
 
             case 38,39 ' Shadow
                 g_obj(i%,1)=g_obj(g_obj(i%,6),1)
+                offset_x%=g_obj(i%,4) >> 8
+                offset_y%=g_obj(i%,4) and &HFF
                 ' Changes Y if it is not fixed height
-                if not g_obj(i%,5) then g_obj(i%,2)=g_obj(g_obj(i%,6),2)+g_obj(i%,4)
-                screen_offset%=-TILE_SIZE
+                if not g_obj(i%,5) then
+                    g_obj(i%,2)=g_obj(g_obj(i%,6),2)
+                end if
 
             case else
                 ' Increment X and Y position
@@ -527,7 +529,7 @@ sub destroy_object(obj_ix%)
     sprite close sprite_id%
     if is_enemy(obj_id%) then
         inc g_enemies_count%, -1
-        if g_boss(0) = 2 then boss_enemy_destroyed(obj_id%, g_obj(obj_ix%, 4), g_obj(obj_ix%, 5))
+        if g_boss(0) > 1 then boss_enemy_destroyed(obj_id%, g_obj(obj_ix%, 4), g_obj(obj_ix%, 5))
     end if
 end sub
 
@@ -615,7 +617,7 @@ sub spawn_object(obj_id%, x%, y%, obj_cfg%)
                 spawn_speed=1000
             end if
             ' Spawn the bat shadow
-            spawn_shadow(i%, TILE_SIZEx2+TILE_SIZE/2)
+            spawn_shadow(i%,,TILE_SIZEx2+TILE_SIZE/2)
 
         case 4 ' Knight
             spawn_speed=500
@@ -624,10 +626,10 @@ sub spawn_object(obj_id%, x%, y%, obj_cfg%)
             g_obj(i%,1)=choice(obj_cfg%=left, 0, SCREEN_WIDTH-TILE_SIZEx2)
             g_obj(i%,2)=TILE_SIZEx4
             g_obj(i%,5)=choice(obj_cfg%=0, right, obj_cfg%)
-            spawn_shadow(i%, TILE_SIZEx2)
+            spawn_shadow(i%,,TILE_SIZEx2)
 
         case 6 ' Blue demon
-            spawn_shadow(i%, TILE_SIZEx2+TILE_SIZE/2)
+            spawn_shadow(i%,,TILE_SIZEx2+TILE_SIZE/2)
             spawn_speed=400
 
         case 7 ' Skeleton
@@ -653,14 +655,14 @@ sub spawn_object(obj_id%, x%, y%, obj_cfg%)
         case 8,12 ' Black demon, Yellow thing
             angle=min(20,math(ATAN3 abs(g_obj(i%,1)-g_player(0)), abs(g_obj(i%,2)-g_player(1))))
             g_obj(i%,4)=OBJ_DATA(data_id%,0)*choice(g_obj(i%,1)>g_player(0),left,right)*sin(angle)
-            spawn_shadow(i%, TILE_SIZEx2)
+            spawn_shadow(i%,,TILE_SIZEx2)
             if obj_id%=8 then obj_id%=5 ' Spawns as a cloud
 
         case 13 ' Red thing
             g_obj(i%,1)=choice(g_obj(i%,1) < SCREEN_CENTER_W, 0, SCREEN_WIDTH-TILE_SIZEx2)
             g_obj(i%,2)=TILE_SIZEx2
             g_obj(i%,5)=choice(g_obj(i%,1)=0, 1, -1)
-            spawn_shadow(i%, TILE_SIZEx2+TILE_SIZE/2)
+            spawn_shadow(i%,,TILE_SIZEx2+TILE_SIZE/2)
             spawn_speed=300
 
         case 24 ' Fire
@@ -685,19 +687,19 @@ sub spawn_shield()
     g_player(6)=SHIELD_MAX_HITS
 end sub
 
-sub spawn_shadow(obj_ix%, height%, fixed_height%, shadow_tile_id%)
+sub spawn_shadow(obj_ix%, offset_x%, offset_y%, fixed_y%, shadow_tile_id%)
     local i%=get_free_object_slot()
     if i% < 0 then exit sub
 
     local sprite_id%, id%=choice(shadow_tile_id%, shadow_tile_id%, 39)
 
-    g_obj(i%,0)=39                       ' Shadow id
-    g_obj(i%,1)=g_obj(obj_ix%,1)         ' X
-    g_obj(i%,2)=g_obj(obj_ix%,2)+height% ' Y
-    g_obj(i%,4)=height%                  ' Height
-    g_obj(i%,5)=fixed_height%            ' Is fixed hight?
-    g_obj(i%,6)=obj_ix%                  ' Shadow -> source object index
-    g_obj(obj_ix%,6)=i%                  ' Source object -> shadow index
+    g_obj(i%,0)=39                            ' Shadow id
+    g_obj(i%,1)=g_obj(obj_ix%,1)+offset_x%    ' X
+    g_obj(i%,2)=g_obj(obj_ix%,2)+offset_y%    ' Y
+    g_obj(i%,4)=(offset_x% << 8) or offset_y% ' Offset X or Offset Y
+    g_obj(i%,5)=fixed_y%                      ' Is fixed hight?
+    g_obj(i%,6)=obj_ix%                       ' Shadow -> source object index
+    g_obj(obj_ix%,6)=i%                       ' Source object -> shadow index
     sprite_id%=OBJ_INI_SPRITE_ID + i%
     sprite read sprite_id%, OBJ_TILE%(id%,0), OBJ_TILE%(id%,1), OBJ_TILE%(id%,2), OBJ_TILE%(id%,3), OBJ_TILES_BUFFER
     sprite show safe sprite_id%, g_obj(i%,1),g_obj(i%,2), 3

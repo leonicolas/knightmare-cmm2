@@ -46,9 +46,9 @@ dim g_hiscore%=0
 
 ' Boss: 0: status | 1: body index | 2 to 7 - hit box indexes
 ' Status:
-' 0 - Boss not spawned
-' 1 - Waiting start
-' 2 - Active
+' 0    - Boss not spawned
+' 1    - Waiting start
+' 2..N - Active
 dim g_boss(7)
 
 ' Supports 13 shots at the same time: 0: id | 1: x | 2: y | 3: GPR 1 | 4: GPR 2 | 5: GPR 3
