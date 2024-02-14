@@ -53,15 +53,13 @@ sub run_stage()
         if timer - g_prev_frame_timer < GAME_TICK_MS then continue do
         g_delta_time=(timer-g_prev_frame_timer)/1000
         g_prev_frame_timer=timer
+        inc g_timer
         'debug_print("FPS: "+str$(1/g_delta_time))
 
         page write SPRITES_BUFFER
 
         ' Scrolls the map
-        if g_freeze_timer < 0 and g_row% >= -1 and timer - g_scroll_timer >= SCROLL_SPEED_MS then
-            scroll_map()
-            g_scroll_timer=timer
-        end if
+        if g_freeze_timer < 0 and g_row% >= -1 and g_timer mod 16 = 0 then scroll_map()
 
         ' Process keyboard
         process_kb()
@@ -69,19 +67,17 @@ sub run_stage()
         if g_player(8) = 3 then auto_move_player_to_portal()
 
         ' Process animations
-        if timer - g_anim_timer >= ANIM_TICK_MS then
+        if g_timer mod 6 = 0 then
             inc g_anim_tick%
             animate_player()
             if g_boss(0) > 1 then animate_boss()
             animate_shots()
             animate_objects()
-            g_anim_timer=timer
         end if
 
         ' Process enemies shots
-        if timer - g_eshot_timer >= ENEMIES_SHOTS_MS then
+        if g_timer mod 250 = 0 then
             if g_stage% > 1 or g_row% < 125 then enemies_fire()
-            g_eshot_timer=timer
         end if
         ' Process boss shots
         if g_boss(0) > 1 then boss_fire()

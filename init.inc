@@ -26,11 +26,8 @@ end sub
 
 sub init_stage()
     timer=0
-    g_scroll_timer=0
-    g_player_timer=0
-    g_anim_timer=0
+    g_timer=0
     g_pshot_timer=0
-    g_eshot_timer=0
     g_freeze_timer=-1
     g_power_up_timer=-1
     g_prev_frame_timer=0
