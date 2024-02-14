@@ -131,8 +131,7 @@ function hit_object(collided_id%, sfx%, instakill%) as integer
             hit_object=true
 
         case is > 50 ' Boss
-            hit_boss(collided_id%)
-            if is_boss_hit_box(collided_id%) then hit_object=true
+            hit_object = hit_boss(collided_id%)
 
         case 5 ' Cloud
             if instakill% then

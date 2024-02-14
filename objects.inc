@@ -525,7 +525,7 @@ sub destroy_object(obj_ix%)
     destroy_shadow(obj_ix%)
 
     g_obj(obj_ix%, 0)=0
-    sprite hide safe sprite_id%
+    if sprite(X, sprite_id%) <> 10000 then sprite hide safe sprite_id%
     sprite close sprite_id%
     if is_enemy(obj_id%) then
         inc g_enemies_count%, -1
