@@ -14,17 +14,17 @@ sub activate_boss()
             enqueue_action(1, 5,,,left,6500)
             enqueue_action(1, 5,,,right,9500)
         case 2
-            g_obj(g_obj(id%,6),5) = true ' Fix shadow hight
+            g_obj(g_obj(id%,6),5) = true ' Fix shadow height
 
         case 3
             activate_hit_box(2, false)
+            g_obj(g_obj(id%,6),5) = true ' Fix shadow height
     end select
 end sub
 
 sub activate_hit_box(i%, active%)
     if g_boss(i%) < 0 then exit sub
     local sprite_id%=OBJ_INI_SPRITE_ID + g_boss(i%)
-    debug_print("A " + str$(i%) + ": "+str$(active%) + " => " + str$(sprite(X, sprite_id%))+"      ")
 
     if sprite(X, sprite_id%) = 10000 and active% then
         sprite show sprite_id%, g_obj(i%, 1),g_obj(i%, 2), 1
@@ -184,8 +184,10 @@ sub boss_fire()
             speed=70
         case 2
             speed=120
+        case 3
+            exit sub
     end select
-    if g_obj(g_boss(1), 4) mod 70 = 0 then enemy_fire(g_boss(1))
+    if g_timer mod speed = 0 then enemy_fire(g_boss(1))
 end sub
 
 sub animate_boss()
@@ -207,6 +209,8 @@ sub animate_boss()
                 if tick% = 24 then
                     activate_hit_box(2, true)
                     activate_hit_box(3, false)
+                else if tick% = 34 then
+                    enemy_fire(g_boss(1), true)
                 end if
                 ' Wings animation
                 tick% = g_anim_tick% mod 4

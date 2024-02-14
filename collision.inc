@@ -174,8 +174,8 @@ sub hit_shield(shot_sprite_id%)
     local force%=1
 
     select case g_shots(shot_sprite_id% - SHOTS_INI_SPRITE_ID,0)
-        ' Energy ray, Scythe
-        case 15,26
+        ' Energy ray, mini explosion, Scythe
+        case 15,21,26
             force%=3
     end select
 

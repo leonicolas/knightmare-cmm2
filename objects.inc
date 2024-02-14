@@ -787,10 +787,10 @@ sub enemies_fire()
     next
 end sub
 
-sub enemy_fire(i%)
-    local obj_id%=g_obj(i%,0)
+sub enemy_fire(ix%, disable_rnd%)
+    local obj_id%=g_obj(ix%,0)
     ' Checks screen limit for shooting and shoot chance
-    if g_obj(i%,2) > MAX_ENEMIES_SHOOT_Y or rnd > SHOOT_CHANGE(g_stage%) then exit sub
+    if disable_rnd% = false and (g_obj(ix%,2) > MAX_ENEMIES_SHOOT_Y or rnd > SHOOT_CHANGE(g_stage%)) then exit sub
     ' Ignores boss body
     if obj_id% > 50 and g_boss(1) = obj_id% then exit sub
 
@@ -798,12 +798,12 @@ sub enemy_fire(i%)
     local shot_ix%=get_free_shot_slot()
     if shot_ix% < 0 then exit sub
 
-    local enemy_spr_id%=OBJ_INI_SPRITE_ID + i%
-    local x=g_obj(i%,1) + sprite(W, enemy_spr_id%)/2
-    local y=g_obj(i%,2) + sprite(H, enemy_spr_id%)/2
+    local enemy_spr_id%=OBJ_INI_SPRITE_ID + ix%
+    local x=g_obj(ix%,1) + sprite(W, enemy_spr_id%)/2
+    local y=g_obj(ix%,2) + sprite(H, enemy_spr_id%)/2
     local angle=deg(sprite(V, enemy_spr_id%, 1))
-    local rot%=fix((angle+22.5)/45) mod 8, weapon_ix%=16 ' Dot bullet
-    local gpr1, gpr2, gpr3, speed=70
+    local rot%, weapon_ix%=16 ' Dot bullet
+    local i%, gpr1, gpr2, gpr3, speed=70
 
     select case obj_id%
         case 5 ' Cloud
@@ -822,7 +822,7 @@ sub enemy_fire(i%)
             end if
 
         case 7 ' Skeleton
-            if g_obj(i%,5) <> 0 or g_obj(i%,4) > 1 then exit sub
+            if g_obj(ix%,5) <> 0 or g_obj(ix%,4) > 1 then exit sub
             weapon_ix%=18
 
         case 8 ' Black Demon
@@ -842,10 +842,21 @@ sub enemy_fire(i%)
             speed=120
 
         case 52 ' Boss stage 2
-            weapon_ix%=26 ' Scythe
+            weapon_ix%=21 ' Scythe
             ' Center of rotation
-            gpr1=g_obj(i%,1)             ' X
-            gpr2=g_obj(i%,2)+TILE_SIZE*8 ' Y
+            gpr1=g_obj(ix%,1)             ' X
+            gpr2=g_obj(ix%,2)+TILE_SIZE*8 ' Y
+
+        case 53 ' Boss stage 3
+            weapon_ix%=21 ' Mini explosion
+            angle=min(200,max(160,angle))
+            speed=110
+            for i%=-45 to 45 step 15
+                create_shot(shot_ix%, weapon_ix%, x, y, speed*sin(angle-i%), speed*-cos(angle-i%))
+                if i% < 45 then shot_ix%=get_free_shot_slot()
+            next
+            exit sub
+
     end select
 
     if gpr1 = 0 and gpr2 = 0 then
