@@ -27,7 +27,7 @@ sub replace_block(block_ix%)
         spawn_bridge(sprite(X, sprite_id%), sprite(Y, sprite_id%))
         make_bridge_ground(g_blocks(block_ix%, 2)+1, g_blocks(block_ix%, 3)-1, false)
         destroy_block(block_ix%)
-        play_sfx("BLOCK_OPEN_SFX")
+        play_sfx("BLOCK_OPEN")
 
     ' Other blocks
     else
@@ -218,7 +218,7 @@ sub collect_block_bonus(sprite_id%)
     select case g_blocks(i%,0)
         case 1 ' Hook - points
             increment_score(BLOCK_POINTS)
-            play_sfx("POINTS_SFX")
+            play_sfx("POINTS")
         case 2 ' Knight - kill all enemies in the screen
             kill_all_enemies(true)
         case 3 ' Queen - Extra life

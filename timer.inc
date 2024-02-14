@@ -2,7 +2,7 @@
 sub process_freeze_timer()
     local fraction%=fix((g_freeze_timer - fix(g_freeze_timer)) * 100)
     print_freeze_timer(g_freeze_timer)
-    if fraction% = 0 or (g_freeze_timer < 4 and fraction% = 50) then play_sfx("FREEZE_TICK_SFX")
+    if fraction% = 0 or (g_freeze_timer < 4 and fraction% = 50) then play_sfx("FREEZE_TICK")
 
     inc g_freeze_timer, -1 * g_delta_time
     if g_freeze_timer < 0 then

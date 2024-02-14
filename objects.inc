@@ -149,7 +149,7 @@ end sub
 sub move_player_to_portal()
     create_portal()
     g_player(8)=3 ' Move to portal state
-    play_sfx("START_STAGE_SFX")
+    play_sfx("START_STAGE")
 end sub
 
 sub move_player(direction%)
@@ -560,7 +560,7 @@ end sub
 
 sub kill_all_enemies(sfx%)
     local i%,hit
-    if sfx% then play_sfx("KILL_ALL_ENEMIES_SFX")
+    if sfx% then play_sfx("KILL_ALL_ENEMIES")
     for i%=0 to bound(g_obj())
         ' Check for free slots or boss id
         if g_obj(i%,0)=0 or g_obj(i%,0) > 50 then continue for
@@ -668,7 +668,7 @@ sub spawn_object(obj_id%, x%, y%, obj_cfg%)
         case 24 ' Fire
             offset_x%=FIRE_ANIM(0)*TILE_SIZEx2
             layer%=4
-            if obj_cfg% then play_sfx("ENEMY_KILL_SFX")
+            if obj_cfg% then play_sfx("ENEMY_KILL")
     end select
 
     if obj_cfg% > 0 and spawn_speed > 0 then enqueue_action(obj_cfg%, obj_id%, x%, y%,,spawn_speed)
@@ -712,7 +712,7 @@ sub fire()
     local i%, sprite_id%, shots%=choice(g_player(3)>6,2,1)
     local tile_id%=40
     local speed_x=0, speed_y=-220, offset%
-    local sfx$="SHOT_SFX"
+    local sfx$="SHOT"
     local x=g_player(0)+(TILE_SIZE-OBJ_TILE%(tile_id%,2)/2)
     local y=g_player(1)-OBJ_TILE%(tile_id%,3)-1
 
@@ -725,18 +725,18 @@ sub fire()
             inc x, -TILE_SIZEx2
             speed_y=-200
             tile_id%=42
-            sfx$="FLAME_SFX"
+            sfx$="FLAME"
         case 4,9 ' Boomerang
             tile_id%=43
             sfx$=""
-            g_cont_sfx$="BOOMERANG_SFX"
+            g_cont_sfx$="BOOMERANG"
         case 5,10 ' Sword
             shots%=2
             tile_id%=choice(g_player(3) = 5, 45, 46)
-            sfx$="SWORD_SFX"
+            sfx$="SWORD"
         case 6,11 ' Fire arrow
             tile_id%=47
-            sfx$="FIRE_ARROW_SFX"
+            sfx$="FIRE_ARROW"
     end select
 
     ' One, two or three shots depending on the weapon level

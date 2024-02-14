@@ -83,7 +83,7 @@ function hit_boss(sprite_id%) as integer
     if g_obj(obj_id%,3) <= 0 then
         kill_boss()
     else
-        play_sfx("BOSS_HIT_SFX")
+        play_sfx("BOSS_HIT")
     end if
 end function
 
@@ -96,7 +96,7 @@ sub kill_boss()
     kill_all_enemies()
     animate_boss() ' Animates boss to initial state
     play_song("SILENCE_MOD")
-    play_sfx("BOSS_KILL_SFX")
+    play_sfx("BOSS_KILL")
 
     ' Blink screen 30 times
     enqueue_action(30, 100,,,,40)

@@ -95,9 +95,9 @@ function hit_block(sprite_id%) as integer
 
     g_cont_sfx$=""
     if g_blocks(i%,1) < max_hits% then
-        play_sfx("BLOCK_HIT_SFX")
+        play_sfx("BLOCK_HIT")
     else if g_blocks(i%,1) = max_hits% then
-        play_sfx("BLOCK_OPEN_SFX")
+        play_sfx("BLOCK_OPEN")
     end if
 
     if g_blocks(i%,1)=1 or g_blocks(i%,1)=max_hits% then
@@ -127,7 +127,7 @@ function hit_object(collided_id%, sfx%, instakill%) as integer
             g_obj(i%,4)=g_obj(i%,4) mod choice(g_obj(i%,0) = 29, 8, 7)
             ' Enable the wobbling movement
             if g_obj(i%,4) > 3 and g_obj(i%,5) < 0 then g_obj(i%,5)=0
-            if sfx% then play_sfx("POWER_UP_HIT_SFX")
+            if sfx% then play_sfx("POWER_UP_HIT")
             hit_object=true
 
         case is > 50 ' Boss
@@ -180,7 +180,7 @@ sub hit_shield(shot_sprite_id%)
     end select
 
     inc g_player(6), -force%
-    play_sfx("SHIELD_SFX")
+    play_sfx("SHIELD")
     select case g_player(6)
         case is <= 0
             g_player(5)=0

@@ -4,10 +4,10 @@ sub change_weapon(obj_ix%)
     select case g_obj(obj_ix%, 4)
         case 0 to 2 ' No weapon
             increment_score(1000)
-            play_sfx("POINTS_SFX")
+            play_sfx("POINTS")
         case else ' Weapon chrystal
             increment_score(200)
-            play_sfx("CHRYSTAL_SFX")
+            play_sfx("CHRYSTAL")
             local weapon% = g_obj(obj_ix%, 4) - 1
             if weapon% = 5 then increase_player_speed()
             g_player(3)=weapon% + choice(g_player(3)=weapon% or g_player(3)=weapon%+5, 5, 0)
@@ -19,7 +19,7 @@ sub power_up(obj_ix%)
     select case g_obj(obj_ix%, 4)
         case 0 to 2 ' Black pill
             increment_score(1000)
-            play_sfx("POINTS_SFX")
+            play_sfx("POINTS")
             exit sub
         case 3 ' Dark blue pill - speed
             increase_player_speed()
@@ -34,7 +34,7 @@ sub power_up(obj_ix%)
     end select
 
     increment_score(200)
-    play_sfx("CHRYSTAL_SFX")
+    play_sfx("CHRYSTAL")
 end sub
 
 function is_chrystal(obj_sprite_id%) as integer
@@ -63,9 +63,9 @@ end sub
 
 sub update_life(value%)
     if value% >= 0 then
-        play_sfx("NEW_LIFE_SFX")
+        play_sfx("NEW_LIFE")
     else
-        play_sfx("PLAYER_DEATH_SFX")
+        play_sfx("PLAYER_DEATH")
     end if
     inc g_player(7), choice(value%, value%, 1)
     print_lives(g_player(7))

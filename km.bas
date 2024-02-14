@@ -27,7 +27,7 @@ sub start_game()
     init_player()
     g_stage%=1
     play_song("SILENCE_MOD")
-    play_sfx("START_STAGE_SFX")
+    play_sfx("START_STAGE")
     do
         timer=0
         show_stage_screen(g_stage%)
