@@ -790,7 +790,7 @@ end sub
 sub enemy_fire(ix%, disable_rnd%)
     local obj_id%=g_obj(ix%,0)
     ' Checks screen limit for shooting and shoot chance
-    if disable_rnd% = false and (g_obj(ix%,2) > MAX_ENEMIES_SHOOT_Y or rnd > SHOOT_CHANGE(g_stage%)) then exit sub
+    if disable_rnd% = false and (g_obj(ix%,2) > MAX_ENEMIES_SHOOT_Y or rnd > SHOOT_CHANCE(g_stage%)) then exit sub
     ' Ignores boss body
     if obj_id% > 50 and g_boss(1) = obj_id% then exit sub
 
@@ -842,7 +842,7 @@ sub enemy_fire(ix%, disable_rnd%)
             speed=120
 
         case 52 ' Boss stage 2
-            weapon_ix%=21 ' Scythe
+            weapon_ix%=26 ' Scythe
             ' Center of rotation
             gpr1=g_obj(ix%,1)             ' X
             gpr2=g_obj(ix%,2)+TILE_SIZE*8 ' Y
@@ -851,9 +851,9 @@ sub enemy_fire(ix%, disable_rnd%)
             weapon_ix%=21 ' Mini explosion
             angle=min(200,max(160,angle))
             speed=110
-            for i%=-45 to 45 step 15
+            for i%=-60 to 60 step 20
                 create_shot(shot_ix%, weapon_ix%, x, y, speed*sin(angle-i%), speed*-cos(angle-i%))
-                if i% < 45 then shot_ix%=get_free_shot_slot()
+                if i% < 60 then shot_ix%=get_free_shot_slot()
             next
             exit sub
 
