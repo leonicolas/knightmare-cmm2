@@ -2,8 +2,8 @@ const fs = require("fs");
 const path = require("path");
 
 const tilesCols = 32;
-const mapCols=32;
-const tileSize=8;
+const mapCols = 32;
+const tileSize = 8;
 const stageTilesOffset = [0, 3, 5, 9];
 const mapBufferBytesPerTile = 2;
 
@@ -78,10 +78,10 @@ function generateMapBinary(stage) {
 
         // Calculate tile offset
         if (solidValue) {
-            solidValue -= tileOffset;
+            solidValue -= tileOffset + 1;
             if (solidValue < 0) panic(`Solid tile ID is < 0\n- Stage ${stage}\n- Offset: ${tileOffset}\n- Index ${i}\n- ID ${solidValue}`);
         } else {
-            groundValue -= tileOffset;
+            groundValue -= tileOffset + 1;
             if (groundValue < 0) panic(`Ground tile ID is < 0\n- Stage ${stage}\n- Offset: ${tileOffset}\n- Index ${i}\n- ID ${groundValue}`);
         }
         // Tile value + solid flag
