@@ -23,11 +23,8 @@ const BOSS_TILES_BUFFER=5               ' Bosses tileset buffer number
 const SPRITES_BUFFER=6
 
 ' Speed control
-const SCROLL_SPEED_MS=128                 ' Scroll speed in ms
 const GAME_TICK_MS=1000/120               ' Game tick in ms for max 120 FPS
 const SHOT_COOLDOWN_MS=150                ' Player shot cooldown in ms
-const ENEMIES_SHOTS_MS=2000               ' Enemies shots in ms
-const ANIM_TICK_MS=50                     ' Animation frame time in ms
 
 ' Map data
 const MAP_COLS=32                         ' Map columns number
@@ -72,7 +69,7 @@ const BOSS_SPEED=60
 
 const MAX_ENEMIES_SHOOT_Y=SCREEN_HEIGHT*0.6
 'Chance of enemy shoot per stage
-dim SHOOT_CHANGE(8)=(0,0.5,0.5,0.6,0.6,0.7,0.7,0.8,0.8)
+dim SHOOT_CHANCE(8)=(0,0.5,0.5,0.6,0.6,0.7,0.7,0.8,0.8)
 
 const BLOCK_HITS=5
 const BLOCK_POINTS=500

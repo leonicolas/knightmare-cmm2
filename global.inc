@@ -9,7 +9,6 @@ dim g_kb_released%             ' Tracks kb keys releasing
 dim g_stage%                   ' Current stage number
 dim g_enemies_count%           ' Total enemies at the screen
 ' Timers
-dim g_player_timer             ' Player timer
 dim g_pshot_timer              ' Player shot timer
 dim g_freeze_timer             ' Enemies freeze timer
 dim g_power_up_timer           ' Power-up timer
