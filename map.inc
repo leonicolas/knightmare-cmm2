@@ -98,7 +98,7 @@ sub scroll_map()
     next
 
     ' Scroll boss vertically
-    if g_boss(0) > 0 then inc g_obj(g_boss(1), 2)
+    if g_boss(0) > 0 then scroll_boss()
 
     ' Scroll map tiles
     page scroll SCREEN_BUFFER, 0, -1
@@ -145,6 +145,7 @@ sub draw_map(row%)
     local r%, offset_y%=SCREEN_HEIGHT+TILE_SIZE
     row%=min(MAP_ROWS_0-SCREEN_ROWS,row%)
     page write SCREEN_BUFFER
+    g_row%=row%
     for r%=SCREEN_ROWS+row%-1 to row%-2 step -1
         page scroll SCREEN_BUFFER,0,-TILE_SIZE
         process_map_row(r%, false, row%=0, offset_y%)
@@ -164,7 +165,7 @@ sub process_map_row(row%, spawn%, line_zero%, offset_y%)
         case is < 0
             exit sub
         case 7
-            spawn_boss(not line_zero%)
+            spawn_boss()
         case 8
             select case g_stage%
                 case 1,3

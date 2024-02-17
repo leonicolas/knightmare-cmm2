@@ -446,12 +446,12 @@ sub move_and_process_objects()
 
             case 38,39 ' Shadow
                 g_obj(i%,1)=g_obj(g_obj(i%,6),1)
-                offset_x%=g_obj(i%,4) >> 8
-                offset_y%=g_obj(i%,4) and &HFF
                 ' Changes Y if it is not fixed height
                 if not g_obj(i%,5) then
                     g_obj(i%,2)=g_obj(g_obj(i%,6),2)
                 end if
+                offset_x%=g_obj(i%,4) >> 8
+                offset_y%=g_obj(i%,4) and &HFF
 
             case else
                 ' Increment X and Y position

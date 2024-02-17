@@ -1,7 +1,10 @@
 sub activate_boss()
-    local id%=g_boss(1), i%
+    local id%=g_boss(1), shadow_id%=g_obj(id%,6), i%
     g_boss(0)=2
-    g_obj(id%, 2)=TILE_SIZE*6
+    if shadow_id% >= 0 then
+        g_obj(shadow_id%,2) = g_obj(id%, 2)
+        g_obj(shadow_id%,5) = true ' Fix shadow height
+    end if
 
     for i%=2 to 7
         activate_hit_box(i%, true)
@@ -13,9 +16,6 @@ sub activate_boss()
             enqueue_action(1, 5,,,right,3000)
             enqueue_action(1, 5,,,left,6500)
             enqueue_action(1, 5,,,right,9500)
-        case 2
-            g_obj(g_obj(id%,6),5) = true ' Fix shadow height
-
         case 3
             activate_hit_box(2, false)
             g_obj(g_obj(id%,6),5) = true ' Fix shadow height
@@ -122,9 +122,9 @@ sub destroy_boss()
     enqueue_action(1, 101,,,,1500)
 end sub
 
-sub spawn_boss(off_screen%)
-    local i%, y%=choice(off_screen%, -TILE_SIZE*3, TILE_SIZEx4)
-    local id%=allocate_object(50+g_stage%, TILE_SIZE*14, y%, 1, 0, TILE_SIZE*14)
+sub spawn_boss()
+    local x%=SCREEN_WIDTH/2-TILE_SIZE*2.5
+    local y%, i%, id%=allocate_object(50+g_stage%, x%, y%, 1, 0, TILE_SIZE*14)
     local sprite_id%=OBJ_INI_SPRITE_ID + id%
 
     g_boss(0)=1   ' Status - Waiting start
@@ -138,12 +138,13 @@ sub spawn_boss(off_screen%)
     else
         select case g_stage%
             case 1
-                inc g_obj(id%,2), TILE_SIZE
+                g_obj(id%,2)=TILE_SIZE*(6-g_row%)
             case 2
-                spawn_shadow(id%,,TILE_SIZE*7+g_row%*TILE_SIZE, false, 37)
+                g_obj(id%,2)=TILE_SIZE*(5-g_row%)
+                spawn_shadow(id%,,TILE_SIZE*6, false, 37)
             case 3
-                inc g_obj(id%,2), -TILE_SIZE
-                spawn_shadow(id%,TILE_SIZE+TILE_SIZE/2, TILE_SIZE*9+g_row%*TILE_SIZE, false)
+                g_obj(id%,2)=TILE_SIZE*(6-g_row%)
+                spawn_shadow(id%,TILE_SIZE+TILE_SIZE/2, TILE_SIZE*7, false)
                 create_boss_shield(TILE_SIZE, TILE_SIZE, TILE_SIZE*3)
         end select
 
@@ -241,11 +242,16 @@ sub animate_boss()
     sprite read OBJ_INI_SPRITE_ID + g_boss(1), x%,y%, w%,h%, BOSS_TILES_BUFFER
 end sub
 
+sub scroll_boss()
+    local id%=g_boss(1)
+    inc g_obj(id%, 2)
+    sprite next OBJ_INI_SPRITE_ID + id%, g_obj(id%, 1), g_obj(id%, 2)
+    move_hit_box()
+end sub
+
 sub move_boss()
     local id%=g_boss(1)
     if g_boss(0) < 2 then
-        sprite next OBJ_INI_SPRITE_ID + id%, g_obj(id%, 1), g_obj(id%, 2)
-        move_hit_box()
         exit sub
     end if
 
@@ -267,19 +273,18 @@ sub move_boss()
             select case g_stage%
                 case 2
                     speed_x=1.2: speed_y=9
-                    y%=6
                     mov_height=6
+                    y%=TILE_SIZE*5
                 case 3
                     speed_x=1.8: speed_y=3.6
-                    y%=5
                     mov_height=12
+                    y%=TILE_SIZE*6
             end select
             ini_pos=(SCREEN_WIDTH-TILE_SIZE*6)/2
             inc g_obj(id%, 4),BOSS_SPEED*g_delta_time*speed_x
             inc g_obj(id%, 5),BOSS_SPEED*g_delta_time*speed_y
             g_obj(id%, 1)=ini_pos+(ini_pos-TILE_SIZEx4)*sin(g_obj(id%, 4))
-            g_obj(id%, 2)=TILE_SIZE*y%+mov_height*cos(g_obj(id%, 5))
-
+            g_obj(id%, 2)=y%+mov_height*cos(g_obj(id%, 5))
     end select
 
     ' Boss body
