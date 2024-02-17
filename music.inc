@@ -26,6 +26,8 @@ sub play_sfx(sfx$)
             play effect "sfx/boss_hit.wav"
         case "BOSS_KILL"
             play effect "sfx/boss_kill.wav"
+        case "BOSS_SHIELD"
+            play effect "sfx/boss_shield.wav"
         case "BLOCK_HIT"
             play effect "sfx/block_hit.wav"
         case "BLOCK_OPEN"

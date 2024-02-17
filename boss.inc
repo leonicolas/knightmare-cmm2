@@ -55,7 +55,7 @@ function hit_boss(sprite_id%) as integer
         case 3
             local hit_box%=OBJ_INI_SPRITE_ID + g_boss(3)
             if sprite(X, hit_box%) <> 10000 then
-                play_sfx("SHIELD")
+                play_sfx("BOSS_SHIELD")
                 hit_boss = true
                 exit function
             end if
