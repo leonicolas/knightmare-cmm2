@@ -36,7 +36,7 @@ sub animate_objects()
                 if g_anim_tick% mod 6 > 2 then flip%=1
 
             case 7 ' Skeleton
-                if g_obj(i%, 4) > 1 then exit sub
+                if g_obj(i%, 4) > 1 then continue for
                 if g_anim_tick% mod 6 > 2 then offset_x%=TILE_SIZEx2
 
             case 8 ' Black demon
