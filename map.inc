@@ -144,8 +144,8 @@ end function
 sub draw_map(row%)
     local r%, offset_y%=SCREEN_HEIGHT+TILE_SIZE
     row%=min(MAP_ROWS_0-SCREEN_ROWS,row%)
-    page write SCREEN_BUFFER
     g_row%=row%
+    page write SCREEN_BUFFER
     for r%=SCREEN_ROWS+row%-1 to row%-2 step -1
         page scroll SCREEN_BUFFER,0,-TILE_SIZE
         process_map_row(r%, false, row%=0, offset_y%)

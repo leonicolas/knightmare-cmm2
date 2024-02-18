@@ -138,12 +138,12 @@ sub spawn_boss()
     else
         select case g_stage%
             case 1
-                g_obj(id%,2)=TILE_SIZE*(6-g_row%)
+                g_obj(id%,2)=TILE_SIZE*(choice(g_row%=0,6,-3))
             case 2
-                g_obj(id%,2)=TILE_SIZE*(5-g_row%)
+                g_obj(id%,2)=TILE_SIZE*(choice(g_row%=0,5,-4))
                 spawn_shadow(id%,,TILE_SIZE*6, false, 37)
             case 3
-                g_obj(id%,2)=TILE_SIZE*(6-g_row%)
+                g_obj(id%,2)=TILE_SIZE*(choice(g_row%=0,6,-3))
                 spawn_shadow(id%,TILE_SIZE+TILE_SIZE/2, TILE_SIZE*7, false)
                 create_boss_shield(TILE_SIZE, TILE_SIZE, TILE_SIZE*3)
         end select
