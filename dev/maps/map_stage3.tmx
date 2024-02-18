@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="left-up" width="32" height="238" tilewidth="8" tileheight="8" infinite="0" nextlayerid="4" nextobjectid="333">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="left-up" width="32" height="238" tilewidth="8" tileheight="8" infinite="0" nextlayerid="4" nextobjectid="335">
  <editorsettings>
   <export target="map_stage3.json" format="json"/>
  </editorsettings>
@@ -539,12 +539,22 @@
   <object id="328" name="Bat Wave" type="bat_wave" x="224.148" y="215.103" width="8" height="8"/>
   <object id="329" name="Bat Wave" type="bat_wave" x="23.852" y="207.648" width="8" height="8"/>
   <object id="330" name="Weapon" type="weapon" x="0.25" y="216.25" width="8" height="8"/>
-  <object id="331" name="Bat" type="bat" x="0.25" y="176.25" width="8" height="8">
+  <object id="331" name="Bat" type="bat" x="0.25" y="192.25" width="8" height="8">
    <properties>
     <property name="Count" type="int" value="4"/>
    </properties>
   </object>
-  <object id="332" name="Bat" type="bat" x="247.75" y="167.75" width="8" height="8">
+  <object id="332" name="Bat" type="bat" x="247.75" y="183.75" width="8" height="8">
+   <properties>
+    <property name="Count" type="int" value="4"/>
+   </properties>
+  </object>
+  <object id="333" name="Bat" type="bat" x="0.25" y="176.75" width="8" height="8">
+   <properties>
+    <property name="Count" type="int" value="4"/>
+   </properties>
+  </object>
+  <object id="334" name="Bat" type="bat" x="247.75" y="168.25" width="8" height="8">
    <properties>
     <property name="Count" type="int" value="4"/>
    </properties>
