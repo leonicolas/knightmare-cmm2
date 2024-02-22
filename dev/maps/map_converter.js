@@ -121,6 +121,6 @@ function panic(message) {
     process.exit(-1);
 }
 
-for(let stage = 1; stage <= 3; ++stage) {
+for(let stage = 1; stage <= 4; ++stage) {
     generateMapBinary(stage);
 }
