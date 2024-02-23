@@ -61,8 +61,10 @@ sub run_stage()
         ' Scrolls the map
         if g_freeze_timer < 0 and g_row% >= -1 and g_timer mod 16 = 0 then scroll_map()
 
-        ' Process keyboard
+        ' Process keyboard and game pad
         process_kb()
+        process_gamepad()
+
         ' Auto move player
         if g_player(8) = 3 then auto_move_player_to_portal()
 
@@ -148,4 +150,19 @@ sub process_kb()
     else if kb1%=KB_DOWN or kb2%=KB_DOWN or kb3%=KB_DOWN then
         move_player(KB_DOWN)
     end if
+end sub
+
+sub process_gamepad()
+    if g_player(8) or not g_gamepad% then exit sub
+
+    if g_gamepad% and 32 then move_player(KB_DOWN)
+    if g_gamepad% and 64 then move_player(KB_RIGHT)
+    if g_gamepad% and 128 then move_player(KB_UP)
+    if g_gamepad% and 256 then move_player(KB_LEFT)
+end sub
+
+sub handle_gamepad()
+    g_gamepad%=gamepad(B)
+    if g_gamepad% and 8192 then fire()
+    'debug_print(right$("0000000000000000"+bin$(g_gamepad%),16)+" "+str$(g_gamepad%)+" "+str$(timer)+space$(10))
 end sub

@@ -20,6 +20,10 @@ sub init_game()
     page write OBJ_TILES_BUFFER: cls 0
     load png "OBJ_TILESET_IMG"
 
+    ' Interrupts
+    sprite interrupt check_collision
+    gamepad on handle_gamepad
+
     ' init stage state variables
     g_tile_px%=0
 end sub
@@ -43,8 +47,6 @@ sub init_stage()
     load_map(g_stage%)
     'draw_map(choice(g_stage% = 1, 0, MAP_ROWS_0))
     draw_map(MAP_ROWS_0)
-
-    sprite interrupt check_collision
 
     ' Print the status bar
     print_status()
