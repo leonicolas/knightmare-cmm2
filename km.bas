@@ -153,16 +153,16 @@ sub process_kb()
 end sub
 
 sub process_gamepad()
-    if g_player(8) or not g_gamepad% then exit sub
+    if g_player(8) then exit sub
 
-    if g_gamepad% and 32 then move_player(KB_DOWN)
-    if g_gamepad% and 64 then move_player(KB_RIGHT)
-    if g_gamepad% and 128 then move_player(KB_UP)
-    if g_gamepad% and 256 then move_player(KB_LEFT)
+    if g_gamepad% and 128 or gamepad(LY)<124 then move_player(KB_UP)
+    if g_gamepad% and 32  or gamepad(LY)>130 then move_player(KB_DOWN)
+
+    if g_gamepad% and 256 or gamepad(LX)<124 then move_player(KB_LEFT)
+    if g_gamepad% and 64  or gamepad(LX)>130 then move_player(KB_RIGHT)
 end sub
 
 sub handle_gamepad()
     g_gamepad%=gamepad(B)
     if g_gamepad% and 8192 then fire()
-    'debug_print(right$("0000000000000000"+bin$(g_gamepad%),16)+" "+str$(g_gamepad%)+" "+str$(timer)+space$(10))
 end sub
