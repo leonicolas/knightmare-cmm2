@@ -27,7 +27,7 @@ sub activate_hit_box(i%, active%)
     local sprite_id%=OBJ_INI_SPRITE_ID + g_boss(i%)
 
     if sprite(X, sprite_id%) = 10000 and active% then
-        sprite show sprite_id%, g_obj(i%, 1),g_obj(i%, 2), 1
+        sprite show safe sprite_id%, g_obj(i%, 1),g_obj(i%, 2), 1
     else if sprite(X, sprite_id%) <> 10000 and not active% then
         sprite hide safe sprite_id%
     end if
