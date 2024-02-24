@@ -139,8 +139,9 @@ function hit_object(collided_id%, sfx%, instakill%) as integer
                 destroy_object(i%)
             else
                 local angle=deg(sprite(V, collided_id%, 1))
-                g_obj(i%,3)=CLOUD_ATTACK_SPEED*sin(angle)+0.01 ' Speed X
-                g_obj(i%,4)=CLOUD_ATTACK_SPEED*-cos(angle)     ' Speed Y
+                g_obj(i%,3)=1
+                g_obj(i%,4)=CLOUD_ATTACK_SPEED*sin(angle)+0.01 ' Speed X
+                g_obj(i%,5)=CLOUD_ATTACK_SPEED*-cos(angle)     ' Speed Y
             end if
 
         case is < 15 ' Enemies

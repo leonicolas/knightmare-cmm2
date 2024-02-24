@@ -287,10 +287,10 @@ sub move_and_process_objects()
 
             case 5 ' Cloud
                 ' Attack movement
-                if g_obj(i%,3) <> 0 then
+                if g_obj(i%,3) = 1 then
                     ' Increment X and Y position
-                    inc g_obj(i%,1),g_obj(i%,3)*g_delta_time
-                    inc g_obj(i%,2),g_obj(i%,4)*g_delta_time
+                    inc g_obj(i%,1),g_obj(i%,4)*g_delta_time
+                    inc g_obj(i%,2),g_obj(i%,5)*g_delta_time
 
                 ' Floating movement
                 else
