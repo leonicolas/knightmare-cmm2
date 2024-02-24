@@ -811,15 +811,24 @@ sub enemy_fire(ix%, disable_rnd%)
 
         case 4 ' Knight
             ' Arrow weapon_ix%
-            if rot%=0 or rot%=4 then
-                weapon_ix%=22: rot%=choice(rot%=0,2,0)
-            else if rot%=2 or rot%=6 then
-                weapon_ix%=23: rot%=choice(rot%=2,1,0)
-            else if rot%=3 or rot%=5 then
-                weapon_ix%=24: rot%=choice(rot%=3,1,0)
-            else
-                weapon_ix%=24: rot%=choice(rot%=1,3,2)
-            end if
+            select case angle
+                case  23 to  67 ' Up Right
+                    weapon_ix%=24: rot%=3
+                case 292 to 337 ' Up Left
+                    weapon_ix%=24: rot%=2
+                case 112 to 157 ' Down Right
+                    weapon_ix%=24: rot%=1
+                case 202 to 247 ' Down Left
+                    weapon_ix%=24
+                case  67 to 112 ' Right
+                    weapon_ix%=23: rot%=1
+                case 247 to 292 ' Left
+                    weapon_ix%=23
+                case 157 to 202 ' Down
+                    weapon_ix%=22
+                case else       ' Up
+                    weapon_ix%=22: rot%=2
+            end select
 
         case 7 ' Skeleton
             if g_obj(ix%,5) <> 0 or g_obj(ix%,4) > 1 then exit sub
