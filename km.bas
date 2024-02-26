@@ -160,9 +160,15 @@ sub process_gamepad()
 
     if g_gamepad% and 256 or gamepad(LX)<124 then move_player(KB_LEFT)
     if g_gamepad% and 64  or gamepad(LX)>130 then move_player(KB_RIGHT)
+
+    if g_gamepad% and 8192 then
+        if g_gp_released% then fire()
+        g_gp_released%=false
+    else if g_gamepad% = 0 then
+        g_gp_released%=true
+    end if
 end sub
 
 sub handle_gamepad()
     g_gamepad%=gamepad(B)
-    if g_gamepad% and 8192 then fire()
 end sub
