@@ -72,7 +72,7 @@ function hit_boss(sprite_id%) as integer
     ' Replace boss skin
     local aux%=BOSS_LIFE(g_stage%) \ 3
     select case g_stage%
-        case 2
+        case 2,4
             if hit_box_life% mod aux% = 0 then
                 enqueue_action(1, 90, obj_id%, choice(hit_box_life%\aux%<=1,TILE_SIZE*10,TILE_SIZE*5))
             end if
