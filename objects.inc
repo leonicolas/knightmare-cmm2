@@ -110,6 +110,20 @@ sub animate_shots()
                     case 0: rot%=0: tile_id%=18
                 end select
 
+            case 21 ' White explosion
+                if g_shots(i%,3) = 0 and g_shots(i%,4) = 0 then
+                    tile_id%=28
+                    inc g_shots(i%,5)
+                    if g_shots(i%,5) > 18 then
+                        destroy_shot(sprite_id%)
+                        continue for
+                    else if g_shots(i%,5) mod 6 > 2 then
+                        offset_x%=TILE_SIZEx2
+                    end if
+                else
+                    continue for
+                end if
+
             case 26 ' Scythe
                 tile_id%=26: rot%=0
                 offset_x%=TILE_SIZEx2*(g_anim_tick% mod 4)
@@ -195,6 +209,17 @@ sub move_shots()
                 g_shots(i%,1) = g_player(0)
                 inc g_shots(i%,4),2.5
                 speed_y=g_shots(i%,4)
+
+            case 21 ' White explosion
+                speed_x=g_shots(i%,3)
+                speed_y=g_shots(i%,4)
+                y=g_shots(i%,5)
+                if y > 0 and speed_y > 0 and g_shots(i%,2) >= y then
+                    x=g_shots(i%,1)
+                    g_shots(i%,3)=0: speed_x=0
+                    g_shots(i%,4)=0: speed_y=0
+                    g_shots(i%,5)=0
+                end if
 
             case 26 ' Scythe
                 inc g_shots(i%,5),choice(i% mod 2,1,-1)
@@ -803,7 +828,7 @@ sub enemy_fire(ix%, disable_rnd%)
     local y=g_obj(ix%,2) + sprite(H, enemy_spr_id%)/2
     local angle=deg(sprite(V, enemy_spr_id%, 1))
     local rot%, weapon_ix%=16 ' Dot bullet
-    local i%, gpr1, gpr2, gpr3, speed=70
+    local i%, gpr1, gpr2, gpr3, offset_x%, speed=70
 
     select case obj_id%
         case 5 ' Cloud
@@ -866,16 +891,25 @@ sub enemy_fire(ix%, disable_rnd%)
             next
             exit sub
 
+        case 54 ' Boss stage 4
+            weapon_ix%=21 ' White explosion
+            offset_x%=TILE_SIZEx2 ' Red explosion
+            speed=110
+            angle=max(min(210, angle), 150)
+            gpr1=speed*sin(angle)
+            gpr2=speed*-cos(angle)
+            gpr3=g_player(1)
+
     end select
 
     if gpr1 = 0 and gpr2 = 0 then
         gpr1=speed*sin(angle)
         gpr2=speed*-cos(angle)
     end if
-    create_shot(shot_ix%, weapon_ix%, x, y, gpr1, gpr2, gpr3, rot%)
+    create_shot(shot_ix%, weapon_ix%, x, y, gpr1, gpr2, gpr3, rot%, offset_x%)
 end sub
 
-sub create_shot(shot_ix%, weapon_ix%, x, y, gpr1, gpr2, gpr3, rot%)
+sub create_shot(shot_ix%, weapon_ix%, x, y, gpr1, gpr2, gpr3, rot%, offset_x%)
     if shot_ix% < 0 then exit sub
     local shot_spr_id%=shot_ix%+SHOTS_INI_SPRITE_ID
     ' Create the shot state
@@ -886,7 +920,7 @@ sub create_shot(shot_ix%, weapon_ix%, x, y, gpr1, gpr2, gpr3, rot%)
     g_shots(shot_ix%,4)=gpr2
     g_shots(shot_ix%,5)=gpr3
     ' Create the shot sprite
-    sprite read shot_spr_id%, OBJ_TILE%(weapon_ix%,0), OBJ_TILE%(weapon_ix%,1), OBJ_TILE%(weapon_ix%,2), OBJ_TILE%(weapon_ix%,3), OBJ_TILES_BUFFER
+    sprite read shot_spr_id%, OBJ_TILE%(weapon_ix%,0)+offset_x%, OBJ_TILE%(weapon_ix%,1), OBJ_TILE%(weapon_ix%,2), OBJ_TILE%(weapon_ix%,3), OBJ_TILES_BUFFER
     sprite show safe shot_spr_id%, g_shots(shot_ix%,1),g_shots(shot_ix%,2), 1, rot%
 end sub
 

@@ -53,8 +53,7 @@ sub process_collision(sprite_id%)
                 else
                     ' Hits the shield
                     if collided_id% = 2 then
-                        hit_shield(sprite_id%)
-                        destroy_shot(sprite_id%)
+                        if hit_shield(sprite_id%) then destroy_shot(sprite_id%)
                     end if
                 end if
         end select
@@ -170,15 +169,23 @@ function hit_object(collided_id%, sfx%, instakill%) as integer
 
 end function
 
-sub hit_shield(shot_sprite_id%)
-    if g_player(6)=0 then exit sub
+function hit_shield(shot_sprite_id%) as integer
+    hit_shield=0
+    if g_player(6)=0 then exit function
 
-    local force%=1
+    local force%=1, shot_ix%=shot_sprite_id%-SHOTS_INI_SPRITE_ID
+    hit_shield=1
 
-    select case g_shots(shot_sprite_id% - SHOTS_INI_SPRITE_ID,0)
-        ' Energy ray, mini explosion, Scythe
-        case 15,21,26
+    select case g_shots(shot_ix%,0)
+        case 15,26 ' Energy ray, Scythe
             force%=3
+        case 21 ' mini explosion
+            force%=3
+            ' Is it on fire?
+            if g_shots(shot_ix%,3)=0 and g_shots(shot_ix%,4)=0 then
+                hit_shield=0
+                exit function
+            end if
     end select
 
     inc g_player(6), -force%
@@ -193,7 +200,7 @@ sub hit_shield(shot_sprite_id%)
         case is <= SHIELD_MAX_HITS\6*2
             sprite read 2, OBJ_TILE%(32,0)+TILE_SIZEx2, OBJ_TILE%(32,1), OBJ_TILE%(32,2), OBJ_TILE%(32,3), OBJ_TILES_BUFFER
     end select
-end sub
+end function
 
 ' TODO: implement!!!
 sub hit_player(collided_id%)

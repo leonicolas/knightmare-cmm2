@@ -52,7 +52,7 @@
     <property name="Count" value="2"/>
    </properties>
   </object>
-  <object id="41" name="Knight" type="knight" x="167.818" y="1023.82" width="8" height="8"/>
+  <object id="41" name="Knight" type="knight" x="184.11" y="1024.11" width="8" height="8"/>
   <object id="42" name="Knight" type="knight" x="119.818" y="1016" width="8" height="8"/>
   <object id="43" name="Knight" type="knight" x="167.818" y="1040.19" width="8" height="8"/>
   <object id="44" name="Knight" type="knight" x="32.3636" y="1031.89" width="8" height="8"/>

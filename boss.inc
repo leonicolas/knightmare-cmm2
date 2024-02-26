@@ -146,6 +146,9 @@ sub spawn_boss()
                 g_obj(id%,2)=TILE_SIZE*(choice(g_row%=0,6,-3))
                 spawn_shadow(id%,TILE_SIZE+TILE_SIZE/2, TILE_SIZE*7, false)
                 create_boss_shield(TILE_SIZE, TILE_SIZE, TILE_SIZE*3)
+            case 4
+                g_obj(id%,2)=TILE_SIZE*(choice(g_row%=0,5,-4))
+                spawn_shadow(id%,0, TILE_SIZE*8, false, 37)
         end select
 
         show_boss_body(id%,0)
@@ -179,7 +182,9 @@ sub show_boss_body(obj_id%, tile_offset%)
             tile_x%=80
         case 3
             tile_x%=200
-            tile_h%=TILE_SIZE*5
+        case 4
+            tile_y%=80
+            tile_h%=TILE_SIZE*6
     end select
 
     sprite read sprite_id%, tile_x%+tile_offset%, tile_y%, tile_w%, tile_h%, BOSS_TILES_BUFFER
@@ -203,6 +208,9 @@ sub boss_fire()
             disable_rnd%=true
         case 3
             exit sub
+        case 4
+            speed=120
+            disable_rnd%=true
     end select
     if g_timer mod speed = 0 then enemy_fire(g_boss(1), disable_rnd%)
 end sub
@@ -269,13 +277,13 @@ sub move_boss()
                 inc g_obj(id%, 1), choice(g_obj(id%, 1) > g_obj(id%, 5), -1, 1)*BOSS_SPEED*g_delta_time
             end if
 
-        case 2, 3
+        case 2, 3, 4
             select case g_stage%
                 case 2
                     speed_x=1.2: speed_y=9
                     mov_height=6
                     y%=TILE_SIZE*5
-                case 3
+                case 3, 4
                     speed_x=1.8: speed_y=3.6
                     mov_height=12
                     y%=TILE_SIZE*6
