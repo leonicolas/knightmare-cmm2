@@ -155,11 +155,13 @@ end sub
 sub process_gamepad()
     if g_player(8) then exit sub
 
-    if g_gamepad% and 128 or gamepad(LY)<124 then move_player(KB_UP)
-    if g_gamepad% and 32  or gamepad(LY)>130 then move_player(KB_DOWN)
+    local dig_pos=gamepad(LY)
+    if g_gamepad% and 128 or (dig_pos > 0 and dig_pos < 124) then move_player(KB_UP)
+    if g_gamepad% and 32  or dig_pos > 130 then move_player(KB_DOWN)
 
-    if g_gamepad% and 256 or gamepad(LX)<124 then move_player(KB_LEFT)
-    if g_gamepad% and 64  or gamepad(LX)>130 then move_player(KB_RIGHT)
+    dig_pos=gamepad(LX)
+    if g_gamepad% and 256 or (dig_pos > 0 and dig_pos < 124) then move_player(KB_LEFT)
+    if g_gamepad% and 64  or dig_pos > 130 then move_player(KB_RIGHT)
 
     if g_gamepad% and 8192 then
         if g_gp_released% then fire()
