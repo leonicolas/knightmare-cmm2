@@ -47,6 +47,9 @@ sub animate_objects()
                     flip%=1
                 end if
 
+            case 11 ' Ghost
+                continue for
+
             case 12 ' Yellow thing
                 offset_x%=0
 
@@ -262,17 +265,17 @@ sub move_and_process_objects()
     ' Objects and enemies
     if g_freeze_timer >= 0 then exit sub
 
-    local i%, sprite_id%, obj_id%, offset_y%, offset_x%, data_id%, direction%, speed
+    local i%, sprite_ix%, obj_id%, offset_y%, offset_x%, data_id%, direction%, speed, aux, flip%
 
     for i%=0 to bound(g_obj())
-        offset_x%=0: offset_y%=0
+        offset_x%=0: offset_y%=0:flip%=-1
         obj_id%=g_obj(i%,0)
 
         ' Checks object id or if it is a boss
         if not obj_id% or obj_id% > 50 then continue for
 
         data_id%=OBJ_TILE%(obj_id%,4)
-        sprite_id%=OBJ_INI_SPRITE_ID + i%
+        sprite_ix%=OBJ_INI_SPRITE_ID + i%
 
         ' Moves object
         select case obj_id%
@@ -400,7 +403,7 @@ sub move_and_process_objects()
                 else
                     inc g_obj(i%,5),g_delta_time
                     if g_obj(i%,5) > 4.2 then
-                        sprite show safe sprite_id%, g_obj(i%,1)+offset_x%, g_obj(i%,2)+offset_y%, 1
+                        sprite show safe sprite_ix%, g_obj(i%,1)+offset_x%, g_obj(i%,2)+offset_y%, 1
                         g_obj(i%,5)=0
                     end if
                 end if
@@ -409,7 +412,7 @@ sub move_and_process_objects()
                 if g_obj(i%,5)=0 and g_player(1)-g_obj(i%,2) < DEMON_ATTACK_DIST_PX then
                     g_obj(i%,5)=1 ' Starts attack timer
                     ' Transform cloud to demon
-                    replace_sprite_skin(sprite_id%, obj_id%, g_obj(i%,1),g_obj(i%,2))
+                    replace_sprite_skin(sprite_ix%, obj_id%, g_obj(i%,1),g_obj(i%,2))
                 end if
                 if g_obj(i%,5) <= 0 then
                     direction%=choice(g_obj(i%,5) < 0, -1, 1)
@@ -422,9 +425,32 @@ sub move_and_process_objects()
                         g_obj(i%,5)=-1
                         enemy_fire(i%)
                         ' Transform demon to cloud
-                        replace_sprite_skin(sprite_id%, 5, g_obj(i%,1),g_obj(i%,2))
+                        replace_sprite_skin(sprite_ix%, 5, g_obj(i%,1),g_obj(i%,2))
                     end if
                 end if
+
+            case 11 ' Ghost
+                aux=g_obj(i%,1)
+                if g_obj(i%,1)<=SCREEN_CENTER_W then
+                    g_obj(i%,1)=(SCREEN_CENTER_W-TILE_SIZEx2)*-cos(g_obj(i%,4))
+                else
+                    g_obj(i%,1)=(SCREEN_WIDTH-TILE_SIZEx2)+(SCREEN_CENTER_W-TILE_SIZEx2)*-cos(g_obj(i%,4))
+                end if
+                aux=choice(g_obj(i%,1)>aux,right,left)
+                if aux<>g_obj(i%,5) then
+                    flip%=choice(aux=left,1,0)
+                    g_obj(i%,5)=aux
+                end if
+                ' Move ghost to the other side of the screen
+                if g_obj(i%,1) < 0 then
+                    g_obj(i%,1)=SCREEN_WIDTH-TILE_SIZEx2
+                else if g_obj(i%,1) > SCREEN_WIDTH-TILE_SIZEx2 then
+                    g_obj(i%,1)=0
+                end if
+                ' Increment angle by the speed
+                inc g_obj(i%,4),OBJ_DATA(data_id%,0)*g_delta_time
+                ' Increment Y
+                inc g_obj(i%,2),OBJ_DATA(data_id%,1)*g_delta_time
 
             case 12 ' Yellow thing
                 inc g_obj(i%,1),g_obj(i%,4)*g_delta_time
@@ -488,8 +514,12 @@ sub move_and_process_objects()
         end select
 
         ' Move or destroy the sprite if out of bounds
-        if not sprite(e,sprite_id%) and g_obj(i%,2) <= SCREEN_HEIGHT+TILE_SIZE then
-            sprite next sprite_id%, g_obj(i%,1)+offset_x%, g_obj(i%,2)+offset_y%
+        if not sprite(e,sprite_ix%) and g_obj(i%,2) <= SCREEN_HEIGHT+TILE_SIZE then
+            if flip%>=0 then
+                sprite show safe sprite_ix%, g_obj(i%,1)+offset_x%, g_obj(i%,2)+offset_y%, sprite(L, sprite_ix%), flip%
+            else
+                sprite next sprite_ix%, g_obj(i%,1)+offset_x%, g_obj(i%,2)+offset_y%
+            end if
         else if obj_id% = 39 then ' Shadow
             destroy_shadow(g_obj(i%,6))
         else
@@ -685,6 +715,19 @@ sub spawn_object(obj_id%, x%, y%, obj_cfg%)
             g_obj(i%,4)=OBJ_DATA(data_id%,0)*choice(g_obj(i%,1)>g_player(0),left,right)*sin(angle)
             spawn_shadow(i%,,TILE_SIZEx2)
             if obj_id%=8 then obj_id%=5 ' Spawns as a cloud
+
+        case 11 ' Ghost
+            spawn_speed=400
+            ' Calculate the correct bat angle
+            if x% < SCREEN_CENTER_W then
+                g_obj(i%,1)=0
+                g_obj(i%,4)=90
+            else
+                g_obj(i%,1)=SCREEN_WIDTH
+                g_obj(i%,4)=270
+            end if
+            ' Spawn the ghost shadow
+            spawn_shadow(i%,,TILE_SIZEx2+TILE_SIZE/2)
 
         case 13 ' Red thing
             g_obj(i%,1)=choice(g_obj(i%,1) < SCREEN_CENTER_W, 0, SCREEN_WIDTH-TILE_SIZEx2)
