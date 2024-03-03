@@ -99,6 +99,7 @@ sub animate_shots()
                     case 6: rot%=3: tile_id%=43
                     case 3: rot%=0: tile_id%=44
                     case 0: rot%=0: tile_id%=43
+                    case else: continue for
                 end select
 
             case 18 ' Bone
@@ -132,11 +133,13 @@ sub animate_shots()
                 continue for
         end select
 
-        ' Render next frame
+        ' Play SFX
         if g_cont_sfx$ <> "" and not playing% then
             play_sfx(g_cont_sfx$)
             playing%=true
         end if
+
+        ' Render next frame
         sprite hide safe sprite_id%
         sprite close sprite_id%
         sprite read sprite_id%, OBJ_TILE%(tile_id%,0)+offset_x%, OBJ_TILE%(tile_id%,1)+offset_y%, OBJ_TILE%(tile_id%,2), OBJ_TILE%(tile_id%,3), OBJ_TILES_BUFFER
