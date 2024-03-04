@@ -32,7 +32,7 @@ sub animate_objects()
 
         ' Config animation
         select case obj_id%
-            case 4 ' Knight
+            case 4,9 ' Knight, Death Ghost
                 if g_anim_tick% mod 6 > 2 then flip%=1
 
             case 7 ' Skeleton
@@ -76,7 +76,7 @@ sub animate_objects()
 
         ' Read or flip next frame's sprite
         select case obj_id%
-            case 4,8 ' Knight, Demon
+            case 4,8,9 ' Knight, Demon
                 sprite show safe sprite_ix%, sprite(X, sprite_ix%), sprite(Y, sprite_ix%), sprite(L, sprite_ix%), flip%
             case else
                 sprite read sprite_ix%, OBJ_TILE%(obj_id%,0)+offset_x%, OBJ_TILE%(obj_id%,1)+offset_y%, OBJ_TILE%(obj_id%,2), OBJ_TILE%(obj_id%,3), buffer%
@@ -429,6 +429,22 @@ sub move_and_process_objects()
                     end if
                 end if
 
+            case 9 ' Death Ghost
+                if (g_obj(i%,2) < SCREEN_CENTER_H+TILE_SIZE and g_obj(i%,4) <= 180) or g_obj(i%,4) = 999 then
+                    inc g_obj(i%,2),OBJ_DATA(data_id%,1)*g_delta_time*choice(g_obj(i%,4)=999,-1,1)
+                else
+                    speed=choice(g_obj(i%,5)=left,-1,1)
+                    if speed > 0 then ' right
+                        aux=TILE_SIZE*9+cos(g_obj(i%,4)*0.666)*TILE_SIZEx2
+                    else ' left
+                        aux=TILE_SIZE*9-cos((g_obj(i%,4)+90)*0.666)*TILE_SIZEx2
+                    end if
+                    g_obj(i%,1)=SCREEN_CENTER_W-TILE_SIZE+aux*cos(g_obj(i%,4)*speed)
+                    g_obj(i%,2)=SCREEN_CENTER_H+TILE_SIZE+(SCREEN_CENTER_H-TILE_SIZE*3)*sin(g_obj(i%,4)*speed)
+                    inc g_obj(i%,4),0.6
+                    if (speed > 0 and g_obj(i%,4) >= 540) or (speed < 0 and g_obj(i%,4) >= 720) then g_obj(i%,4) = 999
+                end if
+
             case 11 ' Ghost
                 aux=g_obj(i%,1)
                 if g_obj(i%,1)<=SCREEN_CENTER_W then
@@ -483,7 +499,7 @@ sub move_and_process_objects()
                 else
                     g_obj(i%,1)=SCREEN_CENTER_W-TILE_SIZE+TILE_SIZE*9*cos(g_obj(i%,4))
                     g_obj(i%,2)=g_obj(i%,5)+TILE_SIZE*6*sin(g_obj(i%,4))
-                    inc g_obj(i%,4), 0.9*choice(g_obj(i%,4) < 0,-1,1)
+                    inc g_obj(i%,4), choice(g_obj(i%,4) < 0,-0.9,0.9)
                     if g_obj(i%,4) < -405 or g_obj(i%,4) >= 585 then
                         g_obj(i%,5)=choice(g_obj(i%,4)>0,1,-1)
                         g_obj(i%,4)=999
@@ -716,9 +732,20 @@ sub spawn_object(obj_id%, x%, y%, obj_cfg%)
             spawn_shadow(i%,,TILE_SIZEx2)
             if obj_id%=8 then obj_id%=5 ' Spawns as a cloud
 
+        case 9 ' Death Ghost
+            spawn_speed=600
+            if x% < SCREEN_CENTER_W then
+                g_obj(i%,1)=TILE_SIZEx4
+                g_obj(i%,4)=180
+                g_obj(i%,5)=left
+            else
+                g_obj(i%,1)=SCREEN_WIDTH-TILE_SIZEx4-TILE_SIZEx2
+                g_obj(i%,4)=1
+                g_obj(i%,5)=right
+            end if
+
         case 11 ' Ghost
             spawn_speed=400
-            ' Calculate the correct bat angle
             if x% < SCREEN_CENTER_W then
                 g_obj(i%,1)=0
                 g_obj(i%,4)=90

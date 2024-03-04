@@ -221,11 +221,14 @@ OBJ_DATA(8,0)=160    ' X speed
 OBJ_DATA(8,1)=160    ' Y speed
 OBJ_DATA(8,2)=1      ' Life
 const DEMON_ATTACK_DIST_PX=60
+' Death ghost
+OBJ_DATA(9,0)=80     ' X speed (angle increment)
+OBJ_DATA(9,1)=70     ' Y speed
+OBJ_DATA(9,2)=1      ' Life
 ' Ghost
 OBJ_DATA(11,0)=90    ' X speed (angle increment)
 OBJ_DATA(11,1)=31    ' Y speed
 OBJ_DATA(11,2)=1     ' Life
-OBJ_DATA(11,3)=90    ' Angle
 ' Yellow thing
 OBJ_DATA(12,0)=240   ' X speed
 OBJ_DATA(12,1)=240   ' Y speed
