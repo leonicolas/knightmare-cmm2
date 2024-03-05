@@ -744,7 +744,7 @@ sub spawn_object(obj_id%, x%, y%, obj_cfg%)
             if obj_id%=8 then obj_id%=5 ' Spawns as a cloud
 
         case 9 ' Death Ghost
-            spawn_speed=600
+            spawn_speed=300
             if x% < SCREEN_CENTER_W then
                 g_obj(i%,1)=TILE_SIZEx4
                 g_obj(i%,4)=180
@@ -951,6 +951,9 @@ sub enemy_fire(ix%, disable_rnd%)
             create_shot(get_free_shot_slot(), weapon_ix%, x, y, speed*sin(angle+10), speed*-cos(angle+10))
             create_shot(get_free_shot_slot(), weapon_ix%, x, y, speed*sin(angle+30), speed*-cos(angle+30))
             exit sub
+        case 9 ' Death Ghost
+            weapon_ix%=17 ' Energy ray
+            speed=100
 
         case 12, 13 ' Yellow thing and Red thing
             if g_stage% > 2 and g_row% > MAP_ROWS \ 2 then exit sub
