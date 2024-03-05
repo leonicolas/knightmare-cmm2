@@ -132,7 +132,7 @@ OBJ_TILE%(22,0)=133: OBJ_TILE%(22,1)=34: OBJ_TILE%(22,2)=5: OBJ_TILE%(22,3)=14
 OBJ_TILE%(23,0)=145: OBJ_TILE%(23,1)=38: OBJ_TILE%(23,2)=13: OBJ_TILE%(23,3)=5
 OBJ_TILE%(24,0)=163: OBJ_TILE%(24,1)=35: OBJ_TILE%(24,2)=11: OBJ_TILE%(24,3)=11
 ' Axe
-OBJ_TILE%(25,0)=178: OBJ_TILE%(25,1)=34: OBJ_TILE%(25,2)=12: OBJ_TILE%(25,3)=12
+OBJ_TILE%(25,0)=177: OBJ_TILE%(25,1)=34: OBJ_TILE%(25,2)=13: OBJ_TILE%(25,3)=13
 ' Scythe
 OBJ_TILE%(26,0)=184: OBJ_TILE%(26,1)=120: OBJ_TILE%(26,2)=16: OBJ_TILE%(26,3)=16
 ' Fire
@@ -222,8 +222,8 @@ OBJ_DATA(8,1)=160    ' Y speed
 OBJ_DATA(8,2)=1      ' Life
 const DEMON_ATTACK_DIST_PX=60
 ' Death ghost
-OBJ_DATA(9,0)=80     ' X speed (angle increment)
-OBJ_DATA(9,1)=70     ' Y speed
+OBJ_DATA(9,0)=90     ' X speed (angle increment)
+OBJ_DATA(9,1)=80     ' Y speed
 OBJ_DATA(9,2)=1      ' Life
 ' Ghost
 OBJ_DATA(11,0)=90    ' X speed (angle increment)

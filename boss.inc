@@ -149,6 +149,9 @@ sub spawn_boss()
             case 4
                 g_obj(id%,2)=TILE_SIZE*(choice(g_row%=0,5,-4))
                 spawn_shadow(id%,0, TILE_SIZE*8, false, 37)
+            case 5
+                g_obj(id%,2)=TILE_SIZE*(choice(g_row%=0,6,-3))
+                create_boss_shield(TILE_SIZE, TILE_SIZE, TILE_SIZE*3)
         end select
 
         show_boss_body(id%,0)
@@ -185,6 +188,10 @@ sub show_boss_body(obj_id%, tile_offset%)
         case 4
             tile_y%=80
             tile_h%=TILE_SIZE*6
+        case 5
+            tile_x%=120
+            tile_y%=80
+            tile_h%=TILE_SIZE*6
     end select
 
     sprite read sprite_id%, tile_x%+tile_offset%, tile_y%, tile_w%, tile_h%, BOSS_TILES_BUFFER
@@ -199,20 +206,20 @@ sub create_portal()
 end sub
 
 sub boss_fire()
-    local speed, disable_rnd%
+    local delay, disable_rnd%
     select case g_stage%
         case 1
-            speed=70
-        case 2
-            speed=120
+            delay=70
+        case 2,4
+            delay=120
             disable_rnd%=true
         case 3
             exit sub
-        case 4
-            speed=120
+        case 5
+            delay=90
             disable_rnd%=true
     end select
-    if g_timer mod speed = 0 then enemy_fire(g_boss(1), disable_rnd%)
+    if g_timer mod delay = 0 then enemy_fire(g_boss(1), disable_rnd%)
 end sub
 
 sub animate_boss()

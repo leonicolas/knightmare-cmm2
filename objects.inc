@@ -128,6 +128,17 @@ sub animate_shots()
                     continue for
                 end if
 
+            case 25 ' Axe
+                inc g_shots(i%,5)
+                tile_id%=25
+                select case g_shots(i%,5) mod 8
+                    case 6: rot%=1: offset_x%=TILE_SIZEx2
+                    case 4: rot%=0: offset_x%=TILE_SIZEx2
+                    case 2: rot%=1
+                    case 0: rot%=0
+                    case else: continue for
+                end select
+
             case 26 ' Scythe
                 tile_id%=26: rot%=0
                 offset_x%=TILE_SIZEx2*(g_anim_tick% mod 4)
@@ -973,6 +984,13 @@ sub enemy_fire(ix%, disable_rnd%)
             gpr2=speed*-cos(angle)
             gpr3=g_player(1)
 
+        case 55 ' Boss stage 5
+            weapon_ix%=25 ' Axe
+            gpr2=78       ' Y speed
+            x=g_obj(ix%,1)-TILE_SIZE
+            create_shot(get_free_shot_slot(), weapon_ix%, x, y, gpr1, gpr2, gpr3, rot%, offset_x%)
+            inc x, TILE_SIZE*6
+            shot_ix%=get_free_shot_slot()
     end select
 
     if gpr1 = 0 and gpr2 = 0 then
