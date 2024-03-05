@@ -371,8 +371,8 @@
                  "type":"weapon",
                  "visible":true,
                  "width":8,
-                 "x":0.0513833992094867,
-                 "y":1136.06324110672
+                 "x":-0.0111166007905142,
+                 "y":1144.07018555116
                 }, 
                 {
                  "height":16,
@@ -660,8 +660,8 @@
                  "type":"power_up",
                  "visible":true,
                  "width":8,
-                 "x":0.0489130434782616,
-                 "y":544.016304347826
+                 "x":0.0378019323671506,
+                 "y":544.005193236715
                 }, 
                 {
                  "height":16,
@@ -880,7 +880,7 @@
                         {
                          "name":"Count",
                          "type":"string",
-                         "value":"1"
+                         "value":"5"
                         }],
                  "rotation":0,
                  "type":"ghost",
@@ -991,17 +991,6 @@
                 }, 
                 {
                  "height":8,
-                 "id":473,
-                 "name":"Blob",
-                 "rotation":0,
-                 "type":"blob",
-                 "visible":true,
-                 "width":8,
-                 "x":120.072134387352,
-                 "y":1536
-                }, 
-                {
-                 "height":8,
                  "id":474,
                  "name":"Blob",
                  "rotation":0,
@@ -1011,18 +1000,6 @@
                  "x":96.0978260869565,
                  "y":1528.04347826087
                 }, 
-                {
-                 "height":8,
-                 "id":475,
-                 "name":"Blob",
-                 "rotation":0,
-                 "type":"blob",
-                 "visible":true,
-                 "width":8,
-                 "x":184.045454545455,
-                 "y":1512.02272727273
-                },
-            
                 {
                  "height":8,
                  "id":476,
@@ -1044,7 +1021,8 @@
                  "width":8,
                  "x":127.901453030303,
                  "y":1504.12340909091
-                }, 
+                },
+            
                 {
                  "height":8,
                  "id":478,
@@ -1080,39 +1058,6 @@
                 }, 
                 {
                  "height":8,
-                 "id":481,
-                 "name":"Blob",
-                 "rotation":0,
-                 "type":"blob",
-                 "visible":true,
-                 "width":8,
-                 "x":56.0316588932806,
-                 "y":1496.01840250329
-                }, 
-                {
-                 "height":8,
-                 "id":482,
-                 "name":"Blob",
-                 "rotation":0,
-                 "type":"blob",
-                 "visible":true,
-                 "width":8,
-                 "x":120.071093675889,
-                 "y":1479.97535902503
-                }, 
-                {
-                 "height":8,
-                 "id":483,
-                 "name":"Blob",
-                 "rotation":0,
-                 "type":"blob",
-                 "visible":true,
-                 "width":8,
-                 "x":95.9664415019763,
-                 "y":1472.10579380764
-                }, 
-                {
-                 "height":8,
                  "id":485,
                  "name":"Knight",
                  "rotation":0,
@@ -1132,17 +1077,6 @@
                  "width":8,
                  "x":128.117441501976,
                  "y":1448.05188076416
-                }, 
-                {
-                 "height":8,
-                 "id":487,
-                 "name":"Knight",
-                 "rotation":0,
-                 "type":"knight",
-                 "visible":true,
-                 "width":8,
-                 "x":176.421354545455,
-                 "y":1471.98492424242
                 }, 
                 {
                  "height":8,
@@ -1169,8 +1103,8 @@
                  "type":"ghost",
                  "visible":true,
                  "width":8,
-                 "x":247.96875,
-                 "y":1424.0625
+                 "x":248.059659090909,
+                 "y":1431.97159090909
                 }, 
                 {
                  "height":8,
@@ -1186,8 +1120,8 @@
                  "type":"ghost",
                  "visible":true,
                  "width":8,
-                 "x":0.0176630434782612,
-                 "y":1416.05706521739
+                 "x":0.108572134387355,
+                 "y":1423.96615612648
                 }, 
                 {
                  "height":8,
@@ -1203,8 +1137,8 @@
                  "type":"ghost",
                  "visible":true,
                  "width":8,
-                 "x":248.017335166667,
-                 "y":1407.95833333333
+                 "x":248.108244257576,
+                 "y":1415.86742424242
                 }, 
                 {
                  "height":8,
@@ -1220,8 +1154,8 @@
                  "type":"ghost",
                  "visible":true,
                  "width":8,
-                 "x":0.0034981666666738,
-                 "y":1400.00520833333
+                 "x":0.0944072575757673,
+                 "y":1407.91429924242
                 }, 
                 {
                  "height":8,
@@ -1237,8 +1171,8 @@
                  "type":"ghost",
                  "visible":true,
                  "width":8,
-                 "x":247.9444185,
-                 "y":1391.96875
+                 "x":248.035327590909,
+                 "y":1399.87784090909
                 }, 
                 {
                  "height":8,
@@ -1254,8 +1188,8 @@
                  "type":"ghost",
                  "visible":true,
                  "width":8,
-                 "x":-0.00691849999999761,
-                 "y":1383.96875
+                 "x":0.0839905909090959,
+                 "y":1391.87784090909
                 }, 
                 {
                  "height":8,
@@ -1271,8 +1205,8 @@
                  "type":"ghost",
                  "visible":true,
                  "width":8,
-                 "x":247.924754704545,
-                 "y":1351.98398358586
+                 "x":248.015663795455,
+                 "y":1359.89307449495
                 }, 
                 {
                  "height":8,
@@ -1288,8 +1222,8 @@
                  "type":"ghost",
                  "visible":true,
                  "width":8,
-                 "x":-0.0265822954545456,
-                 "y":1343.98398358586
+                 "x":0.0643267954545479,
+                 "y":1351.89307449495
                 }, 
                 {
                  "height":8,
@@ -1305,8 +1239,8 @@
                  "type":"ghost",
                  "visible":true,
                  "width":8,
-                 "x":247.972754704545,
-                 "y":1335.88398358586
+                 "x":248.063663795455,
+                 "y":1343.79307449495
                 }, 
                 {
                  "height":8,
@@ -1322,8 +1256,8 @@
                  "type":"ghost",
                  "visible":true,
                  "width":8,
-                 "x":-0.0407471254545442,
-                 "y":1327.93398358586
+                 "x":0.0501619654545493,
+                 "y":1335.84307449495
                 }, 
                 {
                  "height":8,
@@ -1339,8 +1273,8 @@
                  "type":"ghost",
                  "visible":true,
                  "width":8,
-                 "x":247.899754704545,
-                 "y":1319.89398358586
+                 "x":247.990663795455,
+                 "y":1327.80307449495
                 }, 
                 {
                  "height":8,
@@ -1356,8 +1290,1203 @@
                  "type":"ghost",
                  "visible":true,
                  "width":8,
-                 "x":-0.0511637954545563,
-                 "y":1311.89398358586
+                 "x":0.0397452954545372,
+                 "y":1319.80307449495
+                }, 
+                {
+                 "height":8,
+                 "id":504,
+                 "name":"Death",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"1"
+                        }],
+                 "rotation":0,
+                 "type":"death_ghost",
+                 "visible":true,
+                 "width":8,
+                 "x":248.038464471212,
+                 "y":1280.04689393939
+                }, 
+                {
+                 "height":8,
+                 "id":505,
+                 "name":"Death",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"1"
+                        }],
+                 "rotation":0,
+                 "type":"death_ghost",
+                 "visible":true,
+                 "width":8,
+                 "x":0.00866627121214947,
+                 "y":1272.01564393939
+                }, 
+                {
+                 "height":8,
+                 "id":506,
+                 "name":"Death",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"1"
+                        }],
+                 "rotation":0,
+                 "type":"death_ghost",
+                 "visible":true,
+                 "width":8,
+                 "x":248.023964471212,
+                 "y":1264.00939393939
+                }, 
+                {
+                 "height":8,
+                 "id":507,
+                 "name":"Death",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"1"
+                        }],
+                 "rotation":0,
+                 "type":"death_ghost",
+                 "visible":true,
+                 "width":8,
+                 "x":0.0257514712121463,
+                 "y":1256.02814393939
+                }, 
+                {
+                 "height":8,
+                 "id":508,
+                 "name":"Death",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"1"
+                        }],
+                 "rotation":0,
+                 "type":"death_ghost",
+                 "visible":true,
+                 "width":8,
+                 "x":248.060339471212,
+                 "y":1248.01939393939
+                }, 
+                {
+                 "height":8,
+                 "id":509,
+                 "name":"Death",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"1"
+                        }],
+                 "rotation":0,
+                 "type":"death_ghost",
+                 "visible":true,
+                 "width":8,
+                 "x":0.0465847712121388,
+                 "y":1240.03501893939
+                }, 
+                {
+                 "height":8,
+                 "id":513,
+                 "name":"Blob",
+                 "rotation":0,
+                 "type":"blob",
+                 "visible":true,
+                 "width":8,
+                 "x":119.934094444444,
+                 "y":1215.91444444444
+                }, 
+                {
+                 "height":8,
+                 "id":514,
+                 "name":"Blob",
+                 "rotation":0,
+                 "type":"blob",
+                 "visible":true,
+                 "width":8,
+                 "x":63.9679944444444,
+                 "y":1264.04444444444
+                }, 
+                {
+                 "height":8,
+                 "id":515,
+                 "name":"Blob",
+                 "rotation":0,
+                 "type":"blob",
+                 "visible":true,
+                 "width":8,
+                 "x":31.8357944444444,
+                 "y":1248.09444444444
+                }, 
+                {
+                 "height":8,
+                 "id":516,
+                 "name":"Blob",
+                 "rotation":0,
+                 "type":"blob",
+                 "visible":true,
+                 "width":8,
+                 "x":183.870094444444,
+                 "y":1232.04444444444
+                }, 
+                {
+                 "height":8,
+                 "id":517,
+                 "name":"Blob",
+                 "rotation":0,
+                 "type":"blob",
+                 "visible":true,
+                 "width":8,
+                 "x":207.853094444444,
+                 "y":1208.04444444444
+                }, 
+                {
+                 "height":8,
+                 "id":522,
+                 "name":"Cloud",
+                 "rotation":0,
+                 "type":"cloud",
+                 "visible":true,
+                 "width":8,
+                 "x":-0.011213424242428,
+                 "y":1168.02212121212
+                }, 
+                {
+                 "height":8,
+                 "id":523,
+                 "name":"Cloud",
+                 "rotation":0,
+                 "type":"cloud",
+                 "visible":true,
+                 "width":8,
+                 "x":0.0119701313131348,
+                 "y":1135.99267676768
+                }, 
+                {
+                 "height":8,
+                 "id":524,
+                 "name":"Cloud",
+                 "rotation":0,
+                 "type":"cloud",
+                 "visible":true,
+                 "width":8,
+                 "x":247.983989464646,
+                 "y":1152.03656565657
+                },
+            
+                {
+                 "height":8,
+                 "id":525,
+                 "name":"Cloud",
+                 "rotation":0,
+                 "type":"cloud",
+                 "visible":true,
+                 "width":8,
+                 "x":247.969878353535,
+                 "y":1120.05767676768
+                }, 
+                {
+                 "height":8,
+                 "id":526,
+                 "name":"Skeleton",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"4"
+                        }],
+                 "rotation":0,
+                 "type":"skeleton",
+                 "visible":true,
+                 "width":8,
+                 "x":48.0826304347826,
+                 "y":1160.0597826087
+                }, 
+                {
+                 "height":8,
+                 "id":527,
+                 "name":"Skeleton",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"4"
+                        }],
+                 "rotation":0,
+                 "type":"skeleton",
+                 "visible":true,
+                 "width":8,
+                 "x":48.0337173913044,
+                 "y":1144.03804347826
+                }, 
+                {
+                 "height":8,
+                 "id":528,
+                 "name":"Skeleton",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"4"
+                        }],
+                 "rotation":0,
+                 "type":"skeleton",
+                 "visible":true,
+                 "width":8,
+                 "x":192.026185990338,
+                 "y":1128.03200483092
+                }, 
+                {
+                 "height":8,
+                 "id":529,
+                 "name":"Skeleton",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"4"
+                        }],
+                 "rotation":0,
+                 "type":"skeleton",
+                 "visible":true,
+                 "width":8,
+                 "x":192.151185990338,
+                 "y":1111.97644927536
+                }, 
+                {
+                 "height":8,
+                 "id":530,
+                 "name":"Cloud",
+                 "rotation":0,
+                 "type":"cloud",
+                 "visible":true,
+                 "width":8,
+                 "x":0.0218377444444291,
+                 "y":1080.05638888889
+                }, 
+                {
+                 "height":8,
+                 "id":532,
+                 "name":"Death",
+                 "rotation":0,
+                 "type":"death_ghost",
+                 "visible":true,
+                 "width":8,
+                 "x":248.085232962626,
+                 "y":1056.0735479798
+                }, 
+                {
+                 "height":8,
+                 "id":535,
+                 "name":"Death",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"1"
+                        }],
+                 "rotation":0,
+                 "type":"death_ghost",
+                 "visible":true,
+                 "width":8,
+                 "x":0.0124541500000248,
+                 "y":1048.10541666667
+                }, 
+                {
+                 "height":8,
+                 "id":536,
+                 "name":"Death",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"1"
+                        }],
+                 "rotation":0,
+                 "type":"death_ghost",
+                 "visible":true,
+                 "width":8,
+                 "x":248.01212735,
+                 "y":1040.00541666667
+                }, 
+                {
+                 "height":8,
+                 "id":537,
+                 "name":"Death",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"1"
+                        }],
+                 "rotation":0,
+                 "type":"death_ghost",
+                 "visible":true,
+                 "width":8,
+                 "x":-0.00171064999997839,
+                 "y":1032.05541666667
+                }, 
+                {
+                 "height":8,
+                 "id":538,
+                 "name":"Death",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"1"
+                        }],
+                 "rotation":0,
+                 "type":"death_ghost",
+                 "visible":true,
+                 "width":8,
+                 "x":247.93912735,
+                 "y":1024.01541666667
+                }, 
+                {
+                 "height":8,
+                 "id":539,
+                 "name":"Death",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"1"
+                        }],
+                 "rotation":0,
+                 "type":"death_ghost",
+                 "visible":true,
+                 "width":8,
+                 "x":-0.0121273499999717,
+                 "y":1016.01541666667
+                }, 
+                {
+                 "height":8,
+                 "id":540,
+                 "name":"Death",
+                 "rotation":0,
+                 "type":"death_ghost",
+                 "visible":true,
+                 "width":8,
+                 "x":248.07981365,
+                 "y":936.0875
+                }, 
+                {
+                 "height":8,
+                 "id":541,
+                 "name":"Death",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"1"
+                        }],
+                 "rotation":0,
+                 "type":"death_ghost",
+                 "visible":true,
+                 "width":8,
+                 "x":0.00726784999999097,
+                 "y":928.1275
+                }, 
+                {
+                 "height":8,
+                 "id":542,
+                 "name":"Death",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"1"
+                        }],
+                 "rotation":0,
+                 "type":"death_ghost",
+                 "visible":true,
+                 "width":8,
+                 "x":248.00681365,
+                 "y":920.0275
+                }, 
+                {
+                 "height":8,
+                 "id":543,
+                 "name":"Death",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"1"
+                        }],
+                 "rotation":0,
+                 "type":"death_ghost",
+                 "visible":true,
+                 "width":8,
+                 "x":-0.00689700000000926,
+                 "y":912.0775
+                }, 
+                {
+                 "height":8,
+                 "id":544,
+                 "name":"Death",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"1"
+                        }],
+                 "rotation":0,
+                 "type":"death_ghost",
+                 "visible":true,
+                 "width":8,
+                 "x":247.93381365,
+                 "y":904.0375
+                }, 
+                {
+                 "height":8,
+                 "id":545,
+                 "name":"Death",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"1"
+                        }],
+                 "rotation":0,
+                 "type":"death_ghost",
+                 "visible":true,
+                 "width":8,
+                 "x":-0.0173136500000055,
+                 "y":896.0375
+                }, 
+                {
+                 "height":8,
+                 "id":546,
+                 "name":"Cloud",
+                 "rotation":0,
+                 "type":"cloud",
+                 "visible":true,
+                 "width":8,
+                 "x":0.0887183333333113,
+                 "y":855.951666666667
+                }, 
+                {
+                 "height":8,
+                 "id":547,
+                 "name":"Cloud",
+                 "rotation":0,
+                 "type":"cloud",
+                 "visible":true,
+                 "width":8,
+                 "x":248.077948333333,
+                 "y":840.086666666667
+                }, 
+                {
+                 "height":8,
+                 "id":548,
+                 "name":"Death",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"5"
+                        }],
+                 "rotation":0,
+                 "type":"death_ghost",
+                 "visible":true,
+                 "width":8,
+                 "x":248.013948333333,
+                 "y":832.006666666667
+                }, 
+                {
+                 "height":8,
+                 "id":549,
+                 "name":"Cloud",
+                 "rotation":0,
+                 "type":"cloud",
+                 "visible":true,
+                 "width":8,
+                 "x":0.0320000000000107,
+                 "y":800.07125
+                }, 
+                {
+                 "height":8,
+                 "id":550,
+                 "name":"Death",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"5"
+                        }],
+                 "rotation":0,
+                 "type":"death_ghost",
+                 "visible":true,
+                 "width":8,
+                 "x":-0.0319999999999823,
+                 "y":791.99125
+                }, 
+                {
+                 "height":8,
+                 "id":551,
+                 "name":"Cloud",
+                 "rotation":0,
+                 "type":"cloud",
+                 "visible":true,
+                 "width":8,
+                 "x":247.96875,
+                 "y":792.03125
+                }, 
+                {
+                 "height":8,
+                 "id":552,
+                 "name":"Skeleton",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"4"
+                        }],
+                 "rotation":0,
+                 "type":"skeleton",
+                 "visible":true,
+                 "width":8,
+                 "x":39.9685108695652,
+                 "y":751.974782608696
+                }, 
+                {
+                 "height":8,
+                 "id":553,
+                 "name":"Skeleton",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"4"
+                        }],
+                 "rotation":0,
+                 "type":"skeleton",
+                 "visible":true,
+                 "width":8,
+                 "x":39.9196108695652,
+                 "y":735.954782608696
+                }, 
+                {
+                 "height":8,
+                 "id":554,
+                 "name":"Skeleton",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"4"
+                        }],
+                 "rotation":0,
+                 "type":"skeleton",
+                 "visible":true,
+                 "width":8,
+                 "x":183.911910869565,
+                 "y":719.944782608696
+                }, 
+                {
+                 "height":8,
+                 "id":555,
+                 "name":"Skeleton",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"4"
+                        }],
+                 "rotation":0,
+                 "type":"skeleton",
+                 "visible":true,
+                 "width":8,
+                 "x":184.036910869565,
+                 "y":703.894782608696
+                }, 
+                {
+                 "height":8,
+                 "id":556,
+                 "name":"Knight",
+                 "rotation":0,
+                 "type":"knight",
+                 "visible":true,
+                 "width":8,
+                 "x":95.9374666666667,
+                 "y":735.995
+                }, 
+                {
+                 "height":8,
+                 "id":557,
+                 "name":"Knight",
+                 "rotation":0,
+                 "type":"knight",
+                 "visible":true,
+                 "width":8,
+                 "x":200.185266666667,
+                 "y":703.985
+                }, 
+                {
+                 "height":8,
+                 "id":558,
+                 "name":"Knight",
+                 "rotation":0,
+                 "type":"knight",
+                 "visible":true,
+                 "width":8,
+                 "x":136.024266666667,
+                 "y":696.005
+                }, 
+                {
+                 "height":8,
+                 "id":559,
+                 "name":"Knight",
+                 "rotation":0,
+                 "type":"knight",
+                 "visible":true,
+                 "width":8,
+                 "x":47.9480666666667,
+                 "y":711.895
+                },
+            
+                {
+                 "height":8,
+                 "id":560,
+                 "name":"Ghost",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"5"
+                        }],
+                 "rotation":0,
+                 "type":"ghost",
+                 "visible":true,
+                 "width":8,
+                 "x":248.088320171739,
+                 "y":656.08347826087
+                }, 
+                {
+                 "height":8,
+                 "id":561,
+                 "name":"Ghost",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"5"
+                        }],
+                 "rotation":0,
+                 "type":"ghost",
+                 "visible":true,
+                 "width":8,
+                 "x":0.0421146108695583,
+                 "y":624.057826086957
+                }, 
+                {
+                 "height":8,
+                 "id":562,
+                 "name":"Ghost",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"5"
+                        }],
+                 "rotation":0,
+                 "type":"ghost",
+                 "visible":true,
+                 "width":8,
+                 "x":248.020527241063,
+                 "y":599.999698067633
+                }, 
+                {
+                 "height":8,
+                 "id":563,
+                 "name":"Ghost",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"5"
+                        }],
+                 "rotation":0,
+                 "type":"ghost",
+                 "visible":true,
+                 "width":8,
+                 "x":-0.0253581589371805,
+                 "y":567.974698067633
+                }, 
+                {
+                 "height":8,
+                 "id":564,
+                 "name":"Death",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"5"
+                        }],
+                 "rotation":0,
+                 "type":"death_ghost",
+                 "visible":true,
+                 "width":8,
+                 "x":0.027272727272722,
+                 "y":535.99595959596
+                }, 
+                {
+                 "height":8,
+                 "id":567,
+                 "name":"Death",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"5"
+                        }],
+                 "rotation":0,
+                 "type":"death_ghost",
+                 "visible":true,
+                 "width":8,
+                 "x":247.979166666667,
+                 "y":495.958333333333
+                }, 
+                {
+                 "height":8,
+                 "id":568,
+                 "name":"Ghost",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"1"
+                        }],
+                 "rotation":0,
+                 "type":"ghost",
+                 "visible":true,
+                 "width":8,
+                 "x":248.0265047,
+                 "y":503.992916666666
+                }, 
+                {
+                 "height":8,
+                 "id":569,
+                 "name":"Ghost",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"1"
+                        }],
+                 "rotation":0,
+                 "type":"ghost",
+                 "visible":true,
+                 "width":8,
+                 "x":0.0750767000000003,
+                 "y":495.992916666666
+                }, 
+                {
+                 "height":8,
+                 "id":570,
+                 "name":"Ghost",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"1"
+                        }],
+                 "rotation":0,
+                 "type":"ghost",
+                 "visible":true,
+                 "width":8,
+                 "x":248.0745047,
+                 "y":487.892916666666
+                }, 
+                {
+                 "height":8,
+                 "id":571,
+                 "name":"Ghost",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"1"
+                        }],
+                 "rotation":0,
+                 "type":"ghost",
+                 "visible":true,
+                 "width":8,
+                 "x":0.0609120000000019,
+                 "y":479.932916666667
+                }, 
+                {
+                 "height":8,
+                 "id":572,
+                 "name":"Ghost",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"1"
+                        }],
+                 "rotation":0,
+                 "type":"ghost",
+                 "visible":true,
+                 "width":8,
+                 "x":248.0015047,
+                 "y":471.902916666667
+                }, 
+                {
+                 "height":8,
+                 "id":573,
+                 "name":"Ghost",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"1"
+                        }],
+                 "rotation":0,
+                 "type":"ghost",
+                 "visible":true,
+                 "width":8,
+                 "x":0.0504953000000015,
+                 "y":463.902916666667
+                }, 
+                {
+                 "height":8,
+                 "id":574,
+                 "name":"Ghost",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"1"
+                        }],
+                 "rotation":0,
+                 "type":"ghost",
+                 "visible":true,
+                 "width":8,
+                 "x":248.058138713636,
+                 "y":456.073863636364
+                }, 
+                {
+                 "height":8,
+                 "id":575,
+                 "name":"Ghost",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"1"
+                        }],
+                 "rotation":0,
+                 "type":"ghost",
+                 "visible":true,
+                 "width":8,
+                 "x":0.106634013636352,
+                 "y":448.073863636364
+                }, 
+                {
+                 "height":8,
+                 "id":576,
+                 "name":"Cloud",
+                 "rotation":0,
+                 "type":"cloud",
+                 "visible":true,
+                 "width":8,
+                 "x":0.034514492753658,
+                 "y":407.982028985507
+                }, 
+                {
+                 "height":8,
+                 "id":577,
+                 "name":"Death",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"5"
+                        }],
+                 "rotation":0,
+                 "type":"death_ghost",
+                 "visible":true,
+                 "width":8,
+                 "x":0.0173894927536651,
+                 "y":392.050466485507
+                }, 
+                {
+                 "height":8,
+                 "id":578,
+                 "name":"Cloud",
+                 "rotation":0,
+                 "type":"cloud",
+                 "visible":true,
+                 "width":8,
+                 "x":247.971514492754,
+                 "y":399.942028985507
+                }, 
+                {
+                 "height":8,
+                 "id":579,
+                 "name":"Death",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"5"
+                        }],
+                 "rotation":0,
+                 "type":"death_ghost",
+                 "visible":true,
+                 "width":8,
+                 "x":248,
+                 "y":376
+                }, 
+                {
+                 "height":8,
+                 "id":580,
+                 "name":"Cloud",
+                 "rotation":0,
+                 "type":"cloud",
+                 "visible":true,
+                 "width":8,
+                 "x":0.0113269963768179,
+                 "y":327.976507246377
+                }, 
+                {
+                 "height":8,
+                 "id":581,
+                 "name":"Death",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"5"
+                        }],
+                 "rotation":0,
+                 "type":"death_ghost",
+                 "visible":true,
+                 "width":8,
+                 "x":-0.00579800362318927,
+                 "y":312.044507246377
+                }, 
+                {
+                 "height":8,
+                 "id":582,
+                 "name":"Cloud",
+                 "rotation":0,
+                 "type":"cloud",
+                 "visible":true,
+                 "width":8,
+                 "x":247.948812496377,
+                 "y":319.936507246377
+                }, 
+                {
+                 "height":8,
+                 "id":583,
+                 "name":"Death",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"5"
+                        }],
+                 "rotation":0,
+                 "type":"death_ghost",
+                 "visible":true,
+                 "width":8,
+                 "x":247.976812496377,
+                 "y":295.994507246377
+                }, 
+                {
+                 "height":8,
+                 "id":585,
+                 "name":"Ghost",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"1"
+                        }],
+                 "rotation":0,
+                 "type":"ghost",
+                 "visible":true,
+                 "width":8,
+                 "x":248.017697295455,
+                 "y":255.889136363636
+                }, 
+                {
+                 "height":8,
+                 "id":586,
+                 "name":"Ghost",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"1"
+                        }],
+                 "rotation":0,
+                 "type":"ghost",
+                 "visible":true,
+                 "width":8,
+                 "x":0.0435517732323127,
+                 "y":248.000247474747
+                }, 
+                {
+                 "height":8,
+                 "id":587,
+                 "name":"Ghost",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"1"
+                        }],
+                 "rotation":0,
+                 "type":"ghost",
+                 "visible":true,
+                 "width":8,
+                 "x":248.003197295455,
+                 "y":240.007886363636
+                }, 
+                {
+                 "height":8,
+                 "id":588,
+                 "name":"Ghost",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"1"
+                        }],
+                 "rotation":0,
+                 "type":"ghost",
+                 "visible":true,
+                 "width":8,
+                 "x":0.00716485101009567,
+                 "y":231.96246969697
+                }, 
+                {
+                 "height":8,
+                 "id":589,
+                 "name":"Ghost",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"1"
+                        }],
+                 "rotation":0,
+                 "type":"ghost",
+                 "visible":true,
+                 "width":8,
+                 "x":247.992697295455,
+                 "y":224.017886363636
+                }, 
+                {
+                 "height":8,
+                 "id":590,
+                 "name":"Ghost",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"1"
+                        }],
+                 "rotation":0,
+                 "type":"ghost",
+                 "visible":true,
+                 "width":8,
+                 "x":0.0411925954545396,
+                 "y":215.954691919192
+                }, 
+                {
+                 "height":8,
+                 "id":591,
+                 "name":"Ghost",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"1"
+                        }],
+                 "rotation":0,
+                 "type":"ghost",
+                 "visible":true,
+                 "width":8,
+                 "x":248.048697295455,
+                 "y":207.970136363636
+                }, 
+                {
+                 "height":8,
+                 "id":592,
+                 "name":"Ghost",
+                 "properties":[
+                        {
+                         "name":"Count",
+                         "type":"string",
+                         "value":"1"
+                        }],
+                 "rotation":0,
+                 "type":"ghost",
+                 "visible":true,
+                 "width":8,
+                 "x":0.0973312954545378,
+                 "y":199.970136363636
+                }, 
+                {
+                 "height":8,
+                 "id":593,
+                 "name":"Cloud",
+                 "rotation":0,
+                 "type":"cloud",
+                 "visible":true,
+                 "width":8,
+                 "x":-0.00787999198507539,
+                 "y":240.010986605182
+                }, 
+                {
+                 "height":8,
+                 "id":594,
+                 "name":"Cloud",
+                 "rotation":0,
+                 "type":"cloud",
+                 "visible":true,
+                 "width":8,
+                 "x":248.087697295455,
+                 "y":247.994386363636
+                },
+            
+                {
+                 "height":8,
+                 "id":595,
+                 "name":"Cloud",
+                 "rotation":0,
+                 "type":"cloud",
+                 "visible":true,
+                 "width":8,
+                 "x":248.03125,
+                 "y":216
+                }, 
+                {
+                 "height":8,
+                 "id":596,
+                 "name":"Cloud",
+                 "rotation":0,
+                 "type":"cloud",
+                 "visible":true,
+                 "width":8,
+                 "x":0.125,
+                 "y":207.9375
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1366,7 +2495,7 @@
          "y":0
         }],
  "nextlayerid":8,
- "nextobjectid":504,
+ "nextobjectid":597,
  "orientation":"orthogonal",
  "renderorder":"left-up",
  "tiledversion":"1.10.2",

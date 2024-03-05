@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="left-up" width="32" height="238" tilewidth="8" tileheight="8" infinite="0" nextlayerid="8" nextobjectid="504">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="left-up" width="32" height="238" tilewidth="8" tileheight="8" infinite="0" nextlayerid="8" nextobjectid="597">
  <editorsettings>
   <export target="map_stage5.json" format="json"/>
  </editorsettings>
@@ -107,7 +107,7 @@
     <property name="Type" value="knight"/>
    </properties>
   </object>
-  <object id="428" name="Weapon" type="weapon" x="0.0513834" y="1136.06" width="8" height="8"/>
+  <object id="428" name="Weapon" type="weapon" x="-0.0111166" y="1144.07" width="8" height="8"/>
   <object id="429" name="Block" type="block" x="31.9205" y="1047.98" width="16" height="16">
    <properties>
     <property name="Type" value="rook"/>
@@ -185,7 +185,7 @@
     <property name="Type" value="queen"/>
    </properties>
   </object>
-  <object id="446" name="Power Up" type="power_up" x="0.048913" y="544.016" width="8" height="8"/>
+  <object id="446" name="Power Up" type="power_up" x="0.0378019" y="544.005" width="8" height="8"/>
   <object id="447" name="Block" type="block" x="16.0361" y="512.018" width="16" height="16">
    <properties>
     <property name="Type" value="knight"/>
@@ -245,7 +245,7 @@
   <object id="459" name="Weapon" type="weapon" x="-0.0284091" y="168.091" width="8" height="8"/>
   <object id="460" name="Ghost" type="ghost" x="-0.0615119" y="1680.03" width="8" height="8">
    <properties>
-    <property name="Count" value="1"/>
+    <property name="Count" value="5"/>
    </properties>
   </object>
   <object id="461" name="Ghost" type="ghost" x="247.98" y="1624.07" width="8" height="8">
@@ -264,80 +264,362 @@
   <object id="470" name="Blob" type="blob" x="184.017" y="1592.09" width="8" height="8"/>
   <object id="471" name="Blob" type="blob" x="208" y="1568.09" width="8" height="8"/>
   <object id="472" name="Blob" type="blob" x="56.0938" y="1552.06" width="8" height="8"/>
-  <object id="473" name="Blob" type="blob" x="120.072" y="1536" width="8" height="8"/>
   <object id="474" name="Blob" type="blob" x="96.0978" y="1528.04" width="8" height="8"/>
-  <object id="475" name="Blob" type="blob" x="184.045" y="1512.02" width="8" height="8"/>
   <object id="476" name="Knight" type="knight" x="192.149" y="1512.1" width="8" height="8"/>
   <object id="477" name="Knight" type="knight" x="127.901" y="1504.12" width="8" height="8"/>
   <object id="478" name="Knight" type="knight" x="176.075" y="1528.1" width="8" height="8"/>
   <object id="479" name="Knight" type="knight" x="40.0159" y="1519.98" width="8" height="8"/>
   <object id="480" name="Knight" type="knight" x="88.0302" y="1488.04" width="8" height="8"/>
-  <object id="481" name="Blob" type="blob" x="56.0317" y="1496.02" width="8" height="8"/>
-  <object id="482" name="Blob" type="blob" x="120.071" y="1479.98" width="8" height="8"/>
-  <object id="483" name="Blob" type="blob" x="95.9664" y="1472.11" width="8" height="8"/>
   <object id="485" name="Knight" type="knight" x="192.278" y="1456.03" width="8" height="8"/>
   <object id="486" name="Knight" type="knight" x="128.117" y="1448.05" width="8" height="8"/>
-  <object id="487" name="Knight" type="knight" x="176.421" y="1471.98" width="8" height="8"/>
   <object id="488" name="Knight" type="knight" x="40.0408" y="1463.94" width="8" height="8"/>
-  <object id="490" name="Ghost" type="ghost" x="247.969" y="1424.06" width="8" height="8">
+  <object id="490" name="Ghost" type="ghost" x="248.06" y="1431.97" width="8" height="8">
    <properties>
     <property name="Count" value="1"/>
    </properties>
   </object>
-  <object id="491" name="Ghost" type="ghost" x="0.017663" y="1416.06" width="8" height="8">
+  <object id="491" name="Ghost" type="ghost" x="0.108572" y="1423.97" width="8" height="8">
    <properties>
     <property name="Count" value="1"/>
    </properties>
   </object>
-  <object id="492" name="Ghost" type="ghost" x="248.017" y="1407.96" width="8" height="8">
+  <object id="492" name="Ghost" type="ghost" x="248.108" y="1415.87" width="8" height="8">
    <properties>
     <property name="Count" value="1"/>
    </properties>
   </object>
-  <object id="493" name="Ghost" type="ghost" x="0.00349817" y="1400.01" width="8" height="8">
+  <object id="493" name="Ghost" type="ghost" x="0.0944073" y="1407.91" width="8" height="8">
    <properties>
     <property name="Count" value="1"/>
    </properties>
   </object>
-  <object id="494" name="Ghost" type="ghost" x="247.944" y="1391.97" width="8" height="8">
+  <object id="494" name="Ghost" type="ghost" x="248.035" y="1399.88" width="8" height="8">
    <properties>
     <property name="Count" value="1"/>
    </properties>
   </object>
-  <object id="495" name="Ghost" type="ghost" x="-0.0069185" y="1383.97" width="8" height="8">
+  <object id="495" name="Ghost" type="ghost" x="0.0839906" y="1391.88" width="8" height="8">
    <properties>
     <property name="Count" value="1"/>
    </properties>
   </object>
-  <object id="496" name="Ghost" type="ghost" x="247.925" y="1351.98" width="8" height="8">
+  <object id="496" name="Ghost" type="ghost" x="248.016" y="1359.89" width="8" height="8">
    <properties>
     <property name="Count" value="1"/>
    </properties>
   </object>
-  <object id="497" name="Ghost" type="ghost" x="-0.0265823" y="1343.98" width="8" height="8">
+  <object id="497" name="Ghost" type="ghost" x="0.0643268" y="1351.89" width="8" height="8">
    <properties>
     <property name="Count" value="1"/>
    </properties>
   </object>
-  <object id="498" name="Ghost" type="ghost" x="247.973" y="1335.88" width="8" height="8">
+  <object id="498" name="Ghost" type="ghost" x="248.064" y="1343.79" width="8" height="8">
    <properties>
     <property name="Count" value="1"/>
    </properties>
   </object>
-  <object id="499" name="Ghost" type="ghost" x="-0.0407471" y="1327.93" width="8" height="8">
+  <object id="499" name="Ghost" type="ghost" x="0.050162" y="1335.84" width="8" height="8">
    <properties>
     <property name="Count" value="1"/>
    </properties>
   </object>
-  <object id="500" name="Ghost" type="ghost" x="247.9" y="1319.89" width="8" height="8">
+  <object id="500" name="Ghost" type="ghost" x="247.991" y="1327.8" width="8" height="8">
    <properties>
     <property name="Count" value="1"/>
    </properties>
   </object>
-  <object id="501" name="Ghost" type="ghost" x="-0.0511638" y="1311.89" width="8" height="8">
+  <object id="501" name="Ghost" type="ghost" x="0.0397453" y="1319.8" width="8" height="8">
    <properties>
     <property name="Count" value="1"/>
    </properties>
   </object>
+  <object id="504" name="Death" type="death_ghost" x="248.038" y="1280.05" width="8" height="8">
+   <properties>
+    <property name="Count" value="1"/>
+   </properties>
+  </object>
+  <object id="505" name="Death" type="death_ghost" x="0.00866627" y="1272.02" width="8" height="8">
+   <properties>
+    <property name="Count" value="1"/>
+   </properties>
+  </object>
+  <object id="506" name="Death" type="death_ghost" x="248.024" y="1264.01" width="8" height="8">
+   <properties>
+    <property name="Count" value="1"/>
+   </properties>
+  </object>
+  <object id="507" name="Death" type="death_ghost" x="0.0257515" y="1256.03" width="8" height="8">
+   <properties>
+    <property name="Count" value="1"/>
+   </properties>
+  </object>
+  <object id="508" name="Death" type="death_ghost" x="248.06" y="1248.02" width="8" height="8">
+   <properties>
+    <property name="Count" value="1"/>
+   </properties>
+  </object>
+  <object id="509" name="Death" type="death_ghost" x="0.0465848" y="1240.04" width="8" height="8">
+   <properties>
+    <property name="Count" value="1"/>
+   </properties>
+  </object>
+  <object id="513" name="Blob" type="blob" x="119.934" y="1215.91" width="8" height="8"/>
+  <object id="514" name="Blob" type="blob" x="63.968" y="1264.04" width="8" height="8"/>
+  <object id="515" name="Blob" type="blob" x="31.8358" y="1248.09" width="8" height="8"/>
+  <object id="516" name="Blob" type="blob" x="183.87" y="1232.04" width="8" height="8"/>
+  <object id="517" name="Blob" type="blob" x="207.853" y="1208.04" width="8" height="8"/>
+  <object id="522" name="Cloud" type="cloud" x="-0.0112134" y="1168.02" width="8" height="8"/>
+  <object id="523" name="Cloud" type="cloud" x="0.0119701" y="1135.99" width="8" height="8"/>
+  <object id="524" name="Cloud" type="cloud" x="247.984" y="1152.04" width="8" height="8"/>
+  <object id="525" name="Cloud" type="cloud" x="247.97" y="1120.06" width="8" height="8"/>
+  <object id="526" name="Skeleton" type="skeleton" x="48.0826" y="1160.06" width="8" height="8">
+   <properties>
+    <property name="Count" value="4"/>
+   </properties>
+  </object>
+  <object id="527" name="Skeleton" type="skeleton" x="48.0337" y="1144.04" width="8" height="8">
+   <properties>
+    <property name="Count" value="4"/>
+   </properties>
+  </object>
+  <object id="528" name="Skeleton" type="skeleton" x="192.026" y="1128.03" width="8" height="8">
+   <properties>
+    <property name="Count" value="4"/>
+   </properties>
+  </object>
+  <object id="529" name="Skeleton" type="skeleton" x="192.151" y="1111.98" width="8" height="8">
+   <properties>
+    <property name="Count" value="4"/>
+   </properties>
+  </object>
+  <object id="530" name="Cloud" type="cloud" x="0.0218377" y="1080.06" width="8" height="8"/>
+  <object id="532" name="Death" type="death_ghost" x="248.085" y="1056.07" width="8" height="8"/>
+  <object id="535" name="Death" type="death_ghost" x="0.0124542" y="1048.11" width="8" height="8">
+   <properties>
+    <property name="Count" value="1"/>
+   </properties>
+  </object>
+  <object id="536" name="Death" type="death_ghost" x="248.012" y="1040.01" width="8" height="8">
+   <properties>
+    <property name="Count" value="1"/>
+   </properties>
+  </object>
+  <object id="537" name="Death" type="death_ghost" x="-0.00171065" y="1032.06" width="8" height="8">
+   <properties>
+    <property name="Count" value="1"/>
+   </properties>
+  </object>
+  <object id="538" name="Death" type="death_ghost" x="247.939" y="1024.02" width="8" height="8">
+   <properties>
+    <property name="Count" value="1"/>
+   </properties>
+  </object>
+  <object id="539" name="Death" type="death_ghost" x="-0.0121273" y="1016.02" width="8" height="8">
+   <properties>
+    <property name="Count" value="1"/>
+   </properties>
+  </object>
+  <object id="540" name="Death" type="death_ghost" x="248.08" y="936.087" width="8" height="8"/>
+  <object id="541" name="Death" type="death_ghost" x="0.00726785" y="928.127" width="8" height="8">
+   <properties>
+    <property name="Count" value="1"/>
+   </properties>
+  </object>
+  <object id="542" name="Death" type="death_ghost" x="248.007" y="920.027" width="8" height="8">
+   <properties>
+    <property name="Count" value="1"/>
+   </properties>
+  </object>
+  <object id="543" name="Death" type="death_ghost" x="-0.006897" y="912.077" width="8" height="8">
+   <properties>
+    <property name="Count" value="1"/>
+   </properties>
+  </object>
+  <object id="544" name="Death" type="death_ghost" x="247.934" y="904.037" width="8" height="8">
+   <properties>
+    <property name="Count" value="1"/>
+   </properties>
+  </object>
+  <object id="545" name="Death" type="death_ghost" x="-0.0173137" y="896.037" width="8" height="8">
+   <properties>
+    <property name="Count" value="1"/>
+   </properties>
+  </object>
+  <object id="546" name="Cloud" type="cloud" x="0.0887183" y="855.952" width="8" height="8"/>
+  <object id="547" name="Cloud" type="cloud" x="248.078" y="840.087" width="8" height="8"/>
+  <object id="548" name="Death" type="death_ghost" x="248.014" y="832.007" width="8" height="8">
+   <properties>
+    <property name="Count" value="5"/>
+   </properties>
+  </object>
+  <object id="549" name="Cloud" type="cloud" x="0.032" y="800.071" width="8" height="8"/>
+  <object id="550" name="Death" type="death_ghost" x="-0.032" y="791.991" width="8" height="8">
+   <properties>
+    <property name="Count" value="5"/>
+   </properties>
+  </object>
+  <object id="551" name="Cloud" type="cloud" x="247.969" y="792.031" width="8" height="8"/>
+  <object id="552" name="Skeleton" type="skeleton" x="39.9685" y="751.975" width="8" height="8">
+   <properties>
+    <property name="Count" value="4"/>
+   </properties>
+  </object>
+  <object id="553" name="Skeleton" type="skeleton" x="39.9196" y="735.955" width="8" height="8">
+   <properties>
+    <property name="Count" value="4"/>
+   </properties>
+  </object>
+  <object id="554" name="Skeleton" type="skeleton" x="183.912" y="719.945" width="8" height="8">
+   <properties>
+    <property name="Count" value="4"/>
+   </properties>
+  </object>
+  <object id="555" name="Skeleton" type="skeleton" x="184.037" y="703.895" width="8" height="8">
+   <properties>
+    <property name="Count" value="4"/>
+   </properties>
+  </object>
+  <object id="556" name="Knight" type="knight" x="95.9375" y="735.995" width="8" height="8"/>
+  <object id="557" name="Knight" type="knight" x="200.185" y="703.985" width="8" height="8"/>
+  <object id="558" name="Knight" type="knight" x="136.024" y="696.005" width="8" height="8"/>
+  <object id="559" name="Knight" type="knight" x="47.9481" y="711.895" width="8" height="8"/>
+  <object id="560" name="Ghost" type="ghost" x="248.088" y="656.083" width="8" height="8">
+   <properties>
+    <property name="Count" value="5"/>
+   </properties>
+  </object>
+  <object id="561" name="Ghost" type="ghost" x="0.0421146" y="624.058" width="8" height="8">
+   <properties>
+    <property name="Count" value="5"/>
+   </properties>
+  </object>
+  <object id="562" name="Ghost" type="ghost" x="248.021" y="600" width="8" height="8">
+   <properties>
+    <property name="Count" value="5"/>
+   </properties>
+  </object>
+  <object id="563" name="Ghost" type="ghost" x="-0.0253582" y="567.975" width="8" height="8">
+   <properties>
+    <property name="Count" value="5"/>
+   </properties>
+  </object>
+  <object id="564" name="Death" type="death_ghost" x="0.0272727" y="535.996" width="8" height="8">
+   <properties>
+    <property name="Count" value="5"/>
+   </properties>
+  </object>
+  <object id="567" name="Death" type="death_ghost" x="247.979" y="495.958" width="8" height="8">
+   <properties>
+    <property name="Count" value="5"/>
+   </properties>
+  </object>
+  <object id="568" name="Ghost" type="ghost" x="248.027" y="503.993" width="8" height="8">
+   <properties>
+    <property name="Count" value="1"/>
+   </properties>
+  </object>
+  <object id="569" name="Ghost" type="ghost" x="0.0750767" y="495.993" width="8" height="8">
+   <properties>
+    <property name="Count" value="1"/>
+   </properties>
+  </object>
+  <object id="570" name="Ghost" type="ghost" x="248.075" y="487.893" width="8" height="8">
+   <properties>
+    <property name="Count" value="1"/>
+   </properties>
+  </object>
+  <object id="571" name="Ghost" type="ghost" x="0.060912" y="479.933" width="8" height="8">
+   <properties>
+    <property name="Count" value="1"/>
+   </properties>
+  </object>
+  <object id="572" name="Ghost" type="ghost" x="248.002" y="471.903" width="8" height="8">
+   <properties>
+    <property name="Count" value="1"/>
+   </properties>
+  </object>
+  <object id="573" name="Ghost" type="ghost" x="0.0504953" y="463.903" width="8" height="8">
+   <properties>
+    <property name="Count" value="1"/>
+   </properties>
+  </object>
+  <object id="574" name="Ghost" type="ghost" x="248.058" y="456.074" width="8" height="8">
+   <properties>
+    <property name="Count" value="1"/>
+   </properties>
+  </object>
+  <object id="575" name="Ghost" type="ghost" x="0.106634" y="448.074" width="8" height="8">
+   <properties>
+    <property name="Count" value="1"/>
+   </properties>
+  </object>
+  <object id="576" name="Cloud" type="cloud" x="0.0345145" y="407.982" width="8" height="8"/>
+  <object id="577" name="Death" type="death_ghost" x="0.0173895" y="392.05" width="8" height="8">
+   <properties>
+    <property name="Count" value="5"/>
+   </properties>
+  </object>
+  <object id="578" name="Cloud" type="cloud" x="247.972" y="399.942" width="8" height="8"/>
+  <object id="579" name="Death" type="death_ghost" x="248" y="376" width="8" height="8">
+   <properties>
+    <property name="Count" value="5"/>
+   </properties>
+  </object>
+  <object id="580" name="Cloud" type="cloud" x="0.011327" y="327.977" width="8" height="8"/>
+  <object id="581" name="Death" type="death_ghost" x="-0.005798" y="312.045" width="8" height="8">
+   <properties>
+    <property name="Count" value="5"/>
+   </properties>
+  </object>
+  <object id="582" name="Cloud" type="cloud" x="247.949" y="319.937" width="8" height="8"/>
+  <object id="583" name="Death" type="death_ghost" x="247.977" y="295.995" width="8" height="8">
+   <properties>
+    <property name="Count" value="5"/>
+   </properties>
+  </object>
+  <object id="585" name="Ghost" type="ghost" x="248.018" y="255.889" width="8" height="8">
+   <properties>
+    <property name="Count" value="1"/>
+   </properties>
+  </object>
+  <object id="586" name="Ghost" type="ghost" x="0.0435518" y="248" width="8" height="8">
+   <properties>
+    <property name="Count" value="1"/>
+   </properties>
+  </object>
+  <object id="587" name="Ghost" type="ghost" x="248.003" y="240.008" width="8" height="8">
+   <properties>
+    <property name="Count" value="1"/>
+   </properties>
+  </object>
+  <object id="588" name="Ghost" type="ghost" x="0.00716485" y="231.962" width="8" height="8">
+   <properties>
+    <property name="Count" value="1"/>
+   </properties>
+  </object>
+  <object id="589" name="Ghost" type="ghost" x="247.993" y="224.018" width="8" height="8">
+   <properties>
+    <property name="Count" value="1"/>
+   </properties>
+  </object>
+  <object id="590" name="Ghost" type="ghost" x="0.0411926" y="215.955" width="8" height="8">
+   <properties>
+    <property name="Count" value="1"/>
+   </properties>
+  </object>
+  <object id="591" name="Ghost" type="ghost" x="248.049" y="207.97" width="8" height="8">
+   <properties>
+    <property name="Count" value="1"/>
+   </properties>
+  </object>
+  <object id="592" name="Ghost" type="ghost" x="0.0973313" y="199.97" width="8" height="8">
+   <properties>
+    <property name="Count" value="1"/>
+   </properties>
+  </object>
+  <object id="593" name="Cloud" type="cloud" x="-0.00787999" y="240.011" width="8" height="8"/>
+  <object id="594" name="Cloud" type="cloud" x="248.088" y="247.994" width="8" height="8"/>
+  <object id="595" name="Cloud" type="cloud" x="248.031" y="216" width="8" height="8"/>
+  <object id="596" name="Cloud" type="cloud" x="0.125" y="207.938" width="8" height="8"/>
  </objectgroup>
 </map>

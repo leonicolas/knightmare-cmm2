@@ -168,7 +168,7 @@ sub process_map_row(row%, spawn%, line_zero%, offset_y%)
             spawn_boss()
         case 8
             select case g_stage%
-                case 1,3,4
+                case 1,3,4,5
                     play_song("DEMON_MOD")
                 case 2
                     play_song("BOSS_MOD")
