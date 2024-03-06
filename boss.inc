@@ -19,6 +19,8 @@ sub activate_boss()
         case 3
             activate_hit_box(2, false)
             g_obj(g_obj(id%,6),5) = true ' Fix shadow height
+        case 5
+            activate_hit_box(2, false)
     end select
 end sub
 
@@ -132,6 +134,7 @@ sub spawn_boss()
     for i%=2 to 7
         g_boss(i%)=-1 ' Hit box
     next
+    g_obj(id%, 4)=0: g_obj(id%, 5)=0: g_obj(id%, 6)=0
 
     if g_stage% = 8 then
         ' Final boss
@@ -151,6 +154,7 @@ sub spawn_boss()
                 spawn_shadow(id%,0, TILE_SIZE*8, false, 37)
             case 5
                 g_obj(id%,2)=TILE_SIZE*(choice(g_row%=0,6,-3))
+                g_obj(id%, 5)=choice(g_player(0)<SCREEN_WIDTH,-120,120)
                 create_boss_shield(TILE_SIZE, TILE_SIZE, TILE_SIZE*3)
         end select
 
@@ -216,25 +220,25 @@ sub boss_fire()
         case 3
             exit sub
         case 5
-            delay=90
+            delay=70
             disable_rnd%=true
     end select
     if g_timer mod delay = 0 then enemy_fire(g_boss(1), disable_rnd%)
 end sub
 
 sub animate_boss()
-    local tick%, x%,y%,w%=TILE_SIZE*5,h%=TILE_SIZE*5
+    local tick%, x%,y%, w%=TILE_SIZE*5,h%=TILE_SIZE*5, id%=g_boss(1)
 
     select case g_stage%
         case 1
-            tick% = g_anim_tick% mod 8
+            tick%=g_anim_tick% mod 8
             if tick% > 3 and g_boss(0) <> 1 then x%=TILE_SIZE*5
 
         case 3
             local hit_box%=OBJ_INI_SPRITE_ID + g_boss(2)
             x%=choice(g_boss(0)=3,80,200)
             y%=choice(g_boss(0)=2,0,40)
-            tick% = g_anim_tick% mod 48
+            tick%=g_anim_tick% mod 48
             if tick% > 23 then
                 if tick% = 24 then
                     activate_hit_box(2, true)
@@ -250,6 +254,12 @@ sub animate_boss()
                 activate_hit_box(3, true)
             end if
 
+        case 5
+            tick%=g_anim_tick% mod 10
+            x%=120: y%=80
+            h%=TILE_SIZE*6
+            if tick% > 4 and g_boss(0) <> 1 then inc x%, TILE_SIZE*5
+            if g_obj(id%,6)<0 then inc x%, TILE_SIZE*10
         case else
             exit sub
     end select
@@ -300,6 +310,37 @@ sub move_boss()
             inc g_obj(id%, 5),BOSS_SPEED*g_delta_time*speed_y
             g_obj(id%, 1)=ini_pos+(ini_pos-TILE_SIZEx4)*sin(g_obj(id%, 4))
             g_obj(id%, 2)=y%+mov_height*cos(g_obj(id%, 5))
+
+        case 5
+            inc g_obj(id%, 4) ' Boss tick
+            ' Prepare lateral movement
+            if g_obj(id%, 4) mod 200 = 0 then
+                g_obj(id%, 5)=choice(g_obj(id%, 1)>g_player(0),-120,120)
+                ' Not using OR to keep the code short
+                if g_obj(id%, 1)=TILE_SIZEx4 and g_obj(id%, 5)<0 then
+                    g_obj(id%, 5)=-g_obj(id%, 5)
+                else if g_obj(id%, 1)=SCREEN_WIDTH-TILE_SIZE*9 and g_obj(id%, 5)>0 then
+                    g_obj(id%, 5)=-g_obj(id%, 5)
+                end if
+                g_obj(id%, 6)=0 ' Close helmet
+            end if
+            ' Open helmet
+            if g_obj(id%, 4) mod 600 = 0 then
+                g_obj(id%, 6)=-1
+                play_sfx("HELMET")
+            end if
+            ' Check corners
+            if g_obj(id%, 5)<>0 then
+                speed_x=choice(g_obj(id%, 5)<0,1,-1)
+                inc g_obj(id%, 5),speed_x
+                inc g_obj(id%, 1), BOSS_SPEED*g_delta_time*-speed_x
+                select case g_obj(id%, 1)
+                    case is < TILE_SIZEx4
+                        g_obj(id%, 1)=TILE_SIZEx4
+                    case is > SCREEN_WIDTH-TILE_SIZE*9
+                        g_obj(id%, 1)=SCREEN_WIDTH-TILE_SIZE*9
+                end select
+            end if
     end select
 
     ' Boss body

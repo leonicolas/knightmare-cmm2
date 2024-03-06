@@ -989,7 +989,7 @@ sub enemy_fire(ix%, disable_rnd%)
 
         case 55 ' Boss stage 5
             weapon_ix%=25 ' Axe
-            gpr2=78       ' Y speed
+            gpr2=100      ' Y speed
             x=g_obj(ix%,1)-TILE_SIZE
             create_shot(get_free_shot_slot(), weapon_ix%, x, y, gpr1, gpr2, gpr3, rot%, offset_x%)
             inc x, TILE_SIZE*6

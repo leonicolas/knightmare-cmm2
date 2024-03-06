@@ -46,6 +46,8 @@ sub play_sfx(sfx$)
             play effect "sfx/shot_flame.wav"
         case "FREEZE_TICK"
             play effect "sfx/freeze_tick.wav"
+        case "HELMET"
+            play effect "sfx/helmet.wav"
         case "KILL_ALL_ENEMIES"
             play effect "sfx/kill_all_enemies.wav"
         case "NEW_LIFE"
