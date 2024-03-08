@@ -20,19 +20,9 @@ sub activate_boss()
             activate_hit_box(2, false)
             g_obj(g_obj(id%,6),5) = true ' Fix shadow height
         case 5
+            activate_shield(true)
             activate_hit_box(2, false)
     end select
-end sub
-
-sub activate_hit_box(i%, active%)
-    if g_boss(i%) < 0 then exit sub
-    local sprite_id%=OBJ_INI_SPRITE_ID + g_boss(i%)
-
-    if sprite(X, sprite_id%) = 10000 and active% then
-        sprite show safe sprite_id%, g_obj(i%, 1),g_obj(i%, 2), 1
-    else if sprite(X, sprite_id%) <> 10000 and not active% then
-        sprite hide safe sprite_id%
-    end if
 end sub
 
 sub boss_enemy_destroyed(obj_id%, gpr1, gpr2)
@@ -46,17 +36,22 @@ end sub
 
 function hit_boss(sprite_id%) as integer
     local obj_id%=g_boss(1)
-    local sprite_obj_id%=sprite_id% - OBJ_INI_SPRITE_ID
-
+    local hit_box_id%=sprite_id%-OBJ_INI_SPRITE_ID
     hit_boss = false
+
     ' Boss inactive
     if g_boss(0) < 2 then exit function
 
     ' Verifies if was blocked
     select case g_stage%
         case 3
-            local hit_box%=OBJ_INI_SPRITE_ID + g_boss(3)
-            if sprite(X, hit_box%) <> 10000 then
+            if sprite(X, OBJ_INI_SPRITE_ID + g_boss(3)) <> 10000 then
+                play_sfx("BOSS_SHIELD")
+                hit_boss = true
+                exit function
+            end if
+        case 5
+            if g_obj(obj_id%, 6) = 0 then
                 play_sfx("BOSS_SHIELD")
                 hit_boss = true
                 exit function
@@ -66,8 +61,8 @@ function hit_boss(sprite_id%) as integer
     hit_boss = true
 
     ' Decrement hit box life
-    inc g_obj(sprite_obj_id%,3), choice(is_super_weapon(), -2, -1)
-    local hit_box_life%= g_obj(sprite_obj_id%,3)
+    inc g_obj(hit_box_id%,3), choice(is_super_weapon(), -2, -1)
+    local hit_box_life%= g_obj(hit_box_id%,3)
     ' Decrement boss life
     if hit_box_life% <= 0 then inc g_obj(obj_id%,3), -1
 
@@ -79,9 +74,8 @@ function hit_boss(sprite_id%) as integer
                 enqueue_action(1, 90, obj_id%, choice(hit_box_life%\aux%<=1,TILE_SIZE*10,TILE_SIZE*5))
             end if
         case 3
-            if hit_box_life% = aux% or hit_box_life% = aux%*2 then inc g_boss(0)
+            if hit_box_life%=aux% or hit_box_life%=aux%*2 then inc g_boss(0)
     end select
-
     if g_obj(obj_id%,3) <= 0 then
         kill_boss()
     else
@@ -154,30 +148,29 @@ sub spawn_boss()
                 spawn_shadow(id%,0, TILE_SIZE*8, false, 37)
             case 5
                 g_obj(id%,2)=TILE_SIZE*(choice(g_row%=0,6,-3))
-                g_obj(id%, 5)=choice(g_player(0)<SCREEN_WIDTH,-120,120)
+                g_obj(id%,5)=choice(g_player(0)<SCREEN_WIDTH,-120,120)
                 create_boss_shield(TILE_SIZE, TILE_SIZE, TILE_SIZE*3)
         end select
 
         show_boss_body(id%,0)
         ' Hit box
-        create_boss_hit_box(TILE_SIZEx2, TILE_SIZE)
+        create_boss_hit_box(2, TILE_SIZEx2, TILE_SIZE)
     end if
 end sub
 
-sub create_boss_hit_box(offset_x, offset_y)
+sub create_boss_hit_box(ix%, offset_x, offset_y, width, life)
+    if life=0 then life=BOSS_LIFE(g_stage%)
+    if width=0 then width=TILE_SIZE
     local id%=g_boss(1)
-    g_boss(2)=allocate_object(50+g_stage%, g_obj(id%, 1)+offset_x, g_obj(id%, 2)+offset_y, BOSS_LIFE(g_stage%))
-    sprite read OBJ_INI_SPRITE_ID + g_boss(2), TRANSPARENT_BLOCK_X, TRANSPARENT_BLOCK_Y, TILE_SIZE, TILE_SIZE, OBJ_TILES_BUFFER
-    g_obj(g_boss(2), 4)=offset_x
-    g_obj(g_boss(2), 5)=offset_y
+    local hit_box_id%=allocate_object(50+g_stage%, g_obj(id%, 1)+offset_x, g_obj(id%, 2)+offset_y, life)
+    g_boss(ix%)=hit_box_id%
+    sprite read OBJ_INI_SPRITE_ID + hit_box_id%, TRANSPARENT_BLOCK_X, TRANSPARENT_BLOCK_Y, width, TILE_SIZE, OBJ_TILES_BUFFER
+    g_obj(hit_box_id%, 4)=offset_x
+    g_obj(hit_box_id%, 5)=offset_y
 end sub
 
 sub create_boss_shield(offset_x, offset_y, width)
-    local id%=g_boss(1)
-    g_boss(3)=allocate_object(50+g_stage%, g_obj(id%, 1)+offset_x, g_obj(id%, 2)+offset_y, 1000000)
-    sprite read OBJ_INI_SPRITE_ID + g_boss(3), TRANSPARENT_BLOCK_X, TRANSPARENT_BLOCK_Y, width, TILE_SIZE, OBJ_TILES_BUFFER
-    g_obj(g_boss(3), 4)=offset_x
-    g_obj(g_boss(3), 5)=offset_y
+    create_boss_hit_box(3, offset_x, offset_y, width, 1000000)
 end sub
 
 sub show_boss_body(obj_id%, tile_offset%)
@@ -322,11 +315,16 @@ sub move_boss()
                 else if g_obj(id%, 1)=SCREEN_WIDTH-TILE_SIZE*9 and g_obj(id%, 5)>0 then
                     g_obj(id%, 5)=-g_obj(id%, 5)
                 end if
-                g_obj(id%, 6)=0 ' Close helmet
+                ' Close helmet
+                g_obj(id%, 6)=0
+                activate_hit_box(2, false)
+                activate_shield(true)
             end if
             ' Open helmet
-            if g_obj(id%, 4) mod 600 = 0 then
+            if g_obj(id%, 6)=0 and g_obj(id%, 4) mod 300 = 0 then
                 g_obj(id%, 6)=-1
+                activate_hit_box(2, true)
+                activate_shield(false)
                 play_sfx("HELMET")
             end if
             ' Check corners
@@ -349,6 +347,25 @@ sub move_boss()
     ' Boss hit box
     move_hit_box()
 end sub
+
+sub activate_hit_box(i%, active%)
+    if g_boss(i%) < 0 then exit sub
+    local sprite_id%=OBJ_INI_SPRITE_ID + g_boss(i%)
+
+    if sprite(X, sprite_id%) = 10000 and active% then
+        sprite show safe sprite_id%, g_obj(i%, 1),g_obj(i%, 2), 1
+    else if sprite(X, sprite_id%) <> 10000 and not active% then
+        sprite hide safe sprite_id%
+    end if
+end sub
+
+sub activate_shield(active%)
+    activate_hit_box(3,active%)
+end sub
+
+function is_hit_box_active(i%)
+    is_hit_box_active=sprite(X, OBJ_INI_SPRITE_ID + g_boss(i%))<>10000
+end function
 
 sub move_hit_box()
     local i%, sprite_id%, box_id%, id%=g_boss(1)

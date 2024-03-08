@@ -177,7 +177,7 @@ function hit_shield(shot_sprite_id%) as integer
     hit_shield=1
 
     select case g_shots(shot_ix%,0)
-        case 15,26 ' Energy ray, Scythe
+        case 15,25,26 ' Energy ray, Axe, Scythe
             force%=3
         case 21 ' mini explosion
             force%=3
