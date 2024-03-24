@@ -269,11 +269,9 @@ sub scroll_boss()
 end sub
 
 sub move_boss()
-    local id%=g_boss(1)
-    if g_boss(0) < 2 then
-        exit sub
-    end if
+    if g_boss(0) < 2 then exit sub
 
+    local id%=g_boss(1)
     local ini_pos, speed_x, speed_y, mov_height, y%
 
     ' Body position
