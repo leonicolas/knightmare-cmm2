@@ -37,19 +37,11 @@ sub init_stage()
     g_prev_frame_timer=0
     g_enemies_count%=0
 
+    ' Initialize buffers and screen
     page write SPRITES_BUFFER: cls 0
     page write SCREEN_BUFFER: cls 0
     page write 0: cls 0
     page write 1: cls 0
-
-    g_boss(0)=0
-    g_kb_released%=true
-    load_map(g_stage%)
-    'draw_map(choice(g_stage% = 1, 0, MAP_ROWS_0))
-    draw_map(MAP_ROWS_0)
-
-    ' Print the status bar
-    print_status()
 
     ' Initialize player
     page write SPRITES_BUFFER
@@ -61,6 +53,18 @@ sub init_stage()
 
     ' Initialize shield
     if g_player(6) > 0 then spawn_shield()
+
+    ' Initialize boss and kb flag
+    g_boss(0)=0
+    g_kb_released%=true
+
+    ' Load and draw the map
+    load_map(g_stage%)
+    'draw_map(0)
+    draw_map(MAP_ROWS_0)
+
+    ' Print the status bar
+    print_status()
 
     ' Play stage music
     if g_row% > 8 then play_song(MUSIC$(g_stage%))
