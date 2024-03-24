@@ -1,7 +1,7 @@
 sub activate_boss()
     local id%=g_boss(1), shadow_id%=g_obj(id%,6), i%
     g_boss(0)=2
-    if shadow_id% >= 0 then
+    if shadow_id% > 0 then
         g_obj(shadow_id%,2) = g_obj(id%, 2)
         g_obj(shadow_id%,5) = true ' Fix shadow height
     end if
@@ -136,6 +136,7 @@ sub spawn_boss()
         select case g_stage%
             case 1
                 g_obj(id%,2)=TILE_SIZE*(choice(g_row%=0,6,-3))
+                g_obj(id%,5)=SCREEN_CENTER_W-TILE_SIZEx2
             case 2
                 g_obj(id%,2)=TILE_SIZE*(choice(g_row%=0,5,-4))
                 spawn_shadow(id%,,TILE_SIZE*6, false, 37)
