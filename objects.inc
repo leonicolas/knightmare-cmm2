@@ -346,8 +346,8 @@ sub move_and_process_objects()
                     else if g_obj(i%,5)=right and g_obj(i%,1) >= SCREEN_WIDTH-TILE_SIZEx4 then
                         g_obj(i%,5)=left
                     end if
-
                     inc g_obj(i%,1),OBJ_DATA(data_id%,0)*g_delta_time*g_obj(i%,5)
+
                     if g_obj(i%,4) < 0 then
                         ' Change row
                         inc g_obj(i%,4),10*g_delta_time
@@ -541,7 +541,7 @@ sub move_and_process_objects()
         end select
 
         ' Move or destroy the sprite if out of bounds
-        if not sprite(e,sprite_ix%) and g_obj(i%,2) <= SCREEN_HEIGHT+TILE_SIZE then
+        if sprite(e,sprite_ix%) = 0 and g_obj(i%,2) <= SCREEN_HEIGHT+TILE_SIZE then
             if flip%>=0 then
                 sprite show safe sprite_ix%, g_obj(i%,1)+offset_x%, g_obj(i%,2)+offset_y%, sprite(L, sprite_ix%), flip%
             else
@@ -601,7 +601,7 @@ sub destroy_shot(sprite_id%, animate%)
 end sub
 
 sub destroy_object(obj_ix%)
-    local obj_id%=g_obj(obj_ix%, 0)
+    local i%,obj_id%=g_obj(obj_ix%, 0)
     if obj_ix% < 0 or obj_id% <= 0 then
         exit sub
     end if
@@ -609,7 +609,9 @@ sub destroy_object(obj_ix%)
     local sprite_id%=OBJ_INI_SPRITE_ID + obj_ix%
     destroy_shadow(obj_ix%)
 
-    g_obj(obj_ix%, 0)=0
+    for i%=0 to bound(g_obj(),2)
+        g_obj(obj_ix%,i%)=0
+    next
     if sprite(X, sprite_id%) <> 10000 then sprite hide safe sprite_id%
     sprite close sprite_id%
     if is_enemy(obj_id%) then
