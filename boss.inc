@@ -151,6 +151,8 @@ sub spawn_boss()
                 g_obj(id%,2)=TILE_SIZE*(choice(g_row%=0,6,-3))
                 g_obj(id%,5)=choice(g_player(0)<SCREEN_WIDTH,-120,120)
                 create_boss_shield(TILE_SIZE, TILE_SIZE, TILE_SIZE*3)
+            case 6
+                g_obj(id%,2)=TILE_SIZE*(choice(g_row%=0,6,-3))
         end select
 
         show_boss_body(id%,0)
@@ -190,6 +192,9 @@ sub show_boss_body(obj_id%, tile_offset%)
             tile_x%=120
             tile_y%=80
             tile_h%=TILE_SIZE*6
+        case 6
+            tile_y%=128
+            tile_h%=TILE_SIZE*6
     end select
 
     sprite read sprite_id%, tile_x%+tile_offset%, tile_y%, tile_w%, tile_h%, BOSS_TILES_BUFFER
@@ -216,12 +221,14 @@ sub boss_fire()
         case 5
             delay=70
             disable_rnd%=true
+        case 6
+            delay=70
     end select
     if g_timer mod delay = 0 then enemy_fire(g_boss(1), disable_rnd%)
 end sub
 
 sub animate_boss()
-    local tick%, x%,y%, w%=TILE_SIZE*5,h%=TILE_SIZE*5, id%=g_boss(1)
+    local tick%,x%,y%,id%=g_boss(1),spr_id%=OBJ_INI_SPRITE_ID + g_boss(1)
 
     select case g_stage%
         case 1
@@ -254,11 +261,17 @@ sub animate_boss()
             h%=TILE_SIZE*6
             if tick% > 4 and g_boss(0) <> 1 then inc x%, TILE_SIZE*5
             if g_obj(id%,6)<0 then inc x%, TILE_SIZE*10
+
+        case 6
+            tick%=g_anim_tick% mod 12
+            if tick% > 5 and g_boss(0) <> 1 then x%=TILE_SIZE*5
+            y%=128
+
         case else
             exit sub
     end select
 
-    sprite read OBJ_INI_SPRITE_ID + g_boss(1), x%,y%, w%,h%, BOSS_TILES_BUFFER
+    sprite read spr_id%, x%,y%, SPRITE(W,spr_id%), SPRITE(H,spr_id%), BOSS_TILES_BUFFER
 end sub
 
 sub scroll_boss()
