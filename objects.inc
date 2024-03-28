@@ -600,24 +600,23 @@ sub destroy_shot(sprite_id%, animate%)
     if animate% then start_fire_animation(g_shots(i%,1), g_shots(i%,2), true)
 end sub
 
-sub destroy_object(obj_ix%)
-    local i%,obj_id%=g_obj(obj_ix%, 0)
-    if obj_ix% < 0 or obj_id% <= 0 then
-        exit sub
-    end if
+sub destroy_object(id%)
+    local i%,obj_id%=g_obj(id%, 0)
+    if id% < 0 or obj_id% <= 0 then exit sub
 
-    local sprite_id%=OBJ_INI_SPRITE_ID + obj_ix%
-    destroy_shadow(obj_ix%)
+    local sprite_id%=OBJ_INI_SPRITE_ID + id%
+    destroy_shadow(id%)
 
-    for i%=0 to bound(g_obj(),2)
-        g_obj(obj_ix%,i%)=0
-    next
     if sprite(X, sprite_id%) <> 10000 then sprite hide safe sprite_id%
     sprite close sprite_id%
     if is_enemy(obj_id%) then
         inc g_enemies_count%, -1
-        if g_boss(0) > 1 then boss_enemy_destroyed(obj_id%, g_obj(obj_ix%, 4), g_obj(obj_ix%, 5))
+        if g_boss(0) > 1 then boss_enemy_destroyed(obj_id%, g_obj(id%, 4), g_obj(id%, 5))
     end if
+    ' Clear object data
+    for i%=0 to 5
+        g_obj(id%,i%)=0
+    next
 end sub
 
 sub destroy_shadow(src_obj_ix%)

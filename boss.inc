@@ -121,14 +121,13 @@ end sub
 sub spawn_boss()
     local x%=SCREEN_WIDTH/2-TILE_SIZE*2.5
     local y%, i%, id%=allocate_object(50+g_stage%, x%, y%, 1, 0, TILE_SIZE*14)
-    local sprite_id%=OBJ_INI_SPRITE_ID + id%
 
     g_boss(0)=1   ' Status - Waiting start
     g_boss(1)=id% ' Body Object Id
     for i%=2 to 7
         g_boss(i%)=-1 ' Hit box
     next
-    g_obj(id%, 4)=0: g_obj(id%, 5)=0: g_obj(id%, 6)=0
+    g_obj(id%, 4)=0: g_obj(id%, 5)=0
 
     if g_stage% = 8 then
         ' Final boss
@@ -176,8 +175,8 @@ sub create_boss_shield(offset_x, offset_y, width)
     create_boss_hit_box(3, offset_x, offset_y, width, 1000000)
 end sub
 
-sub show_boss_body(obj_id%, tile_offset%)
-    local tile_x%, tile_y%, sprite_id%=OBJ_INI_SPRITE_ID + obj_id%
+sub show_boss_body(id%, tile_offset%)
+    local tile_x%, tile_y%, sprite_id%=OBJ_INI_SPRITE_ID + id%
     local tile_w%=TILE_SIZE*5, tile_h%=TILE_SIZE*5
 
     select case g_stage%
@@ -196,9 +195,8 @@ sub show_boss_body(obj_id%, tile_offset%)
             tile_y%=128
             tile_h%=TILE_SIZE*6
     end select
-
     sprite read sprite_id%, tile_x%+tile_offset%, tile_y%, tile_w%, tile_h%, BOSS_TILES_BUFFER
-    sprite show safe sprite_id%, g_obj(obj_id%, 1),g_obj(obj_id%, 2), 2
+    sprite show safe sprite_id%, g_obj(id%, 1),g_obj(id%, 2), 2
 end sub
 
 sub create_portal()
