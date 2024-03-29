@@ -145,6 +145,7 @@ sub spawn_boss()
                 create_boss_shield(TILE_SIZE, TILE_SIZE, TILE_SIZE*3)
             case 4
                 g_obj(id%,2)=TILE_SIZE*(choice(g_row%=0,5,-4))
+                g_obj(id%,4)=45
                 spawn_shadow(id%,0, TILE_SIZE*8, false, 37)
             case 5
                 g_obj(id%,2)=TILE_SIZE*(choice(g_row%=0,6,-3))
