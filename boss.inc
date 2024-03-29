@@ -257,7 +257,6 @@ sub animate_boss()
         case 5
             tick%=g_anim_tick% mod 10
             x%=120: y%=80
-            h%=TILE_SIZE*6
             if tick% > 4 and g_boss(0) <> 1 then inc x%, TILE_SIZE*5
             if g_obj(id%,6)<0 then inc x%, TILE_SIZE*10
 
