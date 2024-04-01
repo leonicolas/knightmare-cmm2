@@ -709,9 +709,9 @@ sub spawn_object(obj_id%, x%, y%, obj_cfg%)
             spawn_speed=500
 
         case 5 ' Cloud
-            g_obj(i%,1)=choice(obj_cfg%=left, 0, SCREEN_WIDTH-TILE_SIZEx2)
+            g_obj(i%,5)=choice(x% < SCREEN_CENTER_W, left, right)
+            g_obj(i%,1)=choice(g_obj(i%,5)=left, 0, SCREEN_WIDTH-TILE_SIZEx2)
             g_obj(i%,2)=TILE_SIZEx4
-            g_obj(i%,5)=choice(obj_cfg%=0, right, obj_cfg%)
             spawn_shadow(i%,,TILE_SIZEx2)
 
         case 6 ' Blue demon

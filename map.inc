@@ -197,8 +197,6 @@ sub process_map_row(row%, spawn%, line_zero%, offset_y%)
                     spawn_object(obj_id%, min(SCREEN_WIDTH-TILE_SIZE*6,max(TILE_SIZEx4,g_player(0))), 0)
                 case 31 ' Block
                     spawn_block(row%, col%, extra%, offset_y%)
-                case 5 ' Cloud
-                    spawn_object(obj_id%, col%*TILE_SIZE, 0, choice(col% < MAP_COLS \ 2, left, right))
                 case else ' Enemies and other objects
                     spawn_object(obj_id%, col%*TILE_SIZE, 0, extra%)
             end select
