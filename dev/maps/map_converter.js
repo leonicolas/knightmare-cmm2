@@ -22,6 +22,7 @@ const objectsIds = {
     ghost: 11,
     yellow_thing: 12,
     red_thing: 13,
+    sorcerer: 15,
 
     weapon: 29,
     power_up: 30,

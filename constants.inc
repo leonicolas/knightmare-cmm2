@@ -115,6 +115,8 @@ OBJ_TILE%(12,0)=209: OBJ_TILE%(12,1)=2: OBJ_TILE%(12,2)=13: OBJ_TILE%(12,3)=13: 
 OBJ_TILE%(13,0)=224: OBJ_TILE%(13,1)=1: OBJ_TILE%(13,2)=15: OBJ_TILE%(13,3)=14: OBJ_TILE%(13,4)=13
 ' Bat Reverse
 OBJ_TILE%(14,0)=32: OBJ_TILE%(14,1)=16: OBJ_TILE%(14,2)=16: OBJ_TILE%(14,3)=11: OBJ_TILE%(14,4)=14
+' Sorcerer
+OBJ_TILE%(15,0)=0: OBJ_TILE%(15,1)=120: OBJ_TILE%(15,2)=16: OBJ_TILE%(15,3)=16: OBJ_TILE%(15,4)=15
 
 ' Enemies shots
 ' Dot bullet
@@ -237,12 +239,15 @@ OBJ_DATA(12,2)=1     ' Life
 OBJ_DATA(13,0)=140   ' X speed
 OBJ_DATA(13,1)=50    ' Y speed
 OBJ_DATA(13,2)=1     ' Life
+' Sorcerer
+OBJ_DATA(15,1)=20    ' Y speed
+OBJ_DATA(15,2)=1     ' Life
 
 ' Weapon chrystal
-OBJ_DATA(29,0)=50   ' X speed (angle increment)
-OBJ_DATA(29,1)=20   ' Y speed
-OBJ_DATA(29,4)=-1   ' Angle for the wobbling movement. -1 means disabled
+OBJ_DATA(29,0)=50    ' X speed (angle increment)
+OBJ_DATA(29,1)=20    ' Y speed
+OBJ_DATA(29,4)=-1    ' Angle for the wobbling movement. -1 means disabled
 ' Power-up chrystal
-OBJ_DATA(30,0)=50   ' X speed (angle increment)
-OBJ_DATA(30,1)=20   ' Y speed
-OBJ_DATA(30,4)=-1   ' Angle for the wobbling movement. -1 means disabled
+OBJ_DATA(30,0)=50    ' X speed (angle increment)
+OBJ_DATA(30,1)=20    ' Y speed
+OBJ_DATA(30,4)=-1    ' Angle for the wobbling movement. -1 means disabled

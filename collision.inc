@@ -143,7 +143,7 @@ function hit_object(collided_id%, sfx%, instakill%) as integer
                 g_obj(i%,5)=CLOUD_ATTACK_SPEED*-cos(angle)     ' Speed Y
             end if
 
-        case is < 15 ' Enemies
+        case is < 16 ' Enemies
             ' Skeleton
             if obj_id% = 7 then
                 ' Is it broken?

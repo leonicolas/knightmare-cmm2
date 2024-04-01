@@ -32,7 +32,7 @@ sub animate_objects()
 
         ' Config animation
         select case obj_id%
-            case 4,9 ' Knight, Death Ghost
+            case 4,9,15 ' Knight, Death Ghost, Sorcerer
                 if g_anim_tick% mod 6 > 2 then flip%=1
 
             case 7 ' Skeleton
@@ -76,7 +76,7 @@ sub animate_objects()
 
         ' Read or flip next frame's sprite
         select case obj_id%
-            case 4,8,9 ' Knight, Demon
+            case 4,8,9,15 ' Knight, Demon, Death Ghost, Sorcerer
                 sprite show safe sprite_ix%, sprite(X, sprite_ix%), sprite(Y, sprite_ix%), sprite(L, sprite_ix%), flip%
             case else
                 sprite read sprite_ix%, OBJ_TILE%(obj_id%,0)+offset_x%, OBJ_TILE%(obj_id%,1)+offset_y%, OBJ_TILE%(obj_id%,2), OBJ_TILE%(obj_id%,3), buffer%
@@ -958,6 +958,13 @@ sub enemy_fire(ix%, disable_rnd%)
 
         case 12, 13 ' Yellow thing and Red thing
             if g_stage% > 2 and g_row% > MAP_ROWS \ 2 then exit sub
+
+        case 15 ' Sorcerer
+            for i%=45 to 315 step 45
+                if i% <> 180 then create_shot(shot_ix%, weapon_ix%, x, y, speed*-cos(i%), speed*sin(i%))
+                if i% < 315 then shot_ix%=get_free_shot_slot()
+            next
+            exit sub
 
         case 51 ' Boss stage 1
             weapon_ix%=17 ' Energy ray
