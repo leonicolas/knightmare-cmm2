@@ -188,7 +188,7 @@ sub process_map_row(row%, spawn%, line_zero%, offset_y%)
         page write SPRITES_BUFFER
 
         ' Create object
-        obj_id%=(tile_data% AND &H1F00) >> 8
+        obj_id%=tile_data% >> 8 AND &H1F
         if not spawn% and obj_id% <> 31 then continue for
         if obj_id% then
             extra%=tile_data% >> 13
