@@ -17,7 +17,7 @@ sub animate_player()
 end sub
 
 sub animate_objects()
-    local i%, obj_id%, sprite_ix%, offset_x%, offset_y%, flip%=-1, buffer%
+    local i%, obj_id%, sprite_ix%, offset_x%, offset_y%, flip%, buffer%
 
     for i%=0 to bound(g_obj())
         obj_id% = g_obj(i%, 0)
@@ -26,6 +26,7 @@ sub animate_objects()
         ' Skip enemies if freeze is enabled, except fire animation
         if obj_id% < 24 and g_freeze_timer >= 0 then continue for
 
+        flip%=-1
         buffer%=OBJ_TILES_BUFFER
         offset_x%=0: offset_y%=0
         sprite_ix%=OBJ_INI_SPRITE_ID + i%
