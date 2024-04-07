@@ -105,8 +105,8 @@ OBJ_TILE%(7,0)=176: OBJ_TILE%(7,1)=16: OBJ_TILE%(7,2)=16: OBJ_TILE%(7,3)=16: OBJ
 OBJ_TILE%(8,0)=240: OBJ_TILE%(8,1)=17: OBJ_TILE%(8,2)=16: OBJ_TILE%(8,3)=15: OBJ_TILE%(8,4)=8
 ' Death ghost
 OBJ_TILE%(9,0)=240: OBJ_TILE%(9,1)=32: OBJ_TILE%(9,2)=15: OBJ_TILE%(9,3)=16: OBJ_TILE%(9,4)=9
-' Stone monster
-OBJ_TILE%(10,0)=176: OBJ_TILE%(10,1)=1: OBJ_TILE%(10,2)=16: OBJ_TILE%(10,3)=15: OBJ_TILE%(10,4)=10
+' Zombie
+OBJ_TILE%(10,0)=176: OBJ_TILE%(10,1)=0: OBJ_TILE%(10,2)=16: OBJ_TILE%(10,3)=16: OBJ_TILE%(10,4)=10
 ' Ghost
 OBJ_TILE%(11,0)=240: OBJ_TILE%(11,1)=64: OBJ_TILE%(11,2)=16: OBJ_TILE%(11,3)=16: OBJ_TILE%(11,4)=11
 ' Yellow thing
@@ -227,6 +227,10 @@ const DEMON_ATTACK_DIST_PX=60
 OBJ_DATA(9,0)=90     ' X speed (angle increment)
 OBJ_DATA(9,1)=80     ' Y speed
 OBJ_DATA(9,2)=1      ' Life
+' Zombie
+OBJ_DATA(10,1)=25    ' Y speed
+OBJ_DATA(10,2)=1     ' Life
+OBJ_DATA(10,3)=60    ' Y speed after split
 ' Ghost
 OBJ_DATA(11,0)=90    ' X speed (angle increment)
 OBJ_DATA(11,1)=31    ' Y speed

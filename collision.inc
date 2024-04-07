@@ -115,7 +115,7 @@ end function
 
 ' Return true if the hit destroys the shot
 function hit_object(collided_id%, sfx%, instakill%) as integer
-    local i%=collided_id% - OBJ_INI_SPRITE_ID, obj_id%=g_obj(i%,0)
+    local i%=collided_id% - OBJ_INI_SPRITE_ID, obj_id%=g_obj(i%,0),kill_enemy=true
 
     hit_object=false
     g_cont_sfx$=""
@@ -144,25 +144,41 @@ function hit_object(collided_id%, sfx%, instakill%) as integer
             end if
 
         case is < 16 ' Enemies
-            ' Skeleton
-            if obj_id% = 7 then
-                ' Is it broken?
-                if g_obj(i%,5) > 0 or g_obj(i%,4) > 1 then exit function
-                ' Has life remaining
-                if g_obj(i%,3) > 1 then
-                    g_obj(i%,5) = 1
-                    enqueue_action(1,7,g_obj(i%,1),g_obj(i%,2),1)
-                    enqueue_action(1,7,g_obj(i%,1),g_obj(i%,2),2)
-                    sprite hide safe collided_id%
-                end if
-            end if
+            ' Special collision cases
+            select case obj_id%
+                case 7 ' Skeleton
+                    ' Is it broken?
+                    if g_obj(i%,5) > 0 or g_obj(i%,4) > 1 then exit function
+                    ' Has life remaining
+                    if g_obj(i%,3) > 1 then
+                        g_obj(i%,5) = 1
+                        ' split skeleton
+                        play_sfx("SPLIT")
+                        enqueue_action(1,7,g_obj(i%,1),g_obj(i%,2),1)
+                        enqueue_action(1,7,g_obj(i%,1),g_obj(i%,2),2)
+                        sprite hide safe collided_id%
+                    end if
+
+                case 10 ' Zombie
+                    if abs(g_obj(i%,4))=1000 then exit function
+                    if g_obj(i%,5) = 0 then
+                        kill_enemy=false
+                        ' Split zombie
+                        play_sfx("SPLIT")
+                        enqueue_action(1,10,g_obj(i%,1),g_obj(i%,2),-1000)
+                        enqueue_action(1,10,g_obj(i%,1),g_obj(i%,2), 1000)
+                    end if
+
+            end select
 
             inc g_obj(i%,3), -1 ' Decrement life
             if not instakill% and g_obj(i%,3) > 0 then exit function
-            increment_score(OBJ_POINTS(g_obj(i%,0)))
-            start_fire_animation(g_obj(i%,1), g_obj(i%,2), true)
+            if kill_enemy then
+                increment_score(OBJ_POINTS(g_obj(i%,0)))
+                start_fire_animation(g_obj(i%,1), g_obj(i%,2), true)
+                play_sfx("ENEMY_KILL")
+            end if
             destroy_object(i%)
-            play_sfx("ENEMY_KILL")
     end select
 
     if not is_super_weapon() then hit_object=true

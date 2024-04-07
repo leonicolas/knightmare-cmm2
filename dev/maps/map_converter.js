@@ -18,7 +18,7 @@ const objectsIds = {
     skeleton: 7,
     demon: 8,
     death_ghost: 9,
-    stone_monster: 10,
+    zombie: 10,
     ghost: 11,
     yellow_thing: 12,
     red_thing: 13,

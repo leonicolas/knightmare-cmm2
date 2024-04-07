@@ -17,7 +17,7 @@ sub animate_player()
 end sub
 
 sub animate_objects()
-    local i%, obj_id%, sprite_ix%, offset_x%, offset_y%, flip%, buffer%
+    local i%, obj_id%, sprite_ix%, offset_x%, offset_y%, flip%=-1, buffer%
 
     for i%=0 to bound(g_obj())
         obj_id% = g_obj(i%, 0)
@@ -32,8 +32,8 @@ sub animate_objects()
 
         ' Config animation
         select case obj_id%
-            case 4,9,15 ' Knight, Death Ghost, Sorcerer
-                if g_anim_tick% mod 6 > 2 then flip%=1
+            case 4,9,10,15 ' Knight, Death Ghost, Zombie, Sorcerer
+                flip%=g_anim_tick% mod 6 > 2
 
             case 7 ' Skeleton
                 if g_obj(i%, 4) > 1 then continue for
@@ -43,8 +43,8 @@ sub animate_objects()
                 offset_x%=0
                 if g_obj(i%,5) <= 0 then
                     obj_id%=5 ' cloud form
-                else if g_anim_tick% mod 6 > 2 then
-                    flip%=1
+                else
+                    flip%=g_anim_tick% mod 6 > 2
                 end if
 
             case 11 ' Ghost
@@ -75,12 +75,11 @@ sub animate_objects()
         end select
 
         ' Read or flip next frame's sprite
-        select case obj_id%
-            case 4,8,9,15 ' Knight, Demon, Death Ghost, Sorcerer
-                sprite show safe sprite_ix%, sprite(X, sprite_ix%), sprite(Y, sprite_ix%), sprite(L, sprite_ix%), flip%
-            case else
-                sprite read sprite_ix%, OBJ_TILE%(obj_id%,0)+offset_x%, OBJ_TILE%(obj_id%,1)+offset_y%, OBJ_TILE%(obj_id%,2), OBJ_TILE%(obj_id%,3), buffer%
-        end select
+        if flip% >= 0 then
+            sprite show safe sprite_ix%, sprite(X, sprite_ix%), sprite(Y, sprite_ix%), sprite(L, sprite_ix%), flip%
+        else
+            sprite read sprite_ix%, OBJ_TILE%(obj_id%,0)+offset_x%, OBJ_TILE%(obj_id%,1)+offset_y%, OBJ_TILE%(obj_id%,2), OBJ_TILE%(obj_id%,3), buffer%
+        end if
     next
 end sub
 
@@ -394,10 +393,7 @@ sub move_and_process_objects()
                             speed=TILE_SIZEx2
                         case else
                             speed=TILE_SIZE
-                            if g_obj(i%,3) <> 10 then
-                                play_sfx("SKELETON_BROKEN")
-                                g_obj(i%,3)=10
-                            end if
+                            if g_obj(i%,3) <> 10 then g_obj(i%,3)=10
                     end select
                     offset_x%=speed*choice(g_obj(i%,4)=2,-1,1)
 
@@ -454,6 +450,21 @@ sub move_and_process_objects()
                     g_obj(i%,2)=SCREEN_CENTER_H+TILE_SIZE+(SCREEN_CENTER_H-TILE_SIZE*3)*sin(g_obj(i%,4)*speed)
                     inc g_obj(i%,4),0.6
                     if (speed > 0 and g_obj(i%,4) >= 540) or (speed < 0 and g_obj(i%,4) >= 720) then g_obj(i%,4) = 999
+                end if
+
+            case 10 ' Zombie
+                if abs(g_obj(i%,4))=1000 then
+                    offset_x%=g_obj(i%,5)
+                    inc g_obj(i%,5),120*g_delta_time*choice(g_obj(i%,4)<0,-1,1)
+                    if abs(g_obj(i%,5)) >= 30 then
+                        inc g_obj(i%,1),g_obj(i%,5)
+                        g_obj(i%,4)=deg(sprite(V, sprite_ix%, 1))-90
+                        offset_x%=0
+                    end if
+                else
+                    aux=OBJ_DATA(data_id%,choice(abs(g_obj(i%,5)) >= 30,3,1))
+                    inc g_obj(i%,1),aux*g_delta_time*cos(g_obj(i%,4))
+                    inc g_obj(i%,2),aux*g_delta_time*sin(g_obj(i%,4))
                 end if
 
             case 11 ' Ghost
@@ -683,7 +694,7 @@ sub spawn_object(obj_id%, x%, y%, obj_cfg%)
     local offset_x%, offset_y%, layer%=1, data_id%, angle
     data_id%=OBJ_TILE%(obj_id%,4)
 
-    g_obj(i%,3)=OBJ_DATA(data_id%,2) ' GPR 1
+    g_obj(i%,3)=OBJ_DATA(data_id%,2) ' GPR 1 / Life
     g_obj(i%,4)=OBJ_DATA(data_id%,3) ' GPR 2
     g_obj(i%,5)=OBJ_DATA(data_id%,4) ' GPR 3
 
@@ -754,6 +765,14 @@ sub spawn_object(obj_id%, x%, y%, obj_cfg%)
                 g_obj(i%,1)=SCREEN_WIDTH-TILE_SIZEx4-TILE_SIZEx2
                 g_obj(i%,4)=1
                 g_obj(i%,5)=right
+            end if
+
+        case 10 ' Zombie
+            if obj_cfg% then
+                offset_x%=TILE_SIZEx2
+                g_obj(i%,4)=obj_cfg%
+            else
+                g_obj(i%,4)=atan2(sprite(Y,1)-y%, sprite(X,1)-x%)
             end if
 
         case 11 ' Ghost
