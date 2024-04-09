@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="left-up" width="32" height="238" tilewidth="8" tileheight="8" infinite="0" nextlayerid="8" nextobjectid="709">
+<map version="1.8" tiledversion="1.8.0" orientation="orthogonal" renderorder="left-up" width="32" height="238" tilewidth="8" tileheight="8" infinite="0" nextlayerid="8" nextobjectid="797">
  <editorsettings>
   <export target="map_stage6.json" format="json"/>
  </editorsettings>
@@ -353,7 +353,7 @@
   <object id="702" name="Bat Wave" type="bat_wave" x="31.913" y="1351.96" width="8" height="8"/>
   <object id="703" name="Bat Wave" type="bat_wave" x="232.047" y="1359.96" width="8" height="8"/>
   <object id="704" name="Sorcerer" type="sorcerer" x="128.036" y="1368.06" width="8" height="8"/>
-  <object id="705" name="Sorcerer" type="sorcerer" x="184.011" y="1344.02" width="8" height="8"/>
+  <object id="705" name="Zombie" type="zombie" x="168" y="1232" width="8" height="8"/>
   <object id="706" name="Bat Wave" type="bat_wave" x="232" y="1328.03" width="8" height="8">
    <properties>
     <property name="Count" value="5"/>
@@ -364,6 +364,289 @@
     <property name="Count" value="5"/>
    </properties>
   </object>
-  <object id="708" name="Zombie" type="zombie" x="88" y="1696.25" width="8" height="8"/>
+  <object id="709" name="Sorcerer" type="sorcerer" x="182.333" y="1343.33" width="8" height="8"/>
+  <object id="711" name="Zombie" type="zombie" x="32" y="1216" width="8" height="8"/>
+  <object id="712" name="Zombie" type="zombie" x="168" y="1200" width="8" height="8"/>
+  <object id="713" name="Death" type="death_ghost" x="248.139" y="1199.96" width="8" height="8"/>
+  <object id="714" name="Death" type="death_ghost" x="0.0669269" y="1192" width="8" height="8">
+   <properties>
+    <property name="Count" value="1"/>
+   </properties>
+  </object>
+  <object id="715" name="Death" type="death_ghost" x="248.066" y="1183.9" width="8" height="8">
+   <properties>
+    <property name="Count" value="1"/>
+   </properties>
+  </object>
+  <object id="716" name="Death" type="death_ghost" x="0.0527621" y="1175.95" width="8" height="8">
+   <properties>
+    <property name="Count" value="1"/>
+   </properties>
+  </object>
+  <object id="717" name="Death" type="death_ghost" x="247.993" y="1167.91" width="8" height="8">
+   <properties>
+    <property name="Count" value="1"/>
+   </properties>
+  </object>
+  <object id="718" name="Death" type="death_ghost" x="0.0423454" y="1159.91" width="8" height="8">
+   <properties>
+    <property name="Count" value="1"/>
+   </properties>
+  </object>
+  <object id="719" name="Death" type="death_ghost" x="247.986" y="1152.02" width="8" height="8">
+   <properties>
+    <property name="Count" value="1"/>
+   </properties>
+  </object>
+  <object id="720" name="Death" type="death_ghost" x="0.0355423" y="1144.02" width="8" height="8">
+   <properties>
+    <property name="Count" value="1"/>
+   </properties>
+  </object>
+  <object id="721" name="Zombie" type="zombie" x="128" y="1176" width="8" height="8"/>
+  <object id="722" name="Zombie" type="zombie" x="208" y="1152" width="8" height="8"/>
+  <object id="723" name="Zombie" type="zombie" x="88" y="1128" width="8" height="8"/>
+  <object id="725" name="Zombie" type="zombie" x="168" y="1112" width="8" height="8"/>
+  <object id="727" name="Death" type="death_ghost" x="0.092953" y="1080" width="8" height="8">
+   <properties>
+    <property name="Count" value="5"/>
+   </properties>
+  </object>
+  <object id="728" name="Knight" type="knight" x="199.847" y="1040.17" width="8" height="8"/>
+  <object id="729" name="Knight" type="knight" x="183.905" y="1056.08" width="8" height="8"/>
+  <object id="730" name="Knight" type="knight" x="47.7893" y="1048.06" width="8" height="8"/>
+  <object id="731" name="Knight" type="knight" x="95.8917" y="1032.03" width="8" height="8"/>
+  <object id="732" name="Knight" type="knight" x="63.8869" y="1064.1" width="8" height="8"/>
+  <object id="733" name="Zombie" type="zombie" x="168.182" y="1015.58" width="8" height="8"/>
+  <object id="734" name="Zombie" type="zombie" x="40.159" y="1000.09" width="8" height="8"/>
+  <object id="735" name="Zombie" type="zombie" x="176.159" y="984.085" width="8" height="8"/>
+  <object id="736" name="Zombie" type="zombie" x="176.341" y="799.665" width="8" height="8"/>
+  <object id="737" name="Bat" type="bat" x="248" y="976" width="8" height="8">
+   <properties>
+    <property name="Count" value="5"/>
+   </properties>
+  </object>
+  <object id="738" name="Bat" type="bat" x="0" y="960.135" width="8" height="8">
+   <properties>
+    <property name="Count" value="5"/>
+   </properties>
+  </object>
+  <object id="739" name="Zombie" type="zombie" x="184.261" y="952.245" width="8" height="8"/>
+  <object id="740" name="Zombie" type="zombie" x="55.9885" y="936.005" width="8" height="8"/>
+  <object id="741" name="Death" type="death_ghost" x="0" y="904" width="8" height="8">
+   <properties>
+    <property name="Count" value="5"/>
+   </properties>
+  </object>
+  <object id="742" name="Death" type="death_ghost" x="248" y="856" width="8" height="8">
+   <properties>
+    <property name="Count" value="5"/>
+   </properties>
+  </object>
+  <object id="743" name="Death" type="death_ghost" x="248.12" y="791.925" width="8" height="8"/>
+  <object id="744" name="Death" type="death_ghost" x="0.0478376" y="783.965" width="8" height="8">
+   <properties>
+    <property name="Count" value="1"/>
+   </properties>
+  </object>
+  <object id="745" name="Death" type="death_ghost" x="248.047" y="775.865" width="8" height="8">
+   <properties>
+    <property name="Count" value="1"/>
+   </properties>
+  </object>
+  <object id="746" name="Death" type="death_ghost" x="0.0336728" y="767.915" width="8" height="8">
+   <properties>
+    <property name="Count" value="1"/>
+   </properties>
+  </object>
+  <object id="747" name="Death" type="death_ghost" x="247.974" y="759.875" width="8" height="8">
+   <properties>
+    <property name="Count" value="1"/>
+   </properties>
+  </object>
+  <object id="748" name="Death" type="death_ghost" x="0.0232561" y="751.875" width="8" height="8">
+   <properties>
+    <property name="Count" value="1"/>
+   </properties>
+  </object>
+  <object id="749" name="Death" type="death_ghost" x="247.967" y="743.985" width="8" height="8">
+   <properties>
+    <property name="Count" value="1"/>
+   </properties>
+  </object>
+  <object id="750" name="Death" type="death_ghost" x="0.016453" y="735.985" width="8" height="8">
+   <properties>
+    <property name="Count" value="1"/>
+   </properties>
+  </object>
+  <object id="759" name="Bat Wave" type="bat_wave" x="32.1593" y="680.25" width="8" height="8">
+   <properties>
+    <property name="Count" value="1"/>
+   </properties>
+  </object>
+  <object id="760" name="Bat Wave" type="bat_wave" x="216.159" y="688.068" width="8" height="8">
+   <properties>
+    <property name="Count" value="1"/>
+   </properties>
+  </object>
+  <object id="761" name="Bat Wave" type="bat_wave" x="216.704" y="655.886" width="8" height="8">
+   <properties>
+    <property name="Count" value="1"/>
+   </properties>
+  </object>
+  <object id="762" name="Bat Wave" type="bat_wave" x="31.7957" y="664.068" width="8" height="8">
+   <properties>
+    <property name="Count" value="1"/>
+   </properties>
+  </object>
+  <object id="763" name="Bat Wave" type="bat_wave" x="216.159" y="672.25" width="8" height="8">
+   <properties>
+    <property name="Count" value="1"/>
+   </properties>
+  </object>
+  <object id="764" name="Bat Wave" type="bat_wave" x="31.7957" y="648.432" width="8" height="8">
+   <properties>
+    <property name="Count" value="1"/>
+   </properties>
+  </object>
+  <object id="765" name="Bat Wave" type="bat_wave" x="215.75" y="616" width="8" height="8">
+   <properties>
+    <property name="Count" value="5"/>
+   </properties>
+  </object>
+  <object id="766" name="Zombie" type="zombie" x="176.011" y="592.245" width="8" height="8"/>
+  <object id="767" name="Zombie" type="zombie" x="47.7385" y="576.255" width="8" height="8"/>
+  <object id="768" name="Death" type="death_ghost" x="248.225" y="568.5" width="8" height="8">
+   <properties>
+    <property name="Count" value="5"/>
+   </properties>
+  </object>
+  <object id="769" name="Death" type="death_ghost" x="0.274771" y="560.5" width="8" height="8">
+   <properties>
+    <property name="Count" value="5"/>
+   </properties>
+  </object>
+  <object id="770" name="Zombie" type="zombie" x="79.75" y="544" width="8" height="8"/>
+  <object id="771" name="Zombie" type="zombie" x="208" y="536" width="8" height="8"/>
+  <object id="772" name="Bat" type="bat" x="248" y="512.183" width="8" height="8">
+   <properties>
+    <property name="Count" value="5"/>
+   </properties>
+  </object>
+  <object id="773" name="Bat" type="bat" x="0" y="496.317" width="8" height="8">
+   <properties>
+    <property name="Count" value="5"/>
+   </properties>
+  </object>
+  <object id="774" name="Death" type="death_ghost" x="247.975" y="480.25" width="8" height="8">
+   <properties>
+    <property name="Count" value="5"/>
+   </properties>
+  </object>
+  <object id="775" name="Death" type="death_ghost" x="0.0248855" y="472.25" width="8" height="8">
+   <properties>
+    <property name="Count" value="5"/>
+   </properties>
+  </object>
+  <object id="776" name="Death" type="death_ghost" x="247.975" y="447.75" width="8" height="8">
+   <properties>
+    <property name="Count" value="5"/>
+   </properties>
+  </object>
+  <object id="777" name="Death" type="death_ghost" x="0.0249428" y="439.75" width="8" height="8">
+   <properties>
+    <property name="Count" value="5"/>
+   </properties>
+  </object>
+  <object id="778" name="Bat" type="bat" x="248" y="432.183" width="8" height="8">
+   <properties>
+    <property name="Count" value="5"/>
+   </properties>
+  </object>
+  <object id="779" name="Bat" type="bat" x="0" y="416.317" width="8" height="8">
+   <properties>
+    <property name="Count" value="5"/>
+   </properties>
+  </object>
+  <object id="780" name="Bat" type="bat" x="247.75" y="400" width="8" height="8">
+   <properties>
+    <property name="Count" value="5"/>
+   </properties>
+  </object>
+  <object id="781" name="Death" type="death_ghost" x="248.225" y="368.125" width="8" height="8">
+   <properties>
+    <property name="Count" value="5"/>
+   </properties>
+  </object>
+  <object id="782" name="Death" type="death_ghost" x="0.274943" y="360.125" width="8" height="8">
+   <properties>
+    <property name="Count" value="5"/>
+   </properties>
+  </object>
+  <object id="783" name="Bat" type="bat" x="248.25" y="352.558" width="8" height="8">
+   <properties>
+    <property name="Count" value="5"/>
+   </properties>
+  </object>
+  <object id="784" name="Bat" type="bat" x="0.25" y="336.692" width="8" height="8">
+   <properties>
+    <property name="Count" value="5"/>
+   </properties>
+  </object>
+  <object id="785" name="Bat" type="bat" x="248" y="320.375" width="8" height="8">
+   <properties>
+    <property name="Count" value="5"/>
+   </properties>
+  </object>
+  <object id="786" name="Death" type="death_ghost" x="247.975" y="296.125" width="8" height="8">
+   <properties>
+    <property name="Count" value="5"/>
+   </properties>
+  </object>
+  <object id="787" name="Death" type="death_ghost" x="0.024943" y="288.125" width="8" height="8">
+   <properties>
+    <property name="Count" value="5"/>
+   </properties>
+  </object>
+  <object id="788" name="Bat" type="bat" x="248" y="280.558" width="8" height="8">
+   <properties>
+    <property name="Count" value="5"/>
+   </properties>
+  </object>
+  <object id="789" name="Bat" type="bat" x="0" y="264.692" width="8" height="8">
+   <properties>
+    <property name="Count" value="5"/>
+   </properties>
+  </object>
+  <object id="791" name="Bat Rev" type="bat_rev" x="247.909" y="247.376" width="8" height="8">
+   <properties>
+    <property name="Count" value="5"/>
+   </properties>
+  </object>
+  <object id="792" name="Bat Rev" type="bat_rev" x="0.090712" y="239.624" width="8" height="8">
+   <properties>
+    <property name="Count" value="5"/>
+   </properties>
+  </object>
+  <object id="793" name="Death" type="death_ghost" x="247.975" y="216.25" width="8" height="8">
+   <properties>
+    <property name="Count" value="5"/>
+   </properties>
+  </object>
+  <object id="794" name="Death" type="death_ghost" x="0.0249715" y="208.25" width="8" height="8">
+   <properties>
+    <property name="Count" value="5"/>
+   </properties>
+  </object>
+  <object id="795" name="Death" type="death_ghost" x="248.475" y="183.75" width="8" height="8">
+   <properties>
+    <property name="Count" value="5"/>
+   </properties>
+  </object>
+  <object id="796" name="Death" type="death_ghost" x="0.524986" y="175.75" width="8" height="8">
+   <properties>
+    <property name="Count" value="5"/>
+   </properties>
+  </object>
  </objectgroup>
 </map>
