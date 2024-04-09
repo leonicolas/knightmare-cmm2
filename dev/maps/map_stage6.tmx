@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="left-up" width="32" height="238" tilewidth="8" tileheight="8" infinite="0" nextlayerid="8" nextobjectid="659">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="left-up" width="32" height="238" tilewidth="8" tileheight="8" infinite="0" nextlayerid="8" nextobjectid="709">
  <editorsettings>
   <export target="map_stage6.json" format="json"/>
  </editorsettings>
@@ -258,5 +258,112 @@
    </properties>
   </object>
   <object id="658" name="Weapon" type="weapon" x="0" y="184" width="8" height="8"/>
+  <object id="659" name="Knight" type="knight" x="192.019" y="1664.08" width="8" height="8"/>
+  <object id="661" name="Knight" type="knight" x="176.077" y="1679.99" width="8" height="8"/>
+  <object id="662" name="Knight" type="knight" x="39.9613" y="1671.97" width="8" height="8"/>
+  <object id="663" name="Knight" type="knight" x="88.0637" y="1655.94" width="8" height="8"/>
+  <object id="664" name="Knight" type="knight" x="56.0589" y="1688.01" width="8" height="8"/>
+  <object id="665" name="Knight" type="knight" x="144.085" y="1696.02" width="8" height="8"/>
+  <object id="666" name="Ghost" type="ghost" x="247.943" y="1631.98" width="8" height="8">
+   <properties>
+    <property name="Count" value="1"/>
+   </properties>
+  </object>
+  <object id="667" name="Ghost" type="ghost" x="-0.00825663" y="1623.98" width="8" height="8">
+   <properties>
+    <property name="Count" value="1"/>
+   </properties>
+  </object>
+  <object id="668" name="Ghost" type="ghost" x="247.991" y="1615.99" width="8" height="8">
+   <properties>
+    <property name="Count" value="1"/>
+   </properties>
+  </object>
+  <object id="669" name="Ghost" type="ghost" x="-0.0224213" y="1607.92" width="8" height="8">
+   <properties>
+    <property name="Count" value="1"/>
+   </properties>
+  </object>
+  <object id="670" name="Ghost" type="ghost" x="248.007" y="1599.98" width="8" height="8">
+   <properties>
+    <property name="Count" value="1"/>
+   </properties>
+  </object>
+  <object id="671" name="Ghost" type="ghost" x="-0.032838" y="1591.89" width="8" height="8">
+   <properties>
+    <property name="Count" value="1"/>
+   </properties>
+  </object>
+  <object id="672" name="Ghost" type="ghost" x="247.99" y="1583.99" width="8" height="8">
+   <properties>
+    <property name="Count" value="1"/>
+   </properties>
+  </object>
+  <object id="673" name="Ghost" type="ghost" x="-0.0237245" y="1576.03" width="8" height="8">
+   <properties>
+    <property name="Count" value="1"/>
+   </properties>
+  </object>
+  <object id="674" name="Ghost" type="ghost" x="247.917" y="1568" width="8" height="8">
+   <properties>
+    <property name="Count" value="1"/>
+   </properties>
+  </object>
+  <object id="675" name="Ghost" type="ghost" x="-0.0341412" y="1560" width="8" height="8">
+   <properties>
+    <property name="Count" value="1"/>
+   </properties>
+  </object>
+  <object id="684" name="Bat" type="bat" x="248" y="1607.98" width="8" height="8">
+   <properties>
+    <property name="Count" value="5"/>
+   </properties>
+  </object>
+  <object id="685" name="Bat" type="bat" x="8.0591" y="1576.13" width="8" height="8">
+   <properties>
+    <property name="Count" value="5"/>
+   </properties>
+  </object>
+  <object id="686" name="Bat" type="bat" x="247.938" y="1560.03" width="8" height="8">
+   <properties>
+    <property name="Count" value="5"/>
+   </properties>
+  </object>
+  <object id="687" name="Bat" type="bat" x="8.00988" y="1536" width="8" height="8">
+   <properties>
+    <property name="Count" value="5"/>
+   </properties>
+  </object>
+  <object id="688" name="Bat" type="bat" x="248.043" y="1512.02" width="8" height="8">
+   <properties>
+    <property name="Count" value="5"/>
+   </properties>
+  </object>
+  <object id="689" name="Knight" type="knight" x="183.929" y="1488.04" width="8" height="8"/>
+  <object id="690" name="Knight" type="knight" x="48.0705" y="1480" width="8" height="8"/>
+  <object id="691" name="Knight" type="knight" x="63.964" y="1496.05" width="8" height="8"/>
+  <object id="692" name="Knight" type="knight" x="151.949" y="1504.02" width="8" height="8"/>
+  <object id="693" name="Sorcerer" type="sorcerer" x="80.0739" y="1447.87" width="8" height="8"/>
+  <object id="696" name="Sorcerer" type="sorcerer" x="31.9914" y="1424.07" width="8" height="8"/>
+  <object id="697" name="Sorcerer" type="sorcerer" x="167.978" y="1400" width="8" height="8"/>
+  <object id="698" name="Bat Wave" type="bat_wave" x="232.031" y="1392" width="8" height="8"/>
+  <object id="699" name="Bat Wave" type="bat_wave" x="32.0204" y="1384" width="8" height="8"/>
+  <object id="700" name="Bat Wave" type="bat_wave" x="232" y="1375.94" width="8" height="8"/>
+  <object id="701" name="Bat Wave" type="bat_wave" x="32.0476" y="1368.1" width="8" height="8"/>
+  <object id="702" name="Bat Wave" type="bat_wave" x="31.913" y="1351.96" width="8" height="8"/>
+  <object id="703" name="Bat Wave" type="bat_wave" x="232.047" y="1359.96" width="8" height="8"/>
+  <object id="704" name="Sorcerer" type="sorcerer" x="128.036" y="1368.06" width="8" height="8"/>
+  <object id="705" name="Sorcerer" type="sorcerer" x="184.011" y="1344.02" width="8" height="8"/>
+  <object id="706" name="Bat Wave" type="bat_wave" x="232" y="1328.03" width="8" height="8">
+   <properties>
+    <property name="Count" value="5"/>
+   </properties>
+  </object>
+  <object id="707" name="Bat Wave" type="bat_wave" x="232" y="1288.03" width="8" height="8">
+   <properties>
+    <property name="Count" value="5"/>
+   </properties>
+  </object>
+  <object id="708" name="Zombie" type="zombie" x="88" y="1696.25" width="8" height="8"/>
  </objectgroup>
 </map>
