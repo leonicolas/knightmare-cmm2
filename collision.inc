@@ -129,6 +129,9 @@ function hit_object(collided_id%, sfx%, instakill%) as integer
             if sfx% then play_sfx("POWER_UP_HIT")
             hit_object=true
 
+        case 49 ' Terrain
+            exit function
+
         case is > 50 ' Boss
             hit_object = hit_boss(collided_id%)
 

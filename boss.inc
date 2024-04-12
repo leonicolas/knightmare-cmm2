@@ -153,6 +153,7 @@ sub spawn_boss()
                 create_boss_shield(TILE_SIZE, TILE_SIZE, TILE_SIZE*3)
             case 6
                 g_obj(id%,2)=TILE_SIZE*(choice(g_row%=0,6,-3))
+                g_obj(id%, 5)=TILE_SIZE*6*choice(g_player(0)<0,-1,1)
         end select
 
         show_boss_body(id%,0)
@@ -348,6 +349,24 @@ sub move_boss()
                     case is > SCREEN_WIDTH-TILE_SIZE*9
                         g_obj(id%, 1)=SCREEN_WIDTH-TILE_SIZE*9
                 end select
+            end if
+
+        case 6
+            inc g_obj(id%, 4) ' Boss tick
+            if fix(g_obj(id%, 1)) = fix(g_obj(id%, 5)) then
+                ' Opens the terrain
+                if g_obj(id%, 4) mod 160 = 0 then enqueue_action(1,49,g_obj(id%, 1)+TILE_SIZEx2,g_obj(id%, 2)+TILE_SIZE*6)
+                ' Select next pos
+                if g_obj(id%, 4) mod 300 = 0 then
+                    if g_obj(id%, 1) > g_player(0) then
+                        g_obj(id%, 5)=max(g_obj(id%, 1)-TILE_SIZE*6, TILE_SIZEx4)
+                    else
+                        g_obj(id%, 5)=min(g_obj(id%, 1)+TILE_SIZE*6, SCREEN_WIDTH-TILE_SIZE*9)
+                    end if
+
+                end if
+            else
+                inc g_obj(id%, 1), choice(g_obj(id%, 1) > g_obj(id%, 5), -1, 1)*BOSS_SPEED*g_delta_time
             end if
     end select
 

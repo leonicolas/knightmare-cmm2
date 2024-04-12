@@ -17,7 +17,7 @@ sub animate_player()
 end sub
 
 sub animate_objects()
-    local i%, obj_id%, sprite_ix%, offset_x%, offset_y%, flip%, buffer%
+    local i%, obj_id%, sprite_id%, offset_x%, offset_y%, offset_h%, effect%, buffer%,x, y
 
     for i%=0 to bound(g_obj())
         obj_id% = g_obj(i%, 0)
@@ -26,15 +26,15 @@ sub animate_objects()
         ' Skip enemies if freeze is enabled, except fire animation
         if obj_id% < 24 and g_freeze_timer >= 0 then continue for
 
-        flip%=-1
+        effect%=-1
         buffer%=OBJ_TILES_BUFFER
         offset_x%=0: offset_y%=0
-        sprite_ix%=OBJ_INI_SPRITE_ID + i%
+        sprite_id%=OBJ_INI_SPRITE_ID + i%
 
         ' Config animation
         select case obj_id%
             case 4,9,10,15 ' Knight, Death Ghost, Zombie, Sorcerer
-                flip%=g_anim_tick% mod 6 > 2
+                effect%=g_anim_tick% mod 6 > 2
 
             case 7 ' Skeleton
                 if g_obj(i%, 4) > 1 then continue for
@@ -45,7 +45,7 @@ sub animate_objects()
                 if g_obj(i%,5) <= 0 then
                     obj_id%=5 ' cloud form
                 else
-                    flip%=g_anim_tick% mod 6 > 2
+                    effect%=g_anim_tick% mod 6 > 2
                 end if
 
             case 11 ' Ghost
@@ -71,15 +71,33 @@ sub animate_objects()
                 offset_x%=PUP_ANIM(max(0,g_obj(i%, 4) - 2), g_obj(i%, 3))*TILE_SIZEx2
                 if g_obj(i%, 3) = bound(PUP_ANIM(),2) then g_obj(i%, 3)=0 else inc g_obj(i%, 3),1
 
+            case 49 ' Terrain
+                if g_anim_tick% mod 1.4 > 0 then continue for
+                effect%=-2
+                offset_y%=-TILE_SIZE*g_obj(i%,4)
+                offset_h%=min(TILE_SIZE*12, abs(offset_y%))
+                inc g_obj(i%,4)
+                if g_obj(i%,4) > 16 then
+                    if g_obj(i%,4) > 22 then destroy_object(i%)
+                    continue for
+                end if
+
             case else ' Other objects
                 if g_anim_tick% mod 6 > 2 then offset_x%=TILE_SIZEx2
         end select
 
         ' Read or flip next frame's sprite
-        if flip% >= 0 then
-            sprite show safe sprite_ix%, sprite(X, sprite_ix%), sprite(Y, sprite_ix%), sprite(L, sprite_ix%), flip%
+        if effect% >= 0 then
+            sprite show safe sprite_id%, sprite(X, sprite_id%), sprite(Y, sprite_id%), sprite(L, sprite_id%), effect%
         else
-            sprite read sprite_ix%, OBJ_TILE%(obj_id%,0)+offset_x%, OBJ_TILE%(obj_id%,1)+offset_y%, OBJ_TILE%(obj_id%,2), OBJ_TILE%(obj_id%,3), buffer%
+            x=sprite(X, sprite_id%)
+            y=sprite(Y, sprite_id%)
+            if effect% = -2 then
+                sprite hide safe sprite_id%
+                sprite close sprite_id%
+            end if
+            sprite read sprite_id%, OBJ_TILE%(obj_id%,0)+offset_x%, OBJ_TILE%(obj_id%,1)+offset_y%, OBJ_TILE%(obj_id%,2), OBJ_TILE%(obj_id%,3)+offset_h%, buffer%
+            if effect% = -2 then sprite show safe sprite_id%,x,y,1
         end if
     next
 end sub
@@ -799,6 +817,7 @@ sub spawn_object(obj_id%, x%, y%, obj_cfg%)
             offset_x%=FIRE_ANIM(0)*TILE_SIZEx2
             layer%=4
             if obj_cfg% then play_sfx("ENEMY_KILL")
+
     end select
 
     if obj_cfg% > 0 and spawn_speed > 0 then enqueue_action(obj_cfg%, obj_id%, x%, y%,,spawn_speed)
@@ -1006,14 +1025,17 @@ sub enemy_fire(ix%, disable_rnd%)
             next
             exit sub
 
-        case 54 ' Boss stage 4
+        case 54, 56 ' Boss stage 4 and 6
             weapon_ix%=21 ' White explosion
-            offset_x%=TILE_SIZEx2 ' Red explosion
             speed=110
             angle=max(min(210, angle), 150)
             gpr1=speed*sin(angle)
             gpr2=speed*-cos(angle)
-            gpr3=g_player(1)
+
+            if obj_id% = 54 then
+                offset_x%=TILE_SIZEx2 ' Red explosion
+                gpr3=g_player(1)
+            end if
 
         case 55 ' Boss stage 5
             weapon_ix%=25 ' Axe
