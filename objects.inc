@@ -1,18 +1,24 @@
 sub animate_player()
     local offset%
     local speed=choice(g_player(5)=4,PLAYER_MAX_SPEED,g_player(4))
-    inc g_player(2),choice(g_player_is_moving,2+speed/PLAYER_INIT_SPEED,1)
-    select case g_player(5)
-        case 1
-            if sprite(X, 2) = 10000 then sprite show safe 2, g_player(0),g_player(1)-TILE_SIZE, 1
-        case is > 1
-            if g_power_up_timer > 10 or (g_power_up_timer - fix(g_power_up_timer)) > 0.5 then
-                offset%=TILE_SIZEx2*g_player(5)
-            end if
-            if sprite(X, 2) < 10000 then sprite hide safe 2
-    end select
+    if g_player(8)=4 then
+        offset%=PLAYER_DEATH_ANIM(fix(g_player(2)))*TILE_SIZE
+        if g_player(2) < bound(PLAYER_DEATH_ANIM()) then inc g_player(2),0.5
 
-    local x%=choice(g_player(2) mod 10 < 10/2,PLAYER_SKIN1_X_R,PLAYER_SKIN1_X_L)
+    else
+        inc g_player(2),choice(g_player_is_moving,2+speed/PLAYER_INIT_SPEED,1)
+        ' Power up
+        select case g_player(5)
+            case 1
+                if sprite(X, 2) = 10000 then sprite show safe 2, g_player(0),g_player(1)-TILE_SIZE, 1
+            case is > 1
+                if g_power_up_timer > 10 or (g_power_up_timer - fix(g_power_up_timer)) > 0.5 then
+                    offset%=TILE_SIZEx2*g_player(5)
+                end if
+                if sprite(X, 2) < 10000 then sprite hide safe 2
+        end select
+    end if
+    local x%=choice(g_player(8) <> 4 and g_player(2) mod 10 < 5,PLAYER_SKIN1_X_L,PLAYER_SKIN1_X_R)
     sprite read #1, x%+offset%, PLAYER_SKIN_Y, TILE_SIZEx2, TILE_SIZEx2, OBJ_TILES_BUFFER
 end sub
 
@@ -202,6 +208,8 @@ sub move_player_to_portal()
 end sub
 
 sub move_player(direction%)
+    if g_player(8)=4 then exit sub
+
     local x=g_player(0), y=g_player(1)
     ' Player speed or max speed for invincibility power-up
     local speed=choice(g_player(5)=4,PLAYER_MAX_SPEED,g_player(4))

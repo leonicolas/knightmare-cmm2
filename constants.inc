@@ -19,7 +19,7 @@ const KB_RIGHT=131
 const SCREEN_BUFFER=2                     ' Screen buffer number
 const MAP_TILES_BUFFER=3                  ' Map tileset buffer number
 const OBJ_TILES_BUFFER=4                  ' Objects tileset buffer number
-const BOSS_TILES_BUFFER=5               ' Bosses tileset buffer number
+const BOSS_TILES_BUFFER=5                 ' Bosses tileset buffer number
 const SPRITES_BUFFER=6
 
 ' Speed control
@@ -55,6 +55,7 @@ const LETTERS_Y=56
 const TRANSPARENT_BLOCK_X=96
 const TRANSPARENT_BLOCK_Y=144
 
+dim PLAYER_DEATH_ANIM(25)=(0,12,0,12,0,12,0,12,0,12,0,12,0,12,0,12,14,16,18,20,22,22,22,22,22,22)
 const PLAYER_SKIN_Y=0
 const PLAYER_SKIN1_X_L=0
 const PLAYER_SKIN1_X_R=TILE_SIZE*2
@@ -106,7 +107,7 @@ OBJ_TILE%(8,0)=240: OBJ_TILE%(8,1)=17: OBJ_TILE%(8,2)=16: OBJ_TILE%(8,3)=15: OBJ
 ' Death ghost
 OBJ_TILE%(9,0)=16: OBJ_TILE%(9,1)=136: OBJ_TILE%(9,2)=15: OBJ_TILE%(9,3)=16: OBJ_TILE%(9,4)=9
 ' Zombie
-OBJ_TILE%(10,0)=176: OBJ_TILE%(10,1)=0: OBJ_TILE%(10,2)=16: OBJ_TILE%(10,3)=16: OBJ_TILE%(10,4)=10
+OBJ_TILE%(10,0)=48: OBJ_TILE%(10,1)=136: OBJ_TILE%(10,2)=16: OBJ_TILE%(10,3)=16: OBJ_TILE%(10,4)=10
 ' Ghost
 OBJ_TILE%(11,0)=16: OBJ_TILE%(11,1)=120: OBJ_TILE%(11,2)=16: OBJ_TILE%(11,3)=16: OBJ_TILE%(11,4)=11
 ' Yellow thing

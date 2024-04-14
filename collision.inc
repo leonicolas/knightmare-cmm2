@@ -51,10 +51,12 @@ sub process_collision(sprite_id%)
 
                 ' Enemies shots
                 else
-                    ' Hits the shield
-                    if collided_id% = 2 then
-                        if hit_shield(sprite_id%) then destroy_shot(sprite_id%)
-                    end if
+                    select case collided_id%
+                        case 1
+                            hit_player(sprite_id%)
+                        case 2
+                            if hit_shield(sprite_id%) then destroy_shot(sprite_id%)
+                    end select
                 end if
         end select
     next
@@ -221,6 +223,9 @@ function hit_shield(shot_sprite_id%) as integer
     end select
 end function
 
-' TODO: implement!!!
 sub hit_player(collided_id%)
+    if g_player(8)=4 then exit sub
+    g_player(2)=0       ' Animation counter
+    inc g_player(7), -1 ' Life
+    g_player(8)=4       ' Dead state
 end sub
