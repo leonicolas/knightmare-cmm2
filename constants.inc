@@ -8,6 +8,10 @@ const true=1
 const left=-1
 const right=1
 
+' Game controls
+const SOUND_ON=true
+const INVINCIBILITY=false
+
 const KB_ESC=27
 const KB_SPACE=32
 const KB_UP=128

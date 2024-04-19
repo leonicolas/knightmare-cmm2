@@ -215,7 +215,7 @@ function hit_shield(shot_sprite_id%) as integer
 end function
 
 sub hit_player(collided_id%)
-    if g_player(8) > 3 or g_invincible then exit sub
+    if g_player(8) > 3 or INVINCIBILITY then exit sub
     play_song("SILENCE_MOD")
     play_sfx("PLAYER_DEATH")
     init_player(g_player(7) - 1)
