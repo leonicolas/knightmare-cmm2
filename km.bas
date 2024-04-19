@@ -153,7 +153,7 @@ sub process_kb()
 end sub
 
 sub process_gamepad()
-    if g_player(8) then exit sub
+    if g_player(8) or not g_gamepad% then exit sub
 
     local dig_pos=gamepad(LY)
     if g_gamepad% and 128 or (dig_pos >= 0 and dig_pos < 124) then move_player(KB_UP)
