@@ -141,6 +141,7 @@ sub spawn_boss()
                 spawn_shadow(id%,,TILE_SIZE*6, false, 37)
             case 3
                 g_obj(id%,2)=TILE_SIZE*(choice(g_row%=0,6,-3))
+                g_obj(id%,4)=45
                 spawn_shadow(id%,TILE_SIZE+TILE_SIZE/2, TILE_SIZE*7, false)
                 create_boss_shield(TILE_SIZE, TILE_SIZE, TILE_SIZE*3)
             case 4
@@ -158,7 +159,7 @@ sub spawn_boss()
 
         show_boss_body(id%,0)
         ' Hit box
-        create_boss_hit_box(2, TILE_SIZEx2, TILE_SIZE)
+        create_boss_hit_box(2, TILE_SIZEx2, TILE_SIZEx2)
     end if
 end sub
 
@@ -284,16 +285,14 @@ sub move_boss()
     if g_boss(0) < 2 then exit sub
 
     local id%=g_boss(1)
-    local ini_pos, speed_x, speed_y, mov_height, y%
+    local ini_pos, speed_x, speed_y, mov_height, y%, right_edge%=EDGE_RIGHT-TILE_SIZE*5
 
     ' Body position
     select case g_stage%
         case 1
             inc g_obj(id%, 4) ' Boss tick
             if fix(g_obj(id%, 1)) = fix(g_obj(id%, 5)) then
-                if g_obj(id%, 4) mod 150 = 0 then
-                    g_obj(id%, 5)=min(max(g_player(0)-TILE_SIZEx2, TILE_SIZEx4),SCREEN_WIDTH-TILE_SIZE*9)
-                end if
+                if g_obj(id%, 4) mod 150 = 0 then g_obj(id%, 5)=min(max(g_player(0)-TILE_SIZEx2, EDGE_LEFT),right_edge%)
             else
                 inc g_obj(id%, 1), choice(g_obj(id%, 1) > g_obj(id%, 5), -1, 1)*BOSS_SPEED*g_delta_time
             end if
@@ -321,9 +320,9 @@ sub move_boss()
             if g_obj(id%, 4) mod 200 = 0 then
                 g_obj(id%, 5)=choice(g_obj(id%, 1)>g_player(0),-120,120)
                 ' Not using OR to keep the code short
-                if g_obj(id%, 1)=TILE_SIZEx4 and g_obj(id%, 5)<0 then
+                if g_obj(id%, 1)=EDGE_LEFT and g_obj(id%, 5)<0 then
                     g_obj(id%, 5)=-g_obj(id%, 5)
-                else if g_obj(id%, 1)=SCREEN_WIDTH-TILE_SIZE*9 and g_obj(id%, 5)>0 then
+                else if g_obj(id%, 1)=right_edge% and g_obj(id%, 5)>0 then
                     g_obj(id%, 5)=-g_obj(id%, 5)
                 end if
                 ' Close helmet
@@ -338,32 +337,25 @@ sub move_boss()
                 activate_shield(false)
                 play_sfx("HELMET")
             end if
-            ' Check corners
+            ' Check edges
             if g_obj(id%, 5)<>0 then
                 speed_x=choice(g_obj(id%, 5)<0,1,-1)
                 inc g_obj(id%, 5),speed_x
                 inc g_obj(id%, 1), BOSS_SPEED*g_delta_time*-speed_x
-                select case g_obj(id%, 1)
-                    case is < TILE_SIZEx4
-                        g_obj(id%, 1)=TILE_SIZEx4
-                    case is > SCREEN_WIDTH-TILE_SIZE*9
-                        g_obj(id%, 1)=SCREEN_WIDTH-TILE_SIZE*9
-                end select
+                g_obj(id%, 1)=min(max(g_obj(id%, 1), EDGE_LEFT), right_edge%)
             end if
 
         case 6
             inc g_obj(id%, 4) ' Boss tick
             if fix(g_obj(id%, 1)) = fix(g_obj(id%, 5)) then
-                ' Opens the terrain
-                if g_obj(id%, 4) mod 160 = 0 then enqueue_action(1,49,g_obj(id%, 1)+TILE_SIZEx2,g_obj(id%, 2)+TILE_SIZE*6)
-                ' Select next pos
                 if g_obj(id%, 4) mod 300 = 0 then
-                    if g_obj(id%, 1) > g_player(0) then
-                        g_obj(id%, 5)=max(g_obj(id%, 1)-TILE_SIZE*6, TILE_SIZEx4)
-                    else
-                        g_obj(id%, 5)=min(g_obj(id%, 1)+TILE_SIZE*6, SCREEN_WIDTH-TILE_SIZE*9)
-                    end if
-
+                    ' Open the terrain
+                    play_sfx("TERRAIN")
+                    enqueue_action(1,49,g_obj(id%, 1)+TILE_SIZEx2,g_obj(id%, 2)+TILE_SIZE*6)
+                    ' Select next pos
+                    speed_x=choice(g_obj(id%, 1) > g_player(0),-1,1)
+                    if fix(g_obj(id%, 1)) = EDGE_LEFT or fix(g_obj(id%, 1)) = right_edge% then speed_x=-speed_x
+                    g_obj(id%, 5)=min(max(g_obj(id%, 1)+TILE_SIZE*9*speed_x, EDGE_LEFT), right_edge%)
                 end if
             else
                 inc g_obj(id%, 1), choice(g_obj(id%, 1) > g_obj(id%, 5), -1, 1)*BOSS_SPEED*g_delta_time

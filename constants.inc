@@ -45,6 +45,8 @@ const SCREEN_WIDTH=MAP_COLS*TILE_SIZE     ' Screen width in pixels
 const SCREEN_HEIGHT=SCREEN_ROWS*TILE_SIZE ' Screen height in pixels
 const SCREEN_CENTER_W=SCREEN_WIDTH/2      ' Screen center
 const SCREEN_CENTER_H=SCREEN_HEIGHT/2     ' Screen center
+const EDGE_LEFT=TILE_SIZEx4               ' Left Edge of the screen
+const EDGE_RIGHT=SCREEN_WIDTH-TILE_SIZEx4 ' Right Edge of the screen
 
 const SYMBOLS_X=0
 const SYMBOLS_Y=48
