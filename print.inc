@@ -21,12 +21,16 @@ sub print_hiscore(hiscore%)
     print_text(SCREEN_ROWS+1, 17-(len(str$(hiscore%))), str$(hiscore%), SCREEN_OFFSET)
 end sub
 
-sub print_stage(stage%, prefix$, middle_screen%)
+sub print_stage(stage%, prefix$)
     local stg$=prefix$ + right$("0"+str$(stage%),2)
-    local l%=len(stg$)
-    local row%=choice(middle_screen%, SCREEN_ROWS/2-1, SCREEN_ROWS+1)
-    local col%=choice(middle_screen%, SCREEN_COLS/2-l%/2, 30-l%)
-    print_text(row%, col%, stg$, SCREEN_OFFSET)
+    print_centralized(stg$)
+end sub
+
+sub print_centralized(text$, horiz_offset%)
+    local l%=len(text$)
+    local row%=(SCREEN_ROWS/2-1)+horiz_offset%
+    local col%=SCREEN_COLS/2-l%/2
+    print_text(row%, col%, text$, SCREEN_OFFSET)
 end sub
 
 sub print_lives(lives%)
