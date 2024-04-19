@@ -125,20 +125,23 @@ end sub
 '
 ' Returns false (0) or true (1)
 function map_collide(player()) as integer
-    local col%=player(0)\TILE_SIZE
+    local x=fix(player(0))
+
+    if player(0)-x >= 0.9 then inc x
+    local col%=x\TILE_SIZE
     local row%=(player(1)-g_tile_px%)\TILE_SIZE+g_row%+1
     local ix_top%=row%*MAP_COLS, ix_bottom%=(row%+1)*MAP_COLS
     ' Check top left
     map_collide=g_map(ix_top%+col%) and &H80
     ' Check top right
-    if not map_collide then map_collide=g_map(ix_top%+col%+2) >> 7 and 1
+    if not map_collide then map_collide=g_map(ix_top%+col%+2) and &H80
     ' Check bottom left
-    if not map_collide then map_collide=g_map(ix_bottom%+col%) >> 7 and 1
+    if not map_collide then map_collide=g_map(ix_bottom%+col%) and &H80
     ' Check bottom right
-    if not map_collide then map_collide=g_map(ix_bottom%+col%+2) >> 7 and 1
+    if not map_collide then map_collide=g_map(ix_bottom%+col%+2) and &H80
     ' Check horizontal wrapping collision
-    if not map_collide and player(0) < 0 then map_collide=(g_map((row%-1)*MAP_COLS+MAP_COLS_0) >> 7 and 1) or (g_map((row%+4)*MAP_COLS+MAP_COLS_0) >> 7 and 1)
-    if not map_collide and player(0) > SCREEN_WIDTH - TILE_SIZE * 2 then map_collide=(g_map((row%-1)*MAP_COLS) >> 7 and 1) or (g_map((row%+4)*MAP_COLS) >> 7 and 1)
+    if not map_collide and x < 0 then map_collide=(g_map((row%-1)*MAP_COLS+MAP_COLS_0) and &H80) or (g_map((row%+4)*MAP_COLS+MAP_COLS_0) and &H80)
+    if not map_collide and x > SCREEN_WIDTH - TILE_SIZE * 2 then map_collide=(g_map((row%-1)*MAP_COLS) and &H80) or (g_map((row%+4)*MAP_COLS) and &H80)
 end function
 
 sub draw_map(row%)
@@ -167,12 +170,7 @@ sub process_map_row(row%, spawn%, line_zero%, offset_y%)
         case 7
             spawn_boss()
         case 8
-            select case g_stage%
-                case 1,3,4,5
-                    play_song("DEMON_MOD")
-                case 2
-                    play_song("BOSS_MOD")
-            end select
+            play_boss_song()
             destroy_enemies_shots()
             kill_all_enemies()
     end select
