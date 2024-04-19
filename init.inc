@@ -67,14 +67,15 @@ sub init_stage()
     print_status()
 
     ' Play stage music
-    if g_row% > 8 then play_song(MUSIC$(g_stage%))
+    if g_row% > 8 then play_stage_song() else play_boss_song()
 end sub
 
-sub init_player()
+sub init_player(lives)
+    g_player(2)=0                 ' animation counter
     g_player(3)=1                 ' weapon
     g_player(4)=PLAYER_INIT_SPEED ' speed
     g_player(5)=0                 ' power up
     g_player(6)=0                 ' shield
-    g_player(7)=2                 ' Lives
+    g_player(7)=lives             ' Lives
     g_player(8)=5                 ' Status ready to next stage
 end sub

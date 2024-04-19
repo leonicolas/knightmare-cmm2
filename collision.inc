@@ -211,21 +211,14 @@ function hit_shield(shot_sprite_id%) as integer
 
     inc g_player(6), -force%
     play_sfx("SHIELD")
-    select case g_player(6)
-        case is <= 0
-            g_player(5)=0
-            g_player(6)=0
-            sprite hide safe 2
-        case is <= SHIELD_MAX_HITS\6
-            sprite read 2, OBJ_TILE%(32,0)+TILE_SIZEx4, OBJ_TILE%(32,1), OBJ_TILE%(32,2), OBJ_TILE%(32,3), OBJ_TILES_BUFFER
-        case is <= SHIELD_MAX_HITS\6*2
-            sprite read 2, OBJ_TILE%(32,0)+TILE_SIZEx2, OBJ_TILE%(32,1), OBJ_TILE%(32,2), OBJ_TILE%(32,3), OBJ_TILES_BUFFER
-    end select
+    check_shield()
 end function
 
 sub hit_player(collided_id%)
-    if g_player(8)=4 then exit sub
-    g_player(2)=0       ' Animation counter
-    inc g_player(7), -1 ' Life
-    g_player(8)=4       ' Dead state
+    if g_player(8) > 3 or g_invincible then exit sub
+    play_song("SILENCE_MOD")
+    play_sfx("PLAYER_DEATH")
+    init_player(g_player(7) - 1)
+    g_player(8)=4 ' Dead state
+    check_shield()
 end sub

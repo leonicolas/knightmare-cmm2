@@ -1,5 +1,6 @@
 ' Global variables
-dim g_sound_on%=1
+dim g_sound_on%=true
+dim g_invincible=false
 dim g_map(MAP_SIZE) as integer ' Map data
 dim g_row%                     ' Current top map row. Zero is the bottom row.
 dim g_delta_time               ' Frame delta time
@@ -37,6 +38,7 @@ dim g_prev_frame_timer         ' Previous frame timer value
 '  3 - Moving to ending portal
 '  4 - Dead
 '  5 - Ready for next stage
+'  6 - Restart current stage
 dim g_player(8)
 dim g_player_is_moving=false
 dim g_player_shot_ms=SHOT_COOLDOWN_MS

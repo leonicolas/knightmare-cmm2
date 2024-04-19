@@ -2,9 +2,9 @@ sub animate_player()
     local offset%
     local speed=choice(g_player(5)=4,PLAYER_MAX_SPEED,g_player(4))
     if g_player(8)=4 then
-        offset%=PLAYER_DEATH_ANIM(fix(g_player(2)))*TILE_SIZE
-        if g_player(2) < bound(PLAYER_DEATH_ANIM()) then inc g_player(2),0.5
-
+        offset%=PLAYER_DEATH_ANIM(fix(min(g_player(2),bound(PLAYER_DEATH_ANIM()))))*TILE_SIZE
+        inc g_player(2),0.5
+        if g_player(2) > bound(PLAYER_DEATH_ANIM())*1.5 then g_player(8)=6
     else
         inc g_player(2),choice(g_player_is_moving,2+speed/PLAYER_INIT_SPEED,1)
         ' Power up
@@ -78,7 +78,7 @@ sub animate_objects()
                 if g_obj(i%, 3) = bound(PUP_ANIM(),2) then g_obj(i%, 3)=0 else inc g_obj(i%, 3),1
 
             case 49 ' Terrain
-                if g_anim_tick% mod 1.4 > 0 then continue for
+                if g_anim_tick% mod 1.6 > 0 then continue for
                 effect%=-2
                 offset_y%=-TILE_SIZE*g_obj(i%,4)
                 offset_h%=min(TILE_SIZE*12, abs(offset_y%))
@@ -1079,3 +1079,17 @@ end sub
 function is_enemy(obj_id%) as integer
     is_enemy = (obj_id% > 0 and obj_id% < 16)
 end function
+
+sub check_shield()
+    select case g_player(6)
+        case is <= 0
+            g_player(5)=0
+            g_player(6)=0
+            if sprite(x, 2) <> 10000 then sprite hide safe 2
+        case is <= SHIELD_MAX_HITS\6
+            sprite read 2, OBJ_TILE%(32,0)+TILE_SIZEx4, OBJ_TILE%(32,1), OBJ_TILE%(32,2), OBJ_TILE%(32,3), OBJ_TILES_BUFFER
+        case is <= SHIELD_MAX_HITS\6*2
+            sprite read 2, OBJ_TILE%(32,0)+TILE_SIZEx2, OBJ_TILE%(32,1), OBJ_TILE%(32,2), OBJ_TILE%(32,3), OBJ_TILES_BUFFER
+    end select
+end sub
+
