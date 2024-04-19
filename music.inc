@@ -70,5 +70,20 @@ sub play_sfx(sfx$)
             play effect "sfx/skeleton_restored.wav"
         case "SWORD"
             play effect "sfx/shot_sword.wav"
+        case "TERRAIN"
+            play effect "sfx/terrain.wav"
+    end select
+end sub
+
+sub play_stage_song()
+    play_song(MUSIC$(g_stage%))
+end sub
+
+sub play_boss_song()
+    select case g_stage%
+        case 1,3,4,5
+            play_song("DEMON_MOD")
+        case 2,6
+            play_song("BOSS_MOD")
     end select
 end sub
