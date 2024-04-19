@@ -2,7 +2,7 @@
 dim MUSIC$(9)=("INTRO_MOD","MAJOU_MOD","KNIGHTMARE_MOD","MAJOU_MOD","MAJOU_MOD","KNIGHTMARE_MOD","MAJOU_MOD","","","")
 
 sub play_song(song$)
-    if not SOUND_ON then exit sub
+    if not g_sound_on% then exit sub
     on error skip
     play stop
     select case song$
@@ -20,7 +20,7 @@ sub play_song(song$)
 end sub
 
 sub play_sfx(sfx$)
-    if not SOUND_ON or sfx$ = "" then exit sub
+    if not g_sound_on% or sfx$ = "" then exit sub
     select case sfx$
         case "BOSS_HIT"
             play effect "sfx/boss_hit.wav"
