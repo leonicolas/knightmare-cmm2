@@ -21,7 +21,12 @@ sub print_hiscore(hiscore%)
     print_text(SCREEN_ROWS+1, 17-(len(str$(hiscore%))), str$(hiscore%), SCREEN_OFFSET)
 end sub
 
-sub print_stage(stage%, prefix$)
+sub print_stage(stage%)
+    local stg$=right$("0"+str$(stage%),2)
+    print_text(SCREEN_ROWS+1, 30-(len(stg$)), stg$, SCREEN_OFFSET)
+end sub
+
+sub print_centralized_stage(stage%, prefix$)
     local stg$=prefix$ + right$("0"+str$(stage%),2)
     print_centralized(stg$)
 end sub
