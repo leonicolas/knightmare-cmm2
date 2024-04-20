@@ -121,7 +121,6 @@ function hit_object(collided_id%, sfx%, instakill%) as integer
 
     hit_object=false
     g_cont_sfx$=""
-
     select case obj_id%
         case 29,30 ' Weapon and power-up chrystal
             inc g_obj(i%,4)
@@ -131,7 +130,7 @@ function hit_object(collided_id%, sfx%, instakill%) as integer
             if sfx% then play_sfx("POWER_UP_HIT")
             hit_object=true
 
-        case 49 ' Terrain
+        case 27,49 ' Fire, Terrain
             exit function
 
         case is > 50 ' Boss
