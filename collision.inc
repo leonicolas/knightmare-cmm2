@@ -177,7 +177,10 @@ function hit_object(collided_id%, sfx%, instakill%) as integer
             end select
 
             inc g_obj(i%,3), -1 ' Decrement life
-            if not instakill% and g_obj(i%,3) > 0 then exit function
+            if not instakill% and g_obj(i%,3) > 0 then
+                if not is_super_weapon() then hit_object=true
+                exit function
+            end if
             if kill_enemy then
                 increment_score(OBJ_POINTS(g_obj(i%,0)))
                 start_fire_animation(g_obj(i%,1), g_obj(i%,2), true)
