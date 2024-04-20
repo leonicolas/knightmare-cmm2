@@ -219,5 +219,12 @@ end function
 
 sub hit_player(collided_id%)
     if g_player(8) > 3 or g_invincible then exit sub
+
+    local obj_id%=g_obj(collided_id% - OBJ_INI_SPRITE_ID,0)
+    select case obj_id%
+        case 27 ' Fire
+            exit sub
+    end select
+
     kill_player()
 end sub
