@@ -29,6 +29,8 @@ sub init_game()
 end sub
 
 sub init_stage()
+    local i%
+
     timer=0
     g_timer=0
     g_pshot_timer=0
@@ -36,6 +38,13 @@ sub init_stage()
     g_power_up_timer=-1
     g_prev_frame_timer=0
     g_enemies_count%=0
+
+    ' Clear arrays
+    for i%=0 to bound(g_blocks()): g_blocks(i%, 0) = 0: next
+    for i%=0 to bound(g_boss()): g_boss(i%) = 0: next
+    for i%=0 to bound(g_shots()): g_shots(i%, 0) = 0: next
+    for i%=0 to bound(g_obj()): g_obj(i%, 0) = 0: next
+    for i%=0 to bound(g_actions_queue()): g_actions_queue(i%, 0) = 0: next
 
     ' Initialize buffers and screen
     page write SPRITES_BUFFER: cls 0
@@ -60,8 +69,7 @@ sub init_stage()
 
     ' Load and draw the map
     load_map(g_stage%)
-    'draw_map(0)
-    draw_map(MAP_ROWS_0)
+    draw_map(g_row%)
 
     ' Print the status bar
     print_status()

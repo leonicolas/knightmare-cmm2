@@ -24,25 +24,31 @@ start_game()
 sub start_game()
     local first_stage%=true
     init_player(2)
+    g_row%=MAP_ROWS_0
     g_stage%=1
     do
         timer=0
         play_song("SILENCE_MOD")
         show_stage_screen(g_stage%)
         select case g_player(8)
-            case 5
+            case 5 ' Start stage
                 play_sfx("START_STAGE")
                 do while g_player(8) = 5
                     if timer > choice(first_stage%,6000,4000) then g_player(8)=0
                 loop
-            case 6
+            case 6 ' Start after die
                 do while g_player(8) = 6
                     if timer > 2000 then g_player(8)=0
                 loop
         end select
         first_stage%=false
         run_stage()
-        if g_player(8) = 5 then inc g_stage%
+
+        ' Next stage
+        if g_player(8) = 5 then
+            g_row%=MAP_ROWS_0
+            inc g_stage%
+        end if
     loop
 end sub
 
