@@ -38,6 +38,7 @@ sub start_game()
                     g_player(8) = 0
                 loop
             case 6 ' Start after die
+                calculate_start_row()
                 do while g_player(8) = 6
                     if timer > 2000 then g_player(8)=0
                 loop

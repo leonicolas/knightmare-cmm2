@@ -123,6 +123,26 @@ sub check_scroll_collision()
     end if
 end sub
 
+sub calculate_start_row()
+    if g_row% <= 10 then
+        g_row%=0
+        exit sub
+    end if
+    local solid=1
+    inc g_row%, 5
+    do while solid
+        solid=is_solid(g_row%+PLAYER_INIT_ROW,PLAYER_INIT_COL)
+        solid=solid and is_solid(g_row%+PLAYER_INIT_ROW,PLAYER_INIT_COL+1)
+        solid=solid and is_solid(g_row%+PLAYER_INIT_ROW+1,PLAYER_INIT_COL)
+        solid=solid and is_solid(g_row%+PLAYER_INIT_ROW+1,PLAYER_INIT_COL)
+        if solid then inc g_row%
+    loop
+end sub
+
+function is_solid(row%,col%) as integer
+    is_solid=g_map(row%*MAP_COLS+col%) and &H80
+end function
+
 '
 ' Returns false (0) or true (1)
 function map_collide(player()) as integer
