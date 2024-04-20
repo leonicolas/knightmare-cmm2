@@ -692,6 +692,15 @@ sub kill_all_enemies(sfx%)
     next
 end sub
 
+sub kill_player()
+    g_scroll_on=false
+    play_song("SILENCE_MOD")
+    play_sfx("PLAYER_DEATH")
+    init_player(g_player(7) - 1)
+    g_player(8)=4 ' Dead state
+    check_shield()
+end sub
+
 function allocate_object(obj_id%, x%, y%, gpr1, gpr2, gpr3) as integer
     local i%=get_free_object_slot()
     allocate_object=i%

@@ -35,6 +35,7 @@ sub start_game()
                 play_sfx("START_STAGE")
                 do while g_player(8) = 5
                     if timer > choice(first_stage%,6000,4000) then g_player(8)=0
+                    g_player(8) = 0
                 loop
             case 6 ' Start after die
                 do while g_player(8) = 6

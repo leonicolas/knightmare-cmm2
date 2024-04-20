@@ -87,6 +87,7 @@ sub load_map(stage%)
 end sub
 
 sub scroll_map()
+    if not g_scroll_on then exit sub
     local i%, sprite_id%
 
     ' Scroll map blocks sprites
@@ -118,7 +119,7 @@ end sub
 sub check_scroll_collision()
     if map_collide(g_player()) then
         inc g_player(1),2
-        'TODO: Implement player kill by crush
+        if fix(g_player(1)+TILE_SIZE/2) > SCREEN_HEIGHT then kill_player()
     end if
 end sub
 

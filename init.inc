@@ -38,6 +38,7 @@ sub init_stage()
     g_power_up_timer=-1
     g_prev_frame_timer=0
     g_enemies_count%=0
+    g_scroll_on=true
 
     ' Clear arrays
     for i%=0 to bound(g_blocks()): g_blocks(i%, 0) = 0: next
