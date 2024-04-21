@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.8" tiledversion="1.8.0" orientation="orthogonal" renderorder="left-up" width="32" height="238" tilewidth="8" tileheight="8" infinite="0" nextlayerid="8" nextobjectid="797">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="left-up" width="32" height="238" tilewidth="8" tileheight="8" infinite="0" nextlayerid="8" nextobjectid="797">
  <editorsettings>
   <export target="map_stage6.json" format="json"/>
  </editorsettings>
@@ -521,11 +521,6 @@
     <property name="Count" value="5"/>
    </properties>
   </object>
-  <object id="769" name="Death" type="death_ghost" x="0.274771" y="560.5" width="8" height="8">
-   <properties>
-    <property name="Count" value="5"/>
-   </properties>
-  </object>
   <object id="770" name="Zombie" type="zombie" x="79.75" y="544" width="8" height="8"/>
   <object id="771" name="Zombie" type="zombie" x="208" y="536" width="8" height="8"/>
   <object id="772" name="Bat" type="bat" x="248" y="512.183" width="8" height="8">
@@ -548,16 +543,6 @@
     <property name="Count" value="5"/>
    </properties>
   </object>
-  <object id="776" name="Death" type="death_ghost" x="247.975" y="447.75" width="8" height="8">
-   <properties>
-    <property name="Count" value="5"/>
-   </properties>
-  </object>
-  <object id="777" name="Death" type="death_ghost" x="0.0249428" y="439.75" width="8" height="8">
-   <properties>
-    <property name="Count" value="5"/>
-   </properties>
-  </object>
   <object id="778" name="Bat" type="bat" x="248" y="432.183" width="8" height="8">
    <properties>
     <property name="Count" value="5"/>
@@ -569,11 +554,6 @@
    </properties>
   </object>
   <object id="780" name="Bat" type="bat" x="247.75" y="400" width="8" height="8">
-   <properties>
-    <property name="Count" value="5"/>
-   </properties>
-  </object>
-  <object id="781" name="Death" type="death_ghost" x="248.225" y="368.125" width="8" height="8">
    <properties>
     <property name="Count" value="5"/>
    </properties>
@@ -594,16 +574,6 @@
    </properties>
   </object>
   <object id="785" name="Bat" type="bat" x="248" y="320.375" width="8" height="8">
-   <properties>
-    <property name="Count" value="5"/>
-   </properties>
-  </object>
-  <object id="786" name="Death" type="death_ghost" x="247.975" y="296.125" width="8" height="8">
-   <properties>
-    <property name="Count" value="5"/>
-   </properties>
-  </object>
-  <object id="787" name="Death" type="death_ghost" x="0.024943" y="288.125" width="8" height="8">
    <properties>
     <property name="Count" value="5"/>
    </properties>
@@ -630,22 +600,22 @@
   </object>
   <object id="793" name="Death" type="death_ghost" x="247.975" y="216.25" width="8" height="8">
    <properties>
-    <property name="Count" value="5"/>
+    <property name="Count" value="1"/>
    </properties>
   </object>
   <object id="794" name="Death" type="death_ghost" x="0.0249715" y="208.25" width="8" height="8">
    <properties>
-    <property name="Count" value="5"/>
+    <property name="Count" value="1"/>
    </properties>
   </object>
   <object id="795" name="Death" type="death_ghost" x="248.475" y="183.75" width="8" height="8">
    <properties>
-    <property name="Count" value="5"/>
+    <property name="Count" value="1"/>
    </properties>
   </object>
   <object id="796" name="Death" type="death_ghost" x="0.524986" y="175.75" width="8" height="8">
    <properties>
-    <property name="Count" value="5"/>
+    <property name="Count" value="1"/>
    </properties>
   </object>
  </objectgroup>
