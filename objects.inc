@@ -299,9 +299,6 @@ sub move_shots()
 end sub
 
 sub move_and_process_objects()
-    ' Objects and enemies
-    if g_freeze_timer >= 0 then exit sub
-
     local i%, sprite_ix%, obj_id%, offset_y%, offset_x%, data_id%, direction%, speed, aux, flip%
 
     for i%=0 to bound(g_obj())
@@ -310,6 +307,8 @@ sub move_and_process_objects()
 
         ' Checks object id or if it is a boss
         if not obj_id% or obj_id% > 50 then continue for
+        ' Freeze enemies except crystals
+        if g_freeze_timer >= 0 and obj_id%<>29 and obj_id%<>30 then continue for
 
         data_id%=OBJ_TILE%(obj_id%,4)
         sprite_ix%=OBJ_INI_SPRITE_ID + i%
