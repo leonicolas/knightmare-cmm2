@@ -354,7 +354,8 @@ sub move_boss()
                     enqueue_action(1,49,g_obj(id%, 1)+TILE_SIZEx2,g_obj(id%, 2)+TILE_SIZE*6)
                     ' Select next pos
                     speed_x=choice(g_obj(id%, 1) > g_player(0),-1,1)
-                    if fix(g_obj(id%, 1)) = EDGE_LEFT or fix(g_obj(id%, 1)) = right_edge% then speed_x=-speed_x
+                    if fix(g_obj(id%, 1))=EDGE_LEFT then speed_x=1
+                    if fix(g_obj(id%, 1))=right_edge% then speed_x=-1
                     g_obj(id%, 5)=min(max(g_obj(id%, 1)+TILE_SIZE*9*speed_x, EDGE_LEFT), right_edge%)
                 end if
             else
