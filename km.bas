@@ -24,8 +24,8 @@ start_game()
 sub start_game()
     local first_stage%=true
     init_player(2)
-    g_row%=MAP_ROWS_0
     g_stage%=1
+    g_row%=MAP_ROWS_0
     do
         timer=0
         play_song("SILENCE_MOD")
@@ -35,7 +35,6 @@ sub start_game()
                 play_sfx("START_STAGE")
                 do while g_player(8) = 5
                     if timer > choice(first_stage%,6000,4000) then g_player(8)=0
-                    g_player(8) = 0
                 loop
             case 6 ' Start after die
                 calculate_start_row()
@@ -69,7 +68,6 @@ sub run_stage()
         g_prev_frame_timer=timer
         inc g_timer
         'debug_print("FPS: "+str$(1/g_delta_time))
-
         page write SPRITES_BUFFER
 
         ' Scrolls the map
