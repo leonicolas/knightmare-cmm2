@@ -244,6 +244,7 @@ sub collect_block_bonus(sprite_id%)
             play_sfx("POINTS")
         case 2 ' Knight - kill all enemies in the screen
             kill_all_enemies(true)
+            destroy_enemies_shots()
         case 3 ' Queen - Extra life
             update_life(1)
         case 4 ' King - Freeze enemies
