@@ -76,8 +76,7 @@ sub player_hit_obj(collided_id%)
             ' If player has invincibility
             if g_player(5) = 4 then
                 local hit=hit_object(collided_id%, true, true)
-            ' If player is not invisible
-            else if g_player(5) <> 2 then
+            else
                 hit_player(collided_id%, false)
             end if
     end select
@@ -217,12 +216,11 @@ function hit_shield(shot_sprite_id%) as integer
 end function
 
 sub hit_player(collided_id%, shot_hit%)
-    if g_player(8) > 3 or g_invincible then exit sub
-
+    if g_invincible or g_player(8) > 3 or g_player(5) = 2 or g_player(5) = 4 then exit sub
     if not shot_hit% then
         local obj_id%=g_obj(collided_id% - OBJ_INI_SPRITE_ID,0)
         select case obj_id%
-            case 27 ' Fire
+            case 27,29,30 ' Fire, Crystals
                 exit sub
         end select
     end if

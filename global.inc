@@ -32,6 +32,9 @@ dim g_prev_frame_timer         ' Previous frame timer value
 '  9 - Boomerang (level 2)
 ' 10 - Double Sword (level 2)
 ' 11 - Fire arrow (level 2)
+' Power Up
+'  2 - Invisibility
+'  4 - Invincibility
 ' State:
 '  0 - Playing
 '  1 - Frozen
