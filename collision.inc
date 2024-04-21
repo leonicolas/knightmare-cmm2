@@ -46,14 +46,13 @@ sub process_collision(sprite_id%)
                     ' Hits another shot
                     else if collided_id% >= SHOTS_INI_SPRITE_ID then
                         if hit_shot(collided_id%) then destroy_shot(collided_id%, true)
-
                     end if
 
                 ' Enemies shots
                 else
                     select case collided_id%
                         case 1
-                            hit_player(sprite_id%, true)
+                            if hit_player(sprite_id%, true) then destroy_shot(sprite_id%)
                         case 2
                             if hit_shield(sprite_id%) then destroy_shot(sprite_id%)
                     end select
@@ -73,11 +72,11 @@ sub player_hit_obj(collided_id%)
             power_up(obj_ix%)
             destroy_object(obj_ix%)
         case else
-            ' If player has invincibility
-            if g_player(5) = 4 then
-                local hit=hit_object(collided_id%, true, true)
+            local hit
+            if g_player(5) = 4 then ' If player has invincibility
+                hit=hit_object(collided_id%, true, true)
             else
-                hit_player(collided_id%, false)
+                hit=hit_player(collided_id%, false)
             end if
     end select
 end sub
@@ -191,12 +190,13 @@ function hit_object(collided_id%, sfx%, instakill%) as integer
 
 end function
 
+' Return true if the hit destroys the shot
 function hit_shield(shot_sprite_id%) as integer
-    hit_shield=0
+    hit_shield=false
     if g_player(6)=0 then exit function
 
     local force%=1, shot_ix%=shot_sprite_id%-SHOTS_INI_SPRITE_ID
-    hit_shield=1
+    hit_shield=true
 
     select case g_shots(shot_ix%,0)
         case 15,25,26 ' Energy ray, Axe, Scythe
@@ -215,14 +215,17 @@ function hit_shield(shot_sprite_id%) as integer
     check_shield()
 end function
 
-sub hit_player(collided_id%, shot_hit%)
-    if g_invincible or g_player(8) > 3 or g_player(5) = 2 or g_player(5) = 4 then exit sub
+' Return true if the hit destroys the shot
+function hit_player(collided_id%, shot_hit%) as integer
+    hit_player=false
+    if g_invincible or g_player(8) > 3 or g_player(5) = 2 or g_player(5) = 4 then exit function
     if not shot_hit% then
         local obj_id%=g_obj(collided_id% - OBJ_INI_SPRITE_ID,0)
         select case obj_id%
             case 27,29,30 ' Fire, Crystals
-                exit sub
+                exit function
         end select
     end if
+    hit_player=true
     kill_player()
-end sub
+end function
