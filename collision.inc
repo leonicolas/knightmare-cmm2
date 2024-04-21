@@ -53,7 +53,7 @@ sub process_collision(sprite_id%)
                 else
                     select case collided_id%
                         case 1
-                            hit_player(sprite_id%)
+                            hit_player(sprite_id%, true)
                         case 2
                             if hit_shield(sprite_id%) then destroy_shot(sprite_id%)
                     end select
@@ -78,7 +78,7 @@ sub player_hit_obj(collided_id%)
                 local hit=hit_object(collided_id%, true, true)
             ' If player is not invisible
             else if g_player(5) <> 2 then
-                hit_player(collided_id%)
+                hit_player(collided_id%, false)
             end if
     end select
 end sub
@@ -216,14 +216,15 @@ function hit_shield(shot_sprite_id%) as integer
     check_shield()
 end function
 
-sub hit_player(collided_id%)
+sub hit_player(collided_id%, shot_hit%)
     if g_player(8) > 3 or g_invincible then exit sub
 
-    local obj_id%=g_obj(collided_id% - OBJ_INI_SPRITE_ID,0)
-    select case obj_id%
-        case 27 ' Fire
-            exit sub
-    end select
-
+    if not shot_hit% then
+        local obj_id%=g_obj(collided_id% - OBJ_INI_SPRITE_ID,0)
+        select case obj_id%
+            case 27 ' Fire
+                exit sub
+        end select
+    end if
     kill_player()
 end sub
