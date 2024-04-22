@@ -16,9 +16,8 @@ sub clear_screen()
     page write 1: cls 0
 end sub
 
-sub show_menu()
-    local released%=true, kb%, item%=1
-    local diff$(3)=("","EASY  ","NORMAL","HARD  ")
+sub init_menu()
+    show_intro()
     clear_screen()
     reset_globals()
     g_stage%=1
@@ -28,7 +27,12 @@ sub show_menu()
     print_centralized("LEONARDO BERARDINO 2024",12)
     print_centralized("  START GAME        ",-1)
     print_centralized("  QUIT              ", 5)
+end sub
 
+sub show_menu()
+    local released%=true, kb%, item%=1
+    local diff$(3)=("","EASY  ","NORMAL","HARD  ")
+    init_menu()
     do
         kb%=KeyDown(1)
         if released% and kb% = KB_UP then
@@ -61,6 +65,7 @@ sub show_menu()
             select case item%
                 case 1
                     start_game()
+                    init_menu()
                 case 4
                     clear_screen()
                     end

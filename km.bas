@@ -19,7 +19,6 @@ option default float
 #include "timer.inc"
 
 init_game()
-show_intro()
 show_menu()
 
 sub start_game()
@@ -44,7 +43,12 @@ sub start_game()
                     if timer > choice(first_stage%,6000,4000) then g_player(8)=0
                     'g_player(8)=0 ' Dev hack!!!!
                 loop
-            case 6 ' Start after die
+            case 6 ' Player died
+                if g_player(7) < 0 then
+                    show_game_over_screen()
+                    pause 2000
+                    exit do
+                end if
                 calculate_start_row()
                 do while g_player(8) = 6
                     if timer > 2000 then g_player(8)=0
@@ -60,10 +64,6 @@ sub start_game()
         end if
     loop
 end sub
-
-page write 1: cls 0
-page write 0: cls 0
-end
 
 sub run_stage()
     local on_top%
