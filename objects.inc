@@ -671,12 +671,15 @@ sub destroy_all()
     local i%
     ' Destroy objects
     for i%=0 to bound(g_obj())
-        if g_obj(i%,0)=0 then continue for
-        destroy_object(i%)
+        if g_obj(i%,0) > 0 then destroy_object(i%)
     next
     ' Destroy shots
     for i%=0 to bound(g_shots())
         if g_shots(i%, 0) > 0 then destroy_shot(i% + SHOTS_INI_SPRITE_ID)
+    next
+    ' Free actions queue
+    for i%=0 to bound(g_actions_queue())
+        g_actions_queue(i%, 0) = 0
     next
     sprite close all()
 end sub

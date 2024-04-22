@@ -6,8 +6,7 @@ sub init_game()
     'mode 4,12 ' debug mode
 
     ' init screen and buffers
-    page write 0: cls 0
-    page write 1: cls 0
+    clear_screen()
     page write SCREEN_BUFFER: cls 0
     page write SPRITES_BUFFER: cls 0
 
@@ -23,22 +22,13 @@ sub init_game()
     ' Interrupts
     sprite interrupt check_collision
     gamepad on handle_gamepad
-
-    ' init stage state variables
-    g_tile_px%=0
 end sub
 
 sub init_stage()
     local i%
 
-    timer=0
-    g_timer=0
-    g_pshot_timer=0
-    g_freeze_timer=-1
-    g_power_up_timer=-1
-    g_prev_frame_timer=0
-    g_enemies_count%=0
-    g_scroll_on=true
+    sprite close all
+    reset_globals()
 
     ' Clear arrays
     for i%=0 to bound(g_blocks()): g_blocks(i%, 0) = 0: next
@@ -77,6 +67,17 @@ sub init_stage()
 
     ' Play stage music
     if g_row% > 8 then play_stage_song() else play_boss_song()
+end sub
+
+sub reset_globals()
+    timer=0
+    g_timer=0
+    g_pshot_timer=0
+    g_freeze_timer=-1
+    g_power_up_timer=-1
+    g_prev_frame_timer=0
+    g_enemies_count%=0
+    g_scroll_on=true
 end sub
 
 sub init_player(lives)

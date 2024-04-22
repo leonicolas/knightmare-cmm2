@@ -19,13 +19,20 @@ option default float
 #include "timer.inc"
 
 init_game()
-start_game()
+show_intro()
+show_menu()
 
 sub start_game()
     local first_stage%=true
     init_player(2)
-    g_stage%=1
     g_row%=MAP_ROWS_0
+
+    ' Dev variables
+    'g_stage%=1
+    'g_row%=0
+    'g_player(3)=11
+    'g_player(6)=20
+    ' End Dev variables
     do
         timer=0
         play_song("SILENCE_MOD")
@@ -35,6 +42,7 @@ sub start_game()
                 play_sfx("START_STAGE")
                 do while g_player(8) = 5
                     if timer > choice(first_stage%,6000,4000) then g_player(8)=0
+                    'g_player(8)=0 ' Dev hack!!!!
                 loop
             case 6 ' Start after die
                 calculate_start_row()
