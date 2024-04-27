@@ -76,6 +76,8 @@ sub print_text(line%, col%, text$, offset%)
         select case c%
             case 32
                 blit SYMBOLS_X,SYMBOLS_Y, col%*TILE_SIZE+offset%,y%, TILE_SIZE, TILE_SIZE, OBJ_TILES_BUFFER
+            case 40 to 41
+                blit NUMBERS_X+(c%-29)*TILE_SIZE,NUMBERS_Y, col%*TILE_SIZE+offset%,y%, TILE_SIZE, TILE_SIZE, OBJ_TILES_BUFFER
             case 48 to 58
                 blit NUMBERS_X+(c%-48)*TILE_SIZE,NUMBERS_Y, col%*TILE_SIZE+offset%,y%, TILE_SIZE, TILE_SIZE, OBJ_TILES_BUFFER
             case 65 to 90

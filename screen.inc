@@ -22,7 +22,7 @@ sub init_menu()
     reset_globals()
     g_stage%=1
     print_centralized("KNIGHTMARE",-8)
-    print_centralized("ORIGINAL GAME BY KONAMI 1986",9)
+    print_centralized("ORIGINAL GAME BY KONAMI(C) 1986",9)
     print_centralized("MMBASIC VERSION BY",11)
     print_centralized("LEONARDO BERARDINO 2024",12)
     print_centralized("  START GAME        ",-1)
