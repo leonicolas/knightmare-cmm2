@@ -11,7 +11,7 @@ dim g_kb_released%             ' Tracks kb keys releasing
 dim g_gp_released%             ' Tracks gamepad buttons releasing
 dim g_gamepad%                 ' Gamepad state
 dim g_stage%                   ' Current stage number
-dim g_difficulty%=2            ' Difficulty. 1 = Easy, 2 = Normal, 3 = Hard
+dim g_difficulty%=1            ' Difficulty. 0 = Easy, 1 = Normal, 2 = Hard
 dim g_enemies_count%           ' Total enemies at the screen
 ' Timers
 dim g_pshot_timer              ' Player shot timer

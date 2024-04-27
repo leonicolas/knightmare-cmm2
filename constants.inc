@@ -72,8 +72,8 @@ dim BOSS_LIFE(8)=(0,20,48,30,48,40,40,0,0)
 const BOSS_SPEED=60
 
 const MAX_ENEMIES_SHOOT_Y=SCREEN_HEIGHT*0.6
-'Chance of enemy shoot per stage
-dim SHOOT_CHANCE(8)=(0,0.5,0.5,0.6,0.6,0.7,0.7,0.8,0.8)
+'Chance of enemy shoot per stage - Easy, Normal, Hard
+dim SHOOT_CHANCE(2,8)=(0,0,0,  0.3,0.5,0.7,  0.3,0.5,0.7,  0.4,0.6,0.8,  0.4,0.6,0.8,  0.5,0.7,0.9,  0.5,0.7,0.9,  0.6,0.8,1,  0.6,0.8,1)
 
 const BLOCK_HITS=5
 

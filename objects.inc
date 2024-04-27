@@ -958,7 +958,7 @@ end sub
 sub enemy_fire(ix%, disable_rnd%)
     local obj_id%=g_obj(ix%,0)
     ' Checks screen limit for shooting and shoot chance
-    if disable_rnd% = false and (g_obj(ix%,2) > MAX_ENEMIES_SHOOT_Y or rnd > SHOOT_CHANCE(g_stage%)) then exit sub
+    if disable_rnd% = false and (g_obj(ix%,2) > MAX_ENEMIES_SHOOT_Y or rnd > SHOOT_CHANCE(g_difficulty%,g_stage%)) then exit sub
     ' Ignores boss body
     if obj_id% > 50 and g_boss(1) = obj_id% then exit sub
 

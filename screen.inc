@@ -30,8 +30,8 @@ sub init_menu()
 end sub
 
 sub show_menu()
-    local released%=true, kb%, item%=1
-    local diff$(3)=("","EASY  ","NORMAL","HARD  ")
+    local released%=true, kb%, item%=1, i%
+    local diff$(2)=("EASY  ","NORMAL","HARD  ")
     init_menu()
     do
         kb%=KeyDown(1)
@@ -46,7 +46,7 @@ sub show_menu()
         else if released% and kb% = KB_RIGHT then
             select case item%
                 case 2
-                    g_difficulty%=min(3,g_difficulty%+1)
+                    g_difficulty%=min(2,g_difficulty%+1)
                 case 3
                     g_stage%=min(8,g_stage%+1)
             end select
@@ -55,7 +55,7 @@ sub show_menu()
         else if released% and kb% = KB_LEFT then
             select case item%
                 case 2
-                    g_difficulty%=max(1,g_difficulty%-1)
+                    g_difficulty%=max(0,g_difficulty%-1)
                 case 3
                     g_stage%=max(1,g_stage%-1)
             end select
