@@ -6,6 +6,8 @@ sub play_song(song$)
     on error skip
     play stop
     select case song$
+        case "STAGE_INTRO"
+            play modfile "music/stage-intro.mod", 16000
         case "BOSS_MOD"
             play modfile "music/boss.mod", 16000
         case "DEMON_MOD"
@@ -36,8 +38,6 @@ sub play_sfx(sfx$)
             play effect "sfx/shot_boomerang.wav"
         case "CHRYSTAL"
             play effect "sfx/chrystal.wav"
-        case "START_STAGE"
-            play effect "sfx/start_stage.wav"
         case "ENEMY_KILL"
             play effect "sfx/enemy_kill.wav"
         case "FIRE_ARROW"

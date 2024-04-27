@@ -34,13 +34,12 @@ sub start_game()
     ' End Dev variables
     do
         timer=0
-        play_song("SILENCE_MOD")
         show_stage_screen(g_stage%)
         select case g_player(8)
             case 5 ' Start stage
-                play_sfx("START_STAGE")
+                if not first_stage% then play_song("STAGE_INTRO")
                 do while g_player(8) = 5
-                    if timer > choice(first_stage%,6000,4000) then g_player(8)=0
+                    if timer > 4000 then g_player(8)=0
                     'g_player(8)=0 ' Dev hack!!!!
                 loop
             case 6 ' Player died

@@ -64,6 +64,15 @@ sub show_menu()
         else if released% and kb% = KB_SPACE then
             select case item%
                 case 1
+                    play_song("STAGE_INTRO")
+                    for i%=0 to 20
+                        if i% mod 2 then
+                            print_centralized("  START GAME        ",-1)
+                        else
+                            print_centralized("                    ",-1)
+                        end if
+                        pause 100
+                    next
                     start_game()
                     init_menu()
                 case 4
