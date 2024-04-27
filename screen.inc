@@ -88,7 +88,7 @@ sub show_menu()
 end sub
 
 sub show_intro()
-    local width=14
+    local width=11
     local y=mm.vres-1, x_center%=center_x(width), y_center%=center_y(5)
     clear_screen()
     reset_globals()
