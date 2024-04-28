@@ -4,7 +4,7 @@ const path = require("path");
 const tilesCols = 32;
 const mapCols = 32;
 const tileSize = 8;
-const stageTilesOffset = [0, 3, 5, 9, 12, 15];
+const stageTilesOffset = [0, 3, 5, 9, 12, 15, 15, 20];
 const mapBufferBytesPerTile = 2;
 
 const objectsIds = {
@@ -122,6 +122,6 @@ function panic(message) {
     process.exit(-1);
 }
 
-for(let stage = 1; stage <= 6; ++stage) {
+for(let stage = 1; stage <= 7; ++stage) {
     generateMapBinary(stage);
 }
