@@ -217,7 +217,7 @@ sub process_map_row(row%, spawn%, line_zero%, offset_y%)
                 case 31 ' Block
                     spawn_block(row%, col%, extra%, offset_y%)
                 case else ' Enemies and other objects
-                    spawn_object(obj_id%, col%*TILE_SIZE, 0, extra%)
+                    spawn_object(obj_id%, col%*TILE_SIZE, 0, choice(g_difficulty%=0,min(3, extra%),extra%))
             end select
         end if
     next
