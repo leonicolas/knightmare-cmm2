@@ -109,11 +109,11 @@ sub destroy_boss()
     g_boss(0)=0
 
     ' Spawn fire
-    enqueue_action(1, 27, x%+TILE_SIZE*2, y%+TILE_SIZE, true)
-    enqueue_action(1, 27, x%, y%+TILE_SIZE*2, true)
-    enqueue_action(1, 27, x%+TILE_SIZE*4, y%+TILE_SIZE*3, true)
-    enqueue_action(1, 27, x%+TILE_SIZE*5, y%+TILE_SIZE*4, true)
-    enqueue_action(1, 27, x%+TILE_SIZE, y%+TILE_SIZE*5, true)
+    enqueue_action(1, 34, x%+TILE_SIZE*2, y%+TILE_SIZE, true)
+    enqueue_action(1, 34, x%, y%+TILE_SIZE*2, true)
+    enqueue_action(1, 34, x%+TILE_SIZE*4, y%+TILE_SIZE*3, true)
+    enqueue_action(1, 34, x%+TILE_SIZE*5, y%+TILE_SIZE*4, true)
+    enqueue_action(1, 34, x%+TILE_SIZE, y%+TILE_SIZE*5, true)
     ' Enqueue player animation
     enqueue_action(1, 101,,,,1500)
 end sub

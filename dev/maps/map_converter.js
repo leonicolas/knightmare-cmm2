@@ -24,9 +24,9 @@ const objectsIds = {
     red_thing: 13,
     sorcerer: 15,
 
-    weapon: 29,
-    power_up: 30,
-    block: 31,
+    weapon: 20,
+    power_up: 21,
+    block: 22,
 };
 
 const blockTypes = {

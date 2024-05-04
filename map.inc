@@ -19,7 +19,7 @@ sub replace_block(block_ix%)
         destroy_block(block_ix%)
         ' Replace map tile
         page write SCREEN_BUFFER
-        blit OBJ_TILE%(31,0)+offset%, OBJ_TILE%(31,1), x%,y%, OBJ_TILE%(31,2),OBJ_TILE%(31,3), OBJ_TILES_BUFFER
+        blit OBJ_TILE%(22,0)+offset%, OBJ_TILE%(22,1), x%,y%, OBJ_TILE%(22,2),OBJ_TILE%(22,3), OBJ_TILES_BUFFER
         page write SPRITES_BUFFER
 
     ' Bridge block
@@ -32,7 +32,7 @@ sub replace_block(block_ix%)
     ' Other blocks
     else
         ' Replace buffer tiles
-        sprite read sprite_id%, OBJ_TILE%(31,0)+offset%, OBJ_TILE%(31,1), OBJ_TILE%(31,2), OBJ_TILE%(31,3), OBJ_TILES_BUFFER
+        sprite read sprite_id%, OBJ_TILE%(22,0)+offset%, OBJ_TILE%(22,1), OBJ_TILE%(22,2), OBJ_TILE%(22,3), OBJ_TILES_BUFFER
         ' Makes the barrier solid
         if g_blocks(block_ix%, 0) = 5 and g_blocks(block_ix%,1) = max_hits% then
             make_block_solid(g_blocks(block_ix%, 2), g_blocks(block_ix%, 3))
@@ -208,13 +208,13 @@ sub process_map_row(row%, spawn%, line_zero%, offset_y%)
 
         ' Create object
         obj_id%=tile_data% >> 8 AND &H1F
-        if not spawn% and obj_id% <> 31 then continue for
+        if not spawn% and obj_id% <> 22 then continue for
         if obj_id% then
             extra%=tile_data% >> 13
             select case obj_id%
-                case 29, 30 ' Weapon chrystal or power-up chrystal
+                case 20, 21 ' Weapon chrystal or power-up chrystal
                     spawn_object(obj_id%, min(SCREEN_WIDTH-TILE_SIZE*6,max(TILE_SIZEx4,g_player(0))), 0)
-                case 31 ' Block
+                case 22 ' Block
                     spawn_block(row%, col%, extra%, offset_y%)
                 case else ' Enemies and other objects
                     spawn_object(obj_id%, col%*TILE_SIZE, 0, choice(g_difficulty%=0,min(3, extra%),extra%))
@@ -254,7 +254,7 @@ sub collect_block_bonus(sprite_id%)
 
     ' Replace block content by empty block
     g_blocks(i%,0)=6
-    enqueue_action(1, 31, i%)
+    enqueue_action(1, 22, i%)
 end sub
 
 sub destroy_block(block_ix%)
@@ -271,7 +271,7 @@ sub spawn_block(row%, col%, type%, offset_y%)
         if g_blocks(i%, 0) = 0 then exit for
     next
 
-    block_id%=31
+    block_id%=22
     g_blocks(i%,0)=type% ' Block type
     g_blocks(i%,1)=0     ' Hits
     g_blocks(i%,2)=row%  ' Row

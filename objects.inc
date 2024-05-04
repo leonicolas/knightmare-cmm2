@@ -30,7 +30,7 @@ sub animate_objects()
         ' Skip free slots, shadows and bosses
         if obj_id% = 0 or obj_id%=39 or obj_id% > 50 then continue for
         ' Skip enemies if freeze is enabled, except fire animation
-        if obj_id% < 24 and g_freeze_timer >= 0 then continue for
+        if obj_id% < 20 and g_freeze_timer >= 0 then continue for
 
         effect%=-1
         buffer%=OBJ_TILES_BUFFER
@@ -60,22 +60,22 @@ sub animate_objects()
             case 12 ' Yellow thing
                 offset_x%=0
 
-            case 27 ' Fire
+            case 20 ' Weapon chrystal
+                offset_x%=WEAPON_ANIM(max(0,g_obj(i%, 4) - 2), g_obj(i%, 3))*TILE_SIZEx2
+                if g_obj(i%, 3) = bound(WEAPON_ANIM(),2) then g_obj(i%, 3)=0 else inc g_obj(i%, 3),1
+
+            case 21 ' Power-up chrystal
+                if g_anim_tick% mod 1.5 > 0 then continue for
+                offset_x%=PUP_ANIM(max(0,g_obj(i%, 4) - 2), g_obj(i%, 3))*TILE_SIZEx2
+                if g_obj(i%, 3) = bound(PUP_ANIM(),2) then g_obj(i%, 3)=0 else inc g_obj(i%, 3),1
+
+            case 34 ' Fire
                 if g_obj(i%, 3) > bound(FIRE_ANIM()) then
                     destroy_object(i%)
                     continue for
                 end if
                 offset_x%=FIRE_ANIM(g_obj(i%, 3))*TILE_SIZEx2
                 inc g_obj(i%, 3),1
-
-            case 29 ' Weapon chrystal
-                offset_x%=WEAPON_ANIM(max(0,g_obj(i%, 4) - 2), g_obj(i%, 3))*TILE_SIZEx2
-                if g_obj(i%, 3) = bound(WEAPON_ANIM(),2) then g_obj(i%, 3)=0 else inc g_obj(i%, 3),1
-
-            case 30 ' Power-up chrystal
-                if g_anim_tick% mod 1.5 > 0 then continue for
-                offset_x%=PUP_ANIM(max(0,g_obj(i%, 4) - 2), g_obj(i%, 3))*TILE_SIZEx2
-                if g_obj(i%, 3) = bound(PUP_ANIM(),2) then g_obj(i%, 3)=0 else inc g_obj(i%, 3),1
 
             case 49 ' Terrain
                 if g_anim_tick% mod 1.6 > 0 then continue for
@@ -129,18 +129,18 @@ sub animate_shots()
                     case else: continue for
                 end select
 
-            case 18 ' Bone
+            case 25 ' Bone
                 inc g_shots(i%,5)
                 select case g_shots(i%,5) mod 4
-                    case 3: rot%=2: tile_id%=19
-                    case 2: rot%=0: tile_id%=20
-                    case 1: rot%=0: tile_id%=19
-                    case 0: rot%=0: tile_id%=18
+                    case 3: rot%=2: tile_id%=26
+                    case 2: rot%=0: tile_id%=27
+                    case 1: rot%=0: tile_id%=26
+                    case 0: rot%=0: tile_id%=25
                 end select
 
-            case 21 ' White explosion
+            case 28 ' White explosion
                 if g_shots(i%,3) = 0 and g_shots(i%,4) = 0 then
-                    tile_id%=28
+                    tile_id%=35
                     inc g_shots(i%,5)
                     if g_shots(i%,5) > 18 then
                         destroy_shot(sprite_id%)
@@ -152,9 +152,9 @@ sub animate_shots()
                     continue for
                 end if
 
-            case 25 ' Axe
+            case 32 ' Axe
                 inc g_shots(i%,5)
-                tile_id%=25
+                tile_id%=32
                 select case g_shots(i%,5) mod 8
                     case 6: rot%=1: offset_x%=TILE_SIZEx2
                     case 4: rot%=0: offset_x%=TILE_SIZEx2
@@ -163,8 +163,8 @@ sub animate_shots()
                     case else: continue for
                 end select
 
-            case 26 ' Scythe
-                tile_id%=26: rot%=0
+            case 33 ' Scythe
+                tile_id%=33: rot%=0
                 offset_x%=TILE_SIZEx2*(g_anim_tick% mod 4)
 
             case else
@@ -253,7 +253,7 @@ sub move_shots()
                 inc g_shots(i%,4),2.5
                 speed_y=g_shots(i%,4)
 
-            case 21 ' White explosion
+            case 28 ' White explosion
                 speed_x=g_shots(i%,3)
                 speed_y=g_shots(i%,4)
                 y=g_shots(i%,5)
@@ -264,7 +264,7 @@ sub move_shots()
                     g_shots(i%,5)=0
                 end if
 
-            case 26 ' Scythe
+            case 33 ' Scythe
                 inc g_shots(i%,5),choice(i% mod 2,1,-1)
                 if abs(g_shots(i%,5)) > 720 then
                     destroy_shot(i% + SHOTS_INI_SPRITE_ID)
@@ -308,7 +308,7 @@ sub move_and_process_objects()
         ' Checks object id or if it is a boss
         if not obj_id% or obj_id% > 50 then continue for
         ' Freeze enemies except crystals
-        if g_freeze_timer >= 0 and obj_id%<>29 and obj_id%<>30 then continue for
+        if g_freeze_timer >= 0 and obj_id%<>20 and obj_id%<>21 then continue for
 
         data_id%=OBJ_TILE%(obj_id%,4)
         sprite_ix%=OBJ_INI_SPRITE_ID + i%
@@ -554,7 +554,7 @@ sub move_and_process_objects()
                     end if
                 end if
 
-            case 29,30 ' Weapon and power-up chrystal
+            case 20,21 ' Weapon and power-up chrystal
                 if g_obj(i%,5) >= 0 then
                     offset_x%=-TILE_SIZEx4*sin(g_obj(i%,5))
                     ' Increment angle by the speed
@@ -593,7 +593,7 @@ sub move_and_process_objects()
 end sub
 
 sub start_fire_animation(x%, y%, sfx%)
-    enqueue_action(1, 27, x%, y%, sfx%)
+    enqueue_action(1, 34, x%, y%, sfx%)
 end sub
 
 ' Returns -1 if there are no free slots
@@ -832,7 +832,7 @@ sub spawn_object(obj_id%, x%, y%, obj_cfg%)
             spawn_shadow(i%,,TILE_SIZEx2+TILE_SIZE/2)
             spawn_speed=300
 
-        case 24 ' Fire
+        case 31 ' Fire CHECK
             offset_x%=FIRE_ANIM(0)*TILE_SIZEx2
             layer%=4
             if obj_cfg% then play_sfx("ENEMY_KILL")
@@ -849,7 +849,7 @@ sub spawn_object(obj_id%, x%, y%, obj_cfg%)
 end sub
 
 sub spawn_shield()
-    sprite read 2, OBJ_TILE%(32,0), OBJ_TILE%(32,1), OBJ_TILE%(32,2), OBJ_TILE%(32,3), OBJ_TILES_BUFFER
+    sprite read 2, OBJ_TILE%(36,0), OBJ_TILE%(36,1), OBJ_TILE%(36,2), OBJ_TILE%(36,3), OBJ_TILES_BUFFER
     if sprite(X, 2) = 10000 then sprite show 2, g_player(0),g_player(1)-TILE_SIZE, 1
     g_player(5)=1
     g_player(6)=SHIELD_MAX_HITS
@@ -946,7 +946,7 @@ sub enemies_fire()
 
     for i%=0 to bound(g_obj())
         ' Has object or it is in the min Y position?
-        if g_obj(i%,0) = 0 or g_obj(i%,0) > 16 or g_obj(i%,2) < TILE_SIZEx2 then continue for
+        if g_obj(i%,0) = 0 or g_obj(i%,0) > 16 or g_obj(i%,2) < TILE_SIZEx2 then continue for ' CHECK
 
         ' If it is not a black demon
         if g_obj(i%,0) <> 8 then
@@ -970,7 +970,7 @@ sub enemy_fire(ix%, disable_rnd%)
     local x=g_obj(ix%,1) + sprite(W, enemy_spr_id%)/2
     local y=g_obj(ix%,2) + sprite(H, enemy_spr_id%)/2
     local angle=deg(sprite(V, enemy_spr_id%, 1))
-    local rot%, weapon_ix%=16 ' Dot bullet
+    local rot%, weapon_ix%=23 ' Dot bullet
     local i%, gpr1, gpr2, gpr3, offset_x%, speed=70
 
     select case obj_id%
@@ -981,29 +981,29 @@ sub enemy_fire(ix%, disable_rnd%)
             ' Arrow weapon_ix%
             select case angle
                 case  23 to  67 ' Up Right
-                    weapon_ix%=24: rot%=3
+                    weapon_ix%=31: rot%=3
                 case 292 to 337 ' Up Left
-                    weapon_ix%=24: rot%=2
+                    weapon_ix%=31: rot%=2
                 case 112 to 157 ' Down Right
-                    weapon_ix%=24: rot%=1
+                    weapon_ix%=31: rot%=1
                 case 202 to 247 ' Down Left
-                    weapon_ix%=24
+                    weapon_ix%=31
                 case  67 to 112 ' Right
-                    weapon_ix%=23: rot%=1
+                    weapon_ix%=30: rot%=1
                 case 247 to 292 ' Left
-                    weapon_ix%=23
+                    weapon_ix%=30
                 case 157 to 202 ' Down
-                    weapon_ix%=22
+                    weapon_ix%=29
                 case else       ' Up
-                    weapon_ix%=22: rot%=2
+                    weapon_ix%=29: rot%=2
             end select
 
         case 7 ' Skeleton
             if g_obj(ix%,5) <> 0 or g_obj(ix%,4) > 1 then exit sub
-            weapon_ix%=18
+            weapon_ix%=25
 
         case 8 ' Black Demon
-            weapon_ix%=17 ' Energy ray
+            weapon_ix%=24 ' Energy ray
             speed=speed*1.3
             create_shot(shot_ix%            , weapon_ix%, x, y, speed*sin(angle-30), speed*-cos(angle-30))
             create_shot(get_free_shot_slot(), weapon_ix%, x, y, speed*sin(angle-10), speed*-cos(angle-10))
@@ -1011,7 +1011,7 @@ sub enemy_fire(ix%, disable_rnd%)
             create_shot(get_free_shot_slot(), weapon_ix%, x, y, speed*sin(angle+30), speed*-cos(angle+30))
             exit sub
         case 9 ' Death Ghost
-            weapon_ix%=17 ' Energy ray
+            weapon_ix%=24 ' Energy ray
             speed=100
 
         case 12, 13 ' Yellow thing and Red thing
@@ -1025,17 +1025,17 @@ sub enemy_fire(ix%, disable_rnd%)
             exit sub
 
         case 51 ' Boss stage 1
-            weapon_ix%=17 ' Energy ray
+            weapon_ix%=24 ' Energy ray
             speed=120
 
         case 52 ' Boss stage 2
-            weapon_ix%=26 ' Scythe
+            weapon_ix%=33 ' Scythe
             ' Center of rotation
             gpr1=g_obj(ix%,1)             ' X
             gpr2=g_obj(ix%,2)+TILE_SIZE*8 ' Y
 
         case 53 ' Boss stage 3
-            weapon_ix%=21 ' Mini explosion
+            weapon_ix%=28 ' White explosion
             angle=min(200,max(160,angle))
             speed=110
             for i%=-60 to 60 step 20
@@ -1045,7 +1045,7 @@ sub enemy_fire(ix%, disable_rnd%)
             exit sub
 
         case 54, 56 ' Boss stage 4 and 6
-            weapon_ix%=21 ' White explosion
+            weapon_ix%=28 ' White explosion
             speed=110
             angle=max(min(210, angle), 150)
             gpr1=speed*sin(angle)
@@ -1057,7 +1057,7 @@ sub enemy_fire(ix%, disable_rnd%)
             end if
 
         case 55 ' Boss stage 5
-            weapon_ix%=25 ' Axe
+            weapon_ix%=32 ' Axe
             gpr2=100      ' Y speed
             x=g_obj(ix%,1)-TILE_SIZE
             create_shot(get_free_shot_slot(), weapon_ix%, x, y, gpr1, gpr2, gpr3, rot%, offset_x%)
@@ -1088,7 +1088,7 @@ sub create_shot(shot_ix%, weapon_ix%, x, y, gpr1, gpr2, gpr3, rot%, offset_x%)
 end sub
 
 function is_enemy(obj_id%) as integer
-    is_enemy = (obj_id% > 0 and obj_id% < 16)
+    is_enemy = (obj_id% > 0 and obj_id% < 20)
 end function
 
 sub check_shield()
@@ -1098,9 +1098,9 @@ sub check_shield()
             g_player(6)=0
             if sprite(x, 2) <> 10000 then sprite hide safe 2
         case is <= SHIELD_MAX_HITS\6
-            sprite read 2, OBJ_TILE%(32,0)+TILE_SIZEx4, OBJ_TILE%(32,1), OBJ_TILE%(32,2), OBJ_TILE%(32,3), OBJ_TILES_BUFFER
+            sprite read 2, OBJ_TILE%(36,0)+TILE_SIZEx4, OBJ_TILE%(36,1), OBJ_TILE%(36,2), OBJ_TILE%(36,3), OBJ_TILES_BUFFER
         case is <= SHIELD_MAX_HITS\6*2
-            sprite read 2, OBJ_TILE%(32,0)+TILE_SIZEx2, OBJ_TILE%(32,1), OBJ_TILE%(32,2), OBJ_TILE%(32,3), OBJ_TILES_BUFFER
+            sprite read 2, OBJ_TILE%(36,0)+TILE_SIZEx2, OBJ_TILE%(36,1), OBJ_TILE%(36,2), OBJ_TILE%(36,3), OBJ_TILES_BUFFER
     end select
 end sub
 

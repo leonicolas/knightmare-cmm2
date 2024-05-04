@@ -30,7 +30,7 @@ sub start_game()
     'g_stage%=1
     'g_row%=0
     'g_player(3)=11
-    'g_player(6)=20
+    'g_player(6)=27
     ' End Dev variables
     do
         timer=0

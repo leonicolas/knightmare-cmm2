@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="left-up" width="32" height="238" tilewidth="8" tileheight="8" infinite="0" nextlayerid="8" nextobjectid="847">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="left-up" width="32" height="238" tilewidth="8" tileheight="8" infinite="0" nextlayerid="8" nextobjectid="848">
  <editorsettings>
   <export target="map_stage7.json" format="json"/>
  </editorsettings>
@@ -210,6 +210,11 @@
   <object id="846" name="Block" type="block" x="95.9526" y="272.004" width="16" height="16">
    <properties>
     <property name="Type" value="queen"/>
+   </properties>
+  </object>
+  <object id="847" name="Red Death" type="death_ghost" x="199.875" y="1695.94" width="8" height="8">
+   <properties>
+    <property name="Type" value="red"/>
    </properties>
   </object>
  </objectgroup>

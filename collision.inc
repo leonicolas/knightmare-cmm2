@@ -65,10 +65,10 @@ sub player_hit_obj(collided_id%)
     local obj_ix%=collided_id% - OBJ_INI_SPRITE_ID
     if obj_ix% < 0 then exit sub
     select case g_obj(obj_ix%, 0)
-        case 29 ' Weapon chrystal
+        case 20 ' Weapon chrystal
             change_weapon(obj_ix%)
             destroy_object(obj_ix%)
-        case 30 ' Power-up chrystal
+        case 21 ' Power-up chrystal
             power_up(obj_ix%)
             destroy_object(obj_ix%)
         case else
@@ -101,7 +101,7 @@ function hit_block(sprite_id%) as integer
 
     if g_blocks(i%,1)=1 or g_blocks(i%,1)=max_hits% then
         ' Spawn new block tile
-        enqueue_action(1, 31, i%)
+        enqueue_action(1, 22, i%)
     end if
 end function
 
@@ -110,7 +110,7 @@ function hit_shot(sprite_id%) as integer
     local shot_id%=sprite_id% - SHOTS_INI_SPRITE_ID
     local weapon%=g_shots(shot_id%, 0)
     ' Check if hit a scythe or bone
-    hit_shot=(weapon% = 18 or weapon% = 26)
+    hit_shot=(weapon% = 25 or weapon% = 33)
 end function
 
 ' Return true if the hit destroys the shot
@@ -120,20 +120,6 @@ function hit_object(collided_id%, sfx%, instakill%) as integer
     hit_object=false
     g_cont_sfx$=""
     select case obj_id%
-        case 29,30 ' Weapon and power-up chrystal
-            inc g_obj(i%,4)
-            g_obj(i%,4)=g_obj(i%,4) mod choice(g_obj(i%,0) = 29, 8, 7)
-            ' Enable the wobbling movement
-            if g_obj(i%,4) > 3 and g_obj(i%,5) < 0 then g_obj(i%,5)=0
-            if sfx% then play_sfx("POWER_UP_HIT")
-            hit_object=true
-
-        case 27,49 ' Fire, Terrain
-            exit function
-
-        case is > 50 ' Boss
-            hit_object = hit_boss(collided_id%)
-
         case 5 ' Cloud
             if instakill% then
                 start_fire_animation(g_obj(i%,1), g_obj(i%,2), true)
@@ -145,7 +131,7 @@ function hit_object(collided_id%, sfx%, instakill%) as integer
                 g_obj(i%,5)=CLOUD_ATTACK_SPEED*-cos(angle)     ' Speed Y
             end if
 
-        case is < 16 ' Enemies
+        case is < 20 ' Enemies
             ' Special collision cases
             select case obj_id%
                 case 7 ' Skeleton
@@ -184,6 +170,20 @@ function hit_object(collided_id%, sfx%, instakill%) as integer
                 play_sfx("ENEMY_KILL")
             end if
             destroy_object(i%)
+
+        case 20,21 ' Weapon and power-up chrystal
+            inc g_obj(i%,4)
+            g_obj(i%,4)=g_obj(i%,4) mod choice(g_obj(i%,0) = 20, 8, 7)
+            ' Enable the wobbling movement
+            if g_obj(i%,4) > 3 and g_obj(i%,5) < 0 then g_obj(i%,5)=0
+            if sfx% then play_sfx("POWER_UP_HIT")
+            hit_object=true
+
+        case 34,49 ' Fire, Terrain
+            exit function
+
+        case is > 50 ' Boss
+            hit_object = hit_boss(collided_id%)
     end select
 
     if not is_super_weapon() then hit_object=true
@@ -199,9 +199,9 @@ function hit_shield(shot_sprite_id%) as integer
     hit_shield=true
 
     select case g_shots(shot_ix%,0)
-        case 15,25,26 ' Energy ray, Axe, Scythe
+        case 15,32,33 ' Energy ray, Axe, Scythe
             force%=3
-        case 21 ' mini explosion
+        case 28 ' mini explosion
             force%=3
             ' Is it on fire?
             if g_shots(shot_ix%,3)=0 and g_shots(shot_ix%,4)=0 then
@@ -222,7 +222,7 @@ function hit_player(collided_id%, shot_hit%) as integer
     if not shot_hit% then
         local obj_id%=g_obj(collided_id% - OBJ_INI_SPRITE_ID,0)
         select case obj_id%
-            case 27,29,30 ' Fire, Crystals
+            case 20,21,34 ' Fire, Crystals
                 exit function
         end select
     end if

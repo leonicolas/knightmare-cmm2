@@ -88,7 +88,6 @@ dim TILES_OFFSET(7)=(0,TILE_SIZE*3,TILE_SIZE*5,TILE_SIZE*9,TILE_SIZE*12,TILE_SIZ
 dim OBJ_POINTS(38)=(0,10,50,50,100,200,50,100,200,200,100,100,300,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
 
 ' Objects tiles: 0: tile x | 1: tile y | 2: tile width | 3: tile height | 4: obj data index
-' TODO: Move to data block
 dim OBJ_TILE%(50,4)
 ' Enemies
 ' Blob
@@ -121,42 +120,47 @@ OBJ_TILE%(13,0)=224: OBJ_TILE%(13,1)=1: OBJ_TILE%(13,2)=15: OBJ_TILE%(13,3)=14: 
 OBJ_TILE%(14,0)=32: OBJ_TILE%(14,1)=16: OBJ_TILE%(14,2)=16: OBJ_TILE%(14,3)=11: OBJ_TILE%(14,4)=14
 ' Sorcerer
 OBJ_TILE%(15,0)=0: OBJ_TILE%(15,1)=120: OBJ_TILE%(15,2)=16: OBJ_TILE%(15,3)=16: OBJ_TILE%(15,4)=15
-
-' Enemies shots
-' Dot bullet
-OBJ_TILE%(16,0)=22: OBJ_TILE%(16,1)=38: OBJ_TILE%(16,2)=4: OBJ_TILE%(16,3)=4
-' Energy ray
-OBJ_TILE%(17,0)=35: OBJ_TILE%(17,1)=35: OBJ_TILE%(17,2)=10: OBJ_TILE%(17,3)=10
-' Bone
-OBJ_TILE%(18,0)=50: OBJ_TILE%(18,1)=37: OBJ_TILE%(18,2)=12: OBJ_TILE%(18,3)=6
-OBJ_TILE%(19,0)=66: OBJ_TILE%(19,1)=35: OBJ_TILE%(19,2)=11: OBJ_TILE%(19,3)=11
-OBJ_TILE%(20,0)=85: OBJ_TILE%(20,1)=34: OBJ_TILE%(20,2)=6: OBJ_TILE%(20,3)=12
-' White explosion
-OBJ_TILE%(21,0)=99: OBJ_TILE%(21,1)=35: OBJ_TILE%(21,2)=9: OBJ_TILE%(21,3)=9
-' Arrow
-OBJ_TILE%(22,0)=133: OBJ_TILE%(22,1)=34: OBJ_TILE%(22,2)=5: OBJ_TILE%(22,3)=14
-OBJ_TILE%(23,0)=145: OBJ_TILE%(23,1)=38: OBJ_TILE%(23,2)=13: OBJ_TILE%(23,3)=5
-OBJ_TILE%(24,0)=163: OBJ_TILE%(24,1)=35: OBJ_TILE%(24,2)=11: OBJ_TILE%(24,3)=11
-' Axe
-OBJ_TILE%(25,0)=177: OBJ_TILE%(25,1)=34: OBJ_TILE%(25,2)=13: OBJ_TILE%(25,3)=13
-' Scythe
-OBJ_TILE%(26,0)=48: OBJ_TILE%(26,1)=120: OBJ_TILE%(26,2)=16: OBJ_TILE%(26,3)=16
-' Fire
-OBJ_TILE%(27,0)=112: OBJ_TILE%(27,1)=104: OBJ_TILE%(27,2)=16: OBJ_TILE%(27,3)=16
-dim FIRE_ANIM(15)=(1,0,1,0,1,0,2,1,2,1,2,1,3,2,3,2)
-' Big Fire
-OBJ_TILE%(28,0)=112: OBJ_TILE%(28,1)=120: OBJ_TILE%(28,2)=16: OBJ_TILE%(28,3)=16
+' Red Death ghost
+OBJ_TILE%(16,0)=16: OBJ_TILE%(16,1)=136: OBJ_TILE%(16,2)=15: OBJ_TILE%(16,3)=16: OBJ_TILE%(16,4)=16
 
 ' Weapon crystals
-OBJ_TILE%(29,0)=0: OBJ_TILE%(29,1)=64: OBJ_TILE%(29,2)=16: OBJ_TILE%(29,3)=16: OBJ_TILE%(29,4)=29
+OBJ_TILE%(20,0)=0: OBJ_TILE%(20,1)=64: OBJ_TILE%(20,2)=16: OBJ_TILE%(20,3)=16: OBJ_TILE%(29,4)=20
 ' Power Up crystals
-OBJ_TILE%(30,0)=0: OBJ_TILE%(30,1)=80: OBJ_TILE%(30,2)=16: OBJ_TILE%(30,3)=16: OBJ_TILE%(30,4)=30
+OBJ_TILE%(21,0)=0: OBJ_TILE%(21,1)=80: OBJ_TILE%(21,2)=16: OBJ_TILE%(21,3)=16: OBJ_TILE%(21,4)=21
 dim WEAPON_ANIM(5,3)=(0,3,5,7,9,11, 1,4,6,8,10,12, 0,3,5,7,9,11, 2,1,1,1,1,1)
 dim PUP_ANIM(4,3)=(0,3,6,9,12, 1,4,7,10,13, 0,3,6,9,12, 2,5,8,11,14)
 ' Blocks
-OBJ_TILE%(31,0)=0: OBJ_TILE%(31,1)=104: OBJ_TILE%(31,2)=16: OBJ_TILE%(31,3)=16
+OBJ_TILE%(22,0)=0: OBJ_TILE%(22,1)=104: OBJ_TILE%(22,2)=16: OBJ_TILE%(22,3)=16
+
+
+' Enemies shots
+' Dot bullet
+OBJ_TILE%(23,0)=22: OBJ_TILE%(23,1)=38: OBJ_TILE%(23,2)=4: OBJ_TILE%(23,3)=4
+' Energy ray
+OBJ_TILE%(24,0)=35: OBJ_TILE%(24,1)=35: OBJ_TILE%(24,2)=10: OBJ_TILE%(24,3)=10
+' Bone
+OBJ_TILE%(25,0)=50: OBJ_TILE%(25,1)=37: OBJ_TILE%(25,2)=12: OBJ_TILE%(25,3)=6
+OBJ_TILE%(26,0)=66: OBJ_TILE%(26,1)=35: OBJ_TILE%(26,2)=11: OBJ_TILE%(26,3)=11
+OBJ_TILE%(27,0)=85: OBJ_TILE%(27,1)=34: OBJ_TILE%(27,2)=6: OBJ_TILE%(27,3)=12
+' White explosion
+OBJ_TILE%(28,0)=99: OBJ_TILE%(28,1)=35: OBJ_TILE%(28,2)=9: OBJ_TILE%(28,3)=9
+' Arrow
+OBJ_TILE%(29,0)=133: OBJ_TILE%(29,1)=34: OBJ_TILE%(29,2)=5: OBJ_TILE%(29,3)=14
+OBJ_TILE%(30,0)=145: OBJ_TILE%(30,1)=38: OBJ_TILE%(30,2)=13: OBJ_TILE%(30,3)=5
+OBJ_TILE%(31,0)=163: OBJ_TILE%(31,1)=35: OBJ_TILE%(31,2)=11: OBJ_TILE%(31,3)=11
+' Axe
+OBJ_TILE%(32,0)=177: OBJ_TILE%(32,1)=34: OBJ_TILE%(32,2)=13: OBJ_TILE%(32,3)=13
+' Scythe
+OBJ_TILE%(33,0)=48: OBJ_TILE%(33,1)=120: OBJ_TILE%(33,2)=16: OBJ_TILE%(33,3)=16
+' Fire
+OBJ_TILE%(34,0)=112: OBJ_TILE%(34,1)=104: OBJ_TILE%(34,2)=16: OBJ_TILE%(34,3)=16
+dim FIRE_ANIM(15)=(1,0,1,0,1,0,2,1,2,1,2,1,3,2,3,2)
+' Big Fire
+OBJ_TILE%(35,0)=112: OBJ_TILE%(35,1)=120: OBJ_TILE%(35,2)=16: OBJ_TILE%(35,3)=16
 ' Shield
-OBJ_TILE%(32,0)=136: OBJ_TILE%(32,1)=48: OBJ_TILE%(32,2)=16: OBJ_TILE%(32,3)=7
+OBJ_TILE%(36,0)=136: OBJ_TILE%(36,1)=48: OBJ_TILE%(36,2)=16: OBJ_TILE%(36,3)=7
+
+
 ' Boss Shadow
 OBJ_TILE%(37,0)=200: OBJ_TILE%(37,1)=98: OBJ_TILE%(37,2)=40: OBJ_TILE%(37,3)=6
 ' Big Shadow
@@ -253,10 +257,10 @@ OBJ_DATA(15,1)=20    ' Y speed
 OBJ_DATA(15,2)=1     ' Life
 
 ' Weapon chrystal
-OBJ_DATA(29,0)=50    ' X speed (angle increment)
-OBJ_DATA(29,1)=20    ' Y speed
-OBJ_DATA(29,4)=-1    ' Angle for the wobbling movement. -1 means disabled
+OBJ_DATA(20,0)=50    ' X speed (angle increment)
+OBJ_DATA(20,1)=20    ' Y speed
+OBJ_DATA(20,4)=-1    ' Angle for the wobbling movement. -1 means disabled
 ' Power-up chrystal
-OBJ_DATA(30,0)=50    ' X speed (angle increment)
-OBJ_DATA(30,1)=20    ' Y speed
-OBJ_DATA(30,4)=-1    ' Angle for the wobbling movement. -1 means disabled
+OBJ_DATA(21,0)=50    ' X speed (angle increment)
+OBJ_DATA(21,1)=20    ' Y speed
+OBJ_DATA(21,4)=-1    ' Angle for the wobbling movement. -1 means disabled

@@ -26,10 +26,10 @@ sub process_actions_queue()
         obj_id%=g_actions_queue(i%, 1)
 
         select case obj_id%
-            case 31 ' Blocks
+            case 22 ' Blocks
                 replace_block(g_actions_queue(i%, 2))
 
-            case 32 ' Shield
+            case 36 ' Shield
                 spawn_shield()
 
             case 90 ' Replace boss skin

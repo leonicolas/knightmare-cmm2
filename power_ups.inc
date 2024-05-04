@@ -1,5 +1,5 @@
 sub change_weapon(obj_ix%)
-    if g_obj(obj_ix%, 0) <> 29 then exit sub
+    if g_obj(obj_ix%, 0) <> 20 then exit sub
 
     select case g_obj(obj_ix%, 4)
         case 0 to 2 ' No weapon
@@ -15,7 +15,7 @@ sub change_weapon(obj_ix%)
 end sub
 
 sub power_up(obj_ix%)
-    if g_obj(obj_ix%, 0) <> 30 then exit sub
+    if g_obj(obj_ix%, 0) <> 21 then exit sub
     select case g_obj(obj_ix%, 4)
         case 0 to 2 ' Black pill
             increment_score(1000)
@@ -24,7 +24,7 @@ sub power_up(obj_ix%)
         case 3 ' Dark blue pill - speed
             increase_player_speed()
         case 4 ' Blue pill - shield
-            enqueue_action(1, 32)
+            enqueue_action(1, 36)
         case 5 ' White pill - invisibility
             g_player(5)=2
             g_power_up_timer=POWER_UP_TIME
@@ -39,7 +39,7 @@ end sub
 
 function is_chrystal(obj_sprite_id%) as integer
     local obj_id%=g_obj(obj_sprite_id% - OBJ_INI_SPRITE_ID, 0)
-    is_chrystal=(obj_id%=29 or obj_id%=30)
+    is_chrystal=(obj_id%=20 or obj_id%=21)
 end function
 
 sub increase_player_speed()
