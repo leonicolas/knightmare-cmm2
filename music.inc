@@ -60,6 +60,8 @@ sub play_sfx(sfx$)
             play effect "sfx/power_up_ending.wav"
         case "POWER_UP_HIT"
             play effect "sfx/power_up_hit.wav"
+        case "RED_DEATH"
+            play effect "sfx/red_death.wav"
         case "SHIELD"
             play effect "sfx/shield.wav"
         case "SHOT"

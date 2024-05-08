@@ -109,7 +109,7 @@ OBJ_TILE%(8,0)=240: OBJ_TILE%(8,1)=17: OBJ_TILE%(8,2)=16: OBJ_TILE%(8,3)=15: OBJ
 ' Death ghost
 OBJ_TILE%(9,0)=16: OBJ_TILE%(9,1)=136: OBJ_TILE%(9,2)=15: OBJ_TILE%(9,3)=16: OBJ_TILE%(9,4)=9
 ' Zombie
-OBJ_TILE%(10,0)=48: OBJ_TILE%(10,1)=136: OBJ_TILE%(10,2)=16: OBJ_TILE%(10,3)=16: OBJ_TILE%(10,4)=10
+OBJ_TILE%(10,0)=64: OBJ_TILE%(10,1)=136: OBJ_TILE%(10,2)=16: OBJ_TILE%(10,3)=16: OBJ_TILE%(10,4)=10
 ' Ghost
 OBJ_TILE%(11,0)=16: OBJ_TILE%(11,1)=120: OBJ_TILE%(11,2)=16: OBJ_TILE%(11,3)=16: OBJ_TILE%(11,4)=11
 ' Yellow thing
@@ -121,7 +121,7 @@ OBJ_TILE%(14,0)=32: OBJ_TILE%(14,1)=16: OBJ_TILE%(14,2)=16: OBJ_TILE%(14,3)=11: 
 ' Sorcerer
 OBJ_TILE%(15,0)=0: OBJ_TILE%(15,1)=120: OBJ_TILE%(15,2)=16: OBJ_TILE%(15,3)=16: OBJ_TILE%(15,4)=15
 ' Red Death ghost
-OBJ_TILE%(16,0)=16: OBJ_TILE%(16,1)=136: OBJ_TILE%(16,2)=15: OBJ_TILE%(16,3)=16: OBJ_TILE%(16,4)=16
+OBJ_TILE%(16,0)=32: OBJ_TILE%(16,1)=136: OBJ_TILE%(16,2)=15: OBJ_TILE%(16,3)=16: OBJ_TILE%(16,4)=16
 
 ' Weapon crystals
 OBJ_TILE%(20,0)=0: OBJ_TILE%(20,1)=64: OBJ_TILE%(20,2)=16: OBJ_TILE%(20,3)=16: OBJ_TILE%(29,4)=20
@@ -190,7 +190,7 @@ OBJ_TILE%(49,0)=240: OBJ_TILE%(49,1)=192: OBJ_TILE%(49,2)=16: OBJ_TILE%(49,3)=8
 
 ' Object data: 0: speed X | 1: speed Y | 2: GPR 1 | 3: GPR 2 | 4: GPR 3
 ' TODO: Move to data block
-dim OBJ_DATA(30,4)
+dim OBJ_DATA(21,4)
 ' Blob
 OBJ_DATA(1,1)=20     ' Y speed
 OBJ_DATA(1,2)=1      ' Life
@@ -255,7 +255,10 @@ OBJ_DATA(13,2)=1     ' Life
 ' Sorcerer
 OBJ_DATA(15,1)=20    ' Y speed
 OBJ_DATA(15,2)=1     ' Life
-
+' Red Death ghost
+OBJ_DATA(16,0)=40     ' X speed
+OBJ_DATA(16,1)=20     ' Y speed
+OBJ_DATA(16,2)=1      ' Life
 ' Weapon chrystal
 OBJ_DATA(20,0)=50    ' X speed (angle increment)
 OBJ_DATA(20,1)=20    ' Y speed

@@ -23,7 +23,7 @@ sub animate_player()
 end sub
 
 sub animate_objects()
-    local i%, obj_id%, sprite_id%, offset_x%, offset_y%, offset_h%, effect%, buffer%,x, y
+    local i%,obj_id%,sprite_id%,offset_x%,offset_y%,offset_h%,effect%,buffer%,x,y,sfx%,red_death%=-1
 
     for i%=0 to bound(g_obj())
         obj_id% = g_obj(i%, 0)
@@ -59,6 +59,26 @@ sub animate_objects()
 
             case 12 ' Yellow thing
                 offset_x%=0
+
+            case 16 ' Red Death ghost
+                if red_death%>=0 then g_obj(i%,5)=g_obj(red_death%,5) else red_death%=i%
+                select case g_obj(i%,5)
+                    case is > 40
+                        g_obj(i%,5)=0
+                    case is > 32
+                        offset_x%=choice(g_obj(i%,5) mod 2,TILE_SIZEx2,0)
+                    case is > 8
+                        offset_x%=TILE_SIZEx2
+                    case is > 0
+                        offset_x%=choice(g_obj(i%,5) mod 2,TILE_SIZEx2,0)
+                end select
+                if g_obj(i%,5) > 0 then inc g_obj(i%,5)
+                if g_fire% and g_obj(i%,5)=0 then g_obj(i%,5)=1
+                if sfx%=0 and g_anim_tick% mod 20 = 0 then
+                    play_sfx("RED_DEATH")
+                    sfx%=1
+                end if
+                if g_obj(i%,5) = 0 then continue for
 
             case 20 ' Weapon chrystal
                 offset_x%=WEAPON_ANIM(max(0,g_obj(i%, 4) - 2), g_obj(i%, 3))*TILE_SIZEx2
@@ -516,7 +536,7 @@ sub move_and_process_objects()
                 ' Increment Y
                 inc g_obj(i%,2),OBJ_DATA(data_id%,1)*g_delta_time
 
-            case 12 ' Yellow thing
+            case 12,16 ' Yellow thing, Red death ghost
                 inc g_obj(i%,1),g_obj(i%,4)*g_delta_time
                 inc g_obj(i%,2),OBJ_DATA(data_id%,1)*g_delta_time
 
@@ -832,6 +852,10 @@ sub spawn_object(obj_id%, x%, y%, obj_cfg%)
             spawn_shadow(i%,,TILE_SIZEx2+TILE_SIZE/2)
             spawn_speed=300
 
+        case 16 ' Red death ghost
+            angle=math(ATAN3 g_obj(i%,1)-g_player(0), g_obj(i%,2)-g_player(1)-200)
+            g_obj(i%,4)=OBJ_DATA(data_id%,0)*sin(-angle)
+
         case 31 ' Fire CHECK
             offset_x%=FIRE_ANIM(0)*TILE_SIZEx2
             layer%=4
@@ -884,6 +908,7 @@ sub fire()
     local x=g_player(0)+(TILE_SIZE-OBJ_TILE%(tile_id%,2)/2)
     local y=g_player(1)-OBJ_TILE%(tile_id%,3)-1
 
+    g_fire%=true
     select case g_player(3)
         case 2 ' Twin arrows
             tile_id%=41
@@ -945,8 +970,8 @@ sub enemies_fire()
     local i%
 
     for i%=0 to bound(g_obj())
-        ' Has object or it is in the min Y position?
-        if g_obj(i%,0) = 0 or g_obj(i%,0) > 16 or g_obj(i%,2) < TILE_SIZEx2 then continue for ' CHECK
+        ' Has object or is in the min Y position?
+        if g_obj(i%,0)=0 or g_obj(i%,0)>20 or (g_stage%<5 and g_obj(i%,2)<TILE_SIZEx2) then continue for
 
         ' If it is not a black demon
         if g_obj(i%,0) <> 8 then
@@ -1010,7 +1035,7 @@ sub enemy_fire(ix%, disable_rnd%)
             create_shot(get_free_shot_slot(), weapon_ix%, x, y, speed*sin(angle+10), speed*-cos(angle+10))
             create_shot(get_free_shot_slot(), weapon_ix%, x, y, speed*sin(angle+30), speed*-cos(angle+30))
             exit sub
-        case 9 ' Death Ghost
+        case 9,16 ' Death Ghost, Red Death Ghost
             weapon_ix%=24 ' Energy ray
             speed=100
 

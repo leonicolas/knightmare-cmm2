@@ -9,6 +9,7 @@ dim g_timer                    ' Global timer
 dim g_tile_px%                 ' The rendered tile row pixel
 dim g_kb_released%             ' Tracks kb keys releasing
 dim g_gp_released%             ' Tracks gamepad buttons releasing
+dim g_fire%                    ' Tracks player fire action
 dim g_gamepad%                 ' Gamepad state
 dim g_stage%                   ' Current stage number
 dim g_difficulty%=1            ' Difficulty. 0 = Easy, 1 = Normal, 2 = Hard

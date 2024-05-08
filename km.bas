@@ -94,6 +94,8 @@ sub run_stage()
             if g_boss(0) > 1 then animate_boss()
             animate_shots()
             animate_objects()
+            ' Clean state
+            g_fire%=false
         end if
 
         ' Process enemies shots
@@ -133,10 +135,6 @@ sub run_stage()
 
     ' Close all sprites and free memory
     destroy_all()
-
-    select case g_player(8)
-        case 4 ' Dead
-    end select
 end sub
 
 sub process_kb()
