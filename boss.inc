@@ -155,6 +155,10 @@ sub spawn_boss()
             case 6
                 g_obj(id%,2)=TILE_SIZE*(choice(g_row%=0,6,-3))
                 g_obj(id%, 5)=TILE_SIZE*6*choice(g_player(0)<0,-1,1)
+            case 7
+                if g_row%>0 then exit sub
+                g_obj(id%,1)=SCREEN_WIDTH/2-TILE_SIZE
+                g_obj(id%,2)=TILE_SIZE*5
         end select
 
         show_boss_body(id%,0)
@@ -197,6 +201,11 @@ sub show_boss_body(id%, tile_offset%)
         case 6
             tile_y%=128
             tile_h%=TILE_SIZE*6
+        case 7
+            tile_x%=0
+            tile_y%=56
+            tile_w%=TILE_SIZEx2
+            tile_h%=TILE_SIZEx2
     end select
     sprite read sprite_id%, tile_x%+tile_offset%, tile_y%, tile_w%, tile_h%, BOSS_TILES_BUFFER
     sprite show safe sprite_id%, g_obj(id%, 1),g_obj(id%, 2), 2
@@ -224,6 +233,8 @@ sub boss_fire()
             disable_rnd%=true
         case 6
             delay=70
+        case 7
+            exit sub
     end select
     if g_timer mod delay = 0 then enemy_fire(g_boss(1), disable_rnd%)
 end sub
@@ -267,6 +278,11 @@ sub animate_boss()
             if tick% > 5 and g_boss(0) <> 1 then x%=TILE_SIZE*5
             y%=128
 
+        case 7
+            tick%=g_anim_tick% mod 6
+            'if tick% > 3 and g_boss(0) <> 1 then x%=TILE_SIZEx2
+            y%=56
+            sprite show spr_id%, x%,y%, 2, choice(tick%>2,0,1)
         case else
             exit sub
     end select
@@ -297,7 +313,7 @@ sub move_boss()
                 inc g_obj(id%, 1), choice(g_obj(id%, 1) > g_obj(id%, 5), -1, 1)*BOSS_SPEED*g_delta_time
             end if
 
-        case 2, 3, 4
+        case 2,3,4
             select case g_stage%
                 case 2
                     speed_x=1.2: speed_y=9
@@ -361,6 +377,10 @@ sub move_boss()
             else
                 inc g_obj(id%, 1), choice(g_obj(id%, 1) > g_obj(id%, 5), -1, 1)*BOSS_SPEED*g_delta_time
             end if
+
+        case 7
+            inc g_obj(id%, 2), 30*g_delta_time
+            if g_obj(id%, 2) > SCREEN_HEIGHT then g_obj(id%, 2)=TILE_SIZE*5
     end select
 
     ' Boss body
