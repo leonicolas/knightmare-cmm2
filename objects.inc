@@ -358,18 +358,33 @@ sub move_and_process_objects()
                 if g_anim_tick% mod 6 < 3 then offset_y%=OBJ_TILE%(obj_id%,3)/2
 
             case 4 ' Knight
-                ' Check if it is time to change direction
-                if g_obj(i%,4)=0 and g_player(1)-g_obj(i%,2) < KNIGHT_CHANGE_DIRECT_DIST_PX then
-                    g_obj(i%,4)=g_obj(i%,1) ' Save the last X position
-                    g_obj(i%,5)=choice(g_obj(i%,1)>SCREEN_CENTER_W,left,right) ' Horizontal movement direction
-                else if g_obj(i%,5) and abs(g_obj(i%,4)-g_obj(i%,1)) > KNIGHT_MAX_HORIZONTAL_DIST_PX then
-                    g_obj(i%,5)=0
-                end if
-
-                if g_obj(i%,5) then
-                    inc g_obj(i%,1),OBJ_DATA(4,0)*g_delta_time*g_obj(i%,5)
+                if g_row%<=0 then
+                    ' Check if it is time to change direction
+                    if g_obj(i%,5)=0 then
+                        if g_player(1)-g_obj(i%,2) < KNIGHT_CHANGE_DIRECT_DIST_PX then
+                            g_obj(i%,4)=deg(sprite(V, sprite_ix%, 1))-90
+                            g_obj(i%,5)=1
+                        else
+                            g_obj(i%,4)=90
+                        end if
+                    end if
+                    speed=choice(g_obj(i%,5),60,30)
+                    inc g_obj(i%, 1), speed*cos(g_obj(i%,4))*g_delta_time
+                    inc g_obj(i%, 2), speed*sin(g_obj(i%,4))*g_delta_time
                 else
-                    inc g_obj(i%,2),OBJ_DATA(4,1)*g_delta_time
+                    ' Check if it is time to change direction
+                    if g_obj(i%,4)=0 and g_player(1)-g_obj(i%,2) < KNIGHT_CHANGE_DIRECT_DIST_PX then
+                        g_obj(i%,4)=g_obj(i%,1) ' Save the last X position
+                        g_obj(i%,5)=choice(g_obj(i%,1)>SCREEN_CENTER_W,left,right) ' Horizontal movement direction
+                    else if g_obj(i%,5) and abs(g_obj(i%,4)-g_obj(i%,1)) > KNIGHT_MAX_HORIZONTAL_DIST_PX then
+                        g_obj(i%,5)=0
+                    end if
+
+                    if g_obj(i%,5) then
+                        inc g_obj(i%,1),OBJ_DATA(4,0)*g_delta_time*g_obj(i%,5)
+                    else
+                        inc g_obj(i%,2),OBJ_DATA(4,1)*g_delta_time
+                    end if
                 end if
 
             case 5 ' Cloud

@@ -1,10 +1,12 @@
 sub check_collision()
-    local i%
+    local i%, spr_id%
     if sprite(S) then
         process_collision(sprite(S))
     else
         for i% = 1 to sprite(C, 0)
-            process_collision(sprite(C, 0, i%))
+            on error skip
+            spr_id%=sprite(C, 0, i%)
+            process_collision(spr_id%)
         next
     end if
 end sub
