@@ -107,10 +107,10 @@ end function
 
 ' Return true if the hit destroys the shot
 function hit_shot(sprite_id%) as integer
-    local shot_id%=sprite_id% - SHOTS_INI_SPRITE_ID
+    local shot_id%=sprite_id%-SHOTS_INI_SPRITE_ID
     local weapon%=g_shots(shot_id%, 0)
     ' Check if hit a scythe or bone
-    hit_shot=(weapon% = 25 or weapon% = 33)
+    hit_shot=(weapon%=25 or weapon%=33)
 end function
 
 ' Return true if the hit destroys the shot

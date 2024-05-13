@@ -983,7 +983,8 @@ end sub
 sub enemy_fire(ix%, disable_rnd%)
     local obj_id%=g_obj(ix%,0)
     ' Checks screen limit for shooting and shoot chance
-    if disable_rnd% = false and (g_obj(ix%,2) > MAX_ENEMIES_SHOOT_Y or rnd > SHOOT_CHANCE(g_difficulty%,g_stage%)) then exit sub
+    if disable_rnd%=false and rnd > SHOOT_CHANCE(g_difficulty%,g_stage%) then exit sub
+    if g_stage% < 6 and g_obj(ix%,2) > MAX_ENEMIES_SHOOT_Y then exit sub
     ' Ignores boss body
     if obj_id% > 50 and g_boss(1) = obj_id% then exit sub
 
@@ -1002,25 +1003,38 @@ sub enemy_fire(ix%, disable_rnd%)
         case 5 ' Cloud
             exit sub ' Do not shoot
 
-        case 4 ' Knight
+        case 4, 57 ' Knight, boss stage 07
+            if obj_id%=57 then speed=100
             ' Arrow weapon_ix%
             select case angle
                 case  23 to  67 ' Up Right
                     weapon_ix%=31: rot%=3
+                    inc x,TILE_SIZE
+                    inc y,-TILE_SIZE*2.5
                 case 292 to 337 ' Up Left
                     weapon_ix%=31: rot%=2
+                    inc x,-TILE_SIZEx2
+                    inc y,-TILE_SIZE*2.5
                 case 112 to 157 ' Down Right
                     weapon_ix%=31: rot%=1
+                    inc x,TILE_SIZE
+                    inc y,TILE_SIZE
                 case 202 to 247 ' Down Left
                     weapon_ix%=31
+                    inc x,-TILE_SIZEx2
+                    inc y,TILE_SIZE
                 case  67 to 112 ' Right
                     weapon_ix%=30: rot%=1
+                    inc x,TILE_SIZE
                 case 247 to 292 ' Left
                     weapon_ix%=30
+                    inc x,-TILE_SIZE*2.5
                 case 157 to 202 ' Down
                     weapon_ix%=29
+                    inc y,TILE_SIZE
                 case else       ' Up
                     weapon_ix%=29: rot%=2
+                    inc y,-TILE_SIZE*2.5
             end select
 
         case 7 ' Skeleton
