@@ -3,6 +3,8 @@ option base 0
 option angle degrees
 option default float
 
+If Mm.Device$ = "MMB4L" Then Option Simulate "MMB4W"
+
 #include "constants.inc"
 #include "global.inc"
 #include "screen.inc"
