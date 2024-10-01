@@ -716,7 +716,7 @@ sub destroy_all()
     for i%=0 to bound(g_actions_queue())
         g_actions_queue(i%, 0) = 0
     next
-    sprite close all()
+    sprite close all
 end sub
 
 sub kill_all_enemies(sfx%)
