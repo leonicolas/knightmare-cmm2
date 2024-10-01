@@ -10,7 +10,15 @@ const true=1
 const left=-1
 const right=1
 
-const KB_ESC=27
+' Used in a bitmask, values match MMBasic gamepad constants.
+const CTRL_START = &h02
+const CTRL_DOWN  = &h20
+const CTRL_RIGHT = &h40
+const CTRL_UP    = &h80
+const CTRL_LEFT  = &h100
+const CTRL_FIRE  = &h800 ' Button A
+
+' const KB_ESC=27 ' This is unused
 const KB_SPACE=32
 const KB_UP=128
 const KB_DOWN=129

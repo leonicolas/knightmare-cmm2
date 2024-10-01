@@ -84,8 +84,7 @@ sub run_stage()
         if g_freeze_timer < 0 and g_row% >= -1 and g_timer mod 16 = 0 then scroll_map()
 
         ' Process keyboard and game pad
-        process_kb()
-        process_gamepad()
+        process_input()
 
         ' Auto move player
         if g_player(8) = 3 then auto_move_player_to_portal()
