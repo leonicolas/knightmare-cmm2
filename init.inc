@@ -11,13 +11,13 @@ sub init_game()
     page write SPRITES_BUFFER: cls 0
 
     page write BOSS_TILES_BUFFER: cls 0
-    load png "BOSS_TILESET_IMG"
+    load png BOSS_TILESET_IMG
 
     page write MAP_TILES_BUFFER: cls 0
-    load png "MAP_TILESET_IMG"
+    load png MAP_TILESET_IMG
 
     page write OBJ_TILES_BUFFER: cls 0
-    load png "OBJ_TILESET_IMG"
+    load png OBJ_TILESET_IMG
 
     ' Interrupts
     sprite interrupt check_collision

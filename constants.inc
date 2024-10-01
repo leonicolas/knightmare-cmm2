@@ -1,7 +1,9 @@
-#define "MAP_TILESET_IMG", "tiles/maps.png"
-#define "OBJ_TILESET_IMG", "tiles/objects.png"
-#define "BOSS_TILESET_IMG", "tiles/bosses.png"
-#define "MAPS_DIR", "maps/"
+Const ROOT_DIR = Choice(UCase$(Mm.Info(Path)) = "NONE", "./", Mm.Info(Path))
+
+Const MAP_TILESET_IMG = ROOT_DIR + "tiles/maps.png"
+Const OBJ_TILESET_IMG = ROOT_DIR + "tiles/objects.png"
+Const BOSS_TILESET_IMG = ROOT_DIR + "tiles/bosses.png"
+Const MAPS_DIR = ROOT_DIR + "maps"
 
 const false=0
 const true=1
