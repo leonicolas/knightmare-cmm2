@@ -28,6 +28,7 @@ sub start_game()
     local first_stage%=true
     init_player(2)
     g_row%=MAP_ROWS_0
+    g_score% = 0
 
     ' Dev variables
     'g_stage%=7     ' Stage
