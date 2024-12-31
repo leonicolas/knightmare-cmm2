@@ -19,6 +19,7 @@ option default float
 #include "timer.inc"
 
 init_game()
+show_intro()
 show_menu()
 
 sub start_game()

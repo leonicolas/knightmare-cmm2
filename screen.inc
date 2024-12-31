@@ -17,7 +17,6 @@ sub clear_screen()
 end sub
 
 sub init_menu()
-    show_intro()
     clear_screen()
     reset_globals()
     g_stage%=1
