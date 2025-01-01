@@ -80,7 +80,7 @@ sub show_menu()
                         init_menu()
                     case 4
                         clear_screen()
-                        end
+                        end_game()
                 end select
         End Select
     loop

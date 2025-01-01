@@ -20,7 +20,16 @@ If Mm.Device$ = "MMB4L" Then Option Simulate "MMB4W"
 #include "queue.inc"
 #include "timer.inc"
 
+Option Break 4
+On Key 3, end_game()
+
 init_game()
+
+If Mm.Info(Device X) = "MMB4L" Then
+    Graphics Title 0, "Knightmare for MMBasic, v0.1.0"
+    Graphics Interrupt 0, on_window_event
+EndIf
+
 show_intro()
 show_menu()
 
@@ -67,6 +76,49 @@ sub start_game()
         end if
     loop
 end sub
+
+Sub on_window_event(window_id%, event_id%)
+  If event_id% = WINDOW_EVENT_CLOSE Then end_game()
+End Sub
+
+Sub end_game()
+  Option Break 3
+  If InStr(Mm.CmdLine$, "--shell") Then sys.run_shell()
+  End
+End Sub
+
+Function sys.HOME$()
+  Select Case Mm.Info$(Device X)
+    Case "MMB4L"
+      sys.HOME$ = Mm.Info$(EnvVar "HOME")
+    Case "MMBasic for Windows"
+      sys.HOME$ = Mm.Info$(EnvVar "HOMEDIR") + Mm.Info$(EnvVar "HOMEPATH")
+    Case Else
+      sys.HOME$ = "A:"
+  End Select
+End Function
+
+' Runs the program specified by the '.mmbasic-shell' file.
+'
+' @param  fnbr%  File number to use for accessing the file, if unspecified/0 then uses #9.
+Sub sys.run_shell(fnbr%)
+  Const prog$ = sys.read_shell_file$(1, fnbr%)
+  If prog$ <> "" Then Run prog$
+End Sub
+
+' Reads the '.mmbasic-shell' file.
+'
+' @param  exist%  If 1 then ERROR if file does not exist, otherwise return empty string.
+' @param  fnbr%   File number to use for accessing the file, if unspecified/0 then uses #9.
+' @return         The contents of the first line of the file.
+Function sys.read_shell_file$(exist%, fnbr%)
+  Const f$ = sys.HOME$() + "/.mmbasic-shell"
+  If Not exist% And Not Mm.Info(Exists f$) Then Exit Function
+  Const _fnbr% = Choice(fnbr%, fnbr%, 9)
+  Open f$ For Input As _fnbr%
+  Line Input #_fnbr%, sys.read_shell_file$
+  Close _fnbr%
+End Function
 
 sub run_stage()
     local on_top%
