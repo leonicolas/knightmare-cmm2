@@ -41,6 +41,11 @@ sub show_menu()
         If Not released% Then Continue Do
         released% = false
 
+        If ctrl% = CTRL_START Then
+          item% = 1
+          ctrl% = CTRL_FIRE
+        EndIf
+
         Select Case ctrl%
             Case CTRL_UP
               item%=max(1,item%-1)
