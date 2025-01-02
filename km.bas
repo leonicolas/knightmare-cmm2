@@ -28,10 +28,10 @@ sub start_game()
     g_row%=MAP_ROWS_0
 
     ' Dev variables
-    'g_stage%=1
-    'g_row%=0
-    'g_player(3)=11
-    'g_player(6)=27
+    'g_stage%=7     ' Stage
+    'g_row%=0       ' Position into the map
+    'g_player(3)=11 ' Best weapon
+    'g_player(6)=30 ' Shield with support to 30 hits
     ' End Dev variables
     do
         timer=0
@@ -39,9 +39,9 @@ sub start_game()
         select case g_player(8)
             case 5 ' Start stage
                 if not first_stage% then play_song("STAGE_INTRO")
+                'g_player(8)=0 ' Dev hack! Skip stage intro!
                 do while g_player(8) = 5
                     if timer > 4000 then g_player(8)=0
-                    'g_player(8)=0 ' Dev hack!!!!
                 loop
             case 6 ' Player died
                 if g_player(7) < 0 then
