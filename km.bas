@@ -10,7 +10,6 @@ option default float
 #include "collision.inc"
 #include "init.inc"
 #include "input.inc"
-#include "intro.inc"
 #include "map.inc"
 #include "music.inc"
 #include "objects.inc"
