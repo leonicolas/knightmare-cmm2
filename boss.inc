@@ -190,7 +190,8 @@ sub create_boss_hit_box(ix%, offset_x, offset_y, width, life)
     sprite read OBJ_INI_SPRITE_ID+hit_box_id%,TRANSPARENT_BLOCK_X, TRANSPARENT_BLOCK_Y,width, TILE_SIZE, OBJ_TILES_BUFFER
     g_obj(hit_box_id%, 4)=offset_x
     g_obj(hit_box_id%, 5)=offset_y
-    sprite show safe OBJ_INI_SPRITE_ID+hit_box_id%, g_obj(id%, 1),g_obj(id%, 2), 1
+    On Error Skip ' Workaround bug with sprite displayed completely off screen.
+    sprite show safe OBJ_INI_SPRITE_ID+hit_box_id%, g_obj(hit_box_id%, 1),g_obj(hit_box_id%, 2), 1
 end sub
 
 sub create_boss_shield(offset_x, offset_y, width)
