@@ -74,6 +74,8 @@ sub player_hit_obj(collided_id%)
         case 21 ' Power-up chrystal
             power_up(obj_ix%)
             destroy_object(obj_ix%)
+        case 50 ' Portal
+            ' Ignore so that the player can walk through it.
         case else
             local hit
             if g_player(5) = 4 then ' If player has invincibility
