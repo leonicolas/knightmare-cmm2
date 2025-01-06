@@ -1,6 +1,6 @@
 sub debug_print(msg$, offset%)
     page write 1
-    print @(0,192+offset%) msg$
+    print @(0,offset%) msg$
     page write SPRITES_BUFFER
 end sub
 
