@@ -47,11 +47,12 @@ Function read_keyboard%()
 End Function
 
 Function read_gamepad%()
-  If Not g_gamepad_on% Then Exit Function
+  if not g_gamepad_on% then exit function
 
   read_gamepad% = gamepad(B)
+  if not read_gamepad% Then exit function
 
-  If Not (read_gamepad% And &h1E0) Then
+  If Not &h1E0 Then
     ' No digital direction buttons down so check left-stick.
     Select Case gamepad(LX)
       Case < 124: read_gamepad% = read_gamepad% Or CTRL_LEFT
