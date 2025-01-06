@@ -1,14 +1,24 @@
-#define "MAP_TILESET_IMG", "tiles/maps.png"
-#define "OBJ_TILESET_IMG", "tiles/objects.png"
-#define "BOSS_TILESET_IMG", "tiles/bosses.png"
-#define "MAPS_DIR", "maps/"
+Const ROOT_DIR = Choice(UCase$(Mm.Info(Path)) = "NONE", "./", Mm.Info(Path))
+
+Const MAP_TILESET_IMG = ROOT_DIR + "tiles/maps.png"
+Const OBJ_TILESET_IMG = ROOT_DIR + "tiles/objects.png"
+Const BOSS_TILESET_IMG = ROOT_DIR + "tiles/bosses.png"
+Const MAPS_DIR = ROOT_DIR + "maps"
 
 const false=0
 const true=1
 const left=-1
 const right=1
 
-const KB_ESC=27
+' Used in a bitmask, values match MMBasic gamepad constants.
+const CTRL_START = &h02
+const CTRL_DOWN  = &h20
+const CTRL_RIGHT = &h40
+const CTRL_UP    = &h80
+const CTRL_LEFT  = &h100
+const CTRL_FIRE  = &h800 ' Button A
+
+' const KB_ESC=27 ' This is unused
 const KB_SPACE=32
 const KB_UP=128
 const KB_DOWN=129

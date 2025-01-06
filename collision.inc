@@ -1,12 +1,13 @@
 sub check_collision()
-    local i%, spr_id%
-    if sprite(S) then
-        process_collision(sprite(S))
-    else
-        for i% = 1 to sprite(C, 0)
-            on error skip
+    local spr_id% = sprite(S)
+    if spr_id% >= 1 then
+        process_collision(spr_id%)
+    else if spr_id% = 0 then
+        local i%
+        for i% = 1 to sprite(C, 0) ' Total number of sprites that have active collisions.
+            on error skip 2
             spr_id%=sprite(C, 0, i%)
-            process_collision(spr_id%)
+            If spr_id% > 0 Then process_collision(spr_id%)
         next
     end if
 end sub
@@ -73,6 +74,8 @@ sub player_hit_obj(collided_id%)
         case 21 ' Power-up chrystal
             power_up(obj_ix%)
             destroy_object(obj_ix%)
+        case 50 ' Portal
+            ' Ignore so that the player can walk through it.
         case else
             local hit
             if g_player(5) = 4 then ' If player has invincibility

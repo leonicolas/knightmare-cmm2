@@ -29,70 +29,77 @@ sub init_menu()
 end sub
 
 sub show_menu()
-    local released%=true, kb%, item%=1, i%
-    local diff$(2)=("EASY  ","NORMAL","HARD  ")
+    local released%=true, ctrl%, item%=1, i%
     init_menu()
     do
-        kb%=KeyDown(1)
-        if released% and kb% = KB_UP then
-            item%=max(1,item%-1)
-            released%=false
+        update_menu(item%)
+        Pause 50 ' Probably unnecessary.
 
-        else if released% and kb% = KB_DOWN then
-            item%=min(4,item%+1)
-            released%=false
+        ctrl% = read_keyboard%()
+        If Not ctrl% Then ctrl% = read_gamepad%()
+        If Not ctrl% Then released% = true : Continue Do
+        If Not released% Then Continue Do
+        released% = false
 
-        else if released% and kb% = KB_RIGHT then
-            select case item%
-                case 2
-                    g_difficulty%=min(2,g_difficulty%+1)
-                case 3
-                    g_stage%=min(8,g_stage%+1)
-            end select
-            released%=false
+        If ctrl% = CTRL_START Then
+          item% = 1
+          ctrl% = CTRL_FIRE
+        EndIf
 
-        else if released% and kb% = KB_LEFT then
-            select case item%
-                case 2
-                    g_difficulty%=max(0,g_difficulty%-1)
-                case 3
-                    g_stage%=max(1,g_stage%-1)
-            end select
-            released%=false
+        Select Case ctrl%
+            Case CTRL_UP
+              item%=max(1,item%-1)
 
-        else if released% and kb% = KB_SPACE then
-            select case item%
-                case 1
-                    play_song("STAGE_INTRO")
-                    for i%=0 to 20
-                        if i% mod 2 then
-                            print_centralized("  START GAME        ",-1)
-                        else
-                            print_centralized("                    ",-1)
-                        end if
-                        pause 100
-                    next
-                    start_game()
-                    init_menu()
-                case 4
-                    clear_screen()
-                    end
-            end select
-            released%=false
+            Case CTRL_DOWN
+              item%=min(4,item%+1)
 
-        else if not kb% then
-            released%=true
-        end if
-        print_centralized("  DIFFICULTY: "+diff$(g_difficulty%), 1)
-        print_centralized("  STAGE: "+str$(g_stage%)+space$(10), 3)
+            Case CTRL_RIGHT
+                select case item%
+                    case 2
+                        g_difficulty%=min(2,g_difficulty%+1)
+                    case 3
+                        g_stage%=min(8,g_stage%+1)
+                end select
 
-        page write 0
-        blit 112,160, center_x(11),center_y(3,-6),TILE_SIZE*11,TILE_SIZE*3, OBJ_TILES_BUFFER
-        sprite read 1, 112,184, TILE_SIZE,TILE_SIZE, OBJ_TILES_BUFFER
-        sprite show safe 1, center_x(TILE_SIZE,-5.5), center_y(TILE_SIZE,item%*2), 1
+            Case CTRL_LEFT
+                select case item%
+                    case 2
+                        g_difficulty%=max(0,g_difficulty%-1)
+                    case 3
+                        g_stage%=max(1,g_stage%-1)
+                end select
 
-        pause 50
+            Case CTRL_FIRE
+                select case item%
+                    case 1
+                        play_song("STAGE_INTRO")
+                        for i%=0 to 20
+                            if i% mod 2 then
+                                print_centralized("  START GAME        ",-1)
+                            else
+                                print_centralized("                    ",-1)
+                            end if
+                            pause 100
+                        next
+                        start_game()
+                        init_menu()
+                    case 4
+                        clear_screen()
+                        end_game()
+                end select
+        End Select
     loop
+end sub
+
+sub update_menu(item%)
+    local diff$(2)=("EASY  ","NORMAL","HARD  ")
+    print_centralized("  DIFFICULTY: "+diff$(g_difficulty%), 1)
+    print_centralized("  STAGE: "+str$(g_stage%)+space$(10), 3)
+
+    page write 0
+    blit 112,160, center_x(11),center_y(3,-6),TILE_SIZE*11,TILE_SIZE*3, OBJ_TILES_BUFFER
+    sprite read 1, 112,184, TILE_SIZE,TILE_SIZE, OBJ_TILES_BUFFER
+    sprite show safe 1, center_x(TILE_SIZE,-5.5), center_y(TILE_SIZE,item%*2), 1
 end sub
 
 sub show_intro()
