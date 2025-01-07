@@ -986,7 +986,7 @@ sub enemies_fire()
 
     for i%=0 to bound(g_obj())
         ' Has object or is in the min Y position?
-        if g_obj(i%,0)=0 or g_obj(i%,0)>20 or (g_stage%<5 and g_obj(i%,2)<TILE_SIZEx2) then continue for
+        if g_obj(i%,0)=0 or g_obj(i%,0)>19 or (g_stage%<5 and g_obj(i%,2)<TILE_SIZEx2) then continue for
 
         ' If it is not a black demon
         if g_obj(i%,0) <> 8 then

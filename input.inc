@@ -50,7 +50,7 @@ Function read_gamepad%()
   if not g_gamepad_on% then exit function
 
   read_gamepad% = gamepad(B)
-  if not read_gamepad% Then exit function
+  if not read_gamepad% then exit function
 
   If Not &h1E0 Then
     ' No digital direction buttons down so check left-stick.
