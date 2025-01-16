@@ -16,7 +16,8 @@ const CTRL_DOWN  = &h20
 const CTRL_RIGHT = &h40
 const CTRL_UP    = &h80
 const CTRL_LEFT  = &h100
-const CTRL_FIRE  = &h800 ' Button A
+const CTRL_FIRE  = &h800  ' Button A
+const BUTTON_B   = &h2000 ' Button B
 
 ' const KB_ESC=27 ' This is unused
 const KB_SPACE=32

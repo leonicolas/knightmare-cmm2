@@ -1,66 +1,66 @@
-Sub process_input()
-    Static fire_down% = false
+sub process_input()
+    static fire_down% = false
     if g_player(8) then exit sub
     g_player_is_moving=false
-    Local ctrl% = read_keyboard%()
-    If Not ctrl% Then ctrl% = read_gamepad%()
-    If Not ctrl% Then fire_down% = false : Exit Sub
+    local ctrl% = read_keyboard%()
+    if not ctrl% then ctrl% = read_gamepad%()
+    if not ctrl% then fire_down% = false : exit sub
 
-    If ctrl% And CTRL_FIRE Then
-      If Not fire_down% Then
+    if ctrl% and CTRL_FIRE then
+      if not fire_down% then
         fire()
         fire_down% = true
-      EndIf
-    Else
+      endif
+    else
       fire_down% = false
-    EndIf
+    endif
 
-    If ctrl% And CTRL_LEFT Then
+    if ctrl% and CTRL_LEFT then
         move_player(KB_LEFT)
-    ElseIf ctrl% And CTRL_RIGHT Then
+    elseif ctrl% and CTRL_RIGHT then
         move_player(KB_RIGHT)
-    EndIf
-    If ctrl% And CTRL_UP Then
+    endif
+    if ctrl% and CTRL_UP then
         move_player(KB_UP)
-    ElseIf ctrl% And CTRL_DOWN Then
+    elseif ctrl% and CTRL_DOWN then
         move_player(KB_DOWN)
-    EndIf
-End Sub
+    endif
+end sub
 
-Function read_keyboard%()
-  If Not KeyDown(0) Then Exit Function
-  Local i%
-  For i% = 1 To 3
-    Select Case KeyDown(i%)
-      Case KB_UP
-        read_keyboard% = read_keyboard% Or CTRL_UP
-      Case KB_DOWN
-        read_keyboard% = read_keyboard% Or CTRL_DOWN
-      Case KB_LEFT
-        read_keyboard% = read_keyboard% Or CTRL_LEFT
-      Case KB_RIGHT
-        read_keyboard% = read_keyboard% Or CTRL_RIGHT
-      Case KB_SPACE
-        read_keyboard% = read_keyboard% Or CTRL_FIRE
-    End Select
-  Next
-End Function
+function read_keyboard%()
+    if not keydown(0) then exit function
+    local i%
+    for i% = 1 to 3
+        select case keydown(i%)
+        Case KB_UP
+            read_keyboard% = read_keyboard% Or CTRL_UP
+        Case KB_DOWN
+            read_keyboard% = read_keyboard% Or CTRL_DOWN
+        Case KB_LEFT
+            read_keyboard% = read_keyboard% Or CTRL_LEFT
+        Case KB_RIGHT
+            read_keyboard% = read_keyboard% Or CTRL_RIGHT
+        Case KB_SPACE
+            read_keyboard% = read_keyboard% Or CTRL_FIRE
+        End Select
+    Next
+end function
 
-Function read_gamepad%()
-  if not g_gamepad_on% then exit function
+function read_gamepad%()
+    if not g_gamepad_on% then exit function
 
-  read_gamepad% = gamepad(B)
-  if not read_gamepad% then exit function
+    read_gamepad% = gamepad(B)
+    if (read_gamepad% and BUTTON_B) then read_gamepad% = CTRL_FIRE
 
-  If Not &h1E0 Then
     ' No digital direction buttons down so check left-stick.
-    Select Case gamepad(LX)
-      Case < 124: read_gamepad% = read_gamepad% Or CTRL_LEFT
-      Case > 132: read_gamepad% = read_gamepad% Or CTRL_RIGHT
-    End Select
-    Select Case gamepad(LY)
-      Case < 124: read_gamepad% = read_gamepad% Or CTRL_UP
-      Case > 132: read_gamepad% = read_gamepad% Or CTRL_DOWN
-    End Select
-  EndIf
-End Function
+    if not read_gamepad% then
+        select case gamepad(LX)
+            case < 124: read_gamepad% = read_gamepad% Or CTRL_LEFT
+            case > 132: read_gamepad% = read_gamepad% Or CTRL_RIGHT
+        end select
+        select case gamepad(LY)
+            case < 124: read_gamepad% = read_gamepad% Or CTRL_UP
+            case > 132: read_gamepad% = read_gamepad% Or CTRL_DOWN
+        end select
+    end if
+end function
