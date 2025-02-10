@@ -26,11 +26,7 @@ sub init_game()
     if g_gamepad_on% then
         on error skip
         gamepad on
-        If Mm.ErrNo Then
-            print "Error on connecting to the gamepad: "+ str$(Mm.ErrNo)
-            print "Please, check the gamepad connection and restart the game or change the g_gamepad_on% variable to false."
-            end
-        end if
+        If Mm.ErrNo Then g_gamepad_on% = false
     end if
 end sub
 

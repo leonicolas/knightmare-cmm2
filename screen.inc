@@ -33,27 +33,25 @@ sub show_menu()
     init_menu()
     do
         update_menu(item%)
-        Pause 50 ' Probably unnecessary.
-
         ctrl% = read_keyboard%()
-        If Not ctrl% Then ctrl% = read_gamepad%()
-        If Not ctrl% Then released% = true : Continue Do
-        If Not released% Then Continue Do
+        if not ctrl% then ctrl% = read_gamepad%()
+        if not ctrl% then released% = true : continue do
+        if not released% then continue do
         released% = false
 
-        If ctrl% = CTRL_START Then
+        if ctrl% = CTRL_START then
           item% = 1
           ctrl% = CTRL_FIRE
-        EndIf
+        end if
 
-        Select Case ctrl%
-            Case CTRL_UP
+        select case ctrl%
+            case CTRL_UP
               item%=max(1,item%-1)
 
-            Case CTRL_DOWN
+            case CTRL_DOWN
               item%=min(4,item%+1)
 
-            Case CTRL_RIGHT
+            case CTRL_RIGHT
                 select case item%
                     case 2
                         g_difficulty%=min(2,g_difficulty%+1)
@@ -61,7 +59,7 @@ sub show_menu()
                         g_stage%=min(8,g_stage%+1)
                 end select
 
-            Case CTRL_LEFT
+            case CTRL_LEFT
                 select case item%
                     case 2
                         g_difficulty%=max(0,g_difficulty%-1)
@@ -69,7 +67,7 @@ sub show_menu()
                         g_stage%=max(1,g_stage%-1)
                 end select
 
-            Case CTRL_FIRE
+            case CTRL_FIRE
                 select case item%
                     case 1
                         play_song("STAGE_INTRO")
@@ -87,7 +85,7 @@ sub show_menu()
                         clear_screen()
                         end_game()
                 end select
-        End Select
+        end select
     loop
 end sub
 
