@@ -1,5 +1,5 @@
 ' Music table
-dim MUSIC$(9)=("INTRO_MOD","MAJOU_MOD","KNIGHTMARE_MOD","MAJOU_MOD","MAJOU_MOD","KNIGHTMARE_MOD","MAJOU_MOD","MAJOU_MOD","","")
+dim MUSIC$(9)=("INTRO_MOD","MAJOU_MOD","KNIGHTMARE_MOD","MAJOU_MOD","MAJOU_MOD","KNIGHTMARE_MOD","MAJOU_MOD","MAJOU_MOD","KNIGHTMARE_MOD","")
 
 sub play_song(song$)
     if not g_sound_on then exit sub
