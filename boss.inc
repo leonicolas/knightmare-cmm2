@@ -178,6 +178,10 @@ sub spawn_boss()
             create_boss_hit_box(2,0,0,TILE_SIZEx2)
             show_boss_body(id%,0)
         case 8
+            g_obj(id%,2)=TILE_SIZE*(choice(g_row%=0,6,-3))
+            g_obj(id%, 5)=TILE_SIZE*6*choice(g_player(0)<0,-1,1)
+            create_boss_hit_box(2,TILE_SIZEx2,TILE_SIZEx2)
+            show_boss_body(id%,0)
     end select
 end sub
 
@@ -223,6 +227,10 @@ sub show_boss_body(id%, tile_offset%)
             tile_w%=TILE_SIZEx2
             tile_h%=TILE_SIZEx2
         case 8
+            tile_x%=80
+            tile_y%=128
+            tile_w%=TILE_SIZE*6
+            tile_h%=TILE_SIZE*6
     end select
     sprite read sprite_id%, tile_x%+tile_offset%, tile_y%, tile_w%, tile_h%, BOSS_TILES_BUFFER
     sprite show safe sprite_id%, g_obj(id%, 1),g_obj(id%, 2), 2
@@ -251,8 +259,9 @@ sub boss_fire()
         case 7
             delay=70
         case 8
+            delay=-1
     end select
-    if g_timer mod delay = 0 then enemy_fire(g_boss(1), disable_rnd%)
+    if delay > 0 and g_timer mod delay = 0 then enemy_fire(g_boss(1), disable_rnd%)
 end sub
 
 sub animate_boss()

@@ -83,7 +83,7 @@ end sub
 
 sub play_boss_song()
     select case g_stage%
-        case 1,3,4,5,7
+        case 1,3,4,5,7,8
             play_song("DEMON_MOD")
         case 2,6
             play_song("BOSS_MOD")
