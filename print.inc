@@ -1,4 +1,4 @@
-sub debug_print(msg$, offset%)
+sub print_debug(msg$, offset%)
     page write 1
     print @(0,offset%) msg$
     page write SPRITES_BUFFER
