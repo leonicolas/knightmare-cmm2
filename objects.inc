@@ -23,7 +23,8 @@ sub animate_player()
 end sub
 
 sub animate_objects()
-    local i%,obj_id%,sprite_id%,offset_x%,offset_y%,offset_h%,effect%,buffer%,x,y,sfx%,red_death%=-1
+    local i%,obj_id%,spr_id%,offset_x%,offset_y%,offset_h%
+    local effect%,buffer%,x,y,sfx%,aux%=-1
 
     for i%=0 to bound(g_obj())
         obj_id% = g_obj(i%, 0)
@@ -35,7 +36,7 @@ sub animate_objects()
         effect%=-1
         buffer%=OBJ_TILES_BUFFER
         offset_x%=0: offset_y%=0
-        sprite_id%=OBJ_INI_SPRITE_ID + i%
+        spr_id%=OBJ_INI_SPRITE_ID + i%
 
         ' Config animation
         select case obj_id%
@@ -61,7 +62,7 @@ sub animate_objects()
                 offset_x%=0
 
             case 16 ' Red Death ghost
-                if red_death%>=0 then g_obj(i%,5)=g_obj(red_death%,5) else red_death%=i%
+                if aux%>=0 then g_obj(i%,5)=g_obj(aux%,5) else aux%=i%
                 select case g_obj(i%,5)
                     case is > 40
                         g_obj(i%,5)=0
@@ -108,22 +109,44 @@ sub animate_objects()
                     continue for
                 end if
 
+            case 50 ' Boss eyes
+                buffer%=BOSS_TILES_BUFFER
+                aux%=10*(spr_id%-17)
+                effect%=g_anim_tick% mod (109+aux%)
+                if effect% < 100+aux% then
+                    offset_y%=TILE_SIZEx4
+                    if effect%=1 then
+                        effect%=-1
+                    else
+                        effect%=choice((effect%\8)mod 2=0,0,1)
+                    end if
+                else if effect% < 103+aux% then
+                    offset_y%=TILE_SIZEx2
+                    effect%=-1
+                else if effect% < 106+aux% then
+                    offset_y%=0
+                    effect%=-1
+                else
+                    offset_y%=TILE_SIZEx2
+                    effect%=-1
+                end if
+
             case else ' Other objects
                 if g_anim_tick% mod 6 > 2 then offset_x%=TILE_SIZEx2
         end select
 
         ' Read or flip next frame's sprite
         if effect% >= 0 then
-            sprite show safe sprite_id%, sprite(X, sprite_id%), sprite(Y, sprite_id%), sprite(L, sprite_id%), effect%
+            sprite show safe spr_id%, sprite(X, spr_id%), sprite(Y, spr_id%), sprite(L, spr_id%), effect%
         else
-            x=sprite(X, sprite_id%)
-            y=sprite(Y, sprite_id%)
+            x=sprite(X, spr_id%)
+            y=sprite(Y, spr_id%)
             if effect% = -2 then
-                sprite hide safe sprite_id%
-                sprite close sprite_id%
+                sprite hide safe spr_id%
+                sprite close spr_id%
             end if
-            sprite read sprite_id%, OBJ_TILE%(obj_id%,0)+offset_x%, OBJ_TILE%(obj_id%,1)+offset_y%, OBJ_TILE%(obj_id%,2), OBJ_TILE%(obj_id%,3)+offset_h%, buffer%
-            if effect% = -2 then sprite show safe sprite_id%,x,y,1
+            sprite read spr_id%, OBJ_TILE%(obj_id%,0)+offset_x%, OBJ_TILE%(obj_id%,1)+offset_y%, OBJ_TILE%(obj_id%,2), OBJ_TILE%(obj_id%,3)+offset_h%, buffer%
+            if effect% = -2 then sprite show safe spr_id%,x,y,1
         end if
     next
 end sub
@@ -759,9 +782,10 @@ sub replace_sprite_skin(sprite_id%, obj_id%, x%, y%)
     sprite show safe sprite_id%, x%, y%, 1,, 1
 end sub
 
-sub spawn_object(obj_id%, x%, y%, obj_cfg%)
+function spawn_object(obj_id%, x%, y%, obj_cfg%)
     local i%=allocate_object(obj_id%, x%, y%)
-    if i% < 0 then exit sub
+    spawn_object=i%
+    if i% < 0 then exit function
 
     local sprite_id%=OBJ_INI_SPRITE_ID + i%, spawn_speed
     local offset_x%, offset_y%, layer%=1, data_id%, angle
@@ -885,7 +909,7 @@ sub spawn_object(obj_id%, x%, y%, obj_cfg%)
 
     sprite read sprite_id%, OBJ_TILE%(obj_id%,0)+offset_x%, OBJ_TILE%(obj_id%,1)+offset_y%, OBJ_TILE%(obj_id%,2), OBJ_TILE%(obj_id%,3), OBJ_TILES_BUFFER
     sprite show safe sprite_id%, g_obj(i%,1),g_obj(i%,2), layer%,, 1
-end sub
+end function
 
 sub spawn_shield()
     sprite read 2, OBJ_TILE%(36,0), OBJ_TILE%(36,1), OBJ_TILE%(36,2), OBJ_TILE%(36,3), OBJ_TILES_BUFFER

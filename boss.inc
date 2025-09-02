@@ -159,29 +159,35 @@ sub spawn_boss()
             g_obj(id%,2)=TILE_SIZE*(choice(g_row%=0,5,-4))
             g_obj(id%,4)=45
             spawn_shadow(id%,0, TILE_SIZE*8, false, 37)
-            create_boss_hit_box(2,TILE_SIZEx2,TILE_SIZEx2)
             show_boss_body(id%,0)
+            create_boss_hit_box(2,TILE_SIZEx2,TILE_SIZEx2)
         case 5
             g_obj(id%,2)=TILE_SIZE*(choice(g_row%=0,6,-3))
             g_obj(id%,5)=choice(g_player(0)<SCREEN_WIDTH,-120,120)
             create_boss_shield(TILE_SIZE, TILE_SIZE, TILE_SIZE*3)
-            create_boss_hit_box(2,TILE_SIZEx2,TILE_SIZEx2)
             show_boss_body(id%,0)
+            create_boss_hit_box(2,TILE_SIZEx2,TILE_SIZEx2)
         case 6
             g_obj(id%,2)=TILE_SIZE*(choice(g_row%=0,6,-3))
             g_obj(id%, 5)=TILE_SIZE*6*choice(g_player(0)<0,-1,1)
-            create_boss_hit_box(2,TILE_SIZEx2,TILE_SIZEx2)
             show_boss_body(id%,0)
+            create_boss_hit_box(2,TILE_SIZEx2,TILE_SIZEx2)
         case 7
             g_obj(id%,1)=SCREEN_WIDTH/2-TILE_SIZE
             g_obj(id%,2)=TILE_SIZE*5
-            create_boss_hit_box(2,0,0,TILE_SIZEx2)
             show_boss_body(id%,0)
+            create_boss_hit_box(2,0,0,TILE_SIZEx2)
         case 8
             g_obj(id%,2)=TILE_SIZE*(choice(g_row%=0,6,-3))
             g_obj(id%, 5)=TILE_SIZE*6*choice(g_player(0)<0,-1,1)
-            create_boss_hit_box(2,TILE_SIZEx2,TILE_SIZEx2)
             show_boss_body(id%,0)
+            ' Create eyes
+            create_boss_eye(id%,2,TILE_SIZEx2,0)
+            create_boss_eye(id%,3,3,6)
+            create_boss_eye(id%,4,TILE_SIZE*3+5,6)
+            create_boss_eye(id%,5,TILE_SIZEx2,TILE_SIZEx2)
+            create_boss_eye(id%,6,3,TILE_SIZEx2+6)
+            create_boss_eye(id%,7,TILE_SIZE*3+5,TILE_SIZEx2+6)
     end select
 end sub
 
@@ -191,7 +197,8 @@ sub create_boss_hit_box(ix%, offset_x, offset_y, width, life)
     local id%=g_boss(1)
     local hit_box_id%=allocate_object(50+g_stage%, g_obj(id%, 1)+offset_x, g_obj(id%, 2)+offset_y, life)
     g_boss(ix%)=hit_box_id%
-    sprite read OBJ_INI_SPRITE_ID+hit_box_id%,TRANSPARENT_BLOCK_X, TRANSPARENT_BLOCK_Y,width, TILE_SIZE, OBJ_TILES_BUFFER
+    'sprite read OBJ_INI_SPRITE_ID+hit_box_id%,TRANSPARENT_BLOCK_X, TRANSPARENT_BLOCK_Y, width, TILE_SIZE, OBJ_TILES_BUFFER
+    sprite read OBJ_INI_SPRITE_ID+hit_box_id%, 0, 0, width, TILE_SIZE, OBJ_TILES_BUFFER
     g_obj(hit_box_id%, 4)=offset_x
     g_obj(hit_box_id%, 5)=offset_y
     On Error Skip ' Workaround bug with sprite displayed completely off screen.
@@ -234,6 +241,14 @@ sub show_boss_body(id%, tile_offset%)
     end select
     sprite read sprite_id%, tile_x%+tile_offset%, tile_y%, tile_w%, tile_h%, BOSS_TILES_BUFFER
     sprite show safe sprite_id%, g_obj(id%, 1),g_obj(id%, 2), 2
+end sub
+
+sub create_boss_eye(boss_id%, eye_id%, offset_x, offset_y)
+    local id%=spawn_object(50,g_obj(boss_id%, 1)+offset_x, g_obj(boss_id%, 2)+offset_y)
+    g_boss(eye_id%)=id%
+    g_obj(id%,3)=BOSS_LIFE(g_stage%)
+    g_obj(id%,4)=offset_x
+    g_obj(id%,5)=offset_y
 end sub
 
 sub create_portal()
@@ -311,6 +326,11 @@ sub animate_boss()
             y%=56
             sprite show spr_id%, x%,y%, 2, choice(g_anim_tick% mod 6 > 2,0,1)
 
+        case 8
+            x%=80: y%=128
+            if g_boss(0) <> 1 and fix(g_obj(g_boss(1), 1)) <> fix(g_obj(g_boss(1), 5)) then
+                if g_anim_tick% mod 12 > 5 then inc x%, TILE_SIZE*6
+            end if
         case else
             exit sub
     end select
@@ -333,7 +353,7 @@ sub move_boss()
 
     ' Body position
     select case g_stage%
-        case 1
+        case 1,8
             inc g_obj(i%, 4) ' Boss tick
             if fix(g_obj(i%, 1)) = fix(g_obj(i%, 5)) then
                 if g_obj(i%, 4) mod 150 = 0 then g_obj(i%, 5)=min(max(g_player(0)-TILE_SIZEx2, EDGE_LEFT),right_edge%)
