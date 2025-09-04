@@ -3,6 +3,7 @@ sub process_input()
     if g_player(8) then exit sub
     g_player_is_moving=false
     local ctrl% = read_keyboard%()
+
     if not ctrl% then ctrl% = read_gamepad%()
     if not ctrl% then fire_down% = false : exit sub
 
@@ -31,6 +32,7 @@ function read_keyboard%()
     if not keydown(0) then exit function
     local i%
     for i% = 1 to 3
+        if not keydown(i%) then continue for
         select case keydown(i%)
         Case KB_UP
             read_keyboard% = read_keyboard% Or CTRL_UP

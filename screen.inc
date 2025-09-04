@@ -29,12 +29,20 @@ sub init_menu()
 end sub
 
 sub show_menu()
-    local released%=true, ctrl%, item%=1, i%
+    local released%=true, gp%, kb%, ctrl%, item%=1, i%
     init_menu()
     do
         update_menu(item%)
-        ctrl% = read_keyboard%()
-        if not ctrl% then ctrl% = read_gamepad%()
+        gp% = read_gamepad%()
+        kb% = read_keyboard%()
+
+        ctrl%=0
+        if kb% then
+            ctrl% = kb%
+        else if gp% then
+            ctrl% = gp%
+        end if
+
         if not ctrl% then released% = true : continue do
         if not released% then continue do
         released% = false
