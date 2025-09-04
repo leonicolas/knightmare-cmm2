@@ -11,7 +11,7 @@ sub activate_boss()
     next
 
     select case g_stage%
-        case 1
+        case 1,8
             ' Enqueue clouds spawning
             enqueue_action(1, 5,,,right,3000)
             enqueue_action(1, 5,,,left,6500)
@@ -182,12 +182,9 @@ sub spawn_boss()
             g_obj(id%, 5)=TILE_SIZE*6*choice(g_player(0)<0,-1,1)
             show_boss_body(id%,0)
             ' Create eyes
-            create_boss_eye(id%,2,TILE_SIZEx2,0)
-            create_boss_eye(id%,3,3,6)
-            create_boss_eye(id%,4,TILE_SIZE*3+5,6)
-            create_boss_eye(id%,5,TILE_SIZEx2,TILE_SIZEx2)
-            create_boss_eye(id%,6,3,TILE_SIZEx2+6)
-            create_boss_eye(id%,7,TILE_SIZE*3+5,TILE_SIZEx2+6)
+            for i%=3 to 7
+                create_boss_eye(id%,i%)
+            next
     end select
 end sub
 
@@ -243,12 +240,29 @@ sub show_boss_body(id%, tile_offset%)
     sprite show safe sprite_id%, g_obj(id%, 1),g_obj(id%, 2), 2
 end sub
 
-sub create_boss_eye(boss_id%, eye_id%, offset_x, offset_y)
-    local id%=spawn_object(50,g_obj(boss_id%, 1)+offset_x, g_obj(boss_id%, 2)+offset_y)
+sub create_boss_eye(boss_id%, eye_id%)
+    local offset_x%, offset_y%
+    select case eye_id%
+        case 2
+            offset_x%=TILE_SIZEx2: offset_y%=0
+        case 3
+            offset_x%=3: offset_y%=6
+        case 4
+            offset_x%=TILE_SIZE*3+5: offset_y%=6
+        case 5
+            offset_x%=TILE_SIZEx2: offset_y%=TILE_SIZEx2
+        case 6
+            offset_x%=3: offset_y%=TILE_SIZEx2+6
+        case 7
+            offset_x%=TILE_SIZE*3+5: offset_y%=TILE_SIZEx2+6
+        case else
+            exit sub
+    end select
+    local id%=spawn_object(50,g_obj(boss_id%, 1)+offset_x%, g_obj(boss_id%, 2)+offset_y%)
     g_boss(eye_id%)=id%
     g_obj(id%,3)=BOSS_LIFE(g_stage%)
-    g_obj(id%,4)=offset_x
-    g_obj(id%,5)=offset_y
+    g_obj(id%,4)=offset_x%
+    g_obj(id%,5)=offset_y%
 end sub
 
 sub create_portal()
@@ -259,7 +273,7 @@ sub create_portal()
 end sub
 
 sub boss_fire()
-    local delay, disable_rnd%
+    local delay, disable_rnd%,i%
     select case g_stage%
         case 1,6
             delay=70
@@ -275,6 +289,12 @@ sub boss_fire()
             delay=70
         case 8
             delay=-1
+            for i%=2 to 7
+                if g_boss(i%) <= 0 then continue for
+                if g_obj(g_boss(i%),0) > 0 and g_timer mod (130+10*i%) = 0 then
+                    enemy_fire(g_boss(i%), disable_rnd%)
+                end if
+            next
     end select
     if delay > 0 and g_timer mod delay = 0 then enemy_fire(g_boss(1), disable_rnd%)
 end sub

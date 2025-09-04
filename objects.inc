@@ -899,7 +899,6 @@ function spawn_object(obj_id%, x%, y%, obj_cfg%) as integer
             offset_x%=FIRE_ANIM(0)*TILE_SIZEx2
             layer%=4
             if obj_cfg% then play_sfx("ENEMY_KILL")
-
     end select
 
     if obj_cfg% > 0 and spawn_speed > 0 then enqueue_action(obj_cfg%, obj_id%, x%, y%,,spawn_speed)
@@ -1006,14 +1005,14 @@ end sub
 
 sub enemies_fire()
     if g_freeze_timer >= 0 then exit sub
-    local i%
+    local i%, id%
 
     for i%=0 to bound(g_obj())
-        ' Has object or is in the min Y position?
-        if g_obj(i%,0)=0 or g_obj(i%,0)>19 or (g_stage%<5 and g_obj(i%,2)<TILE_SIZEx2) then continue for
-
-        ' If it is not a black demon
-        if g_obj(i%,0) <> 8 then
+        id%=g_obj(i%,0)
+        ' Has object or it is in the min Y position?
+        if id% = 0 or (g_stage% < 5 and g_obj(i%,2) < TILE_SIZEx2) then continue for
+        ' Fires if it is not a black demon and is a shooting enemy
+        if id% < 20 and id% <> 8 then
             enemy_fire(i%)
         end if
     next
@@ -1122,7 +1121,7 @@ sub enemy_fire(ix%, disable_rnd%)
             next
             exit sub
 
-        case 54, 56 ' Boss stage 4 and 6
+        case 50, 54, 56 ' Boss stage 4, 6 and 8
             weapon_ix%=28 ' White explosion
             speed=110
             angle=max(min(210, angle), 150)
