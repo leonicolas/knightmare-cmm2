@@ -36,7 +36,7 @@ sub process_actions_queue()
                 show_boss_body(g_actions_queue(i%, 2), g_actions_queue(i%, 3))
 
             case 49 ' Open terrain
-                spawn_object(obj_id%, g_actions_queue(i%, 2), g_actions_queue(i%, 3))
+                obj_id%=spawn_object(obj_id%, g_actions_queue(i%, 2), g_actions_queue(i%, 3))
 
             case 100 ' Boss death blinks the screen
                 page write 0
@@ -48,7 +48,7 @@ sub process_actions_queue()
                 move_player_to_portal()
 
             case else ' Objects and enemies
-                spawn_object(obj_id%, g_actions_queue(i%, 2), g_actions_queue(i%, 3), g_actions_queue(i%,4))
+                obj_id%=spawn_object(obj_id%, g_actions_queue(i%, 2), g_actions_queue(i%, 3), g_actions_queue(i%,4))
 
         end select
 

@@ -213,11 +213,11 @@ sub process_map_row(row%, spawn%, line_zero%, offset_y%)
             extra%=tile_data% >> 13
             select case obj_id%
                 case 20, 21 ' Weapon chrystal or power-up chrystal
-                    spawn_object(obj_id%, min(SCREEN_WIDTH-TILE_SIZE*6,max(TILE_SIZEx4,g_player(0))), 0)
+                    obj_id%=spawn_object(obj_id%, min(SCREEN_WIDTH-TILE_SIZE*6,max(TILE_SIZEx4,g_player(0))), 0)
                 case 22 ' Block
                     spawn_block(row%, col%, extra%, offset_y%)
                 case else ' Enemies and other objects
-                    spawn_object(obj_id%, col%*TILE_SIZE, 0, choice(g_difficulty%=0,min(3, extra%),extra%))
+                    obj_id%=spawn_object(obj_id%, col%*TILE_SIZE, 0, choice(g_difficulty%=0,min(3, extra%),extra%))
             end select
         end if
     next

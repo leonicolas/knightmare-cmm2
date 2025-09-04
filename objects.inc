@@ -782,7 +782,7 @@ sub replace_sprite_skin(sprite_id%, obj_id%, x%, y%)
     sprite show safe sprite_id%, x%, y%, 1,, 1
 end sub
 
-function spawn_object(obj_id%, x%, y%, obj_cfg%)
+function spawn_object(obj_id%, x%, y%, obj_cfg%) as integer
     local i%=allocate_object(obj_id%, x%, y%)
     spawn_object=i%
     if i% < 0 then exit function
