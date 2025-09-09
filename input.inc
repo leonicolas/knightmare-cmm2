@@ -54,13 +54,15 @@ function read_gamepad%()
     read_gamepad% = gamepad(B)
     if (read_gamepad% and BUTTON_B) then read_gamepad% = CTRL_FIRE
 
-    ' No digital direction buttons down so check left-stick.
+    ' No digital direction buttons pushed, so check left-stick.
     if not read_gamepad% then
         select case gamepad(LX)
+            case 0
             case < 124: read_gamepad% = read_gamepad% Or CTRL_LEFT
             case > 132: read_gamepad% = read_gamepad% Or CTRL_RIGHT
         end select
         select case gamepad(LY)
+            case 0
             case < 124: read_gamepad% = read_gamepad% Or CTRL_UP
             case > 132: read_gamepad% = read_gamepad% Or CTRL_DOWN
         end select
