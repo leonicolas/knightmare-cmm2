@@ -22,9 +22,9 @@ sub animate_player()
     sprite read #1, x%+offset%, PLAYER_SKIN_Y, TILE_SIZEx2, TILE_SIZEx2, OBJ_TILES_BUFFER
 end sub
 
-sub animate_objects()
+sub animate_objects(reload%)
     local i%,obj_id%,spr_id%,offset_x%,offset_y%,offset_h%
-    local effect%,buffer%,x,y,sfx%,aux%=-1
+    local effect%,buffer%,x,y,sfx%,aux1%=-1,aux2%
 
     for i%=0 to bound(g_obj())
         obj_id% = g_obj(i%, 0)
@@ -62,7 +62,7 @@ sub animate_objects()
                 offset_x%=0
 
             case 16 ' Red Death ghost
-                if aux%>=0 then g_obj(i%,5)=g_obj(aux%,5) else aux%=i%
+                if aux1%>=0 then g_obj(i%,5)=g_obj(aux1%,5) else aux1%=i%
                 select case g_obj(i%,5)
                     case is > 40
                         g_obj(i%,5)=0
@@ -111,25 +111,33 @@ sub animate_objects()
 
             case 50 ' Boss eyes
                 buffer%=BOSS_TILES_BUFFER
-                aux%=10*(spr_id%-17)
-                effect%=g_anim_tick% mod (109+aux%)
-                if effect% < 100+aux% then
-                    offset_y%=TILE_SIZEx4
-                    if effect%=1 then
-                        effect%=-1
-                    else
-                        effect%=choice((effect%\8)mod 2=0,0,1)
-                    end if
-                else if effect% < 103+aux% then
-                    offset_y%=TILE_SIZEx2
-                    effect%=-1
-                else if effect% < 106+aux% then
+                aux1%=10*(spr_id%-17)
+                aux2%=g_anim_tick% mod (115+aux1%)
+
+                ' Y offset
+                if g_obj(i%,3) = 0 then ' Dead
                     offset_y%=0
-                    effect%=-1
-                else
+                else if aux2% < 100+aux1% then ' Open
+                    offset_y%=TILE_SIZEx4
+                    if aux2%<>1 then effect%=choice((aux2%\8)mod 2=0,0,1)
+                    if g_obj(i%,3)>1000 then inc g_obj(i%,3),-1000
+
+                else if aux2% < 103+aux1% then ' Closing
                     offset_y%=TILE_SIZEx2
-                    effect%=-1
+                    if g_obj(i%,3)<1000 then inc g_obj(i%,3),1000
+
+                else if aux2% < 112+aux1% then ' Closed
+                    offset_y%=0
+                else ' Opening
+                    offset_y%=TILE_SIZEx2
                 end if
+
+                ' X offset
+                aux1%=g_obj(i%,3)
+                if aux1% > 1000 then inc aux1%, -1000
+                offset_x%=TILE_SIZEx2*FIX(5-aux1%/5)
+
+                if reload% then effect%=-1
 
             case else ' Other objects
                 if g_anim_tick% mod 6 > 2 then offset_x%=TILE_SIZEx2
@@ -761,6 +769,13 @@ sub kill_player()
     check_shield()
 end sub
 
+sub kill_enemy(id%, keep_object%)
+    if g_obj(id%,0) <= bound(OBJ_POINTS()) then increment_score(OBJ_POINTS(g_obj(id%,0)))
+    start_fire_animation(g_obj(id%,1), g_obj(id%,2), true)
+    play_sfx("ENEMY_KILL")
+    if not keep_object% then destroy_object(id%)
+end sub
+
 function allocate_object(obj_id%, x%, y%, gpr1, gpr2, gpr3) as integer
     local i%=get_free_object_slot()
     allocate_object=i%
@@ -789,8 +804,8 @@ function spawn_object(obj_id%, x%, y%, obj_cfg%) as integer
 
     local sprite_id%=OBJ_INI_SPRITE_ID + i%, spawn_speed
     local offset_x%, offset_y%, layer%=1, data_id%, angle
-    data_id%=OBJ_TILE%(obj_id%,4)
 
+    data_id%=OBJ_TILE%(obj_id%,4)
     g_obj(i%,3)=OBJ_DATA(data_id%,2) ' GPR 1 / Life
     g_obj(i%,4)=OBJ_DATA(data_id%,3) ' GPR 2
     g_obj(i%,5)=OBJ_DATA(data_id%,4) ' GPR 3
@@ -895,7 +910,7 @@ function spawn_object(obj_id%, x%, y%, obj_cfg%) as integer
             angle=math(ATAN3 g_obj(i%,1)-g_player(0), g_obj(i%,2)-g_player(1)-200)
             g_obj(i%,4)=OBJ_DATA(data_id%,0)*sin(-angle)
 
-        case 31 ' Fire CHECK
+        case 31 ' Fire
             offset_x%=FIRE_ANIM(0)*TILE_SIZEx2
             layer%=4
             if obj_cfg% then play_sfx("ENEMY_KILL")

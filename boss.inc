@@ -42,13 +42,19 @@ sub boss_enemy_destroyed(obj_id%, gpr1, gpr2)
     end select
 end sub
 
+' Return true if the hit destroys the shot
 function hit_boss(sprite_id%) as integer
-    local obj_id%=g_boss(1)
-    local hit_box_id%=sprite_id%-OBJ_INI_SPRITE_ID
     hit_boss = false
 
     ' Boss inactive
     if g_boss(0) < 2 then exit function
+
+    local i%,obj_id%=g_boss(1)
+    local hit_box_id%=sprite_id%-OBJ_INI_SPRITE_ID
+
+    ' Invulnerable
+    if g_obj(hit_box_id%,3) > 1000 then exit function
+
 
     ' Verifies if was blocked
     select case g_stage%
@@ -69,10 +75,23 @@ function hit_boss(sprite_id%) as integer
     hit_boss = true
 
     ' Decrement hit box life
-    inc g_obj(hit_box_id%,3), choice(is_super_weapon(), -2, -1)
-    local hit_box_life%= g_obj(hit_box_id%,3)
-    ' Decrement boss life
-    if hit_box_life% <= 0 then inc g_obj(obj_id%,3), -1
+    if g_obj(hit_box_id%,3) > 0 and g_obj(hit_box_id%,3) < 1000 then
+        inc g_obj(hit_box_id%,3), choice(is_super_weapon(), -2, -1)
+        if g_obj(hit_box_id%,3) < 0 then g_obj(hit_box_id%,3)=0
+        if g_stage%=8 then animate_objects(true)
+    end if
+    local hit_box_life% = g_obj(hit_box_id%,3)
+
+    if hit_box_life% <= 0 then
+        ' Decrement boss life
+        inc g_obj(obj_id%,3), -1
+        ' Kill eye
+        if g_stage%=8 then
+            kill_enemy(hit_box_id%, true)
+            ' Create final eye
+            if g_obj(obj_id%,3) = 1 then create_boss_eye(1)
+        end if
+    end if
 
     ' Replace boss skin
     local aux%=BOSS_LIFE(g_stage%) \ 3
@@ -84,6 +103,7 @@ function hit_boss(sprite_id%) as integer
         case 3
             if hit_box_life%=aux% or hit_box_life%=aux%*2 then inc g_boss(0)
     end select
+
     if g_obj(obj_id%,3) <= 0 then
         kill_boss()
     else
@@ -102,7 +122,7 @@ sub kill_boss()
     play_song("SILENCE_MOD")
     play_sfx("BOSS_KILL")
 
-    ' Blink screen 30 times
+    ' Blink screen 30 times and destroy boss
     enqueue_action(30, 100,,,,40)
 end sub
 
@@ -179,11 +199,11 @@ sub spawn_boss()
             create_boss_hit_box(2,0,0,TILE_SIZEx2)
         case 8
             g_obj(id%,2)=TILE_SIZE*(choice(g_row%=0,6,-3))
+            g_obj(id%,3)=6 ' Boss life, 6 eyes
             g_obj(id%, 5)=TILE_SIZE*6*choice(g_player(0)<0,-1,1)
             show_boss_body(id%,0)
-            ' Create eyes
-            for i%=3 to 7
-                create_boss_eye(id%,i%)
+            for i%=2 to 7 ' Create boss eyes
+                create_boss_eye(i%)
             next
     end select
 end sub
@@ -240,33 +260,34 @@ sub show_boss_body(id%, tile_offset%)
     sprite show safe sprite_id%, g_obj(id%, 1),g_obj(id%, 2), 2
 end sub
 
-sub create_boss_eye(boss_id%, eye_id%)
+sub create_boss_eye(eye_id%)
     local offset_x%, offset_y%
     select case eye_id%
-        case 2
+        case 1
             offset_x%=TILE_SIZEx2: offset_y%=0
-        case 3
+        case 2
             offset_x%=3: offset_y%=6
-        case 4
+        case 3
             offset_x%=TILE_SIZE*3+5: offset_y%=6
-        case 5
+        case 4
             offset_x%=TILE_SIZEx2: offset_y%=TILE_SIZEx2
-        case 6
+        case 5
             offset_x%=3: offset_y%=TILE_SIZEx2+6
-        case 7
+        case 6
             offset_x%=TILE_SIZE*3+5: offset_y%=TILE_SIZEx2+6
         case else
             exit sub
     end select
-    local id%=spawn_object(50,g_obj(boss_id%, 1)+offset_x%, g_obj(boss_id%, 2)+offset_y%)
-    g_boss(eye_id%)=id%
+    local boss_id%=g_boss(1)
+    local id%=spawn_object(50,g_obj(boss_id%,1)+offset_x%, g_obj(boss_id%,2)+offset_y%)
+    g_boss(eye_id%+1)=id%
     g_obj(id%,3)=BOSS_LIFE(g_stage%)
     g_obj(id%,4)=offset_x%
     g_obj(id%,5)=offset_y%
 end sub
 
 sub create_portal()
-    local i%=allocate_object(50, SCREEN_WIDTH/2-TILE_SIZEx2, TILE_SIZE)
+    local i%=allocate_object(60, SCREEN_WIDTH/2-TILE_SIZEx2, TILE_SIZE)
     local sprite_id%=OBJ_INI_SPRITE_ID + i%
     sprite read sprite_id%, g_obj(i%,1),g_obj(i%,2), TILE_SIZEx4, TILE_SIZE*4-2, SCREEN_BUFFER
     sprite show safe sprite_id%, g_obj(i%,1),g_obj(i%,2),1,,1
@@ -292,6 +313,7 @@ sub boss_fire()
             for i%=2 to 7
                 if g_boss(i%) <= 0 then continue for
                 if g_obj(g_boss(i%),0) > 0 and g_timer mod (130+10*i%) = 0 then
+                    if g_obj(g_boss(i%),3) <= 0 then continue for
                     enemy_fire(g_boss(i%), disable_rnd%)
                 end if
             next
@@ -472,7 +494,7 @@ sub activate_hit_box(i%, active%)
     local sprite_id%=OBJ_INI_SPRITE_ID + g_boss(i%)
 
     if sprite(X, sprite_id%) = 10000 and active% then
-        sprite show safe sprite_id%, g_obj(i%, 1),g_obj(i%, 2), 1
+        'sprite show safe sprite_id%, g_obj(i%, 1),g_obj(i%, 2), 1
     else if sprite(X, sprite_id%) <> 10000 and not active% then
         sprite hide safe sprite_id%
     end if

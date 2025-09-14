@@ -119,14 +119,14 @@ function hit_shot(sprite_id%) as integer
 end function
 
 ' Return true if the hit destroys the shot
-function hit_object(collided_id%, sfx%, instakill%) as integer
-    local i%=collided_id% - OBJ_INI_SPRITE_ID, obj_id%=g_obj(i%,0),kill_enemy=true
+function hit_object(collided_id%, sfx%, instant_kill%) as integer
+    local i%=collided_id% - OBJ_INI_SPRITE_ID, obj_id%=g_obj(i%,0),is_dead=true
 
     hit_object=false
     g_cont_sfx$=""
     select case obj_id%
         case 5 ' Cloud
-            if instakill% then
+            if instant_kill% then
                 start_fire_animation(g_obj(i%,1), g_obj(i%,2), true)
                 destroy_object(i%)
             else
@@ -155,7 +155,7 @@ function hit_object(collided_id%, sfx%, instakill%) as integer
                 case 10 ' Zombie
                     if abs(g_obj(i%,4))=1000 then exit function
                     if g_obj(i%,5) = 0 then
-                        kill_enemy=false
+                        is_dead=false
                         ' Split zombie
                         play_sfx("SPLIT")
                         enqueue_action(1,10,g_obj(i%,1),g_obj(i%,2),-1000)
@@ -165,16 +165,11 @@ function hit_object(collided_id%, sfx%, instakill%) as integer
             end select
 
             inc g_obj(i%,3), -1 ' Decrement life
-            if not instakill% and g_obj(i%,3) > 0 then
+            if not instant_kill% and g_obj(i%,3) > 0 then
                 if not is_super_weapon() then hit_object=true
                 exit function
             end if
-            if kill_enemy then
-                increment_score(OBJ_POINTS(g_obj(i%,0)))
-                start_fire_animation(g_obj(i%,1), g_obj(i%,2), true)
-                play_sfx("ENEMY_KILL")
-            end if
-            destroy_object(i%)
+            if is_dead then kill_enemy(i%) else destroy_object(i%)
 
         case 20,21 ' Weapon and power-up chrystal
             inc g_obj(i%,4)
@@ -187,8 +182,8 @@ function hit_object(collided_id%, sfx%, instakill%) as integer
         case 34,49 ' Fire, Terrain
             exit function
 
-        case is > 50 ' Boss
-            hit_object = hit_boss(collided_id%)
+        case is >= 50 ' Boss
+            if g_obj(i%,3) > 0 then hit_object = hit_boss(collided_id%)
     end select
 
     if not is_super_weapon() then hit_object=true
