@@ -1,5 +1,5 @@
 ' Music table
-dim MUSIC$(9)=("INTRO_MOD","MAJOU_MOD","KNIGHTMARE_MOD","MAJOU_MOD","MAJOU_MOD","KNIGHTMARE_MOD","MAJOU_MOD","MAJOU_MOD","KNIGHTMARE_MOD","")
+dim MUSIC$(9)=("INTRO","MAJOU","KNIGHTMARE","MAJOU","MAJOU","KNIGHTMARE","MAJOU","MAJOU","KNIGHTMARE","ENDING")
 
 sub play_song(song$)
     if not g_sound_on then exit sub
@@ -7,17 +7,19 @@ sub play_song(song$)
     play stop
     select case song$
         case "STAGE_INTRO"
-            play modfile ROOT_DIR + "music/stage-intro.mod", 16000
-        case "BOSS_MOD"
-            play modfile ROOT_DIR + "music/boss.mod", 16000
-        case "DEMON_MOD"
-            play modfile ROOT_DIR + "music/facing-the-demon.mod", 16000
-        case "MAJOU_MOD"
-            play modfile ROOT_DIR + "music/majou-densetsu.mod", 16000
-        case "KNIGHTMARE_MOD"
-            play modfile ROOT_DIR + "music/knightmare.mod", 16000
-        case "SILENCE_MOD"
-            play modfile ROOT_DIR + "music/silence.mod", 16000
+            play modfile ROOT_DIR + "music/stage-intro.mod", 44100
+        case "BOSS"
+            play modfile ROOT_DIR + "music/boss.mod", 44100
+        case "DEMON"
+            play modfile ROOT_DIR + "music/facing-the-demon.mod", 44100
+        case "ENDING"
+            play modfile ROOT_DIR + "music/ending.mod", 44100
+        case "MAJOU"
+            play modfile ROOT_DIR + "music/majou-densetsu.mod", 44100
+        case "KNIGHTMARE"
+            play modfile ROOT_DIR + "music/knightmare.mod", 44100
+        case "SILENCE"
+            play modfile ROOT_DIR + "music/silence.mod", 44100
     end select
 end sub
 
@@ -84,8 +86,8 @@ end sub
 sub play_boss_song()
     select case g_stage%
         case 1,3,4,5,7,8
-            play_song("DEMON_MOD")
+            play_song("DEMON")
         case 2,6
-            play_song("BOSS_MOD")
+            play_song("BOSS")
     end select
 end sub

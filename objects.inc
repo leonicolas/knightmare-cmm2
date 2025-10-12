@@ -762,7 +762,7 @@ end sub
 
 sub kill_player()
     g_scroll_on=false
-    play_song("SILENCE_MOD")
+    play_song("SILENCE")
     play_sfx("PLAYER_DEATH")
     init_player(g_player(7) - 1)
     g_player(8)=4 ' Dead state

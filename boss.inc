@@ -119,7 +119,7 @@ sub kill_boss()
     destroy_enemies_shots()
     kill_all_enemies()
     animate_boss() ' Animates boss to initial state
-    play_song("SILENCE_MOD")
+    play_song("SILENCE")
     play_sfx("BOSS_KILL")
 
     ' Blink screen 30 times and destroy boss
