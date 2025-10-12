@@ -111,7 +111,7 @@ sub animate_objects(reload%)
 
             case 50 ' Boss eyes
                 buffer%=BOSS_TILES_BUFFER
-                aux1%=10*(spr_id%-17)
+                aux1%=10*(spr_id%-17) ' Different blinking time per eye
                 aux2%=g_anim_tick% mod (115+aux1%)
 
                 ' Y offset
@@ -134,8 +134,8 @@ sub animate_objects(reload%)
 
                 ' X offset
                 aux1%=g_obj(i%,3)
-                if aux1% > 1000 then inc aux1%, -1000
-                offset_x%=TILE_SIZEx2*FIX(5-aux1%/5)
+                if aux1% > 1000 then inc aux1%,-1000
+                offset_x%=TILE_SIZEx2*FIX(BOSS_LIFE(8)/5-aux1%/5)
 
                 if reload% then effect%=-1
 
@@ -914,6 +914,7 @@ function spawn_object(obj_id%, x%, y%, obj_cfg%) as integer
             offset_x%=FIRE_ANIM(0)*TILE_SIZEx2
             layer%=4
             if obj_cfg% then play_sfx("ENEMY_KILL")
+
     end select
 
     if obj_cfg% > 0 and spawn_speed > 0 then enqueue_action(obj_cfg%, obj_id%, x%, y%,,spawn_speed)
