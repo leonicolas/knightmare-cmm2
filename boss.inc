@@ -89,7 +89,10 @@ function hit_boss(sprite_id%) as integer
         if g_stage%=8 then
             kill_enemy(hit_box_id%, true)
             ' Create final eye
-            if g_obj(obj_id%,3) = 1 then create_boss_eye(1)
+            if g_obj(obj_id%,3) = 1 then
+                create_boss_eye(1)
+                animate_objects(true)
+            end if
         end if
     end if
 
