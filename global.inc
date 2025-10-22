@@ -43,6 +43,9 @@ dim g_prev_frame_timer         ' Previous frame timer value
 '  4 - Dead
 '  5 - Ready for next stage
 '  6 - Restart current stage
+'  7 - Final cutscene standing still
+'  8 - Final cutscene walking
+'  9 - Final cutscene fade out
 dim g_player(8)
 dim g_player_is_moving=false
 dim g_player_shot_ms=SHOT_COOLDOWN_MS

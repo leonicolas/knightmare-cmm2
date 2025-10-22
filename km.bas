@@ -51,9 +51,15 @@ sub start_game()
         select case g_player(8)
             case 5 ' Start stage
                 if not first_stage% then play_song("STAGE_INTRO")
-                'g_player(8)=0 ' Dev hack! Skip stage intro!
                 do while g_player(8) = 5
-                    if timer > 4000 then g_player(8)=0
+                    if timer > 4000 then
+                        if g_stage% = 9 then
+                            g_player(6)=0 ' No shield for final cutscene
+                            g_player(8)=7 ' Final cutscene state
+                        else
+                            g_player(8)=0
+                        end if
+                    end if
                 loop
             case 6 ' Player died
                 if g_player(7) < 0 then
@@ -71,8 +77,8 @@ sub start_game()
 
         ' Next stage
         if g_player(8) = 5 then
-            g_row%=MAP_ROWS_0
             inc g_stage%
+            g_row%=choice(g_stage%=9,0,MAP_ROWS_0)
         end if
     loop
 end sub
@@ -130,7 +136,7 @@ sub run_stage()
         g_delta_time=(timer-g_prev_frame_timer)/1000
         g_prev_frame_timer=timer
         inc g_timer
-        'debug_print("FPS: "+str$(1/g_delta_time))
+        'print_debug("FPS: "+str$(1/g_delta_time))
         page write SPRITES_BUFFER
 
         ' Scrolls the map
@@ -140,7 +146,9 @@ sub run_stage()
         process_input()
 
         ' Auto move player
-        if g_player(8) = 3 then auto_move_player_to_portal()
+        if g_player(8)=3 then auto_move_player_to_portal()
+        ' Play final cutscene
+        if g_player(8)=7 then play_final_cutscene()
 
         ' Process animations
         if g_timer mod 6 = 0 then
@@ -185,7 +193,7 @@ sub run_stage()
         if g_power_up_timer >= 0 then process_power_up_timer()
 
         ' Check player status
-        if g_player(8) > 4 then exit do
+        if g_player(8)>4 and g_player(8)<7 then exit do
     loop
 
     ' Close all sprites and free memory

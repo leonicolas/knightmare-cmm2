@@ -1,23 +1,27 @@
 sub animate_player()
     local offset%
     local speed=choice(g_player(5)=4,PLAYER_MAX_SPEED,g_player(4))
-    if g_player(8)=4 then
-        offset%=PLAYER_DEATH_ANIM(fix(min(g_player(2),bound(PLAYER_DEATH_ANIM()))))*TILE_SIZE
-        inc g_player(2),0.5
-        if g_player(2) > bound(PLAYER_DEATH_ANIM())*1.5 then g_player(8)=6
-    else
-        inc g_player(2),choice(g_player_is_moving,2+speed/PLAYER_INIT_SPEED,1)
-        ' Power up
-        select case g_player(5)
-            case 1
-                if sprite(X, 2) = 10000 then sprite show safe 2, g_player(0),g_player(1)-TILE_SIZE, 1
-            case is > 1
-                if g_power_up_timer > 10 or (g_power_up_timer - fix(g_power_up_timer)) > 0.5 then
-                    offset%=TILE_SIZEx2*g_player(5)
-                end if
-                if sprite(X, 2) < 10000 then sprite hide safe 2
-        end select
-    end if
+
+    select case g_player(8)
+        case 7,9 ' Final cutscene standing still
+            exit sub
+        case 4 ' Dead
+            offset%=PLAYER_DEATH_ANIM(fix(min(g_player(2),bound(PLAYER_DEATH_ANIM()))))*TILE_SIZE
+            inc g_player(2),0.5
+            if g_player(2) > bound(PLAYER_DEATH_ANIM())*1.5 then g_player(8)=6
+        case else
+            inc g_player(2),choice(g_player_is_moving,2+speed/PLAYER_INIT_SPEED,1)
+            ' Power up
+            select case g_player(5)
+                case 1
+                    if sprite(X, 2) = 10000 then sprite show safe 2, g_player(0),g_player(1)-TILE_SIZE, 1
+                case is > 1
+                    if g_power_up_timer > 10 or (g_power_up_timer - fix(g_power_up_timer)) > 0.5 then
+                        offset%=TILE_SIZEx2*g_player(5)
+                    end if
+                    if sprite(X, 2) < 10000 then sprite hide safe 2
+            end select
+    end select
     local x%=choice(g_player(8) <> 4 and g_player(2) mod 10 < 5,PLAYER_SKIN1_X_L,PLAYER_SKIN1_X_R)
     sprite read #1, x%+offset%, PLAYER_SKIN_Y, TILE_SIZEx2, TILE_SIZEx2, OBJ_TILES_BUFFER
 end sub
@@ -357,7 +361,7 @@ sub move_and_process_objects()
         obj_id%=g_obj(i%,0)
 
         ' Checks object id or if it is a boss
-        if not obj_id% or obj_id% > 50 then continue for
+        if not obj_id% or obj_id%>bound(OBJ_TILE%()) then continue for
         ' Freeze enemies except crystals
         if g_freeze_timer >= 0 and obj_id%<>20 and obj_id%<>21 then continue for
 
@@ -636,6 +640,21 @@ sub move_and_process_objects()
                 end if
                 offset_x%=g_obj(i%,4) >> 8
                 offset_y%=g_obj(i%,4) and &HFF
+
+            case 51 ' Princess and player final cutscene
+                if g_obj(i%,2) < SCREEN_CENTER_H-TILE_SIZE then
+                    ' Move princess down
+                    inc g_obj(i%,2),30*g_delta_time
+                elseif g_player(8) = 7 then
+                    g_player(8) = 8 ' Final cutscene player moving
+                elseif g_player(8) = 8 then
+                    if g_player(1) > SCREEN_CENTER_H+TILE_SIZEx2+3 then
+                        ' Move player up toward princess
+                        inc g_player(1),-30*g_delta_time
+                    else
+                        g_player(8) = 9 ' Final cutscene ended
+                    end if
+                end if
 
             case else
                 ' Increment X and Y position
@@ -949,6 +968,10 @@ sub spawn_shadow(obj_ix%, offset_x%, offset_y%, fixed_y%, shadow_tile_id%)
     sprite_id%=OBJ_INI_SPRITE_ID + i%
     sprite read sprite_id%, OBJ_TILE%(id%,0), OBJ_TILE%(id%,1), OBJ_TILE%(id%,2), OBJ_TILE%(id%,3), OBJ_TILES_BUFFER
     sprite show safe sprite_id%, g_obj(i%,1),g_obj(i%,2), 3
+end sub
+
+sub spawn_princess()
+    local id=spawn_object(51, SCREEN_CENTER_W - OBJ_TILE%(51,2)/2, 0)
 end sub
 
 sub fire()

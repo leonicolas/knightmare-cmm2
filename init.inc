@@ -67,11 +67,17 @@ sub init_stage()
     load_map(g_stage%)
     draw_map(g_row%)
 
+    ' Create cutscene portal and spawn princess
+    if g_stage% = 9 then
+        spawn_princess()
+        create_portal()
+    end if
+
     ' Print the status bar
     print_status()
 
     ' Play stage music
-    if g_row% > 8 then play_stage_song() else play_boss_song()
+    if g_row% > 8 or g_stage% = 9 then play_stage_song() else play_boss_song()
 end sub
 
 sub reset_globals()

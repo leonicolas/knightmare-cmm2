@@ -99,7 +99,7 @@ dim TILES_OFFSET(8)=(0,TILE_SIZE*3,TILE_SIZE*5,TILE_SIZE*9,TILE_SIZE*12,TILE_SIZ
 dim OBJ_POINTS(38)=(0,10,50,50,100,200,50,100,200,200,100,100,300,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
 
 ' Objects tiles: 0: tile x | 1: tile y | 2: tile width | 3: tile height | 4: obj data index
-dim OBJ_TILE%(50,4)
+dim OBJ_TILE%(51,4)
 ' Enemies
 ' Blob
 OBJ_TILE%(1,0)=1: OBJ_TILE%(1,1)=17: OBJ_TILE%(1,2)=14: OBJ_TILE%(1,3)=14: OBJ_TILE%(1,4)=1
@@ -200,6 +200,8 @@ OBJ_TILE%(48,0)=184: OBJ_TILE%(48,1)=136: OBJ_TILE%(48,2)=32: OBJ_TILE%(48,3)=8
 OBJ_TILE%(49,0)=240: OBJ_TILE%(49,1)=192: OBJ_TILE%(49,2)=16: OBJ_TILE%(49,3)=8
 ' Boss eyes
 OBJ_TILE%(50,0)=176: OBJ_TILE%(50,1)=128: OBJ_TILE%(50,2)=16: OBJ_TILE%(50,3)=16
+' Princess
+OBJ_TILE%(51,0)=0: OBJ_TILE%(51,1)=136: OBJ_TILE%(51,2)=16: OBJ_TILE%(51,3)=24
 
 ' Object data: 0: speed X | 1: speed Y | 2: GPR 1 | 3: GPR 2 | 4: GPR 3
 ' TODO: Move to data block
