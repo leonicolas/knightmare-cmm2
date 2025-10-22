@@ -1,9 +1,9 @@
-Const ROOT_DIR = Choice(UCase$(Mm.Info(Path)) = "NONE", "./", Mm.Info(Path))
+const ROOT_DIR = Choice(UCase$(Mm.Info(Path)) = "NONE", "./", Mm.Info(Path))
 
-Const MAP_TILESET_IMG = ROOT_DIR + "tiles/maps.png"
-Const OBJ_TILESET_IMG = ROOT_DIR + "tiles/objects.png"
-Const BOSS_TILESET_IMG = ROOT_DIR + "tiles/bosses.png"
-Const MAPS_DIR = ROOT_DIR + "maps"
+const MAP_TILESET_IMG = ROOT_DIR + "tiles/maps.png"
+const OBJ_TILESET_IMG = ROOT_DIR + "tiles/objects.png"
+const BOSS_TILESET_IMG = ROOT_DIR + "tiles/bosses.png"
+const MAPS_DIR = ROOT_DIR + "maps"
 
 const false=0
 const true=1
@@ -93,7 +93,7 @@ const FREEZE_TIME=10
 const POWER_UP_TIME=45
 
 ' Map Tiles Offset
-dim TILES_OFFSET(7)=(0,TILE_SIZE*3,TILE_SIZE*5,TILE_SIZE*9,TILE_SIZE*12,TILE_SIZE*15,TILE_SIZE*15,TILE_SIZE*19)
+dim TILES_OFFSET(8)=(0,TILE_SIZE*3,TILE_SIZE*5,TILE_SIZE*9,TILE_SIZE*12,TILE_SIZE*15,TILE_SIZE*15,TILE_SIZE*19,TILE_SIZE*19)
 
 ' Points
 dim OBJ_POINTS(38)=(0,10,50,50,100,200,50,100,200,200,100,100,300,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)

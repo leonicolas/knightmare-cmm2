@@ -2,7 +2,11 @@ sub show_stage_screen(stage%)
     page write 1: cls 0
     page write 0: cls 0
     print_status()
-    print_centralized_stage(stage%, "STAGE ")
+    if stage% = 9 then
+        print_centralized("YOU HAVE BEATEN ALL DEMONS !")
+    else
+        print_centralized_stage(stage%, "STAGE ")
+    end if
 end sub
 
 sub show_game_over_screen(stage%)
@@ -137,3 +141,9 @@ end function
 function center_y(tile_rows,offset_y) as float
     center_y=SCREEN_ROWS*TILE_SIZE/2-TILE_SIZE*tile_rows/2+offset_y*TILE_SIZE
 end function
+
+sub show_final_cutscene()
+    print_centralized("CONGRATULATIONS !",-2)
+    print_centralized("YOU HAVE DEFEATED THE DEMONS !",0)
+    print_centralized("THANK YOU FOR PLAYING !",2)
+end sub

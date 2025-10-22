@@ -184,7 +184,7 @@ sub process_map_row(row%, spawn%, line_zero%, offset_y%)
     ' Boss triggers
     select case row%
         case is < -1
-            activate_boss()
+            if g_stage% = 9 then show_final_cutscene() else activate_boss()
             exit sub
         case is < 0
             exit sub

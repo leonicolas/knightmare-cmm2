@@ -4,7 +4,7 @@ const path = require("path");
 const tilesCols = 32;
 const mapCols = 32;
 const tileSize = 8;
-const stageTilesOffset = [0, 3, 5, 9, 12, 15, 15, 19];
+const stageTilesOffset = [0, 3, 5, 9, 12, 15, 15, 19, 19];
 const mapBufferBytesPerTile = 2;
 
 const objectsIds = {
@@ -51,18 +51,18 @@ function generateMapBinary(stage) {
     /**
      * Indexes objects by tile index
      */
-    const tileObjects = mapData.layers[2].objects.reduce(
-        (data, object) => {
-            const higherX = Math.ceil(object.x);
-            const higherY = Math.ceil(object.y);
-            const normX = higherX - (higherX % tileSize);
-            const normY = higherY - (higherY % tileSize);
-            const index = (normY / tileSize) * mapCols + (normX / tileSize);
+    const tileObjects = mapData.layers[2].objects.reduce((data, object) => {
+        const higherX = Math.ceil(object.x);
+        const higherY = Math.ceil(object.y);
+        const normX = higherX - (higherX % tileSize);
+        const normY = higherY - (higherY % tileSize);
+        const index = (normY / tileSize) * mapCols + normX / tileSize;
 
-            data[index] = Object.assign({}, object, { id: objectsIds[object.type] });
-            return data;
-        }, {}
-    );
+        data[index] = Object.assign({}, object, {
+            id: objectsIds[object.type],
+        });
+        return data;
+    }, {});
 
     /**
      * 2 Bytes per tile
@@ -81,10 +81,16 @@ function generateMapBinary(stage) {
         // Calculate tile offset
         if (solidValue) {
             solidValue -= tileOffset + 1;
-            if (solidValue < 0) panic(`Solid tile ID is < 0\n- Stage ${stage}\n- Offset: ${tileOffset}\n- Index ${i}\n- ID ${solidValue}`);
+            if (solidValue < 0)
+                panic(
+                    `Solid tile ID is < 0\n- Stage ${stage}\n- Offset: ${tileOffset}\n- Index ${i}\n- ID ${solidValue}`
+                );
         } else {
             groundValue -= tileOffset + 1;
-            if (groundValue < 0) panic(`Ground tile ID is < 0\n- Stage ${stage}\n- Offset: ${tileOffset}\n- Index ${i}\n- ID ${groundValue}`);
+            if (groundValue < 0)
+                panic(
+                    `Ground tile ID is < 0\n- Stage ${stage}\n- Offset: ${tileOffset}\n- Index ${i}\n- ID ${groundValue}`
+                );
         }
         // Tile value + solid flag
         let value = solidValue ? solidValue | 0x80 : groundValue;
@@ -94,23 +100,26 @@ function generateMapBinary(stage) {
             value |= objectData.id << 8;
             value |= getObjectPropertyValue(objectData) << 13;
         }
-        mapBuffer.writeUInt16BE(value & 0xFFFF, i / mapBufferBytesPerTile);
-    };
+        mapBuffer.writeUInt16BE(value & 0xffff, i / mapBufferBytesPerTile);
+    }
 
     //fs.writeFileSync("ground.bin", groundBuffer);
     //fs.writeFileSync("solid.bin", solidBuffer);
-    fs.writeFileSync(path.join(__dirname, `../../maps/stage${stage}.map`), mapBuffer);
+    fs.writeFileSync(
+        path.join(__dirname, `../../maps/stage${stage}.map`),
+        mapBuffer
+    );
 }
 
 function getObjectPropertyValue(objectData) {
     let propertyValue = 0;
-    (objectData.properties ?? []).every(propertyData => {
+    (objectData.properties ?? []).every((propertyData) => {
         if (objectData.type === "block") {
             propertyValue = blockTypes[propertyData.value];
         } else {
             propertyValue = parseInt(propertyData.value, 10);
             if (propertyData.name === "Count") {
-                propertyValue = propertyValue > 0 ? propertyValue - 1 : 0
+                propertyValue = propertyValue > 0 ? propertyValue - 1 : 0;
             }
         }
         return false;
@@ -123,6 +132,6 @@ function panic(message) {
     process.exit(-1);
 }
 
-for(let stage = 1; stage <= 8; ++stage) {
+for (let stage = 1; stage <= 9; ++stage) {
     generateMapBinary(stage);
 }
