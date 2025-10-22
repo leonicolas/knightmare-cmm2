@@ -74,8 +74,8 @@ sub print_text(line%, col%, text$, offset%)
     for i%=1 to txt_len%
         c%=asc(mid$(text$, i%, 1))
         select case c%
-            case 32
-                blit SYMBOLS_X,SYMBOLS_Y, col%*TILE_SIZE+offset%,y%, TILE_SIZE, TILE_SIZE, OBJ_TILES_BUFFER
+            case 32 to 33
+                blit SYMBOLS_X+(c%-32)*TILE_SIZE,SYMBOLS_Y, col%*TILE_SIZE+offset%,y%, TILE_SIZE, TILE_SIZE, OBJ_TILES_BUFFER
             case 40 to 41
                 blit NUMBERS_X+(c%-29)*TILE_SIZE,NUMBERS_Y, col%*TILE_SIZE+offset%,y%, TILE_SIZE, TILE_SIZE, OBJ_TILES_BUFFER
             case 48 to 58
