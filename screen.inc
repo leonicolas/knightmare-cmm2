@@ -3,7 +3,7 @@ sub show_stage_screen(stage%)
     page write 0: cls 0
     print_status()
     if stage% = 9 then
-        print_centralized("YOU HAVE BEATEN ALL DEMONS !")
+        print_centralized("YOU HAVE BEATEN ALL DEMONS !",2)
     else
         print_centralized_stage(stage%, "STAGE ")
     end if
