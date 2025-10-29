@@ -1,5 +1,5 @@
 ' Music table
-dim MUSIC$(9)=("INTRO","MAJOU","KNIGHTMARE","MAJOU","MAJOU","KNIGHTMARE","MAJOU","MAJOU","KNIGHTMARE","ENDING")
+dim MUSIC$(8)=("INTRO","MAJOU","KNIGHTMARE","MAJOU","MAJOU","KNIGHTMARE","MAJOU","MAJOU","KNIGHTMARE")
 
 sub play_song(song$)
     if not g_sound_on then exit sub
@@ -80,7 +80,9 @@ sub play_sfx(sfx$)
 end sub
 
 sub play_stage_song()
-    play_song(MUSIC$(g_stage%))
+    if g_stage% < 9 then
+        play_song(MUSIC$(g_stage%))
+    end if
 end sub
 
 sub play_boss_song()

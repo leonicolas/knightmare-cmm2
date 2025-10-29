@@ -31,11 +31,11 @@ sub print_centralized_stage(stage%, prefix$)
     print_centralized(stg$)
 end sub
 
-sub print_centralized(text$, horiz_offset%)
+sub print_centralized(text$, horiz_offset%, page%)
     local l%=len(text$)
     local row%=(SCREEN_ROWS/2-1)+horiz_offset%
     local col%=SCREEN_COLS/2-l%/2
-    print_text(row%, col%, text$, SCREEN_OFFSET)
+    print_text(row%, col%, text$, SCREEN_OFFSET, page%)
 end sub
 
 sub print_lives(lives%)
@@ -67,10 +67,12 @@ sub clear_text(line%, col%, len%, offset%)
     print_text(line%, col%, string$(len%,127), offset%)
 end sub
 
-sub print_text(line%, col%, text$, offset%)
+sub print_text(line%, col%, text$, offset%, page%)
     local txt_len%=len(text$), i%, c%, y%=line%*TILE_SIZE
+    local p%=page%
+    if p%=0 then p% = 1
 
-    page write 1
+    page write p%
     for i%=1 to txt_len%
         c%=asc(mid$(text$, i%, 1))
         select case c%
@@ -78,6 +80,8 @@ sub print_text(line%, col%, text$, offset%)
                 blit SYMBOLS_X+(c%-32)*TILE_SIZE,SYMBOLS_Y, col%*TILE_SIZE+offset%,y%, TILE_SIZE, TILE_SIZE, OBJ_TILES_BUFFER
             case 40 to 41
                 blit NUMBERS_X+(c%-29)*TILE_SIZE,NUMBERS_Y, col%*TILE_SIZE+offset%,y%, TILE_SIZE, TILE_SIZE, OBJ_TILES_BUFFER
+            case 46
+                blit NUMBERS_X-TILE_SIZE,NUMBERS_Y, col%*TILE_SIZE+offset%,y%, TILE_SIZE, TILE_SIZE, OBJ_TILES_BUFFER
             case 48 to 58
                 blit NUMBERS_X+(c%-48)*TILE_SIZE,NUMBERS_Y, col%*TILE_SIZE+offset%,y%, TILE_SIZE, TILE_SIZE, OBJ_TILES_BUFFER
             case 65 to 90

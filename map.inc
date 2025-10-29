@@ -86,6 +86,23 @@ sub load_map(stage%)
     close #5
 end sub
 
+sub fade_map(start)
+    local delta=g_player(8)-start
+    local vspeed=2
+
+    if delta > 60/vspeed then
+        print_centralized("LOVE IS FOREVER...      ", 7, SCREEN_BUFFER)
+        exit sub
+    end if
+
+    local hspeed=vspeed*1.6*delta
+    vspeed=vspeed*delta
+
+    page write SCREEN_BUFFER
+    box hspeed,TILE_SIZEx2+vspeed, SCREEN_WIDTH-hspeed*2,SCREEN_HEIGHT-vspeed*2, 4, 0
+    page write SPRITES_BUFFER
+end sub
+
 sub scroll_map()
     if not g_scroll_on then exit sub
     local i%, sprite_id%

@@ -3,7 +3,10 @@ sub animate_player()
     local speed=choice(g_player(5)=4,PLAYER_MAX_SPEED,g_player(4))
 
     select case g_player(8)
-        case 7,9 ' Final cutscene standing still
+        case 7 ' Final cutscene standing still
+            exit sub
+        case >8 ' Fade out
+            inc g_player(8)
             exit sub
         case 4 ' Dead
             offset%=PLAYER_DEATH_ANIM(fix(min(g_player(2),bound(PLAYER_DEATH_ANIM()))))*TILE_SIZE
@@ -646,6 +649,7 @@ sub move_and_process_objects()
                     ' Move princess down
                     inc g_obj(i%,2),30*g_delta_time
                 elseif g_player(8) = 7 then
+                    destroy_portal()
                     g_player(8) = 8 ' Final cutscene player moving
                 elseif g_player(8) = 8 then
                     if g_player(1) > SCREEN_CENTER_H+TILE_SIZEx2+3 then
@@ -730,6 +734,7 @@ sub destroy_object(id%)
     destroy_shadow(id%)
 
     if sprite(X, sprite_id%) <> 10000 then sprite hide safe sprite_id%
+    on error skip
     sprite close sprite_id%
     if is_enemy(obj_id%) then
         inc g_enemies_count%, -1

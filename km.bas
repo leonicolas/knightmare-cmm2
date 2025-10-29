@@ -40,20 +40,25 @@ sub start_game()
     g_score% = 0
 
     ' Dev variables
-    'g_stage%=7     ' Stage
-    'g_row%=0       ' Position into the map
-    'g_player(3)=11 ' Best weapon
-    'g_player(6)=30 ' Shield with support to 30 hits
+    ' g_stage%=8     ' Stage
+    ' g_row%=0       ' Position into the map
+    ' g_player(3)=11 ' Best weapon
+    ' g_player(6)=30 ' Shield with support to 30 hits
     ' End Dev variables
     do
         timer=0
         show_stage_screen(g_stage%)
         select case g_player(8)
             case 5 ' Start stage
-                if not first_stage% then play_song("STAGE_INTRO")
+                if g_stage% = 9 then
+                    play_song("ENDING")
+                elseif not first_stage% then
+                    play_song("STAGE_INTRO")
+                end if
                 do while g_player(8) = 5
                     if timer > 4000 then
                         if g_stage% = 9 then
+                            g_player(5)=0 ' No power-ups for final cutscene
                             g_player(6)=0 ' No shield for final cutscene
                             g_player(8)=7 ' Final cutscene state
                         else
@@ -71,6 +76,9 @@ sub start_game()
                 do while g_player(8) = 6
                     if timer > 2000 then g_player(8)=0
                 loop
+            case > 10 ' Game finished
+                play stop
+                exit do
         end select
         first_stage%=false
         run_stage()
@@ -154,7 +162,8 @@ sub run_stage()
         if g_timer mod 6 = 0 then
             inc g_anim_tick%
             animate_player()
-            if g_boss(0) > 1 then animate_boss()
+            if g_boss(0)>1 then animate_boss()
+            if g_player(8)>=20 then fade_map(20)
             animate_shots()
             animate_objects()
             ' Clean state
@@ -193,7 +202,7 @@ sub run_stage()
         if g_power_up_timer >= 0 then process_power_up_timer()
 
         ' Check player status
-        if g_player(8)>4 and g_player(8)<7 then exit do
+        if g_player(8)>4 and g_player(8)<7 or g_player(8)>100 then exit do
     loop
 
     ' Close all sprites and free memory
