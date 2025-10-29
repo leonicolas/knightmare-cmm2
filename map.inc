@@ -280,3 +280,14 @@ sub spawn_block(row%, col%, type%, offset_y%)
     sprite read BLOCK_INI_SPRITE_ID + i%, TRANSPARENT_BLOCK_X, TRANSPARENT_BLOCK_Y, TILE_SIZEx2, TILE_SIZEx2, OBJ_TILES_BUFFER
     sprite show safe BLOCK_INI_SPRITE_ID + i%, col%*TILE_SIZE,offset_y%, 1
 end sub
+
+sub create_portal()
+    local i%=allocate_object(60, SCREEN_WIDTH/2-TILE_SIZEx2, TILE_SIZE)
+    local sprite_id%=OBJ_INI_SPRITE_ID + i%
+    sprite read sprite_id%, g_obj(i%,1),g_obj(i%,2), TILE_SIZEx4, TILE_SIZE*4-2, SCREEN_BUFFER
+    sprite show safe sprite_id%, g_obj(i%,1),g_obj(i%,2),1,,1
+end sub
+
+sub destroy_portal()
+    destroy_object(2)
+end sub

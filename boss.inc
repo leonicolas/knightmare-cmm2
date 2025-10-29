@@ -289,13 +289,6 @@ sub create_boss_eye(eye_id%)
     g_obj(id%,5)=offset_y%
 end sub
 
-sub create_portal()
-    local i%=allocate_object(60, SCREEN_WIDTH/2-TILE_SIZEx2, TILE_SIZE)
-    local sprite_id%=OBJ_INI_SPRITE_ID + i%
-    sprite read sprite_id%, g_obj(i%,1),g_obj(i%,2), TILE_SIZEx4, TILE_SIZE*4-2, SCREEN_BUFFER
-    sprite show safe sprite_id%, g_obj(i%,1),g_obj(i%,2),1,,1
-end sub
-
 sub boss_fire()
     local delay, disable_rnd%,i%
     select case g_stage%
