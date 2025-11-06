@@ -23,6 +23,7 @@ sub activate_boss()
             activate_shield(true)
             activate_hit_box(2, false)
         case 7
+            show_boss_body(id%,0)
             ' Enqueue knight spawning
             enqueue_action(1, 4,SCREEN_WIDTH/2-TILE_SIZE,TILE_SIZE*5,,4000)
             enqueue_action(1, 4,SCREEN_WIDTH/2-TILE_SIZE,TILE_SIZE*5,,8000)
@@ -197,8 +198,7 @@ sub spawn_boss()
             create_boss_hit_box(2,TILE_SIZEx2,TILE_SIZEx2)
         case 7
             g_obj(id%,1)=SCREEN_WIDTH/2-TILE_SIZE
-            g_obj(id%,2)=TILE_SIZE*5
-            show_boss_body(id%,0)
+            g_obj(id%,2)=TILE_SIZE*6
             create_boss_hit_box(2,0,0,TILE_SIZEx2)
         case 8
             g_obj(id%,2)=TILE_SIZE*(choice(g_row%=0,6,-3))
@@ -376,6 +376,7 @@ sub animate_boss()
 end sub
 
 sub scroll_boss()
+    if g_stage% = 7 then exit sub
     local id%=g_boss(1)
     inc g_obj(id%, 2)
     sprite next OBJ_INI_SPRITE_ID + id%, g_obj(id%, 1), g_obj(id%, 2)
