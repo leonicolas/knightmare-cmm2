@@ -35,6 +35,7 @@ end sub
 sub show_menu()
     local released%=true, gp%, kb%, ctrl%, item%=1, i%
     init_menu()
+    play_song("TITLE")
     do
         update_menu(item%)
         gp% = read_gamepad%()
