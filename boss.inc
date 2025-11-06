@@ -512,6 +512,6 @@ sub move_hit_box()
         g_obj(box_id%, 1)=g_obj(id%, 1)+g_obj(box_id%, 4)
         g_obj(box_id%, 2)=g_obj(id%, 2)+g_obj(box_id%, 5)
         sprite_id%=OBJ_INI_SPRITE_ID + box_id%
-        if sprite(x, sprite_id%) <> 10000 then sprite next sprite_id%, g_obj(box_id%, 1),g_obj(box_id%, 2)
+        if sprite(x, sprite_id%) <> 10000 then sprite next sprite_id%, g_obj(box_id%, 1),max(-7,g_obj(box_id%, 2))
     next
 end sub
