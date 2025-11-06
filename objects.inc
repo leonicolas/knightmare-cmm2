@@ -117,6 +117,8 @@ sub animate_objects(reload%)
                 end if
 
             case 50 ' Boss eyes
+                if g_stage% <> 9 then continue for
+
                 buffer%=BOSS_TILES_BUFFER
                 aux1%=10*(spr_id%-17) ' Different blinking time per eye
                 aux2%=g_anim_tick% mod (115+aux1%)
@@ -160,6 +162,7 @@ sub animate_objects(reload%)
                 sprite hide safe spr_id%
                 sprite close spr_id%
             end if
+
             sprite read spr_id%, OBJ_TILE%(obj_id%,0)+offset_x%, OBJ_TILE%(obj_id%,1)+offset_y%, OBJ_TILE%(obj_id%,2), OBJ_TILE%(obj_id%,3)+offset_h%, buffer%
             if effect% = -2 then sprite show safe spr_id%,x,y,1
         end if
@@ -643,7 +646,8 @@ sub move_and_process_objects()
                 end if
                 offset_x%=g_obj(i%,4) >> 8
                 offset_y%=g_obj(i%,4) and &HFF
-
+            case 50 ' Boss
+                continue for
             case 51 ' Princess and player final cutscene
                 if g_obj(i%,2) < SCREEN_CENTER_H-TILE_SIZE then
                     ' Move princess down
@@ -660,6 +664,7 @@ sub move_and_process_objects()
                     end if
                 end if
 
+            case 60 ' Hit box
             case else
                 ' Increment X and Y position
                 inc g_obj(i%,1),OBJ_DATA(data_id%,0)*g_delta_time
@@ -671,7 +676,7 @@ sub move_and_process_objects()
             if flip%>=0 then
                 sprite show safe sprite_ix%, g_obj(i%,1)+offset_x%, g_obj(i%,2)+offset_y%, sprite(L, sprite_ix%), flip%
             else
-                sprite next sprite_ix%, g_obj(i%,1)+offset_x%, g_obj(i%,2)+offset_y%
+                sprite next sprite_ix%, g_obj(i%,1)+offset_x%, max(-7, g_obj(i%,2)+offset_y%)
             end if
         else if obj_id% = 39 then ' Shadow
             destroy_shadow(g_obj(i%,6))
@@ -1145,45 +1150,44 @@ sub enemy_fire(ix%, disable_rnd%)
             next
             exit sub
 
-        case 51 ' Boss stage 1
-            weapon_ix%=24 ' Energy ray
-            speed=120
+        case 50 ' Boss
+            select case g_stage%
+                case 1
+                    weapon_ix%=24 ' Energy ray
+                    speed=120
+                case 2
+                    weapon_ix%=33 ' Scythe
+                    ' Center of rotation
+                    gpr1=g_obj(ix%,1)             ' X
+                    gpr2=g_obj(ix%,2)+TILE_SIZE*8 ' Y
+                case 3
+                    weapon_ix%=28 ' White explosion
+                    angle=min(200,max(160,angle))
+                    speed=110
+                    for i%=-60 to 60 step 20
+                        create_shot(shot_ix%, weapon_ix%, x, y, speed*sin(angle-i%), speed*-cos(angle-i%))
+                        if i% < 60 then shot_ix%=get_free_shot_slot()
+                    next
+                    exit sub
+                case 4,6,8
+                    weapon_ix%=28 ' White explosion
+                    speed=110
+                    angle=max(min(210, angle), 150)
+                    gpr1=speed*sin(angle)
+                    gpr2=speed*-cos(angle)
 
-        case 52 ' Boss stage 2
-            weapon_ix%=33 ' Scythe
-            ' Center of rotation
-            gpr1=g_obj(ix%,1)             ' X
-            gpr2=g_obj(ix%,2)+TILE_SIZE*8 ' Y
-
-        case 53 ' Boss stage 3
-            weapon_ix%=28 ' White explosion
-            angle=min(200,max(160,angle))
-            speed=110
-            for i%=-60 to 60 step 20
-                create_shot(shot_ix%, weapon_ix%, x, y, speed*sin(angle-i%), speed*-cos(angle-i%))
-                if i% < 60 then shot_ix%=get_free_shot_slot()
-            next
-            exit sub
-
-        case 50, 54, 56 ' Boss stage 4, 6 and 8
-            weapon_ix%=28 ' White explosion
-            speed=110
-            angle=max(min(210, angle), 150)
-            gpr1=speed*sin(angle)
-            gpr2=speed*-cos(angle)
-
-            if obj_id% = 54 then
-                offset_x%=TILE_SIZEx2 ' Red explosion
-                gpr3=g_player(1)
-            end if
-
-        case 55 ' Boss stage 5
-            weapon_ix%=32 ' Axe
-            gpr2=100      ' Y speed
-            x=g_obj(ix%,1)-TILE_SIZE
-            create_shot(get_free_shot_slot(), weapon_ix%, x, y, gpr1, gpr2, gpr3, rot%, offset_x%)
-            inc x, TILE_SIZE*6
-            shot_ix%=get_free_shot_slot()
+                    if obj_id% = 54 then
+                        offset_x%=TILE_SIZEx2 ' Red explosion
+                        gpr3=g_player(1)
+                    end if
+                case 5
+                    weapon_ix%=32 ' Axe
+                    gpr2=100      ' Y speed
+                    x=g_obj(ix%,1)-TILE_SIZE
+                    create_shot(get_free_shot_slot(), weapon_ix%, x, y, gpr1, gpr2, gpr3, rot%, offset_x%)
+                    inc x, TILE_SIZE*6
+                    shot_ix%=get_free_shot_slot()
+            end select
     end select
 
     if gpr1 = 0 and gpr2 = 0 then

@@ -130,7 +130,7 @@ sub kill_boss()
 end sub
 
 sub destroy_boss()
-    local i%, x%=g_obj(g_boss(1),1), y%=g_obj(g_boss(1),2)
+    local i%, x%=g_obj(0,1), y%=g_obj(0,2)
 
     ' Destroy boss objects
     for i%=1 to 7
@@ -151,10 +151,11 @@ end sub
 
 sub spawn_boss()
     local x%=SCREEN_WIDTH/2-TILE_SIZE*2.5
-    local y%, i%, id%=allocate_object(50+g_stage%, x%, y%, 1, 0, TILE_SIZE*14)
+    local y%, i%, id%=allocate_object(50, x%, y%, 1, 0, TILE_SIZE*14)
 
     g_boss(0)=1   ' Status - Waiting start
     g_boss(1)=id% ' Body Object Id
+
     for i%=2 to 7
         g_boss(i%)=-1 ' Hit box
     next
@@ -215,14 +216,13 @@ sub create_boss_hit_box(ix%, offset_x, offset_y, width, life)
     if life=0 then life=BOSS_LIFE(g_stage%)
     if width=0 then width=TILE_SIZE
     local id%=g_boss(1)
-    local hit_box_id%=allocate_object(50+g_stage%, g_obj(id%, 1)+offset_x, g_obj(id%, 2)+offset_y, life)
+    local hit_box_id%=allocate_object(60, g_obj(id%, 1)+offset_x, g_obj(id%, 2)+offset_y, life)
     g_boss(ix%)=hit_box_id%
-    'sprite read OBJ_INI_SPRITE_ID+hit_box_id%,TRANSPARENT_BLOCK_X, TRANSPARENT_BLOCK_Y, width, TILE_SIZE, OBJ_TILES_BUFFER
-    sprite read OBJ_INI_SPRITE_ID+hit_box_id%, 0, 0, width, TILE_SIZE, OBJ_TILES_BUFFER
+    sprite read OBJ_INI_SPRITE_ID+hit_box_id%,TRANSPARENT_BLOCK_X, TRANSPARENT_BLOCK_Y, width, TILE_SIZE, OBJ_TILES_BUFFER
+    'sprite read OBJ_INI_SPRITE_ID+hit_box_id%, 0, 0, width, TILE_SIZE, OBJ_TILES_BUFFER
     g_obj(hit_box_id%, 4)=offset_x
     g_obj(hit_box_id%, 5)=offset_y
-    On Error Skip ' Workaround bug with sprite displayed completely off screen.
-    sprite show safe OBJ_INI_SPRITE_ID+hit_box_id%, g_obj(hit_box_id%, 1),g_obj(hit_box_id%, 2), 1
+    sprite show safe OBJ_INI_SPRITE_ID+hit_box_id%, g_obj(hit_box_id%, 1),max(-7,g_obj(hit_box_id%, 2)), 1
 end sub
 
 sub create_boss_shield(offset_x, offset_y, width)

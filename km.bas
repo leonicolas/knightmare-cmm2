@@ -50,11 +50,6 @@ sub start_game()
         show_stage_screen(g_stage%)
         select case g_player(8)
             case 5 ' Start stage
-                if g_stage% = 9 then
-                    play_song("ENDING")
-                elseif not first_stage% then
-                    play_song("STAGE_INTRO")
-                end if
                 do while g_player(8) = 5
                     if timer > 4000 then
                         if g_stage% = 9 then

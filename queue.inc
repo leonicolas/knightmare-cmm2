@@ -45,6 +45,7 @@ sub process_actions_queue()
                 if g_actions_queue(i%, 0) = 1 then destroy_boss()
 
             case 101 ' Move player to portal
+                play_song("STAGE_INTRO")
                 move_player_to_portal()
 
             case else ' Objects and enemies
