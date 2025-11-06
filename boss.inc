@@ -52,10 +52,6 @@ function hit_boss(sprite_id%) as integer
     local i%,obj_id%=g_boss(1)
     local hit_box_id%=sprite_id%-OBJ_INI_SPRITE_ID
 
-    ' Invulnerable
-    if g_obj(hit_box_id%,3) > 1000 then exit function
-
-
     ' Verifies if was blocked
     select case g_stage%
         case 3
@@ -71,6 +67,9 @@ function hit_boss(sprite_id%) as integer
                 exit function
             end if
     end select
+
+    ' Invulnerable
+    if g_obj(hit_box_id%,3) > 1000 then exit function
 
     hit_boss = true
 
@@ -490,7 +489,7 @@ sub activate_hit_box(i%, active%)
     local sprite_id%=OBJ_INI_SPRITE_ID + g_boss(i%)
 
     if sprite(X, sprite_id%) = 10000 and active% then
-        'sprite show safe sprite_id%, g_obj(i%, 1),g_obj(i%, 2), 1
+        sprite show safe sprite_id%, g_obj(i%, 1),g_obj(i%, 2), 1
     else if sprite(X, sprite_id%) <> 10000 and not active% then
         sprite hide safe sprite_id%
     end if
