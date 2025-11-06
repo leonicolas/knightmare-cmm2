@@ -180,6 +180,7 @@ function hit_object(collided_id%, sfx%, instant_kill%) as integer
             hit_object=true
 
         case 34,49 ' Fire, Terrain
+            if instant_kill% and obj_id% = 49 then destroy_object(i%)
             exit function
 
         case is >= 50 ' Boss

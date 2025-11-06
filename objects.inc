@@ -1089,7 +1089,7 @@ sub enemy_fire(ix%, disable_rnd%)
     if calc_id% = 50 then inc calc_id%, g_stage% ' Boss variant
 
     select case calc_id%
-        case 4,57 ' Knight or Boss
+        case 4,57 ' Knight or Boss level 7
             if calc_id%=57 then speed=100
             ' Arrow weapon_ix%
             select case angle
