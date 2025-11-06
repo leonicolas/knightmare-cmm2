@@ -1084,14 +1084,13 @@ sub enemy_fire(ix%, disable_rnd%)
     local y=g_obj(ix%,2) + sprite(H, enemy_spr_id%)/2
     local angle=deg(sprite(V, enemy_spr_id%, 1))
     local rot%, weapon_ix%=23 ' Dot bullet
-    local i%, gpr1, gpr2, gpr3, offset_x%, speed=70
+    local i%, gpr1, gpr2, gpr3, offset_x%, calc_id%=obj_id%, speed=70
 
-    select case obj_id%
-        case 5 ' Cloud
-            exit sub ' Do not shoot
+    if calc_id% = 50 then inc calc_id%, g_stage% ' Boss variant
 
-        case 4, 57 ' Knight, boss stage 07
-            if obj_id%=57 then speed=100
+    select case calc_id%
+        case 4,57 ' Knight or Boss
+            if calc_id%=57 then speed=100
             ' Arrow weapon_ix%
             select case angle
                 case  23 to  67 ' Up Right
@@ -1124,6 +1123,9 @@ sub enemy_fire(ix%, disable_rnd%)
                     inc y,-TILE_SIZE*2.5
             end select
 
+        case 5 ' Cloud
+            exit sub ' Do not shoot
+
         case 7 ' Skeleton
             if g_obj(ix%,5) <> 0 or g_obj(ix%,4) > 1 then exit sub
             weapon_ix%=25
@@ -1150,44 +1152,42 @@ sub enemy_fire(ix%, disable_rnd%)
             next
             exit sub
 
-        case 50 ' Boss
-            select case g_stage%
-                case 1
-                    weapon_ix%=24 ' Energy ray
-                    speed=120
-                case 2
-                    weapon_ix%=33 ' Scythe
-                    ' Center of rotation
-                    gpr1=g_obj(ix%,1)             ' X
-                    gpr2=g_obj(ix%,2)+TILE_SIZE*8 ' Y
-                case 3
-                    weapon_ix%=28 ' White explosion
-                    angle=min(200,max(160,angle))
-                    speed=110
-                    for i%=-60 to 60 step 20
-                        create_shot(shot_ix%, weapon_ix%, x, y, speed*sin(angle-i%), speed*-cos(angle-i%))
-                        if i% < 60 then shot_ix%=get_free_shot_slot()
-                    next
-                    exit sub
-                case 4,6,8
-                    weapon_ix%=28 ' White explosion
-                    speed=110
-                    angle=max(min(210, angle), 150)
-                    gpr1=speed*sin(angle)
-                    gpr2=speed*-cos(angle)
+        case 51 ' Boss stage 1
+            weapon_ix%=24 ' Energy ray
+            speed=120
 
-                    if obj_id% = 54 then
-                        offset_x%=TILE_SIZEx2 ' Red explosion
-                        gpr3=g_player(1)
-                    end if
-                case 5
-                    weapon_ix%=32 ' Axe
-                    gpr2=100      ' Y speed
-                    x=g_obj(ix%,1)-TILE_SIZE
-                    create_shot(get_free_shot_slot(), weapon_ix%, x, y, gpr1, gpr2, gpr3, rot%, offset_x%)
-                    inc x, TILE_SIZE*6
-                    shot_ix%=get_free_shot_slot()
-            end select
+        case 52 ' Boss stage 2
+            weapon_ix%=33 ' Scythe
+            ' Center of rotation
+            gpr1=g_obj(ix%,1)             ' X
+            gpr2=g_obj(ix%,2)+TILE_SIZE*8 ' Y
+        case 53 ' Boss stage 3
+            weapon_ix%=28 ' White explosion
+            angle=min(200,max(160,angle))
+            speed=110
+            for i%=-60 to 60 step 20
+                create_shot(shot_ix%, weapon_ix%, x, y, speed*sin(angle-i%), speed*-cos(angle-i%))
+                if i% < 60 then shot_ix%=get_free_shot_slot()
+            next
+            exit sub
+        case 54,56,58 ' Boss stage 4,5,8
+            weapon_ix%=28 ' White explosion
+            speed=110
+            angle=max(min(210, angle), 150)
+            gpr1=speed*sin(angle)
+            gpr2=speed*-cos(angle)
+
+            if g_stage% = 4 then
+                offset_x%=TILE_SIZEx2 ' Red explosion
+                gpr3=g_player(1)
+            end if
+        case 55 ' Boss stage 5
+            weapon_ix%=32 ' Axe
+            gpr2=100      ' Y speed
+            x=g_obj(ix%,1)-TILE_SIZE
+            create_shot(get_free_shot_slot(), weapon_ix%, x, y, gpr1, gpr2, gpr3, rot%, offset_x%)
+            inc x, TILE_SIZE*6
+            shot_ix%=get_free_shot_slot()
     end select
 
     if gpr1 = 0 and gpr2 = 0 then
