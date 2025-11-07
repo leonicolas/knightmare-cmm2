@@ -150,8 +150,6 @@ sub run_stage()
 
         ' Auto move player
         if g_player(8)=3 then auto_move_player_to_portal()
-        ' Play final cutscene
-        if g_player(8)=7 then play_final_cutscene()
 
         ' Process animations
         if g_timer mod 6 = 0 then

@@ -144,5 +144,3 @@ function center_y(tile_rows,offset_y) as float
     center_y=SCREEN_ROWS*TILE_SIZE/2-TILE_SIZE*tile_rows/2+offset_y*TILE_SIZE
 end function
 
-sub play_final_cutscene()
-end sub
