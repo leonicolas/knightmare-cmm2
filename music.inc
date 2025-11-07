@@ -1,6 +1,6 @@
 ' Music table
 dim MUSIC$(9)=("01-gamestart","02-bgm1","04-bgm2","06-prince_of_maresia","08-tavern_funk","10-another_level","12-xakt","14-positive_trek","16-last_hurdle","25-ending")
-DIM BOSS_MUSIC$(8)=("","03-boss1","05-boss2","07-bat_rock","09-blind_panic","11-more_boss","13-under_his_eyes","15-boss_fronty_ii","17-manbow_reprise")
+DIM BOSS_MUSIC$(9)=("","03-boss1","05-boss2","07-bat_rock","09-blind_panic","11-more_boss","13-under_his_eyes","15-boss_fronty_ii","17-manbow_reprise","25-ending")
 
 sub play_song(song$)
     if not g_sound_on then exit sub
