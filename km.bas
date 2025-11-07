@@ -40,10 +40,11 @@ sub start_game()
     g_score% = 0
 
     ' Dev variables
-    ' g_stage%=8     ' Stage
-    ' g_row%=0       ' Position into the map
-    ' g_player(3)=11 ' Best weapon
-    ' g_player(6)=30 ' Shield with support to 30 hits
+    'g_invincible=true ' Invincible player
+    'g_stage%=8        ' Stage
+    'g_row%=0          ' Position into the map
+    'g_player(3)=11    ' Best weapon
+    'g_player(6)=30    ' Shield with support to 30 hits
     ' End Dev variables
     do
         timer=0
