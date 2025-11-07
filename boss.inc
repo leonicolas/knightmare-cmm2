@@ -292,7 +292,7 @@ sub create_boss_eye(eye_id%)
 end sub
 
 sub boss_fire()
-    local delay, disable_rnd%,i%,id%
+    local delay, disable_rnd%,i%,id%,fire_rate%
     select case g_stage%
         case 1,6
             delay=70
@@ -311,7 +311,9 @@ sub boss_fire()
             for i%=2 to 7
                 if g_boss(i%) <= 0 then continue for
                 id%=g_boss(i%)
-                if g_obj(id%,0) > 0 and g_timer mod (130+10*i%) = 0 then
+                fire_rate%=130+10*i%
+                if i% = 2 then fire_rate%=fire_rate%/4
+                if g_obj(id%,0) > 0 and g_timer mod fire_rate% = 0 then
                     if g_obj(id%,3) <= 0 or g_obj(id%,3)>1000 then continue for
                     enemy_fire(id%, false)
                 end if
