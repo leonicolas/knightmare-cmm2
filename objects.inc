@@ -42,7 +42,7 @@ sub animate_objects(reload%)
 
         effect%=-1
         buffer%=OBJ_TILES_BUFFER
-        offset_x%=0: offset_y%=0
+        offset_x%=0: offset_y%=0: offset_h%=0
         spr_id%=OBJ_INI_SPRITE_ID + i%
 
         ' Config animation
@@ -117,35 +117,33 @@ sub animate_objects(reload%)
                 end if
 
             case 50 ' Boss eyes
-                if g_stage% <> 9 then continue for
+                if g_stage% <> 8 or g_boss(0) <> 2 or i% = 0 then continue for
 
                 buffer%=BOSS_TILES_BUFFER
-                aux1%=10*(spr_id%-17) ' Different blinking time per eye
+                aux1%=spr_id%-15 ' Different blinking time per eye
                 aux2%=g_anim_tick% mod (115+aux1%)
 
                 ' Y offset
                 if g_obj(i%,3) = 0 then ' Dead
                     offset_y%=0
-                else if aux2% < 100+aux1% then ' Open
+                else if aux2% < 3+aux1% then ' Opening
+                    offset_y%=TILE_SIZEx2
+                else if aux2% < 103+aux1% then ' Open
                     offset_y%=TILE_SIZEx4
-                    if aux2%<>1 then effect%=choice((aux2%\8)mod 2=0,0,1)
+                    effect%=choice((aux2%\8)mod 2=0,0,1)
+                    if aux2%=4+aux1% then effect% = -2
                     if g_obj(i%,3)>1000 then inc g_obj(i%,3),-1000
-
-                else if aux2% < 103+aux1% then ' Closing
+                else if aux2% < 112+aux1% then ' Closing
                     offset_y%=TILE_SIZEx2
                     if g_obj(i%,3)<1000 then inc g_obj(i%,3),1000
-
-                else if aux2% < 112+aux1% then ' Closed
+                else ' Closed
                     offset_y%=0
-                else ' Opening
-                    offset_y%=TILE_SIZEx2
                 end if
 
                 ' X offset
-                aux1%=g_obj(i%,3)
+                aux1%=g_obj(i%,3) ' life
                 if aux1% > 1000 then inc aux1%,-1000
-                offset_x%=TILE_SIZEx2*FIX(BOSS_LIFE(8)/5-aux1%/5)
-
+                offset_x%=TILE_SIZEx2*FIX(5-(aux1%/(BOSS_LIFE(8)*BOSS_DIFFICULTY(g_difficulty%)/5)))
                 if reload% then effect%=-1
 
             case else ' Other objects
@@ -833,6 +831,7 @@ function spawn_object(obj_id%, x%, y%, obj_cfg%) as integer
 
     local sprite_id%=OBJ_INI_SPRITE_ID + i%, spawn_speed
     local offset_x%, offset_y%, layer%=1, data_id%, angle
+    local buffer%=OBJ_TILES_BUFFER
 
     data_id%=OBJ_TILE%(obj_id%,4)
     g_obj(i%,3)=OBJ_DATA(data_id%,2) ' GPR 1 / Life
@@ -944,6 +943,8 @@ function spawn_object(obj_id%, x%, y%, obj_cfg%) as integer
             layer%=4
             if obj_cfg% then play_sfx("ENEMY_KILL")
 
+        case 50
+            buffer%=BOSS_TILES_BUFFER
     end select
 
     if obj_cfg% > 0 and spawn_speed > 0 then enqueue_action(obj_cfg%, obj_id%, x%, y%,,spawn_speed)
@@ -951,8 +952,8 @@ function spawn_object(obj_id%, x%, y%, obj_cfg%) as integer
     ' Enemies range
     if is_enemy(obj_id%) then inc g_enemies_count%
 
-    sprite read sprite_id%, OBJ_TILE%(obj_id%,0)+offset_x%, OBJ_TILE%(obj_id%,1)+offset_y%, OBJ_TILE%(obj_id%,2), OBJ_TILE%(obj_id%,3), OBJ_TILES_BUFFER
-    sprite show safe sprite_id%, g_obj(i%,1),g_obj(i%,2), layer%,, 1
+    sprite read sprite_id%, OBJ_TILE%(obj_id%,0)+offset_x%, OBJ_TILE%(obj_id%,1)+offset_y%, OBJ_TILE%(obj_id%,2), OBJ_TILE%(obj_id%,3), buffer%
+    sprite show safe sprite_id%, g_obj(i%,1),max(-7,g_obj(i%,2)), layer%,, 1
 end function
 
 sub spawn_shield()

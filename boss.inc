@@ -12,6 +12,8 @@ sub activate_boss()
 
     select case g_stage%
         case 1,8
+            ' Force eye animation update to open eyes
+            if g_stage%=8 then g_anim_tick%=0
             ' Enqueue clouds spawning
             enqueue_action(1, 5,,,right,3000)
             enqueue_action(1, 5,,,left,6500)
@@ -213,6 +215,7 @@ end sub
 
 sub create_boss_hit_box(ix%, offset_x, offset_y, width, life)
     if life=0 then life=BOSS_LIFE(g_stage%)
+    life=life*BOSS_DIFFICULTY(g_difficulty%)
     if width=0 then width=TILE_SIZE
     local id%=g_boss(1)
     local hit_box_id%=allocate_object(60, g_obj(id%, 1)+offset_x, g_obj(id%, 2)+offset_y, life)
@@ -283,13 +286,13 @@ sub create_boss_eye(eye_id%)
     local boss_id%=g_boss(1)
     local id%=spawn_object(50,g_obj(boss_id%,1)+offset_x%, g_obj(boss_id%,2)+offset_y%)
     g_boss(eye_id%+1)=id%
-    g_obj(id%,3)=BOSS_LIFE(g_stage%)
+    g_obj(id%,3)=BOSS_LIFE(g_stage%)*BOSS_DIFFICULTY(g_difficulty%) ' Eye life
     g_obj(id%,4)=offset_x%
     g_obj(id%,5)=offset_y%
 end sub
 
 sub boss_fire()
-    local delay, disable_rnd%,i%
+    local delay, disable_rnd%,i%,id%
     select case g_stage%
         case 1,6
             delay=70
@@ -307,11 +310,13 @@ sub boss_fire()
             delay=-1
             for i%=2 to 7
                 if g_boss(i%) <= 0 then continue for
-                if g_obj(g_boss(i%),0) > 0 and g_timer mod (130+10*i%) = 0 then
-                    if g_obj(g_boss(i%),3) <= 0 then continue for
-                    enemy_fire(g_boss(i%), disable_rnd%)
+                id%=g_boss(i%)
+                if g_obj(id%,0) > 0 and g_timer mod (130+10*i%) = 0 then
+                    if g_obj(id%,3) <= 0 or g_obj(id%,3)>1000 then continue for
+                    enemy_fire(id%, false)
                 end if
             next
+            exit sub
     end select
     if delay > 0 and g_timer mod delay = 0 then enemy_fire(g_boss(1), disable_rnd%)
 end sub
