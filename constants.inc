@@ -79,7 +79,7 @@ const PLAYER_SPEED_INC=20   ' Speed increment
 const PLAYER_MAX_SPEED=PLAYER_INIT_SPEED+PLAYER_SPEED_INC*3
 const NEW_LIFE_POINTS=100000
 const SHIELD_MAX_HITS=30
-dim BOSS_LIFE(8)=(0,20,48,30,48,40,40,40,30) ' Boss life per stage
+dim BOSS_LIFE(8)=(0,20,48,30,48,40,40,40,24) ' Boss life per stage
 'Boss difficulty - Easy, Normal, Hard
 dim BOSS_DIFFICULTY(2)=(0.5,1,1.5)
 const BOSS_SPEED=60
