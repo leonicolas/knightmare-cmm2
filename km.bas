@@ -63,8 +63,7 @@ sub start_game()
                 loop
             case 6 ' Player died
                 if g_player(7) < 0 then
-                    show_game_over_screen()
-                    pause 2000
+                    game_over()
                     exit do
                 end if
                 calculate_start_row()

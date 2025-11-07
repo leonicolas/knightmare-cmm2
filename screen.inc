@@ -9,10 +9,13 @@ sub show_stage_screen(stage%)
     end if
 end sub
 
-sub show_game_over_screen(stage%)
+sub game_over()
     page write 1: cls 0
     page write 0: cls 0
+    play_song("GAME_OVER")
     print_centralized("GAME OVER")
+    pause 5200
+    play stop
 end sub
 
 sub clear_screen()

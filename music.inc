@@ -13,6 +13,8 @@ sub play_song(song$)
             play modfile ROOT_DIR + "music/26-silence.mod", 44100
         case "TITLE"
             play modfile ROOT_DIR + "music/24-title.mod", 44100
+        case "GAME_OVER"
+            play modfile ROOT_DIR + "music/20-gameover.mod", 44100
         case else
             play modfile ROOT_DIR + "music/" + song$ + ".mod", 44100
     end select
