@@ -195,7 +195,7 @@ sub run_stage()
         if g_power_up_timer >= 0 then process_power_up_timer()
 
         ' Check player status
-        if g_player(8)>4 and g_player(8)<7 or g_player(8)>100 then exit do
+        if g_player(8)>4 and g_player(8)<7 or g_player(8)>160 then exit do
     loop
 
     ' Close all sprites and free memory
