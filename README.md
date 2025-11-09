@@ -2,13 +2,11 @@
 
 The MSX Knightmare video game entirely written in MMBasic.
 
-**This version is still in development!**
-
 ## MSX Knightmare
 
 Knightmare is a 1986 vertically scrolling shooter video game developed and published by Konami for the MSX home computer.
 
-For more about the video game, [Knightmare on Wikipedia](https://en.wikipedia.org/wiki/Knightmare_(1986_video_game))
+For more about the video game, [Knightmare on Wikipedia](<https://en.wikipedia.org/wiki/Knightmare_(1986_video_game)>)
 
 ## MMBasic
 
@@ -18,17 +16,27 @@ It includes floating point numbers, extensive string handling, multi-dimensional
 
 See more at the [MMBasic home page](https://mmbasic.com/)
 
+## MMBasic for the CMM2 Computer
+
+The Colour Maximite 2 (CMM2) is a small self contained computer inspired by the home computers of the early 80's such as the Tandy TRS-80, Commodore 64 and Apple II.
+
+It uses a USB keyboard and outputs to a standard VGA monitor. Programs are saved on a full size SD card and it boots straight into its own sophisticated BASIC interpreter with a full screen program editor.
+
+The Colour Maximite 2 is designed to be simple to use, easy to program and provide endless hours of fun.
+
+For more info, please visit [https://geoffg.net/maximite.html](https://geoffg.net/maximite.html)
+
 ## MMBasic for Windows
 
 The Windows/DOS version of MMBasic was created to make it easy to evaluate MMBasic. It is a single executable that does not need installation, just double-click on the executable and MMBasic will run in a DOS window on Windows (including Windows 10). It also runs in Linux using [Wine](https://www.winehq.org/).
 
-The executable and documentation can be downloaded from [https://www.thebackshed.com/forum/uploads/matherp/2023-12-24_033644_MMBasic.zip](https://www.thebackshed.com/forum/uploads/matherp/2023-12-24_033644_MMBasic.zip).
+The executable and documentation can be downloaded from [https://www.thebackshed.com/forum/uploads/matherp/2025-10-02_183145_MMB4WV5.07.03b25.zip](https://www.thebackshed.com/forum/uploads/matherp/2025-10-02_183145_MMB4WV5.07.03b25.zip).
 
 ## Running MMBasic Knightmare
 
-After downloading the source code from this repository and executing the MMBasic, you will need to access the directory where the **Knightmare** is located using the command ```chdir "dir/for/the/game"```. You can also use the command ```files``` to list the directory content.
+After downloading the source code from this repository and executing the MMBasic, you will need to access the directory where the **Knightmare** is located using the command `chdir "dir/for/the/game"`. You can also use the command `files` to list the directory content.
 
-To run the video game use the command ```run "km.bas"```
+To run the video game use the command `run "km.bas"`
 
 [<img src="images/thumbnail-small.png" width="400px" />](https://youtube.com/playlist?list=PLpx1nOk-DRHy_u9RyLZ5AYdjwFX-UcOje&si=Dn6mccseqbJvQ2Kn "MMBasic Knightmare")
 
@@ -50,6 +58,10 @@ The binary format is very simple:
 |  |---------------> 5 bits: Objects, enemies, power-ups
 |------------------> 3 bits: Object properties
 ```
+
+## Special Thank You
+
+I wish to extend a special thank you to [https://www.youtube.com/@HoffmanYouTube](H0ffman) for kindly allowing me to use his reinterpretation of the 1986 Knightmare game songs
 
 ## Original MSX Knightmare Screenshots
 
