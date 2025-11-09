@@ -66,7 +66,7 @@ end sub
 
 sub player_hit_obj(collided_id%)
     local obj_ix%=collided_id% - OBJ_INI_SPRITE_ID
-    if obj_ix% < 0 then exit sub
+    if obj_ix% < 0 or g_player(8) = 3 then exit sub
     select case g_obj(obj_ix%, 0)
         case 20 ' Weapon chrystal
             change_weapon(obj_ix%)
