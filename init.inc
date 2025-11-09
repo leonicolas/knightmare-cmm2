@@ -3,6 +3,7 @@ sub init_game()
     ' screen mode
     mode 3,12 ' 320x200 Original size
     'mode 7,12 ' 320x240
+    pause 2000 ' Wait for video resync
 
     ' init screen and buffers
     clear_screen()
@@ -10,13 +11,13 @@ sub init_game()
     page write SPRITES_BUFFER: cls 0
 
     page write BOSS_TILES_BUFFER: cls 0
-    load png BOSS_TILESET_IMG
+    load png BOSS_TILESET_IMG,,,15
 
     page write MAP_TILES_BUFFER: cls 0
-    load png MAP_TILESET_IMG
+    load png MAP_TILESET_IMG,,,15
 
     page write OBJ_TILES_BUFFER: cls 0
-    load png OBJ_TILESET_IMG
+    load png OBJ_TILESET_IMG,,,15
 
     ' Interrupts
     sprite interrupt check_collision
