@@ -5,6 +5,7 @@ sub process_input()
     local ctrl% = read_keyboard%()
 
     if not ctrl% then ctrl% = read_gamepad%()
+    if not ctrl% then ctrl% = read_wcc%()
     if not ctrl% then fire_down% = false : exit sub
 
     if ctrl% and CTRL_FIRE then
@@ -65,6 +66,26 @@ function read_gamepad%()
             case 0
             case < 124: read_gamepad% = read_gamepad% Or CTRL_UP
             case > 132: read_gamepad% = read_gamepad% Or CTRL_DOWN
+        end select
+    end if
+end function
+
+function read_wcc%()
+    if not g_wcc_on% then exit function
+
+    read_wcc% = classic(B)
+    if (read_wcc% and &H800) then read_wcc% = CTRL_FIRE
+    ' No digital direction buttons pushed, so check left-stick.
+    if not read_wcc% then
+        select case classic(LX)
+            case 128
+            case < 124: read_wcc% = read_wcc% Or CTRL_LEFT
+            case > 132: read_wcc% = read_wcc% Or CTRL_RIGHT
+        end select
+        select case classic(LY)
+            case 128
+            case < 124: read_wcc% = read_wcc% Or CTRL_DOWN
+            case > 132: read_wcc% = read_wcc% Or CTRL_UP
         end select
     end if
 end function

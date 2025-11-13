@@ -28,6 +28,11 @@ sub init_game()
         gamepad on
         If Mm.ErrNo Then g_gamepad_on% = false
     end if
+    if g_wcc_on% then
+        on error skip
+        controller classic open
+        If Mm.ErrNo Then g_wcc_on% = false
+    end if
 end sub
 
 sub init_stage()
